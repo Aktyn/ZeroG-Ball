@@ -1,0 +1,5 @@
+html, body {
+	background: url('./../img/42.png') top no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+}
