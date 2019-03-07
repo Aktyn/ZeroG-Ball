@@ -6,7 +6,9 @@
 	"scripts": {
 		"dev": "webpack-dev-server --config ./webpack.config.js",
 		"build": "rm -rf dist && webpack --config ./webpack.config.js",
-		"publish": "rm -rf dist && NODE_ENV='production' webpack --config ./webpack.config.js -p"
+		"publish": "rm -rf dist && NODE_ENV='production' webpack --config ./webpack.config.js -p",
+		"w:publish": "set NODE_ENV=production&&webpack --config ./webpack.config.js -p",
+		"test": "node ./tests/main.js"
 	},
 	"repository": {
 		"type": "git",
