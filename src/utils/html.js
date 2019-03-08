@@ -140,30 +140,18 @@ const extender = {//extended methods of DOM HTMLElements
 	getChildren: function(query) {
 		return fromQuery(query, this);
 	},
-	addChild: function(element) {
-		if(Array.isArray(element)) {
+	addChild: function(...elements) {
+		/*if(element && element.length) {
 			for(var i=0; i<element.length; i++)
 				this.append(element[i]);
 			return this;
 		}
 		
-		this.appendChild(element);
+		this.appendChild(element);*/
+		for(let el of elements)
+			this.appendChild(el);
 		return this;
 	},
-	/*appendAtBeginning: function(element) {
-		if(Array.isArray(element)) {
-			for(var i=0; i<element.length; i++)
-				this.appendAtBeginning(element[i]);
-			return this;
-		}
-		try {
-			this.insertBefore(element, this.firstChild);
-		}
-		catch(e) {
-			console.log('Cannot insert element');
-		}
-		return this;
-	},*/
 	delete: function() {
 		this.remove();
 	},

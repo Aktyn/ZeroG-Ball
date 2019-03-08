@@ -7,7 +7,7 @@
 /*cubic-bezier(.87,-.41,.19,1.44)*/
 /*cubic-bezier(.36,.07,.19,.97)*/
 
-body, html, textarea, input, button {
+body, html, textarea, input, button, div {
 	padding: 0px;
     margin: 0px;
 
@@ -65,12 +65,21 @@ button:active {
 	background-color: yellow;
 	display: block;
 	position: relative;
+	max-height: 100vh;
 }
 
-#main > .menu-container {
+#main > .menu-container, #main > .game-container {
+	box-sizing: border-box;
 	position: absolute;
 	left: 0px;
 	right: 0px;
 	top: 0px;
-	/*background-color: red;*/
+}
+
+#main > .menu-container {
+	background-color: red;
+}
+
+#main > .game-container {
+	background-color: #546E7A;
 }

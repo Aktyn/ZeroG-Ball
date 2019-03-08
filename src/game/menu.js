@@ -1,26 +1,25 @@
 import $ from './../utils/html';
+import Stage from './stage';
 import './../styles/menu.css';
 
 const _void_func = ()=>{};
 
-export default class Menu {
+export default class Menu extends Stage {
 	constructor(target, listeners) {
-		this.listeners = listeners;
+		super(target, 'menu-container', listeners)
+		
 
 		this.start_btn = $.create('button').text('START').on('click', listeners.onStart);
 
-		this.container = $.create('div').addClass('menu-container').addChild(
+		this.container.addChild(
 			this.start_btn
 		);
-
-		target.addChild(this.container);
 	}
 
 	close() {
 		if(this.start_btn)
 			this.start_btn.off('click', this.listeners.onStart);
-		
-		//removing menu html from page
-		this.container.remove();
+
+		super.close();
 	}
 }
