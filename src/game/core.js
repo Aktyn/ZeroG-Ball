@@ -1,7 +1,10 @@
 import $ from './../utils/html';
 import Menu from './menu';
+import Game from './game';
 
 let initialized = false;
+
+let current_game = null;
 
 export default {
 	init: () => {
@@ -18,6 +21,7 @@ export default {
 			onStart: function() {
 				menu.close();
 				
+				current_game = new Game();
 			}
 		});
 
