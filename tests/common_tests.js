@@ -1,9 +1,9 @@
 import {test, describe} from './core';
 
-import test_file from './../src/other_file';
+import test_file from './../src/file_to_test';
 
 describe(
-	test.func('nazwa testu', test_file.test_func)
+	test.func('Test name', test_file.test_func)
 		.expect(5, 7).to_return(12)
 		.expect(584, 16).to_return(600)
 		.expect(2, 2).to_return(5)
