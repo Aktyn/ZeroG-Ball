@@ -1,6 +1,6 @@
 import './styles/main.css';
 
-import * as other from './other_file';
+import * as other from './file_to_test';
 
 function sqrt(x) {
 	if(x < 0)
