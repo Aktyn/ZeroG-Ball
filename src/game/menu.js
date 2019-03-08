@@ -1,10 +1,26 @@
-export default class Menu {
-	constructor(target) {
-		
-		this.container = document.createElement('div');
-		this.container.className = 'menu-container';
-		this.container.innerText = 'TODO - menu';
+import $ from './../utils/html';
+import './../styles/menu.css';
 
-		target.appendChild(this.container);
+const _void_func = ()=>{};
+
+export default class Menu {
+	constructor(target, listeners) {
+		this.listeners = listeners;
+
+		this.start_btn = $.create('button').text('START').on('click', listeners.onStart);
+
+		this.container = $.create('div').addClass('menu-container').addChild(
+			this.start_btn
+		);
+
+		target.addChild(this.container);
+	}
+
+	close() {
+		if(this.start_btn)
+			this.start_btn.off('click', this.listeners.onStart);
+		
+		//removing menu html from page
+		this.container.remove();
 	}
 }
