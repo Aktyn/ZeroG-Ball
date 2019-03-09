@@ -79,11 +79,7 @@ export default class Game extends Stage {
 				);
 			}
 		}
-		/*this.bg_tiles.push(
-			SvgEngine.createObject('image').setClass('nearest').set({'href': bg}).setSize(Config.ASPECT),
-			SvgEngine.createObject('image').setClass('nearest').set({'href': bg}).setSize(Config.ASPECT).setPos(-Config.ASPECT*2, 0),
-			SvgEngine.createObject('image').setClass('nearest').set({'href': bg}).setSize(Config.ASPECT).setPos(Config.ASPECT*2, 0),
-		);*/
+		
 		this.svg.addObjects(//.setSize(0.5, 0.5)
 			...this.bg_tiles,
 
