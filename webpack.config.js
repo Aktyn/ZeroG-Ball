@@ -1,11 +1,12 @@
 /*
 const webpack = require('webpack');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 */
 
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const TerserPlugin = require('terser-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -30,18 +31,7 @@ module.exports = {
 
 	optimization: isDevelopment ? undefined : {
 		minimize: true,
-		/*minimizer: [
-			new UglifyJsPlugin({
-				exclude: 'sw.js',
-				uglifyOptions: {
-					output: {
-						comments: false
-					},
-					ie8: false,
-					toplevel: true
-				}
-			})
-		],*/
+		
 	},
 
 	module: {
@@ -54,8 +44,16 @@ module.exports = {
 			{        
 			    test: /\.css$/,        
 			    use: [
-			    	'style-loader', 
-			    	'css-loader',
+			    	//'style-loader', 
+			    	//'css-loader',
+			    	MiniCssExtractPlugin.loader,
+					{
+						loader: "css-loader",
+						options: {
+							sourceMap: isDevelopment,
+							//minimize: !isDevelopment
+						}
+					},
 			    	{
 						loader: "postcss-loader",
 						options: {
@@ -115,10 +113,16 @@ module.exports = {
 				update_time: Date.now()
 			})
 		}),*/
-		/*new MiniCssExtractPlugin({
+		new TerserPlugin({
+			parallel: true,
+			terserOptions: {
+				ecma: 6,
+			},
+		}),
+		new MiniCssExtractPlugin({
 			filename: "[name]-styles.css",
 			chunkFilename: "[id].css"
-		}),*/
+		}),
 		new HtmlWebpackPlugin({
 			hash: isDevelopment,
 			favicon: isDevelopment ? './src/img/favicon.png' : undefined,
