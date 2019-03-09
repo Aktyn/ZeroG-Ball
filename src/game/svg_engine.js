@@ -1,5 +1,6 @@
 import {SvgObject} from './svg';
 import Config from './config';
+import './../styles/svg.css';
 
 export default class SvgEngine {
 	constructor() {
@@ -50,9 +51,11 @@ export default class SvgEngine {
 		this.svg.node.style.transform = `scale(${height/Config.VIRT_SCALE})`;
 	}
 
-	addObject(obj) {
-		this.objects.push(obj);
-		this.svg.addChild(obj);
+	addObjects(...objs) {
+		for(let obj of objs) {
+			this.objects.push(obj);
+			this.svg.addChild(obj);
+		}
 	}
 
 	getNode() {

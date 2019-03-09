@@ -6,6 +6,7 @@ import GUI from './gui';
 import Config from './config';
 
 import './../styles/game.css';
+import bg1 from './../img/backgrounds/bg1.png';
 
 export default class Game extends Stage {
 	constructor(target, listeners) {
@@ -17,7 +18,6 @@ export default class Game extends Stage {
 		this.container.addChild(
 			this.svg.getNode(), this.gui.getNode()
 		);
-		//this.container.innerHTML = `<svg class='game-svg' width="400" height="110"><rect width="300" height="100" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" /></svg>`;
 
 		window.addEventListener('resize', this.onResize.bind(this), false);
 		this.onResize();
@@ -35,37 +35,34 @@ export default class Game extends Stage {
 	onResize() {//window resize event
 		let res = $.getScreenSize();
 
-		var w, h;
-		if(res.width / res.height > Config.ASPECT) {
-			w = res.height*Config.ASPECT;
-			h = res.height;
-		}
-		else {
-			w = res.width;
-			h = res.width/Config.ASPECT;
-		}
+		if(res.width / res.height > Config.ASPECT)
+			res.width = res.height*Config.ASPECT;
+		else
+			res.height = res.width/Config.ASPECT;
 
-		Object.assign(this.container.style, 
-			{width: `${w}px`, height: `${h}px`});
-		this.svg.onResize(w, h);
+		Object.assign(this.container.style, {width: `${res.width}px`, height: `${res.height}px`});
+		this.svg.onResize(res.width, res.height);
 	}
 
 	loadMap() {
-		/*this.svg.addObject(//.setSize(0.5, 0.5)
-			SvgEngine.createObject('rect').setRot(Math.PI/4).setSize(1/Math.SQRT2)
-				.set({'fill': 'rgb(0, 0, 255)'})
-		);*/
-
-		this.svg.addObject(
-			SvgEngine.createObject('circle').setSize(0.1)//.setPos(1/2, 0)
-				.set({'fill': 'rgba(0, 255, 255, 0.5)'})
+		console.log(bg1);
+		this.svg.addObjects(//.setSize(0.5, 0.5)
+			SvgEngine.createObject('image').set({'href': bg1}).setPos(-1, 0),
+			SvgEngine.createObject('image').set({'href': bg1}).setPos(1, 0),
+			SvgEngine.createObject('rect').setRot(Math.PI*0.25).setSize(1, 0.02)
+				.setPos(1, 1/Math.SQRT2+0.25).set({'fill': 'rgb(0, 128, 255)'}),
+			SvgEngine.createObject('rect').setSize(1, 0.02)
+				.setPos(-1/Math.SQRT2, 0.25).set({'fill': 'rgb(0, 128, 255)'}),
+		
+			SvgEngine.createObject('circle').setSize(0.1).setPos(0, -0.5)
+				.set({'fill': 'rgb(255, 128, 128)'})
 		);
 
 		this.svg.update();
 
 		/*let t = 0;
 		setInterval(() => {//temp
-			this.svg.updateCamera(Math.cos(t), Math.sin(t)+1, 2);
+			this.svg.updateCamera(Math.cos(t), Math.sin(t), 2);
 			t += Math.PI/60 * 0.5;
 		}, 1000/60);*/
 	}

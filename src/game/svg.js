@@ -23,7 +23,7 @@ export class SvgObject {
 			else {
 				this.node.setAttributeNS(null, 'width', Config.VIRT_SCALE);
 				this.node.setAttributeNS(null, 'height', Config.VIRT_SCALE);
-				this.node.setAttributeNS(null, 'x', -Config.VIRT_SCALE/2);//Config.VIRT_SCALE*(Config.ASPECT - 1)/2
+				this.node.setAttributeNS(null, 'x', -Config.VIRT_SCALE/2);
 				this.node.setAttributeNS(null, 'y', -Config.VIRT_SCALE/2);
 			}
 		}
@@ -36,10 +36,10 @@ export class SvgObject {
 	}
 
 	update() {//updates object transform
-		this.node.setAttributeNS(null, 'transform', 
-			`translate(${this.transform.x*Config.VIRT_SCALE}, ${this.transform.y*Config.VIRT_SCALE}) 
-			rotate(${this.transform.rot/Math.PI*180}) 
-			scale(${this.transform.w} ${this.transform.h})`);
+		this.node.setAttributeNS(null, 'transform', `translate(${
+			this.transform.x*Config.VIRT_SCALE/2}, ${this.transform.y*Config.VIRT_SCALE/2}) rotate(${
+			this.transform.rot/Math.PI*180}) scale(${
+			this.transform.w} ${this.transform.h})`);
 	}
 
 	addChild(child) {
@@ -51,10 +51,10 @@ export class SvgObject {
 			throw new Error('Incorrect child');
 	}
 
-	/*setClass(name) {
-		this.node.className = name;
+	setClass(name) {
+		this.node.setAttributeNS(null, 'class', name);
 		return this;
-	}*/
+	}
 
 	setPos(x, y) {
 		this.transform.x = x;
