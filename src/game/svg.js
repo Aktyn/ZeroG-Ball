@@ -26,20 +26,39 @@ export class SvgObject {
 				this.node.setAttributeNS(null, 'x', -Config.VIRT_SCALE/2);
 				this.node.setAttributeNS(null, 'y', -Config.VIRT_SCALE/2);
 			}
+
+			this.node.setAttributeNS(null, 'transform-origin', '0 0');
 		}
-
-		this.node.setAttributeNS(null, 'transform-origin', '0 0');
-
-		//this.node.setAttributeNS(null, 'transform-origin', 
-		//	`${Config.VIRT_SCALE/2*Config.ASPECT} ${Config.VIRT_SCALE/2}`);
-		//this.node.setAttributeNS(null, 'transform', 'translate(500, -200) scale(0.2) rotate(45)');
 	}
 
 	update() {//updates object transform
-		this.node.setAttributeNS(null, 'transform', `translate(${
+		/*this.node.setAttributeNS(null, 'transform', `translate(${
 			this.transform.x*Config.VIRT_SCALE/2}, ${this.transform.y*Config.VIRT_SCALE/2}) rotate(${
 			this.transform.rot/Math.PI*180}) scale(${
-			this.transform.w} ${this.transform.h})`);
+			this.transform.w} ${this.transform.h})`);*/
+		
+		if(this.name === 'circle') {
+			this.node.setAttributeNS(null, 'r', Config.VIRT_SCALE/2 * this.transform.w);
+			this.node.setAttributeNS(null, 'cx', this.transform.x*Config.VIRT_SCALE/2);
+			this.node.setAttributeNS(null, 'cy', this.transform.y*Config.VIRT_SCALE/2);
+		}
+		else {
+			this.node.setAttributeNS(null, 'width', Config.VIRT_SCALE * this.transform.w);
+			this.node.setAttributeNS(null, 'height', Config.VIRT_SCALE * this.transform.h);
+			this.node.setAttributeNS(null, 'x', -Config.VIRT_SCALE/2 * this.transform.w +
+				this.transform.x*Config.VIRT_SCALE/2);
+			this.node.setAttributeNS(null, 'y', -Config.VIRT_SCALE/2 * this.transform.h +
+				this.transform.y*Config.VIRT_SCALE/2);
+		}
+
+		/*this.node.setAttributeNS(null, 'transform-origin', `${
+			-Config.VIRT_SCALE/2 * this.transform.w + this.transform.x*Config.VIRT_SCALE/2} ${
+			0}`);*/
+		if(this.transform.rot !== 0) {
+			this.node.setAttributeNS(null, 'transform-origin', `${
+				this.transform.x*Config.VIRT_SCALE/2} ${this.transform.y*Config.VIRT_SCALE/2}`);
+			this.node.setAttributeNS(null, 'transform', `rotate(${this.transform.rot/Math.PI*180})`);
+		}
 	}
 
 	addChild(child) {

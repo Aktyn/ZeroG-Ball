@@ -1,3 +1,7 @@
 svg.game-svg {
 
 }
+
+svg.game-svg image.nearest {
+	image-rendering: pixelated;
+}

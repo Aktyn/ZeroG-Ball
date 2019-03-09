@@ -21,10 +21,26 @@ export default class SvgEngine {
 			'class': 'game-svg',
 			'viewBox': `${-this.width/2}, ${-this.height/2}, ${this.width}, ${this.height}`
 		});
+
+		this.defs = new SvgObject('defs', true);
+
+		this.svg.addChild(this.defs);
 	}
 
 	static createObject(name) {
 		return new SvgObject(name);
+	}
+
+	//@effects - array of objects with name and attribs fields
+	createFilter(id, ...effects) {
+		let filter = new SvgObject('filter', true).set({
+			'id': id,
+			'x': '0', 'y': '0', 'width': '200%', 'height': '200%'
+		});
+		for(let effect of effects) {
+			filter.addChild( new SvgObject(effect.name, true).set(effect.attribs) );
+		}
+		this.defs.addChild(filter);
 	}
 
 	update() {
