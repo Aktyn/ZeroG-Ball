@@ -51,12 +51,22 @@ export default class Game extends Stage {
 	}
 
 	loadMap() {
-		this.svg.addObject(//.setSize(0.5, 0.5)
-			SvgEngine.createObject('rect').set({'fill': 'rgb(0, 0, 255)'})
+		/*this.svg.addObject(//.setSize(0.5, 0.5)
+			SvgEngine.createObject('rect').setRot(Math.PI/4).setSize(1/Math.SQRT2)
+				.set({'fill': 'rgb(0, 0, 255)'})
+		);*/
+
+		this.svg.addObject(
+			SvgEngine.createObject('circle').setSize(0.1)//.setPos(1/2, 0)
+				.set({'fill': 'rgba(0, 255, 255, 0.5)'})
 		);
 
-		/*this.svg.addObject(//.setSize(0.5, 0.5)
-			SvgEngine.createObject('circle').set({'fill': 'rgb(0, 255, 255)'})
-		);*/
+		this.svg.update();
+
+		/*let t = 0;
+		setInterval(() => {//temp
+			this.svg.updateCamera(Math.cos(t), Math.sin(t)+1, 2);
+			t += Math.PI/60 * 0.5;
+		}, 1000/60);*/
 	}
 }
