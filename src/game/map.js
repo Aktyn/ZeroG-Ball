@@ -1,4 +1,5 @@
 import SvgEngine from './svg_engine';
+import Physics from './physics/physics_engine';
 import Background from './background';
 import Config from './config';
 
@@ -27,6 +28,7 @@ export default class Map {
 				.set({'fill': 'rgb(255, 128, 128)'})*/
 		);
 
+		this.physics = new Physics();
 		//this.graphics.update();//temporary here
 	}
 
