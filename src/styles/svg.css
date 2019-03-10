@@ -7,6 +7,10 @@ svg.game-svg.cartoon-style > * {
 	stroke-width: 1px;
 }
 
+svg.game-svg.flat-shadows > * {
+	filter: url(#flat-shadow);
+}
+
 svg.game-svg image.nearest {
 	image-rendering: pixelated;
 }

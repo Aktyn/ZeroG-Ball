@@ -2,7 +2,7 @@ import SvgEngine from './svg_engine';
 
 import bg_texture from './../img/backgrounds/bg3.png';
 
-const BG_SMOOTHING = 0.7;
+const BG_SMOOTHING = 0.9;
 
 export default class Background {
 	constructor(tiles_x, tiles_y) {

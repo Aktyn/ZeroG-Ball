@@ -46,7 +46,7 @@ function runLoop(self) {
 	step(0);
 }
 
-let t = 0;
+let t = 0;//tmp
 
 export default class GameCore extends Map {
 	constructor() {
@@ -62,7 +62,7 @@ export default class GameCore extends Map {
 
 	update(dt) {
 		let xx = Math.cos(t)*0.5;
-		let yy = Math.sin(t*0.5)*0.28;
+		let yy = Math.sin(t*0.6)*0.28;
 		let zoom = 1.5;
 		super.updateCamera(xx, yy, zoom);
 		
