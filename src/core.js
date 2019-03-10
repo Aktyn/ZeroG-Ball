@@ -1,13 +1,13 @@
-import $ from './../utils/html';
-import Menu from './menu';
-import Game from './game';
+import $ from './utils/html';
+import MenuStage from './stages/menu';
+import GameStage from './stages/game';
 
 let initialized = false;
 
 let current_stage = null;
 
 function initMenu(main_div) {
-	current_stage = new Menu(main_div, {
+	current_stage = new MenuStage(main_div, {
 		onStart: function() {
 			current_stage.close();
 			initGame(main_div);
@@ -18,7 +18,7 @@ function initMenu(main_div) {
 }
 
 function initGame(main_div) {
-	current_stage = new Game(main_div, {
+	current_stage = new GameStage(main_div, {
 		onEnd() {//TODO - invoke from game class
 			current_stage.close();
 		}

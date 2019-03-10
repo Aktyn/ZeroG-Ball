@@ -2,6 +2,11 @@ svg.game-svg {
 
 }
 
+svg.game-svg.cartoon-style > * {
+	stroke: black;
+	stroke-width: 1px;
+}
+
 svg.game-svg image.nearest {
 	image-rendering: pixelated;
 }

@@ -4,7 +4,7 @@ import './../styles/menu.css';
 
 const _void_func = ()=>{};
 
-export default class Menu extends Stage {
+export default class MenuStage extends Stage {
 	constructor(target, listeners) {
 		super(target, 'menu-container', listeners)
 		

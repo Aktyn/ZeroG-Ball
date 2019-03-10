@@ -10,7 +10,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
-module.exports = {
+const CONFIG = {
 	entry: {
 		main: './src/main.js'
 	},
@@ -31,7 +31,6 @@ module.exports = {
 
 	optimization: isDevelopment ? undefined : {
 		minimize: true,
-		
 	},
 
 	module: {
@@ -113,12 +112,6 @@ module.exports = {
 				update_time: Date.now()
 			})
 		}),*/
-		new TerserPlugin({
-			parallel: true,
-			terserOptions: {
-				ecma: 6,
-			},
-		}),
 		new MiniCssExtractPlugin({
 			filename: "[name]-styles.css",
 			chunkFilename: "[id].css"
@@ -134,3 +127,14 @@ module.exports = {
 		}),
 	]
 };
+
+if(!isDevelopment) {
+	CONFIG.plugins.splice(0, 0, new TerserPlugin({
+		parallel: true,
+		terserOptions: {
+			ecma: 6,
+		},
+	}));
+}
+
+module.exports = CONFIG;

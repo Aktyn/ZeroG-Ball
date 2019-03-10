@@ -74,6 +74,12 @@ export default class SvgEngine {
 		}
 	}
 
+	addClass(name) {
+		//this.svg.node.setAttributeNS(null, 'class', name);
+		this.svg.node.classList.add(name);
+		return this;
+	}
+
 	getNode() {
 		return this.svg.node;
 	}
