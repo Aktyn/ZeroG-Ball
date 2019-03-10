@@ -103,7 +103,8 @@ export default class PhysicsEngine {
 		@returns {Body}
 	*/
 	add(shape, x, y) {
-		this.bodies.push( new Body(shape, x, y) );
+		let b = new Body(shape, x, y);
+		this.bodies.push( b );
 		return b;
 	}
 }

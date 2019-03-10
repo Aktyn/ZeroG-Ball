@@ -7,8 +7,8 @@ export default {
 
 	//physics
 	gravityScale: 5.0,//*10
-	gravity: new Vec2(0, 10.*this.gravityScale),
+	gravity: new Vec2(0, 10. * 5.0),//5.0 - gravityScale
 	//(Config.step * Config.gravity).LenSqr()
-	gravity_step: new Vec2(0, this.step * 10.*this.gravityScale).LenSqr(),
+	gravity_step: new Vec2(0, 10. * 5.0 / 60.0).LenSqr(),//this.step * 10.*this.gravityScale
 	step: 1 / 60
 }

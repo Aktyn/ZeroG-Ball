@@ -26,6 +26,7 @@ export default class Shape {
 
 export class Circle extends Shape {
 	constructor(radius) {
+		super();
 		this.radius = radius;
 	}
 
@@ -38,9 +39,9 @@ export class Circle extends Shape {
 	}
 
 	computeMass(density) {
-		this.body.m = PI * radius * radius * density;
+		this.body.m = Math.PI * this.radius * this.radius * density;
 		this.body.im = (this.body.m) ? 1 / this.body.m : 0;
-		this.body.I = this.body.m * radius * radius;
+		this.body.I = this.body.m * this.radius * this.radius;
 		this.body.iI = (this.body.I) ? 1 / this.body.I : 0;
 	}
 
@@ -53,6 +54,7 @@ export class Circle extends Shape {
 
 export class PolygonShape extends Shape {
 	constructor() {
+		super();
 		this.body = null;
 		this.u = new Mat2();
 

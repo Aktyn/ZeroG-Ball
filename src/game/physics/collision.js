@@ -339,19 +339,6 @@ function polygontoPolygon(m, a, b) {
 	let incidentFace = [new Vec2(), new Vec2()];
 	findIncidentFace(incidentFace, RefPoly, IncPoly, referenceIndex);
 
-	//        y
-	//        ^  .n       ^
-	//      +---c ------posPlane--
-	//  x < | i |\
-	//      +---+ c-----negPlane--
-	//             \       v
-	//              r
-	//
-	//  r : reference face
-	//  i : incident poly
-	//  c : clipped point
-	//  n : incident normal
-
 	// Setup reference face vertices
 	let v1 = RefPoly.m_vertices[referenceIndex];
 	referenceIndex = referenceIndex + 1 == RefPoly.m_vertexCount ? 0 : referenceIndex + 1;

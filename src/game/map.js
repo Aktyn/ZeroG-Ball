@@ -1,5 +1,6 @@
 import SvgEngine from './svg_engine';
 import Physics from './physics/physics_engine';
+import {Circle} from './physics/shape';
 import Background from './background';
 import Config from './config';
 
@@ -28,7 +29,9 @@ export default class Map {
 				.set({'fill': 'rgb(255, 128, 128)'})*/
 		);
 
+		let c = new Circle(0.5);
 		this.physics = new Physics();
+		let body = this.physics.add(c, 0, 0);
 		//this.graphics.update();//temporary here
 	}
 
@@ -62,5 +65,6 @@ export default class Map {
 
 	update() {
 		this.graphics.update();
+		// this.physics.step();
 	}
 }

@@ -108,7 +108,7 @@ export class Vec2 {
 }
 
 export class Mat2 {//2x2
-	constructor(opts) {
+	constructor(opts = {}) {
 		if(opts.radians)
 			this.set(radians);
 		else {
