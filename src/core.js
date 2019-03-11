@@ -6,6 +6,10 @@ let initialized = false;
 
 let current_stage = null;
 
+/**
+ * Initializes the menu
+ * @param {Object} main_div
+ */
 function initMenu(main_div) {
 	current_stage = new MenuStage(main_div, {
 		onStart: function() {
@@ -17,6 +21,10 @@ function initMenu(main_div) {
 	current_stage.listeners.onStart();//temp test
 }
 
+/**
+ * Initializes the game
+ * @param {Object} main_div
+ */
 function initGame(main_div) {
 	current_stage = new GameStage(main_div, {
 		onEnd() {//TODO - invoke from game class
