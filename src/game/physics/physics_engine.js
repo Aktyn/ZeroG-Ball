@@ -9,33 +9,36 @@
 import Config from './../config';
 import Body from './body';
 import Shape from './shape';
+import Manifold from './manifold';
 
 const STEP = Config.step;
 
 /** 
 *	@param {Body} b
-*	@param {number} dt
 */
-function integrateForces(b, dt) {
+function integrateForces(b) {
 	if(b.im === 0)
 		return;
 
-	b.velocity += (b.force * b.im + gravity) * (dt / 2.);
-	b.angularVelocity += b.torque * b.iI * (dt / 2.);
+	//b.velocity += (b.force * b.im + gravity) * (STEP / 2.);
+	b.velocity.addVec( 
+		b.force.clone().scale(b.im).addVec(Config.gravity).scale(STEP/2.0)
+	);
+	b.angularVelocity += b.torque * b.iI * (STEP / 2.0);
 }
 
 /** 
 *	@param {Body} b
-*	@param {number} dt
 */
-function integrateVelocity(b, dt) {
-	if(b.im == 0.)
+function integrateVelocity(b) {
+	if(b.im === 0)
 		return;
 
-	b.position += b.velocity * dt;
-	b.orient += b.angularVelocity * dt;
-	b.SetOrient(b.orient);
-	integrateForces(b, dt);
+	//b.position += b.velocity * dt;
+	b.position.addVec( b.velocity.clone().scale(STEP) );
+	b.orient += b.angularVelocity * STEP;
+	b.setOrient(b.orient);
+	integrateForces(b);
 }
 
 export default class PhysicsEngine {
@@ -45,13 +48,13 @@ export default class PhysicsEngine {
 
 		/** @type {Body[]} */
 		this.bodies = [];
-		/** @type {Contact[]} */
+		/** @type {Manifold[]} */
 		this.contacts = [];
 	}
 
 	step() {
 		// Generate new collision info
-		contacts.clear();
+		this.contacts = [];
 		for(var i=0; i<this.bodies.length; i++) {//TODO - for of
 			let A = this.bodies[i];
 
@@ -61,37 +64,38 @@ export default class PhysicsEngine {
 					continue;
 
 				let m = new Manifold(A, B);
-				m.Solve();
+				m.solve();
 				if(m.contact_count)
-					contacts.emplace_back(m);
+					this.contacts.push(m);
+					//this.contacts.emplace_back(m);
 			}
 		}
 
 		// Integrate forces
 		for(var i=0; i < this.bodies.length; i++)
-			integrateForces(bodies[i], STEP);
+			integrateForces(this.bodies[i]);
 
 		// Initialize collision
 		for(var i=0; i < this.contacts.length; i++)
-			contacts[i].Initialize();
+			this.contacts[i].initialize();
 
 		// Solve collisions
 		for(var j=0; j < this.m_iterations; j++)
 			for(var i=0; i < this.contacts.length; i++)
-				contacts[i].ApplyImpulse();
+				this.contacts[i].applyImpulse();
 
 		// Integrate velocities
 		for(var i=0; i < this.bodies.length; i++)
-			integrateVelocity(bodies[i], STEP);
+			integrateVelocity(this.bodies[i]);
 
 		// Correct positions
 		for(var i=0; i < this.contacts.length; i++)
-			contacts[i].PositionalCorrection();
+			this.contacts[i].positionalCorrection();
 
 		// Clear all forces
 		for(var i=0; i < this.bodies.length; i++) {//TODO - for of
 			let b = this.bodies[i];
-			b.force.Set(0, 0);
+			b.force.set(0, 0);
 			b.torque = 0;
 		}
 	}

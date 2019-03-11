@@ -20,13 +20,13 @@ export default class Map {
 		this.graphics.addObjects(//.setSize(0.5, 0.5)
 			...this.background.tiles,
 
-			/*SvgEngine.createObject('rect').setRot(Math.PI*0.25).setSize(1, 0.02)
+			SvgEngine.createObject('rect').setRot(Math.PI*0.25).setSize(1, 0.02)
 				.setPos(1, 1/Math.SQRT2+0.25).set({'fill': 'rgb(0, 128, 255)'}),
 			SvgEngine.createObject('rect').setSize(1, 0.02)
 				.setPos(-1/Math.SQRT2, 0.25).set({'fill': 'rgb(0, 128, 255)'}),
 		
 			SvgEngine.createObject('circle').setSize(0.1).setPos(0, -0.5)
-				.set({'fill': 'rgb(255, 128, 128)'})*/
+				.set({'fill': 'rgb(255, 128, 128)'})
 		);
 
 		let c = new Circle(0.5);
@@ -65,6 +65,6 @@ export default class Map {
 
 	update() {
 		this.graphics.update();
-		// this.physics.step();
+		this.physics.step();
 	}
 }
