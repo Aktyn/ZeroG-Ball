@@ -45,31 +45,4 @@ export default class GameStage extends Stage {
 		Object.assign(this.container.style, {width: `${res.width}px`, height: `${res.height}px`});
 		this.game.onResize(res.width, res.height);
 	}
-
-	
-
-	loadMap() {
-		/*let t = 0;
-		setInterval(() => {//temporary update-loop
-			let xx = Math.cos(t)*0.5;
-			let yy = Math.sin(t*0.5)*0.28;
-			let zoom = 1.5;
-			this.svg.updateCamera(xx, yy, zoom);
-
-			for(var y=0; y<MAP_SIZE_Y; y++) {
-				for(var x=0; x<MAP_SIZE_X; x++) {
-					var i = x + y*MAP_SIZE_X;
-					//bg.setPos(xx, yy); //static background
-					this.bg_tiles[i].setPos(
-						(-MAP_SIZE_X + 1 + x*2) + xx/zoom*BG_SMOOTHING, 
-						(-MAP_SIZE_Y + 1 + y*2) + yy/zoom*BG_SMOOTHING
-					);
-				}
-			}
-			
-			this.svg.update();
-
-			t += Math.PI/60 * 0.3;
-		}, 1000/60);*/
-	}
 }

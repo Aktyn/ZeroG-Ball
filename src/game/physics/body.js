@@ -38,6 +38,14 @@ export default class Body {
 		this.shape.setOrient(radians);
 	}
 
+	/**
+	* @param {number} x
+	* @param {number} y
+	*/
+	setPos(x, y) {
+		this.position.set(x, y);
+	}
+
 	/** 
 	*	@param {Vec2} f
 	*/

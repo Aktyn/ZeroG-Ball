@@ -75,7 +75,10 @@ export default class Map {
 	loadObjects() {
 		this.objects.push( 
 			new Object2D(Type.CIRCLE, 0.1, 0.1, this.graphics, this.physics)
-				.set({'fill': 'rgb(255, 128, 128)'})
+				.set({'fill': 'rgb(255, 128, 128)'}).setPos(0, -0.5),
+
+			new Object2D(Type.RECT, 0.8, 0.3, this.graphics, this.physics)
+				.set({'fill': 'rgb(64, 192, 255)'}).setPos(0, 0.3).setRot(-Math.PI*0.01).setStatic(),
 		);
 	}
 

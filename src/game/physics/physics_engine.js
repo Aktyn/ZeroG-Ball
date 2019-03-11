@@ -61,7 +61,7 @@ export default class PhysicsEngine {
 
 			for(var j=i+1; j<this.bodies.length; j++) {
 				let B = this.bodies[j];
-				if(A.im === 0 && B.im === 0)
+				if(A.im === 0 && B.im === 0)//ignore two static bodies
 					continue;
 
 				let m = new Manifold(A, B);
@@ -81,9 +81,11 @@ export default class PhysicsEngine {
 			this.contacts[i].initialize();
 
 		// Solve collisions
-		for(var j=0; j < this.m_iterations; j++)
-			for(var i=0; i < this.contacts.length; i++)
+		for(var j=0; j < this.iterations; j++) {
+			for(var i=0; i < this.contacts.length; i++) {
 				this.contacts[i].applyImpulse();
+			}
+		}
 
 		// Integrate velocities
 		for(var i=0; i < this.bodies.length; i++)

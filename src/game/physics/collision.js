@@ -66,10 +66,10 @@ function circletoPolygon(m, a, b) {
 	m.contact_count = 0;
 
 	// Transform circle center to Polygon model space
-	//let center = a.position;
+	let center = a.position.clone();
 	//center = B.u.Transpose() * (center - b.position);
-	let center = B.u.Transpose().multiplyByVec(
-		new Vec2(a.position.x - b.position.x, a.position.y - b.position.y)
+	center = B.u.Transpose().multiplyByVec(
+		new Vec2(center.x - b.position.x, center.y - b.position.y)
 	);
 
 	// Find edge with minimum penetration
@@ -77,8 +77,9 @@ function circletoPolygon(m, a, b) {
 	let separation = Number.MIN_SAFE_INTEGER; //-FLT_MAX;
 	let faceNormal = 0;//TODO - optimize by using var
 	for(let i = 0; i < B.m_vertices.length; i++) {
-		let s = Dot( B.m_normals[i], center - B.m_vertices[i] );
-
+		// let s = Dot( B.m_normals[i], center - B.m_vertices[i] );
+		let s = Dot( B.m_normals[i], center.clone().substractVec(B.m_vertices[i]) );
+		// console.log(s);
 		if(s > A.radius)
 			return;
 

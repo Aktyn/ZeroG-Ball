@@ -27,8 +27,8 @@ export default class Manifold {
 	}
 
 	initialize() {
-
 		// Calculate average restitution
+		//TODO - that is not an average 
 		this.e = Math.min( this.A.restitution, this.B.restitution );
 
 		// Calculate static and dynamic friction
@@ -65,8 +65,9 @@ export default class Manifold {
 
 	applyImpulse() {
 		// Early out and positional correct if both objects have infinite mass
+		//debugger;
 		if(Equal(this.A.im + this.B.im, 0)) {
-			this.infiniteMassCorrection( );
+			this.infiniteMassCorrection();
 			return;
 		}
 
@@ -82,8 +83,8 @@ export default class Manifold {
 			//	this.A.velocity - Cross( this.A.angularVelocity, ra );
 			let rv = this.B.velocity.clone()
 				.addVec( CrossNV(this.B.angularVelocity, rb) )
-				.addVec( this.A.velocity.clone().minus() )
-				.addVec( CrossNV(this.A.angularVelocity, ra).minus() );
+				.substractVec( this.A.velocity )
+				.substractVec( CrossNV(this.A.angularVelocity, ra) );
 
 			// Relative velocity along the normal
 			let contactVel = Dot( rv, this.normal );
@@ -105,7 +106,7 @@ export default class Manifold {
 			// Apply impulse
 			//Vec2 impulse = normal * j;
 			let impulse = this.normal.clone().scale(j);
-			this.A.applyImpulse(impulse.clone().minus, ra);
+			this.A.applyImpulse(impulse.clone().minus(), ra);
 			this.B.applyImpulse(impulse, rb);
 
 			// Friction impulse
@@ -115,7 +116,9 @@ export default class Manifold {
 
 			//Vec2 t = rv - (normal * Dot( rv, normal ));
 			//t.Normalize( );
-			let t = rv.clone().addVec( this.normal.clone().scale( Dot(rv, normal) ) ).Normalize();
+			let t = rv.clone().substractVec( 
+				this.normal.clone().scale( Dot(rv, this.normal) ) 
+			).Normalize();
 
 			// j tangent magnitude
 			let jt = -Dot( rv, t );
@@ -128,14 +131,14 @@ export default class Manifold {
 
 			// Coulumb's law
 			let tangentImpulse;
-			if(Math.abs( jt ) < j * sf)
+			if(Math.abs( jt ) < j * this.sf)
 				tangentImpulse = t.clone().scale(jt);//t * jt;
 			else
-				tangentImpulse = t.clone().scale(-j * df)//t * -j * df;
+				tangentImpulse = t.clone().scale(-j * this.df)//t * -j * df;
 
 			// Apply friction impulse
-			this.A.ApplyImpulse( -tangentImpulse, ra );
-			this.B.ApplyImpulse(  tangentImpulse, rb );
+			this.A.applyImpulse( tangentImpulse.clone().minus(), ra );
+			this.B.applyImpulse( tangentImpulse, rb );
 		}
 	}
 

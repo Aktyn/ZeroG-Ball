@@ -60,13 +60,13 @@ export default class GameCore extends Map {
 	}
 
 	update(dt) {
-		let xx = Math.cos(t)*0.5;
+		/*let xx = Math.cos(t)*0.5;
 		let yy = Math.sin(t*0.6)*0.28;
 		let zoom = 1.5;
 		super.updateCamera(xx, yy, zoom);
-		
-		super.update();
 
-		t += Math.PI * dt/1000 * 0.5;
+		t += Math.PI * dt/1000 * 0.5;*/
+
+		super.update();
 	}
 }
