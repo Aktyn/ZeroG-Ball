@@ -1,4 +1,4 @@
-//import Body from './body';
+import Body from './body';
 import {Mat2, Vec2, CrossVV, Dot} from './math';
 
 const MaxPolyVertexCount = 64;
@@ -11,16 +11,20 @@ const Type = {//the numbers are important
 
 export default class Shape {
 	constructor() {
-		this.radius = 0;
+		this.radius = 1;
+		/** @type {Body} */
 		this.body = null;
-		this.u = new Mat2();
+		this.u = new Mat2({radians: 0});
 	}
 
+	/** @returns {Shape} */
 	clone() {}
 	initialize() {}
 	computeMass(density) {}
+	/** @param {number} radians */
 	setOrient(radians) {}
 	draw() {}
+	/** @returns {number} */
 	getType() {}
 }
 
@@ -30,6 +34,7 @@ export class Circle extends Shape {
 		this.radius = radius;
 	}
 
+	/** @returns {Circle} */
 	clone() {
 		return new Circle(this.radius);
 	}
@@ -42,7 +47,7 @@ export class Circle extends Shape {
 		this.body.m = Math.PI * this.radius * this.radius * density;
 		this.body.im = (this.body.m) ? 1 / this.body.m : 0;
 		this.body.I = this.body.m * this.radius * this.radius;
-		this.body.iI = (this.body.I) ? 1 / this.body.I : 0;
+		this.body.iI = (this.body.I) ? (1.0 / this.body.I) : 0;
 	}
 
 	//setOrient( let radians ) {}//no need to rotate a circle
@@ -55,6 +60,7 @@ export class Circle extends Shape {
 export class PolygonShape extends Shape {
 	constructor() {
 		super();
+		/** @type {Body} */
 		this.body = null;
 		this.u = new Mat2();
 
@@ -73,9 +79,10 @@ export class PolygonShape extends Shape {
 		this.computeMass(1);
 	}
 
+	/** @returns {PolygonShape} */
 	clone() {
 		let poly = new PolygonShape();
-		poly.u = u;
+		poly.u = this.u;
 		for(var i=0; i<this.m_vertices.length; i++) {//m_vertexCount
 			//poly.m_vertices[i] = m_vertices[i];
 			//poly.m_normals[i] = m_normals[i];
@@ -89,15 +96,15 @@ export class PolygonShape extends Shape {
 	computeMass(density) {
 		// Calculate centroid and moment of interia
 		let c = new Vec2(0, 0);
-		let area = 0.;
-		let I = 0.;
-		const k_inv3 = 1/3;
+		let area = 0.0;
+		let I = 0.0;
+		const k_inv3 = 1.0/3.0;
 
-		for(var i1=0; i1<this.m_vertices.length; ++i1) {
+		for(var i1=0; i1<this.m_vertices.length; i1++) {
 			// Triangle vertices, third vertex implied as (0, 0)
 			// Vec2 p1( m_vertices[i1] );
 			let p1 = this.m_vertices[i1].clone();
-			let i2 = i1 + 1 < this.m_vertices.length ? i1 + 1 : 0;
+			let i2 = i1 + 1 < this.m_vertices.length ? (i1 + 1) : 0;
 			let p2 = this.m_vertices[i2].clone();
 
 			let D = CrossVV( p1, p2 );
@@ -106,32 +113,34 @@ export class PolygonShape extends Shape {
 			area += triangleArea;
 
 			// Use area to weight the centroid average, not just vertex position
-			c += triangleArea * k_inv3 * (p1 + p2);
+			//c += triangleArea * k_inv3 * (p1 + p2);
+			c.addVec( p1.clone().addVec(p2).scale(triangleArea*k_inv3) );
 
 			let intx2 = p1.x * p1.x + p2.x * p1.x + p2.x * p2.x;
 			let inty2 = p1.y * p1.y + p2.y * p1.y + p2.y * p2.y;
 			I += (0.25 * k_inv3 * D) * (intx2 + inty2);
 		}
 
-		c *= 1.0 / area;
+		//c *= 1.0 / area;
+		c.scale(1.0 / area);
 
 		// Translate vertices to centroid (make the centroid (0, 0)
 		// for the polygon in model space)
 		// Not really necessary, but I like doing this anyway
-		for(var i = 0; i<this.m_vertices.length; ++i)
-			this.m_vertices[i].add(-c);
+		for(var i = 0; i<this.m_vertices.length; i++)
+			this.m_vertices[i].substractVec(c);//.add(-c);
 			//this.m_vertices[i] -= c;
 
 		if(!this.body)
 			throw new Error('No body assigned to this shape');
 		this.body.m = density * area;
-		this.body.im = this.body.m ? 1 / this.body.m : 0;
-		this.body.I = this.I * density;
-		this.body.iI = this.body.I ? 1 / this.body.I : 0;
+		this.body.im = this.body.m ? (1.0 / this.body.m) : 0;
+		this.body.I = I * density;
+		this.body.iI = this.body.I ? (1.0 / this.body.I) : 0;
 	}
 
 	setOrient(radians) {
-		this.u.set( radians );
+		this.u.setRadians( radians );
 	}
 
 	getType() {
@@ -139,6 +148,10 @@ export class PolygonShape extends Shape {
 	}
 
 	// Half width and half height
+	/**
+	* @param {number} hw
+	* @param {number} hh
+	*/
 	setBox(hw, hh) {
 		//m_vertexCount = 4;
 		while(this.m_vertices.length < 4)

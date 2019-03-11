@@ -23,15 +23,16 @@ export default class Manifold {
 	}
 
 	solve() {
-		Dispatch[this.A.shape.getType( )][this.B.shape.getType( )]( this, this.A, this.B );
+		Dispatch[this.A.shape.getType()][this.B.shape.getType()]( this, this.A, this.B );
 	}
 
 	initialize() {
+
 		// Calculate average restitution
 		this.e = Math.min( this.A.restitution, this.B.restitution );
 
 		// Calculate static and dynamic friction
-		//TODO - check if out
+		//TODO - check it out
 		this.sf = Math.sqrt( this.A.staticFriction * this.A.staticFriction );
 		this.df = Math.sqrt( this.A.dynamicFriction * this.A.dynamicFriction );
 
@@ -47,8 +48,8 @@ export default class Manifold {
 
 			let rv = this.B.velocity.clone()
 				.addVec( CrossNV(this.B.angularVelocity, rb) )
-				.addVec( this.A.velocity.clone().minus() )
-				.addVec( CrossNV(this.A.angularVelocity, ra).minus() );
+				.substractVec( this.A.velocity )
+				.substractVec( CrossNV(this.A.angularVelocity, ra) );
 
 
 			// Determine if we should perform a resting collision or not
@@ -56,8 +57,9 @@ export default class Manifold {
 			// then the collision should be performed without any restitution
 
 			//(Config.step * Config.gravity).LenSqr()
-			if(rv.LenSqr() < Config.gravity_step + EPSILON)
+			if(rv.LenSqr() < Config.gravity_step + Config.EPSILON)
 				this.e = 0;
+			//debugger;
 		}
 	}
 
@@ -143,11 +145,13 @@ export default class Manifold {
 		//Vec2 correction = (std::max( penetration - k_slop, 0.0f ) / (this.A.im + this.B.im)) * 
 		//	normal * percent;
 		let correction = this.normal.clone().scale(
-			(Math.max(penetration - k_slop, 0) / (this.A.im + this.B.im)) * percent
+			(Math.max(this.penetration - k_slop, 0) / (this.A.im + this.B.im)) * percent
 		);
 
-		this.A.position -= correction * this.A.im;
-		this.B.position += correction * this.B.im;
+		//this.A.position -= correction * this.A.im;
+		this.A.position.substractVec( correction.clone().scale(this.A.im) );
+		//this.B.position += correction * this.B.im;
+		this.B.position.addVec( correction.clone().scale(this.B.im) );
 	}
 
 	infiniteMassCorrection() {

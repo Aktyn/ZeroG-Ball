@@ -1,6 +1,6 @@
 import Config from './config';
 
-export class SvgObject {
+export default class SvgObject {
 	constructor(name, prevent_centering = false) {
 		this.name = name;
 		this.node = document.createElementNS("http://www.w3.org/2000/svg", name);
@@ -12,6 +12,7 @@ export class SvgObject {
 			h: 1,
 			rot: 0
 		};
+		this.scale_changed = false;
 
 		if(!prevent_centering) {
 			//place object in center of the svg
@@ -32,25 +33,33 @@ export class SvgObject {
 	}
 
 	update() {//updates object transform
-		if(this.name === 'circle') {
-			this.node.setAttributeNS(null, 'r', Config.VIRT_SCALE/2 * this.transform.w);
-			this.node.setAttributeNS(null, 'cx', this.transform.x*Config.VIRT_SCALE/2);
-			this.node.setAttributeNS(null, 'cy', this.transform.y*Config.VIRT_SCALE/2);
-		}
-		else {
-			this.node.setAttributeNS(null, 'width', Config.VIRT_SCALE * this.transform.w);
-			this.node.setAttributeNS(null, 'height', Config.VIRT_SCALE * this.transform.h);
-			this.node.setAttributeNS(null, 'x', -Config.VIRT_SCALE/2 * this.transform.w +
-				this.transform.x*Config.VIRT_SCALE/2);
-			this.node.setAttributeNS(null, 'y', -Config.VIRT_SCALE/2 * this.transform.h +
-				this.transform.y*Config.VIRT_SCALE/2);
+		if(this.scale_changed === true) {
+			if(this.name === 'circle') {
+				this.node.setAttributeNS(null, 'r', Config.VIRT_SCALE/2 * this.transform.w);
+				//this.node.setAttributeNS(null, 'cx', this.transform.x*Config.VIRT_SCALE/2);
+				//this.node.setAttributeNS(null, 'cy', this.transform.y*Config.VIRT_SCALE/2);
+			}
+			else {
+				this.node.setAttributeNS(null, 'width', Config.VIRT_SCALE * this.transform.w);
+				this.node.setAttributeNS(null, 'height', Config.VIRT_SCALE * this.transform.h);
+				//this.node.setAttributeNS(null, 'x', -Config.VIRT_SCALE/2 * this.transform.w +
+				//	this.transform.x*Config.VIRT_SCALE/2);
+				//this.node.setAttributeNS(null, 'y', -Config.VIRT_SCALE/2 * this.transform.h +
+				//	this.transform.y*Config.VIRT_SCALE/2);
+				this.node.setAttributeNS(null, 'x', -Config.VIRT_SCALE/2 * this.transform.w);
+				this.node.setAttributeNS(null, 'y', -Config.VIRT_SCALE/2 * this.transform.h);
+			}
+
+			this.scale_changed = false;
 		}
 
-		if(this.transform.rot !== 0) {
-			this.node.setAttributeNS(null, 'transform-origin', `${
-				this.transform.x*Config.VIRT_SCALE/2} ${this.transform.y*Config.VIRT_SCALE/2}`);
-			this.node.setAttributeNS(null, 'transform', `rotate(${this.transform.rot/Math.PI*180})`);
-		}
+		//if(this.transform.rot !== 0) {
+			//this.node.setAttributeNS(null, 'transform-origin', `${
+			//	this.transform.x*Config.VIRT_SCALE/2} ${this.transform.y*Config.VIRT_SCALE/2}`);
+			this.node.setAttributeNS(null, 'transform', `translate(${
+				this.transform.x*Config.VIRT_SCALE/2} ${
+				this.transform.y*Config.VIRT_SCALE/2}) rotate(${this.transform.rot/Math.PI*180})`);
+		//}
 	}
 
 	addChild(child) {
@@ -77,6 +86,7 @@ export class SvgObject {
 	setSize(width, height) {
 		this.transform.w = width;
 		this.transform.h = typeof height === 'number' ? height : width;
+		this.scale_changed = true;
 
 		return this;
 	}

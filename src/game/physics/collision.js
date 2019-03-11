@@ -25,6 +25,7 @@ function circletoCircle(m, a, b) {
 	let normal = new Vec2(b.position.x - a.position.x, b.position.y - a.position.y);
 
 	let dist_sqr = normal.LenSqr();
+	/** @type {number} */
 	let radius = A.radius + B.radius;
 
 	// Not in contact
@@ -39,14 +40,15 @@ function circletoCircle(m, a, b) {
 
 	if(distance === 0) {
 		m.penetration = A.radius;
-		m.normal = Vec2( 1, 0 );
-		m.contacts [0] = a.position;
+		m.normal = new Vec2( 1, 0 );
+		m.contacts[0] = a.position;
 	}
-	else
-	{
+	else {
 		m.penetration = radius - distance;
-		m.normal = normal / distance;//faster calculations
-		m.contacts[0] = m.normal * A.radius + a.position;
+		//m.normal = normal / distance;//faster calculations
+		m.normal = new Vec2(normal.x/distance, normal.y/distance);
+		//m.contacts[0] = m.normal * A.radius + a.position;
+		m.contacts[0] = m.normal.clone().scale(A.radius).addVec(a.position);
 	}
 }
 
@@ -72,7 +74,7 @@ function circletoPolygon(m, a, b) {
 
 	// Find edge with minimum penetration
 	// Exact concept as using support points in Polygon vs Polygon
-	let separation = -FLT_MAX;
+	let separation = Number.MIN_SAFE_INTEGER; //-FLT_MAX;
 	let faceNormal = 0;//TODO - optimize by using var
 	for(let i = 0; i < B.m_vertices.length; i++) {
 		let s = Dot( B.m_normals[i], center - B.m_vertices[i] );

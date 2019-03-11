@@ -1,6 +1,7 @@
 import SvgEngine from './svg_engine';
 import Physics from './physics/physics_engine';
-import {Circle} from './physics/shape';
+import Object2D, {Type} from './objects/object2d';
+import {Circle, PolygonShape} from './physics/shape';
 import Background from './background';
 import Config from './config';
 
@@ -20,19 +21,40 @@ export default class Map {
 		this.graphics.addObjects(//.setSize(0.5, 0.5)
 			...this.background.tiles,
 
-			SvgEngine.createObject('rect').setRot(Math.PI*0.25).setSize(1, 0.02)
+			/*SvgEngine.createObject('rect').setRot(Math.PI*0.25).setSize(1, 0.02)
 				.setPos(1, 1/Math.SQRT2+0.25).set({'fill': 'rgb(0, 128, 255)'}),
 			SvgEngine.createObject('rect').setSize(1, 0.02)
 				.setPos(-1/Math.SQRT2, 0.25).set({'fill': 'rgb(0, 128, 255)'}),
 		
 			SvgEngine.createObject('circle').setSize(0.1).setPos(0, -0.5)
-				.set({'fill': 'rgb(255, 128, 128)'})
+				.set({'fill': 'rgb(255, 128, 128)'})*/
 		);
 
-		let c = new Circle(0.5);
 		this.physics = new Physics();
-		let body = this.physics.add(c, 0, 0);
-		//this.graphics.update();//temporary here
+
+		/** @type {Object2D[] */
+		this.objects = [];
+		this.loadObjects();
+
+		/*let c = new Circle(0.1);
+		let body = this.physics.add(c, 0.01, 0.01);
+
+		// let c2 = new Circle(0.5);
+		// let body2 = this.physics.add(c2, 0.1001, 35);
+		// body2.setStatic();
+
+		// let body3 = this.physics.add(c2, -0.6001, 35);
+		// body3.setStatic();
+
+		// let body4 = this.physics.add(c2, 0.6001, 35);
+		// body4.setStatic();
+		//body.setPos(0, 20);
+		
+		let floor = new PolygonShape();
+		floor.setBox(0.5, 0.1);
+		let body5 = this.physics.add(floor, 0, 0.9);
+		body5.setStatic();
+		body5.setOrient(Math.PI*0.001);*/
 	}
 
 	loadFilters() {
@@ -47,6 +69,13 @@ export default class Map {
 				name: 'feBlend',
 				attribs: {'result': 'out1', 'in': "SourceGraphic", 'in2': "matrixOut", 'mode': "normal"}
 			},
+		);
+	}
+
+	loadObjects() {
+		this.objects.push( 
+			new Object2D(Type.CIRCLE, 0.1, 0.1, this.graphics, this.physics)
+				.set({'fill': 'rgb(255, 128, 128)'})
 		);
 	}
 
@@ -66,5 +95,6 @@ export default class Map {
 	update() {
 		this.graphics.update();
 		this.physics.step();
+		//console.log(this.physics.bodies[0].position, this.physics.bodies[1].position);
 	}
 }

@@ -35,6 +35,7 @@ function integrateVelocity(b) {
 		return;
 
 	//b.position += b.velocity * dt;
+	//console.log(b.position, b.velocity.clone().scale(STEP));
 	b.position.addVec( b.velocity.clone().scale(STEP) );
 	b.orient += b.angularVelocity * STEP;
 	b.setOrient(b.orient);

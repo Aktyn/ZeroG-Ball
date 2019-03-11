@@ -12,7 +12,7 @@ export default class Body {
 		this.I = 0;  // moment of inertia
 		this.iI = 0; // inverse inertia
 		this.m = 0;  // mass
-		this.im = 0; // inverse masee
+		this.im = 0; // inverse mass
 
 		// Shape interface
 		this.shape = shape.clone();
@@ -42,7 +42,7 @@ export default class Body {
 	*	@param {Vec2} f
 	*/
 	applyForce(f) {
-		this.force.add(f);
+		this.force.addVec(f);
 	}
 
 	/** 
@@ -51,9 +51,9 @@ export default class Body {
 	*/
 	applyImpulse(impulse, contactVector) {
 		// velocity += im * impulse;
-		this.velocity.x += this.im * this.impulse.x;
-		this.velocity.y += this.im * this.impulse.y;
-		angularVelocity += this.iI * CrossVV( this.contactVector, this.impulse );
+		this.velocity.x += this.im * impulse.x;
+		this.velocity.y += this.im * impulse.y;
+		this.angularVelocity += this.iI * CrossVV( contactVector, impulse );
 	}
 
 	setStatic() {

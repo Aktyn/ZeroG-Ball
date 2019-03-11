@@ -110,7 +110,7 @@ export class Vec2 {
 export class Mat2 {//2x2
 	constructor(opts = {}) {
 		if(opts.radians)
-			this.set(radians);
+			this.setRadians(opts.radians);
 		else {
 			this.m00 = opts.a || 0;
 			this.m01 = opts.b || 0;
@@ -122,9 +122,9 @@ export class Mat2 {//2x2
 	/**
 	* @param {number} radians
 	*/
-	set(radians) {
-		let c = Math.cos( opts.radians );
-		let s = Math.sin( opts.radians );
+	setRadians(radians) {
+		let c = Math.cos( radians );
+		let s = Math.sin( radians );
 
 		this.m00 = c; 
 		this.m01 = -s;
@@ -154,7 +154,7 @@ export class Mat2 {//2x2
 	}
 
 	Transpose() {
-		return new Mat2({a: m00, b: m10, c: m01, d: m11});
+		return new Mat2({a: this.m00, b: this.m10, c: this.m01, d: this.m11});
 	}
 
 	/**

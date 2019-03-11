@@ -4,7 +4,6 @@ import Map from './map';
 /**
 * Starts an update loop
 * @param {GameCore} self
-* @returns {void}
 */
 function runLoop(self) {
 	let last = 0, dt;
