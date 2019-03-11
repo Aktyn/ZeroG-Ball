@@ -3,8 +3,8 @@ svg.game-svg {
 }
 
 svg.game-svg .cartoon-style {
-	stroke: black;
-	stroke-width: 1px;
+	stroke: #0008;
+	stroke-width: 2px;
 }
 
 svg.game-svg .flat-shadows {

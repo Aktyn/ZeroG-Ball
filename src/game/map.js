@@ -5,6 +5,8 @@ import {Circle, PolygonShape} from './physics/shape';
 import Background from './background';
 import Config from './config';
 
+import ball_texture from './../img/ball_texture.png';
+
 const BG_SMOOTHING = 0.7;
 //TODO - BACKGROUND_TILE_SCALE
 const MAP_SIZE_X = 4;
@@ -17,6 +19,7 @@ export default class Map {
 			.addClass('flat-shadows');
 
 		this.loadFilters();
+		this.loadTextures();
 
 		this.background = new Background(MAP_SIZE_X, MAP_SIZE_Y);
 		
@@ -44,22 +47,16 @@ export default class Map {
 				attribs: {'result': 'out1', 'in': "SourceGraphic", 'in2': "matrixOut", 'mode': "normal"}
 			},
 		);
+	}
 
-		// <filter id="drop-shadow">
-		//   <feGaussianBlur in="[alpha-channel-of-input]" stdDeviation="[radius]"/>
-		//   <feOffset dx="[offset-x]" dy="[offset-y]" result="offsetblur"/>
-		//   <feFlood flood-color="[color]"/>
-		//   <feComposite in2="offsetblur" operator="in"/>
-		//   <feMerge>
-		//     <feMergeNode/>
-		//     <feMergeNode in="[input-image]"/>
-		//   </feMerge>
-		// </filter> 
+	loadTextures() {
+		this.graphics.createTexture('ball-texture', ball_texture, 
+			Config.VIRT_SCALE*0.1, Config.VIRT_SCALE*0.1);
 	}
 
 	loadObjects() {
 		this.objects.push( 
-			new Object2D(Type.RECT, 0.8, 0.3, this.graphics, this.physics)
+			new Object2D(Type.RECT, 0.8, 0.2, this.graphics, this.physics)
 				.set({'fill': 'rgb(64, 192, 255)'}).setPos(0, 0.3).setRot(Math.PI*0.).setStatic(),
 
 			new Object2D(Type.RECT, 0.8, 0.1, this.graphics, this.physics)
@@ -76,7 +73,7 @@ export default class Map {
 			for(let j=0; j<4; j++) {
 				this.objects.push(
 					new Object2D(Type.CIRCLE, 0.1, 0.1, this.graphics, this.physics)
-						.set({'fill': 'rgb(255, 128, 128)'}).setPos(-0.1 + i*0.25-j*0.05, -0.4 - 0.9*j),
+						.set({'fill': 'url(#ball-texture)'}).setPos(-0.1 + i*0.25-j*0.05, -0.4 - 0.9*j),
 				);
 			}
 		}

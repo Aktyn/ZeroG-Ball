@@ -50,6 +50,31 @@ export default class SvgEngine {
 		this.defs.addChild(filter);
 	}
 
+	/**
+	* @param {string} id
+	* @param {string} source
+	* @param {number} width
+	* @param {number} height
+	*/
+	createTexture(id, source, width, height) {
+		//<pattern id="img1" patternUnits="userSpaceOnUse" width="100" height="100">
+		//	<image xlink:href="wall.jpg" x="0" y="0" width="100" height="100" />
+		//</pattern>
+		let texture = new SvgObject('pattern', true).set({
+			'id': id,
+			'patternUnits': 'userSpaceOnUse', 
+			'width': width, 'height': height
+		}).addChild(
+			new SvgObject('image', true).set({
+				'x': 0, 'y': 0,
+				'width': width, 'height': height,
+				'href': source
+			})
+		);
+
+		this.defs.addChild(texture);
+	}
+
 	update() {
 		for(let obj of this.objects)
 			obj.update();
