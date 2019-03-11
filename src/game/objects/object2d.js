@@ -65,6 +65,7 @@ export default class Object2D extends SvgObject {
 
 	update() {
 		super.setPos( this.body.position.x, this.body.position.y );
+		super.setRot(this.body.orient);
 
 		super.update();
 	}

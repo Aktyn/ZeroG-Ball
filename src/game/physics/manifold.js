@@ -29,7 +29,8 @@ export default class Manifold {
 	initialize() {
 		// Calculate average restitution
 		//TODO - that is not an average 
-		this.e = Math.min( this.A.restitution, this.B.restitution );
+		// this.e = Math.min( this.A.restitution, this.B.restitution );
+		this.e = ( this.A.restitution + this.B.restitution ) / 2.0;
 
 		// Calculate static and dynamic friction
 		//TODO - check it out

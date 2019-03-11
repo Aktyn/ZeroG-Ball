@@ -18,16 +18,8 @@ export default class Map {
 
 		this.background = new Background(MAP_SIZE_X, MAP_SIZE_Y);
 		
-		this.graphics.addObjects(//.setSize(0.5, 0.5)
+		this.graphics.addBackgroundObjects(//.setSize(0.5, 0.5)
 			...this.background.tiles,
-
-			/*SvgEngine.createObject('rect').setRot(Math.PI*0.25).setSize(1, 0.02)
-				.setPos(1, 1/Math.SQRT2+0.25).set({'fill': 'rgb(0, 128, 255)'}),
-			SvgEngine.createObject('rect').setSize(1, 0.02)
-				.setPos(-1/Math.SQRT2, 0.25).set({'fill': 'rgb(0, 128, 255)'}),
-		
-			SvgEngine.createObject('circle').setSize(0.1).setPos(0, -0.5)
-				.set({'fill': 'rgb(255, 128, 128)'})*/
 		);
 
 		this.physics = new Physics();
@@ -35,26 +27,6 @@ export default class Map {
 		/** @type {Object2D[] */
 		this.objects = [];
 		this.loadObjects();
-
-		/*let c = new Circle(0.1);
-		let body = this.physics.add(c, 0.01, 0.01);
-
-		// let c2 = new Circle(0.5);
-		// let body2 = this.physics.add(c2, 0.1001, 35);
-		// body2.setStatic();
-
-		// let body3 = this.physics.add(c2, -0.6001, 35);
-		// body3.setStatic();
-
-		// let body4 = this.physics.add(c2, 0.6001, 35);
-		// body4.setStatic();
-		//body.setPos(0, 20);
-		
-		let floor = new PolygonShape();
-		floor.setBox(0.5, 0.1);
-		let body5 = this.physics.add(floor, 0, 0.9);
-		body5.setStatic();
-		body5.setOrient(Math.PI*0.001);*/
 	}
 
 	loadFilters() {
@@ -74,12 +46,27 @@ export default class Map {
 
 	loadObjects() {
 		this.objects.push( 
-			new Object2D(Type.CIRCLE, 0.1, 0.1, this.graphics, this.physics)
-				.set({'fill': 'rgb(255, 128, 128)'}).setPos(0, -0.5),
-
 			new Object2D(Type.RECT, 0.8, 0.3, this.graphics, this.physics)
-				.set({'fill': 'rgb(64, 192, 255)'}).setPos(0, 0.3).setRot(-Math.PI*0.01).setStatic(),
+				.set({'fill': 'rgb(64, 192, 255)'}).setPos(0, 0.3).setRot(Math.PI*0.).setStatic(),
+
+			new Object2D(Type.RECT, 0.8, 0.1, this.graphics, this.physics)
+				.set({'fill': 'rgb(64, 192, 255)'}).setPos(-0.95, 0.).setRot(Math.PI/2).setStatic(),
+
+			new Object2D(Type.RECT, 0.8, 0.1, this.graphics, this.physics)
+				.set({'fill': 'rgb(64, 192, 255)'}).setPos(1.1, 0.1).setRot(-Math.PI*0.4).setStatic(),
+
+			new Object2D(Type.RECT, 0.1, 0.2, this.graphics, this.physics)
+				.set({'fill': 'rgb(128, 255, 128)'}).setPos(0.1, -0.8).setRot(Math.PI*0.1),
 		);
+
+		for(let i=0; i<3; i++) {
+			for(let j=0; j<3; j++) {
+				this.objects.push(
+					new Object2D(Type.CIRCLE, 0.1, 0.1, this.graphics, this.physics)
+						.set({'fill': 'rgb(255, 128, 128)'}).setPos(-0.1 + i*0.25-j*0.05, -0.4 - 0.9*j),
+				);
+			}
+		}
 	}
 
 	onResize(w, h) {
@@ -92,7 +79,7 @@ export default class Map {
 
 	updateCamera(x, y, zoom) {
 		this.graphics.updateCamera(x, y, zoom);
-		this.background.update(x, y, zoom);
+		this.background.update(x, y, zoom, this.graphics.background_layer);
 	}
 
 	update() {

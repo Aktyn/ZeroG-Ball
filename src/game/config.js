@@ -1,6 +1,6 @@
 import {Vec2} from './physics/math';
 
-const gravity_scale = 0.1;
+const gravity_scale = 1.0;
 
 export default {
 	//graphics

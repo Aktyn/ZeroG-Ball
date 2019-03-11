@@ -1,10 +1,15 @@
 import SvgEngine from './svg_engine';
+import SvgObject from './svg';
 
 import bg_texture from './../img/backgrounds/bg3.png';
 
 const BG_SMOOTHING = 0.9;
 
 export default class Background {
+	/**
+	* @param {number} tiles_x
+	* @param {number} tiles_y
+	*/
 	constructor(tiles_x, tiles_y) {
 		this.tiles_x = tiles_x;
 		this.tiles_y = tiles_y;
@@ -13,16 +18,23 @@ export default class Background {
 
 		for(var y=0; y<tiles_y; y++) {
 			for(var x=0; x<tiles_x; x++) {
-				this.tiles.push(
-					SvgEngine.createObject('image').setClass('nearest').set({'href': bg_texture})
-						.setPos(-tiles_x + 1 + x*2, -tiles_y + 1 + y*2),
-				);
+				let tile = SvgEngine.createObject('image').setClass('nearest')
+					.set({'href': bg_texture}).setPos(-tiles_x + 1 + x*2, -tiles_y + 1 + y*2);
+				tile.update();
+				this.tiles.push(tile);
 			}
 		}
 	}
 
-	update(camera_x, camera_y, zoom) {
-		for(var y=0; y<this.tiles_y; y++) {
+	/**
+	* @param {number} camera_x
+	* @param {number} camera_y
+	* @param {number} zoom
+	* @param {SvgObject} bg_layer
+	*/
+	update(camera_x, camera_y, zoom, bg_layer) {
+		bg_layer.setPos(camera_x/zoom*BG_SMOOTHING, camera_y/zoom*BG_SMOOTHING).update();
+		/*for(var y=0; y<this.tiles_y; y++) {
 			for(var x=0; x<this.tiles_x; x++) {
 				var i = x + y*this.tiles_x;
 
@@ -32,6 +44,6 @@ export default class Background {
 					(-this.tiles_y + 1 + y*2) + camera_y/zoom*BG_SMOOTHING
 				);
 			}
-		}
+		}*/
 	}
 }

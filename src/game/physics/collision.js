@@ -344,7 +344,7 @@ function polygontoPolygon(m, a, b) {
 
 	// Setup reference face vertices
 	let v1 = RefPoly.m_vertices[referenceIndex];
-	referenceIndex = referenceIndex + 1 == RefPoly.m_vertexCount ? 0 : referenceIndex + 1;
+	referenceIndex = referenceIndex + 1 == RefPoly.m_vertices.length ? 0 : referenceIndex + 1;
 	let v2 = RefPoly.m_vertices[referenceIndex];
 
 	// Transform vertices to world space

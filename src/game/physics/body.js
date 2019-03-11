@@ -22,11 +22,12 @@ export default class Body {
 		this.velocity = new Vec2(0, 0);
 		this.angularVelocity = 0;
 		this.torque = 0;
-		this.orient = Random(-Math.PI, Math.PI);//TODO - do not let it be random
-		this.force = new Vec2(0, 0);;
+		//this.orient = Random(-Math.PI, Math.PI);//TODO - do not let it be random
+		this.orient = 0;
+		this.force = new Vec2(0, 0);
 		this.staticFriction = 0.5;
 		this.dynamicFriction = 0.3;
-		this.restitution = 0.2;
+		this.restitution = 0.4;//0.2;
 		this.shape.initialize();
 	}
 

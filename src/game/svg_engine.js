@@ -23,8 +23,12 @@ export default class SvgEngine {
 		});
 
 		this.defs = new SvgObject('defs', true);
+		this.background_layer = new SvgObject('g');
+		this.foreground_layers = new SvgObject('g');
 
 		this.svg.addChild(this.defs);
+		this.svg.addChild(this.background_layer);
+		this.svg.addChild(this.foreground_layers);
 	}
 
 	static createObject(name) {
@@ -67,10 +71,17 @@ export default class SvgEngine {
 		this.svg.node.style.transform = `scale(${height/Config.VIRT_SCALE})`;
 	}
 
+	addBackgroundObjects(...objs) {
+		for(let obj of objs) {
+			//this.objects.push(obj);//assuming that the background objects doesn't need update
+			this.background_layer.addChild(obj);
+		}
+	}
+
 	addObjects(...objs) {
 		for(let obj of objs) {
 			this.objects.push(obj);
-			this.svg.addChild(obj);
+			this.foreground_layers.addChild(obj);
 		}
 	}
 

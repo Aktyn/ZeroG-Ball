@@ -266,10 +266,11 @@ export class PolygonShape extends Shape {
 	* @param {Vec2} dir
 	*/
 	getSupport(dir) {
-		let bestProjection = -FLT_MAX;
+		let bestProjection = Number.MIN_SAFE_INTEGER;//-FLT_MAX;
+		/** @type {Vec2} */
 		let bestVertex;
 
-		for(let i = 0; i < this.m_vertices.length; ++i) {
+		for(let i = 0; i < this.m_vertices.length; i++) {
 			let v = this.m_vertices[i];
 			let projection = Dot(v, dir);
 
