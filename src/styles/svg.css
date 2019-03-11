@@ -2,12 +2,12 @@ svg.game-svg {
 
 }
 
-svg.game-svg.cartoon-style > * {
+svg.game-svg .cartoon-style {
 	stroke: black;
 	stroke-width: 1px;
 }
 
-svg.game-svg.flat-shadows > * {
+svg.game-svg .flat-shadows {
 	filter: url(#flat-shadow);
 }
 

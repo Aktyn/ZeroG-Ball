@@ -1,5 +1,6 @@
-const PI = 3.141592741;
-const EPSILON = 0.0001;
+//const PI = 3.141592741;
+// const EPSILON = 0.0001;
+import Config from './../config';
 
 export class Vec2 {
 	constructor(x = 0, y = 0) {
@@ -97,7 +98,7 @@ export class Vec2 {
 	Normalize() {
 		let len = this.Len();
 
-		if(len > EPSILON) {
+		if(len > Config.EPSILON) {
 			let invLen = 1.0 / len;
 			this.scale(invLen);
 			// this.x *= invLen;
@@ -248,7 +249,7 @@ export function CrossVV(a, b) {
 	@returns {boolean}
 */
 export function Equal(a, b) {// Comparison with tolerance of EPSILON
-	return Math.abs(a - b) <= EPSILON;
+	return Math.abs(a - b) <= Config.EPSILON;
 }
 
 /** 

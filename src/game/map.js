@@ -12,7 +12,9 @@ const MAP_SIZE_Y = 2;
 
 export default class Map {
 	constructor() {
-		this.graphics = new SvgEngine().addClass('cartoon-style').addClass('flat-shadows');
+		this.graphics = new SvgEngine();//.addClass('cartoon-style').addClass('flat-shadows');
+		this.graphics.foreground_layer.addClass('cartoon-style')
+			.addClass('flat-shadows');
 
 		this.loadFilters();
 
@@ -42,6 +44,17 @@ export default class Map {
 				attribs: {'result': 'out1', 'in': "SourceGraphic", 'in2': "matrixOut", 'mode': "normal"}
 			},
 		);
+
+		// <filter id="drop-shadow">
+		//   <feGaussianBlur in="[alpha-channel-of-input]" stdDeviation="[radius]"/>
+		//   <feOffset dx="[offset-x]" dy="[offset-y]" result="offsetblur"/>
+		//   <feFlood flood-color="[color]"/>
+		//   <feComposite in2="offsetblur" operator="in"/>
+		//   <feMerge>
+		//     <feMergeNode/>
+		//     <feMergeNode in="[input-image]"/>
+		//   </feMerge>
+		// </filter> 
 	}
 
 	loadObjects() {
@@ -59,8 +72,8 @@ export default class Map {
 				.set({'fill': 'rgb(128, 255, 128)'}).setPos(0.1, -0.8).setRot(Math.PI*0.1),
 		);
 
-		for(let i=0; i<3; i++) {
-			for(let j=0; j<3; j++) {
+		for(let i=0; i<4; i++) {
+			for(let j=0; j<4; j++) {
 				this.objects.push(
 					new Object2D(Type.CIRCLE, 0.1, 0.1, this.graphics, this.physics)
 						.set({'fill': 'rgb(255, 128, 128)'}).setPos(-0.1 + i*0.25-j*0.05, -0.4 - 0.9*j),

@@ -24,15 +24,15 @@ export default class SvgEngine {
 
 		this.defs = new SvgObject('defs', true);
 		this.background_layer = new SvgObject('g');
-		this.foreground_layers = new SvgObject('g');
+		this.foreground_layer = new SvgObject('g');
 
 		this.svg.addChild(this.defs);
 		this.svg.addChild(this.background_layer);
-		this.svg.addChild(this.foreground_layers);
+		this.svg.addChild(this.foreground_layer);
 	}
 
-	static createObject(name) {
-		return new SvgObject(name);
+	static createObject(name, prevent_centering = false) {
+		return new SvgObject(name, prevent_centering);
 	}
 
 	//@effects - array of objects with name and attribs fields
@@ -42,7 +42,10 @@ export default class SvgEngine {
 			'x': '0', 'y': '0', 'width': '200%', 'height': '200%'
 		});
 		for(let effect of effects) {
-			filter.addChild( new SvgObject(effect.name, true).set(effect.attribs) );
+			if(effect instanceof SvgObject)
+				filter.addChild(effect);
+			else
+				filter.addChild( new SvgObject(effect.name, true).set(effect.attribs) );
 		}
 		this.defs.addChild(filter);
 	}
@@ -81,7 +84,7 @@ export default class SvgEngine {
 	addObjects(...objs) {
 		for(let obj of objs) {
 			this.objects.push(obj);
-			this.foreground_layers.addChild(obj);
+			this.foreground_layer.addChild(obj);
 		}
 	}
 

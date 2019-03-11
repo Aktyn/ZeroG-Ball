@@ -69,10 +69,16 @@ export default class SvgObject {
 			this.node.appendChild(child);
 		else
 			throw new Error('Incorrect child');
+		return this;
 	}
 
 	setClass(name) {
 		this.node.setAttributeNS(null, 'class', name);
+		return this;
+	}
+
+	addClass(name) {
+		this.node.classList.add(name);
 		return this;
 	}
 

@@ -4,6 +4,8 @@ import SvgObject from './../svg';
 
 import {Circle, PolygonShape} from './../physics/shape';
 
+const SCALLER = 20;
+
 export const Type = {
 	CIRCLE: 0,
 	RECT: 1
@@ -22,14 +24,14 @@ export default class Object2D extends SvgObject {
 			case Type.CIRCLE: {
 				super('circle');
 
-				let shape = new Circle(width);
+				let shape = new Circle(width*SCALLER);
 				this.body = physics_engine.add(shape, 0, 0);
 			}	break;
 			case Type.RECT: {
 				super('rect');
 
 				let shape = new PolygonShape();
-				shape.setBox(width, height);
+				shape.setBox(width*SCALLER, height*SCALLER);
 				this.body = physics_engine.add(shape, 0, 0);
 				this.body.setOrient(0);
 			}	break;
@@ -51,7 +53,7 @@ export default class Object2D extends SvgObject {
 	* @param {number} y
 	*/
 	setPos(x, y) {
-		this.body.setPos(x, y);
+		this.body.setPos(x*SCALLER, y*SCALLER);
 		return super.setPos(x, y);
 	}
 
@@ -64,7 +66,7 @@ export default class Object2D extends SvgObject {
 	}
 
 	update() {
-		super.setPos( this.body.position.x, this.body.position.y );
+		super.setPos( this.body.position.x/SCALLER, this.body.position.y/SCALLER );
 		super.setRot(this.body.orient);
 
 		super.update();
