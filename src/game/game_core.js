@@ -1,5 +1,6 @@
 import $ from './../utils/html';
 import Map from './map';
+import Config from './config';
 
 /**
 * Starts an update loop
@@ -45,13 +46,26 @@ function runLoop(self) {
 	step(0);
 }
 
-let t = 0;//tmp
+//let t = 0;//tmp
+const ZOOM_STRENGTH = 0.1;
 
 export default class GameCore extends Map {
 	constructor() {
 		super();//load map
 
 		this._running = false;
+
+		//this.mouse_pressed = false;
+		this.last_mouse_coords = null;
+		this.svg_rect = {x: 0, y: 0, width: 100, height: 100};
+
+		let node = super.getNode();
+
+		node.addEventListener('wheel', this.onMouseWheel.bind(this), false);
+		node.addEventListener('mousedown', this.onMouseDown.bind(this), false);
+		window.addEventListener('mouseup', this.onMouseUp.bind(this), false);
+		//window.addEventListener('mouseleave', this.onMouseLeave.bind(this), false);
+		window.addEventListener('mousemove', this.onMouseMove.bind(this), false);
 	}
 
 	run() {
@@ -59,17 +73,73 @@ export default class GameCore extends Map {
 		runLoop(this);
 	}
 
-	end() {
+	destroy() {
 		this._running = false;
 	}
 
+	/**
+	* @param {number} w
+	* @param {number} h
+	*/
+	onResize(w, h) {
+		super.onResize(w, h);
+
+		this.svg_rect = super.getNode().getBoundingClientRect();//must goes after super.onResize
+	}
+
+	convertCoords(e) {
+		return {
+			x: (e.clientX - this.svg_rect.x) / this.svg_rect.width, 
+			y: (e.clientY - this.svg_rect.y) / this.svg_rect.height
+		};
+	}
+
+	onMouseWheel(e) {
+		let dt = e.wheelDelta/120;
+		//if(dt > 0)
+			super.updateCamera(this.camera.x, this.camera.y, this.camera.zoom*(1-ZOOM_STRENGTH*dt));
+		//else if(dt < 0)
+		//	super.updateCamera(this.camera.x, this.camera.y, this.camera.zoom*(1+ZOOM_STRENGTH*dt));
+	}
+
+	onMouseDown(e) {
+		if(e.button !== 0)
+			return;
+		//save position
+		this.last_mouse_coords = this.convertCoords(e);
+	}
+
+	onMouseUp(e) {
+		if(e.button !== 0)
+			return;
+		this.last_mouse_coords = null;
+	}
+
+	/*onMouseLeave() {
+		console.log('x');
+		this.mouse_pressed = false;
+	}*/
+
+	onMouseMove(e) {
+		if(this.last_mouse_coords === null)
+			return;
+		//console.log(e.clientX, e.clientY);
+
+		let coords = this.convertCoords(e);
+		//console.log(coords);
+		let dx = (this.last_mouse_coords.x - coords.x)*2*Config.ASPECT * this.camera.zoom;
+		let dy = (this.last_mouse_coords.y - coords.y)*2 * this.camera.zoom;
+		super.updateCamera(this.camera.x+dx, this.camera.y+dy, this.camera.zoom);
+		this.last_mouse_coords = coords;
+	}
+
 	update(dt) {
-		let xx = Math.cos(t)*0.5;
+		/*let xx = Math.cos(t)*0.5;
 		let yy = Math.sin(-t*0.6)*0.28;
 		let zoom = 1.25;
 		super.updateCamera(xx, yy, zoom);
 
-		t += Math.PI * dt/1000 * 0.25;
+		t += Math.PI * dt/1000 * 0.25;*/
 
 		super.update();
 	}

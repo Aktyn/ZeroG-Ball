@@ -36,13 +36,11 @@ export default class Background {
 	}
 
 	/**
-	* @param {number} camera_x
-	* @param {number} camera_y
-	* @param {number} zoom
+	* @param {{x: number, y: number, zoom: number}} camera
 	* @param {SvgObject} bg_layer
 	*/
-	update(camera_x, camera_y, zoom, bg_layer) {
-		bg_layer.setPos(camera_x/zoom*BG_SMOOTHING, camera_y/zoom*BG_SMOOTHING).update();
+	update(camera, bg_layer) {
+		bg_layer.setPos(camera.x*BG_SMOOTHING, camera.y*BG_SMOOTHING).update();
 		/*for(var y=0; y<this.tiles_y; y++) {
 			for(var x=0; x<this.tiles_x; x++) {
 				var i = x + y*this.tiles_x;

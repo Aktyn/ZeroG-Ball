@@ -80,16 +80,19 @@ export default class SvgEngine {
 			obj.update();
 	}
 
-	updateCamera(x, y, zoom) {
+	/**
+	* @param {{x: number, y: number, zoom: number}} opts
+	*/
+	updateView(opts) {
 		this.svg.set({
 			'viewBox': `${
-				(-this.width/2 + this.height * (x/zoom) / 2)*zoom
+				(-this.width/2 + this.height * (opts.x/opts.zoom) / 2)*opts.zoom
 			}, ${
-				(this.height * (y/zoom-1) / 2)*zoom
+				(this.height * (opts.y/opts.zoom-1) / 2)*opts.zoom
 			}, ${
-				this.width * zoom
+				this.width * opts.zoom
 			}, ${
-				this.height * zoom
+				this.height * opts.zoom
 			}`
 		});
 	}

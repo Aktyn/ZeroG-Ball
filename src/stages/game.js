@@ -15,8 +15,10 @@ export default class GameStage extends Stage {
 
 		this.gui = new GameGUI({
 			onReturnToMenu: () => {
-				if(this.game)
-					this.game.end();
+				if(this.game) {
+					this.game.destroy();
+					this.game = null;
+				}
 				this.listeners.onExit();
 			}
 		});
@@ -27,7 +29,8 @@ export default class GameStage extends Stage {
 		);
 
 		window.addEventListener('resize', this.onResize.bind(this), false);
-		this.onResize();
+		
+		setTimeout(() => this.onResize(), 1);
 
 		//this.running = false;
 		//this.run();

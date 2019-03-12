@@ -7,8 +7,8 @@ export default class GameGUI {
 
 		this.is_view_open = false;
 
-		this.container = $.create('div').addClass('game-gui-container').addChild(
-			this.header = $.create('header')/*.addClass('hidden')*/.addChild(
+		this.container = $.create('div').setClass('game-gui-container mode-0').addChild(
+			this.header = $.create('header').addClass('hidden').addChild(
 				$.create('button').addClass('menu-btn').on('click', () => {
 					if(!this.header)
 						return;
@@ -23,8 +23,6 @@ export default class GameGUI {
 				).addChild(
 					$.create('button').text('EXPORT')//TODO
 				).addChild(
-					$.create('button').text('WYCZYŚĆ MAPĘ')//TODO
-				).addChild(
 					$.create('button').text('RESTART')//TODO
 				)
 			).addChild(
@@ -35,7 +33,7 @@ export default class GameGUI {
 						.on('click', this.showSettings.bind(this))
 				).addChild(
 					this.menu_return_btn = $.create('button').addClass('exit-btn')
-						.text('WYJŚCIE DO MENU').on('click', this.tryReturnToMenu.bind(this))
+						.text('POWRÓT DO MENU').on('click', this.tryReturnToMenu.bind(this))
 				)
 			)
 		).addChild(
@@ -43,6 +41,20 @@ export default class GameGUI {
 				if(e.target === this.gui_center && this.is_view_open)
 					this.closeView();
 			})
+		).addChild(
+			$.create('div').addClass('edit-tools').addChild(
+				$.create('div').addClass('assets').text('TODO')
+			).addChild(
+				$.create('div').addClass('tools').addChild(
+					$.create('button').text('USUŃ WSZYSTKO')//TODO
+				).addChild(
+					$.create('div').addChild(
+						$.create('button').text('COFNIJ')//TODO
+					).addChild(
+						$.create('button').text('PONÓW')//TODO
+					)
+				)
+			)
 		);
 
 		['GRA', 'EDYCJA'].forEach((mode, i) => {
@@ -66,14 +78,17 @@ export default class GameGUI {
 	}
 
 	changeMode(id) {
-		console.log('TODO', id);
+		// console.log('TODO', id);
+		this.container.setClass(`game-gui-container mode-${id}`);
+
+		//TODO - edit mode pauses game physics, play mode reloads map
 	}
 
 	tryReturnToMenu() {
 		if(this.menu_return_confirm === null) {
-			this.menu_return_btn.text('Na pewno?');
+			this.menu_return_btn.text('NA PEWNO?');
 			this.menu_return_confirm = setTimeout(() => {
-				this.menu_return_btn.text('Powrót do menu');
+				this.menu_return_btn.text('POWRÓT DO MENU');
 				this.menu_return_confirm = null;
 			}, 5000);
 		}
@@ -88,7 +103,9 @@ export default class GameGUI {
 	closeView() {
 		if(this.gui_center)
 			this.gui_center.text('');
+
 		this.is_view_open = false;
+		this.container.removeClass('view-open');
 	}
 
 	showSettings() {
@@ -105,5 +122,6 @@ export default class GameGUI {
 		);
 
 		this.is_view_open = true;
+		this.container.addClass('view-open');
 	}
 }

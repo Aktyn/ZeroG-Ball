@@ -17,6 +17,10 @@ export default class Map {
 		this.graphics.foreground_layer.addClass('cartoon-style')
 			.addClass('flat-shadows');
 
+		this.camera = {
+			x: 0, y: 0, zoom: 1
+		};
+
 		this.loadFilters();
 		this.loadTextures();
 
@@ -31,6 +35,18 @@ export default class Map {
 		/** @type {Object2D[] */
 		this.objects = [];
 		this.loadObjects();
+	}
+
+	getNode() {
+		return this.graphics.getNode();
+	}
+
+	/**
+	* @param {number} w
+	* @param {number} h
+	*/
+	onResize(w, h) {
+		this.graphics.onResize(w, h);
 	}
 
 	loadFilters() {
@@ -79,17 +95,18 @@ export default class Map {
 		}
 	}
 
-	onResize(w, h) {
-		this.graphics.onResize(w, h);
-	}
-
-	getNode() {
-		return this.graphics.getNode();
-	}
-
+	/**
+	* @param {number} x
+	* @param {number} y
+	* @param {number} zoom
+	*/
 	updateCamera(x, y, zoom) {
-		this.graphics.updateCamera(x, y, zoom);
-		this.background.update(x, y, zoom, this.graphics.background_layer);
+		this.camera.x = x;
+		this.camera.y = y;
+		this.camera.zoom = zoom;
+
+		this.graphics.updateView(this.camera);
+		this.background.update(this.camera, this.graphics.background_layer);
 	}
 
 	update() {

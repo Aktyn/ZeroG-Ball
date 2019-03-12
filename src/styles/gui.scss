@@ -1,14 +1,18 @@
 $header-size: 35px;
 
 .game-gui-container {
+	pointer-events: none;
+
 	display: grid;
 	grid-template-columns: 100%;
-	grid-template-rows: fit-content(100%) auto;
+	grid-template-rows: fit-content(100%) auto fit-content(100%);
 	align-items: center;
 	justify-content: space-between;
 	height: 100%;
 
 	& > header {
+		pointer-events: auto;
+
 		min-height: $header-size;
 		padding: 0px 5px;
 		background-color: #0004;
@@ -19,7 +23,7 @@ $header-size: 35px;
 		grid-template-areas: 'switch_btn game_buttons modes actions';
 		grid-template-columns: $header-size fit-content(100%) auto fit-content(100%);
 		align-items: center;
-		justify-content: space-between;
+		justify-content: stretch;
 
 		.game-buttons {
 			grid-area: game_buttons;
@@ -49,8 +53,9 @@ $header-size: 35px;
 
 		.modes {
 			grid-area: modes;
-			background-color: #80CBC480;
+			background-color: #004D4080;
 			border-radius: 5px;
+			justify-self: center;
 
 			& > * {
 				margin: 5px;
@@ -84,6 +89,14 @@ $header-size: 35px;
 		&:not(.hidden) .menu-btn {
 			background-image: url('./../img/close.svg');
 		}
+
+		.exit-btn {
+			width: 150px;
+		}
+	}
+
+	&.view-open .gui-center {
+		pointer-events: auto;
 	}
 
 	.gui-center {
@@ -93,33 +106,67 @@ $header-size: 35px;
 		display: grid;
 		align-items: center;
 		justify-content: center;
+
+		.view-container {
+			margin: auto;
+			background-color: #fff;
+			margin-top: 20px;
+			border-radius: 5px;
+			box-shadow: 0px 1px 8px #0008;
+			overflow: hidden;
+
+			header {
+				padding: 0px 10px;
+				height: 35px;
+				line-height: 35px;
+				color: #fff;
+				background-color: #455a64;
+
+				.close-btn {
+					margin: 5px 0px;
+					margin-left: 10px;
+					float: right;
+				}
+			}
+
+			article {//main content
+				color: #455a64;
+				padding: 5px 5px;
+			}
+		}
 	}
 
-	.view-container {
-		margin: auto;
-		background-color: #fff;
-		margin-top: 20px;
-		border-radius: 5px;
-		box-shadow: 0px 1px 8px #0008;
-		overflow: hidden;
+	.edit-tools {
+		pointer-events: auto;
 
-		header {
-			padding: 0px 10px;
-			height: 35px;
-			line-height: 35px;
-			color: #fff;
-			background-color: #455a64;
+		background-color: #0004;
 
-			.close-btn {
-				margin: 5px 0px;
-				margin-left: 10px;
-				float: right;
+		display: grid;
+		grid-template-areas: 'assets tools';
+		grid-template-columns: auto min-content;
+		align-items: center;
+		justify-content: stretch;
+
+		.assets {
+			grid-area: assets;
+		}
+
+		.tools {
+			padding: 5px 0px;
+			& > * {
+				white-space: nowrap;
+				margin: 5px;
+			}
+
+			& > * > button {
+				margin: 0px 2px;
 			}
 		}
 
-		article {//main content
-			color: #455a64;
-			padding: 5px 5px;
-		}
+		transition: transform 0.5s cubic-bezier(.36,.07,.19,.97);
+	}
+
+	&:not(.mode-1) .edit-tools {//only in edit mode
+		transform: translateY(100%);
 	}
 }
