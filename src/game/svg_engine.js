@@ -1,6 +1,6 @@
 import SvgObject from './svg';
 import Config from './config';
-import './../styles/svg.css';
+import './../styles/svg.scss';
 
 export default class SvgEngine {
 	constructor() {

@@ -1,0 +1,69 @@
+$header-size: 35px;
+
+.game-gui-container {
+	display: grid;
+	grid-template-columns: 100%;
+	grid-template-rows: $header-size auto;
+	align-items: center;
+	justify-content: space-between;
+	height: 100%;
+
+	& > header {
+		height: $header-size;
+		padding: 0px 5px;
+		/*line-height: 35px;*/
+		background-color: #0004;
+		box-shadow: 0px 0px 5px #0008;
+
+		display: grid;
+		grid-template-areas: 'game_buttons info actions';
+		grid-template-columns: fit-content(100%) auto fit-content(100%);
+		align-items: center;
+		justify-content: space-between;
+
+		.actions {
+			grid-area: actions;
+
+			&  > * {
+				margin: 0px 5px;
+			}
+		}
+	}
+
+	.gui-center {
+		height: 100%;
+		width: auto;
+
+		display: grid;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.view-container {
+		margin: auto;
+		background-color: #fff;
+		margin-top: 20px;
+		border-radius: 5px;
+		box-shadow: 0px 1px 8px #0008;
+		overflow: hidden;
+
+		header {
+			padding: 0px 10px;
+			height: 35px;
+			line-height: 35px;
+			color: #fff;
+			background-color: #455a64;
+
+			.close-btn {
+				margin: 5px 0px;
+				margin-left: 10px;
+				float: right;
+			}
+		}
+
+		article {//main content
+			color: #455a64;
+			padding: 5px 5px;
+		}
+	}
+}

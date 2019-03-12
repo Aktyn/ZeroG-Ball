@@ -40,12 +40,10 @@ const CONFIG = {
 				exclude: /node_modules/,        
 				loader: "babel-loader"
 			},
-			{        
-			    test: /\.css$/,        
-			    use: [
-			    	//'style-loader', 
-			    	//'css-loader',
-			    	MiniCssExtractPlugin.loader,
+			{
+				test: /\.(scss|css)$/,
+				use: [
+					MiniCssExtractPlugin.loader,
 					{
 						loader: "css-loader",
 						options: {
@@ -53,7 +51,7 @@ const CONFIG = {
 							//minimize: !isDevelopment
 						}
 					},
-			    	{
+					{
 						loader: "postcss-loader",
 						options: {
 							autoprefixer: {
@@ -65,7 +63,13 @@ const CONFIG = {
 							]
 						},
 					},
-			    ] //orde is important
+					{
+						loader: "sass-loader",
+						options: {
+							sourceMap: isDevelopment
+						}
+					}
+				]
 			},
 			{
 				test: /\.(jpe?g|png|gif|svg|ttf)$/,

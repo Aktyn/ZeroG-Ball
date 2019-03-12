@@ -5,7 +5,7 @@ import {Circle, PolygonShape} from './physics/shape';
 import Background from './background';
 import Config from './config';
 
-import ball_texture from './../img/ball_texture.png';
+//import ball_texture from './../img/ball_texture.png';
 
 const BG_SMOOTHING = 0.7;
 const MAP_SIZE_X = 3;

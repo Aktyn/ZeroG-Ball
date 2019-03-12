@@ -1,11 +1,6 @@
 
 //https://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-oriented-rigid-bodies--gamedev-8032
 
-// f32 m_dt; //step
-// uint32 m_iterations;
-// std::vector<Body *> bodies;
-// std::vector<Manifold> contacts;
-
 import Config from './../config';
 import Body from './body';
 import Shape from './shape';

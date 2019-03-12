@@ -59,6 +59,10 @@ export default class GameCore extends Map {
 		runLoop(this);
 	}
 
+	end() {
+		this._running = false;
+	}
+
 	update(dt) {
 		let xx = Math.cos(t)*0.5;
 		let yy = Math.sin(-t*0.6)*0.28;

@@ -1,6 +1,6 @@
 import $ from './../utils/html';
 import Stage from './stage';
-import './../styles/menu.css';
+import './../styles/menu.scss';
 
 const _void_func = ()=>{};
 

@@ -27,8 +27,9 @@ function initMenu(main_div) {
  */
 function initGame(main_div) {
 	current_stage = new GameStage(main_div, {
-		onEnd() {//TODO - invoke from game class
+		onExit() {//TODO - invoke from game class
 			current_stage.close();
+			initMenu(main_div);
 		}
 	});
 

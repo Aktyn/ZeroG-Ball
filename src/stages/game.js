@@ -6,13 +6,20 @@ import GUI from './../game/gui';
 
 import Config from './../game/config';
 
-import './../styles/game.css';
+import './../styles/game.scss';
+import './../styles/gui.scss';
 
 export default class GameStage extends Stage {
 	constructor(target, listeners) {
 		super(target, 'game-container', listeners);
 
-		this.gui = new GUI();
+		this.gui = new GUI({
+			onReturnToMenu: () => {
+				if(this.game)
+					this.game.end();
+				this.listeners.onExit();
+			}
+		});
 		this.game = new GameCore();
 
 		this.container.addChild(
