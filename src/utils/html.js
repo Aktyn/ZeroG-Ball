@@ -225,7 +225,7 @@ const extender = {//extended methods of DOM HTMLElements
 };
 
 function fromQuery(query, parent) {
-	var value = Array.from((parent || document).querySelectorAll(query))
+	var value = Array.from((parent || document).querySelectorAll(query || '*'))
 		.map( _HTMLElement_ => static_methods.expand(_HTMLElement_, extender, true) );
 
 	if(value.length === 1)//returning single found HTMLElement

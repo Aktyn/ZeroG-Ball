@@ -2,7 +2,7 @@ import $ from './../utils/html';
 import Stage from './stage';
 
 import GameCore from './../game/game_core';
-import GUI from './../game/gui';
+import GameGUI from './../game/game_gui';
 
 import Config from './../game/config';
 
@@ -13,7 +13,7 @@ export default class GameStage extends Stage {
 	constructor(target, listeners) {
 		super(target, 'game-container', listeners);
 
-		this.gui = new GUI({
+		this.gui = new GameGUI({
 			onReturnToMenu: () => {
 				if(this.game)
 					this.game.end();

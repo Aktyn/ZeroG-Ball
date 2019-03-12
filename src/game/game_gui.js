@@ -1,6 +1,6 @@
 import $ from './../utils/html';
 
-export default class GUI {
+export default class GameGUI {
 	constructor(listeners = {}) {
 		this.listeners = listeners;
 		this.menu_return_confirm = null;
@@ -8,13 +8,34 @@ export default class GUI {
 		this.is_view_open = false;
 
 		this.container = $.create('div').addClass('game-gui-container').addChild(
-			$.create('header').addChild(
+			this.header = $.create('header')/*.addClass('hidden')*/.addChild(
+				$.create('button').addClass('menu-btn').on('click', () => {
+					if(!this.header)
+						return;
+					if(this.header.classList.contains('hidden'))
+						this.header.classList.remove('hidden');
+					else
+						this.header.classList.add('hidden');
+				})
+			).addChild(
+				$.create('div').addClass('game-buttons').addChild(
+					$.create('button').text('IMPORT')//TODO
+				).addChild(
+					$.create('button').text('EXPORT')//TODO
+				).addChild(
+					$.create('button').text('WYCZYŚĆ MAPĘ')//TODO
+				).addChild(
+					$.create('button').text('RESTART')//TODO
+				)
+			).addChild(
+				this.modes_panel = $.create('div').addClass('modes')
+			).addChild(
 				$.create('div').addClass('actions').addChild(
-					$.create('button').addClass('exit-btn').text('Ustawienia')
+					$.create('button').text('USTAWIENIA')
 						.on('click', this.showSettings.bind(this))
 				).addChild(
 					this.menu_return_btn = $.create('button').addClass('exit-btn')
-						.text('Powrót do menu').on('click', this.tryReturnToMenu.bind(this))
+						.text('WYJŚCIE DO MENU').on('click', this.tryReturnToMenu.bind(this))
 				)
 			)
 		).addChild(
@@ -24,11 +45,28 @@ export default class GUI {
 			})
 		);
 
-		this.showSettings();//temp test
+		['GRA', 'EDYCJA'].forEach((mode, i) => {
+			let btn = $.create('button').text(mode).setAttrib('id', i).on('click', btn => {
+				//console.log(btn.target.id);
+				this.modes_panel.getChildren().forEach(ex_btn => {
+					ex_btn.disabled = ex_btn.id === btn.target.id;
+				});
+				this.changeMode(btn.target.id);
+			});
+			if(i === 0)//first element
+				btn.disabled = true;//btn.setAttrib('disabled', undefined);
+			this.modes_panel.addChild(btn);
+		});
+
+		//this.showSettings();//temp test
 	}
 
 	getNode() {
 		return this.container;
+	}
+
+	changeMode(id) {
+		console.log('TODO', id);
 	}
 
 	tryReturnToMenu() {

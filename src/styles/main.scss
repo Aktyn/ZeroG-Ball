@@ -60,10 +60,11 @@ button {
 	}
 }
 
-.close-btn {
-	background: url('./../img/close.svg') center no-repeat;
+.close-btn, .menu-btn {
 	background-size: 60%;
 	background-color: #607D8B;
+	background-position: center;
+	background-repeat: no-repeat;
 
 	height: 25px;
 	width: 25px;
@@ -77,6 +78,15 @@ button {
 	&:active {
 		background-color: #e57373;
 	}
+}
+
+.close-btn {
+	background-image: url('./../img/close.svg');
+	
+}
+
+.menu-btn {
+	background-image: url('./../img/menu.svg');
 }
 
 /*main div*/
@@ -95,10 +105,10 @@ button {
 	}
 
 	& > .menu-container {
-		background-color: red;
+		//background-color: red;
 	}
 
 	& > .game-container {
-		background-color: #B0BEC5;
+		//background-color: #B0BEC5;
 	}
 }

@@ -11,8 +11,10 @@ export default class MenuStage extends Stage {
 
 		this.start_btn = $.create('button').text('START').on('click', listeners.onStart);
 
+		this.avaible_levels = $.create('p').text('TODO - lista dostępnych map');
+
 		this.container.addChild(
-			this.start_btn
+			this.start_btn, this.avaible_levels
 		);
 	}
 

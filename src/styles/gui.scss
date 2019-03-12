@@ -3,30 +3,86 @@ $header-size: 35px;
 .game-gui-container {
 	display: grid;
 	grid-template-columns: 100%;
-	grid-template-rows: $header-size auto;
+	grid-template-rows: fit-content(100%) auto;
 	align-items: center;
 	justify-content: space-between;
 	height: 100%;
 
 	& > header {
-		height: $header-size;
+		min-height: $header-size;
 		padding: 0px 5px;
-		/*line-height: 35px;*/
 		background-color: #0004;
-		box-shadow: 0px 0px 5px #0008;
+		transition: background-color 0.3s linear;
+		//box-shadow: 0px 0px 5px #0008;
 
 		display: grid;
-		grid-template-areas: 'game_buttons info actions';
-		grid-template-columns: fit-content(100%) auto fit-content(100%);
+		grid-template-areas: 'switch_btn game_buttons modes actions';
+		grid-template-columns: $header-size fit-content(100%) auto fit-content(100%);
 		align-items: center;
 		justify-content: space-between;
 
+		.game-buttons {
+			grid-area: game_buttons;
+			text-align: left;
+			justify-self: left;
+		}
+
 		.actions {
 			grid-area: actions;
+			text-align: right;
+		}
 
-			&  > * {
-				margin: 0px 5px;
+		.game-buttons, .actions, .modes {
+			transition: opacity 0.3s linear, transform 0.3s ease-in-out;
+		}
+
+		@for $i from 1 through 4 {
+			& > *:nth-child(#{$i}) {
+				//transition: opacity 0.3s linear, transform 0.3s 10s ease-in-out !important;
+				transition-delay: #{($i - 2)*100}ms !important;
 			}
+		}
+
+		.game-buttons > *, .actions > * {
+			margin: 5px 5px;
+		}
+
+		.modes {
+			grid-area: modes;
+			background-color: #80CBC480;
+			border-radius: 5px;
+
+			& > * {
+				margin: 5px;
+			}
+			
+			& > button:disabled {
+				background-color: #8BC34A;
+				font-weight: bold;
+				color: #fff;
+				cursor: auto;
+			}
+		}
+
+		&.hidden {
+			background-color: #0000;
+			//box-shadow: 0px 0px 5px #0000;
+			.game-buttons, .actions, .modes {
+				opacity: 0;
+				transform: translateY(-100%);
+				button {
+					cursor: auto;
+				}
+			}
+		}
+
+		.menu-btn {
+			margin-top: 5px;
+			align-self: flex-start;
+		}
+
+		&:not(.hidden) .menu-btn {
+			background-image: url('./../img/close.svg');
 		}
 	}
 
