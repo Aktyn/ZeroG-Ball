@@ -1,6 +1,6 @@
-
 //https://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-oriented-rigid-bodies--gamedev-8032
 
+// @ts-check
 import Config from './../config';
 import Body from './body';
 import Shape from './shape';

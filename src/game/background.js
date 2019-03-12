@@ -7,6 +7,7 @@ import bg_texture from './../img/backgrounds/bg2.png';
 const BG_SMOOTHING = 0.9;
 const TILE_SCALE = 2;
 
+// @ts-check
 export default class Background {
 	/**
 	* @param {number} tiles_x

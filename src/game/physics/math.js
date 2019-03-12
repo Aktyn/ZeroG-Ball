@@ -1,3 +1,4 @@
+// @ts-check
 //const PI = 3.141592741;
 // const EPSILON = 0.0001;
 import Config from './../config';
@@ -146,7 +147,7 @@ export class Mat2 {//2x2
 		return this;
 	}
 
-	AxisY() {
+	AxisX() {
 		return new Vec2(this.m00, this.m10);
 	}
 

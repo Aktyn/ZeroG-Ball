@@ -1,3 +1,4 @@
+// @ts-check
 import SvgObject from './svg';
 import Config from './config';
 import './../styles/svg.scss';

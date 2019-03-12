@@ -1,3 +1,4 @@
+// @ts-check
 import SvgEngine from './svg_engine';
 import Physics from './physics/physics_engine';
 import Object2D, {Type} from './objects/object2d';

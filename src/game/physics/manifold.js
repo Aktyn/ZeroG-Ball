@@ -1,3 +1,4 @@
+// @ts-check
 import Body from './body';
 import Config from './../config';
 import {Dispatch} from './collision';
@@ -33,7 +34,6 @@ export default class Manifold {
 		this.e = ( this.A.restitution + this.B.restitution ) / 2.0;
 
 		// Calculate static and dynamic friction
-		//TODO - check it out
 		this.sf = Math.sqrt( this.A.staticFriction * this.A.staticFriction );
 		this.df = Math.sqrt( this.A.dynamicFriction * this.A.dynamicFriction );
 

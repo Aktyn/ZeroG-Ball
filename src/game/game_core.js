@@ -1,3 +1,4 @@
+// @ts-check
 import $ from './../utils/html';
 import Map from './map';
 import Config from './config';

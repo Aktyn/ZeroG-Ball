@@ -1,3 +1,4 @@
+// @ts-check
 import Shape from './shape';
 import {Vec2, Random, CrossVV} from './math';
 
@@ -15,6 +16,7 @@ export default class Body {
 		this.im = 0; // inverse mass
 
 		// Shape interface
+		/** @type {any}*/
 		this.shape = shape.clone();
 
 		this.shape.body = this;

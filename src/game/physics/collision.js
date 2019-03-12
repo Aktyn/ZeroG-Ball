@@ -1,9 +1,10 @@
+// @ts-check
 import Config from './../config';
 import Manifold from './manifold';
 import Body from './body';
 import {Vec2, Mat2, Dot, DistSqr, BiasGreaterThan} from './math';
 
-import {Circle, PolygonShape} from './shape';
+import Shape, {Circle, PolygonShape} from './shape';
 
 export const Dispatch = [
 	[circletoCircle, circletoPolygon],
@@ -16,9 +17,9 @@ export const Dispatch = [
 *	@param {Body} b
 */
 function circletoCircle(m, a, b) {
-	/** @type {Circle} */
+	/** @type {Circle&Shape} */
 	let A = a.shape;
-	/** @type {Circle} */
+	/** @type {Circle&Shape} */
 	let B = b.shape;
 
 	// Calculate translational vector, which is normal
@@ -58,9 +59,9 @@ function circletoCircle(m, a, b) {
 *	@param {Body} b
 */
 function circletoPolygon(m, a, b) {
-	/** @type {Circle} */
+	/** @type {Circle&Shape} */
 	let A = a.shape;
-	/** @type {PolygonShape} */
+	/** @type {PolygonShape&Shape} */
 	let B = b.shape;
 
 	m.contact_count = 0;
@@ -167,7 +168,6 @@ function polygontoCircle(m, a, b) {
 }
 
 /**
-*	@param {number} faceIndex
 *	@param {PolygonShape} A
 *	@param {PolygonShape} B
 */
@@ -296,9 +296,9 @@ function clip(n, c, face) {// Vec2 n, let c, Vec2 *face
 *	@param {Body} b
 */
 function polygontoPolygon(m, a, b) {
-	/** @type {PolygonShape} */
+	/** @type {PolygonShape&Shape} */
 	let A = a.shape;
-	/** @type {PolygonShape} */
+	/** @type {PolygonShape&Shape} */
 	let B = b.shape;
 
 	m.contact_count = 0;
@@ -311,7 +311,7 @@ function polygontoPolygon(m, a, b) {
 
 	// Check for a separating axis with B's face planes
 	let penetrationB = findAxisLeastPenetration(B, A);
-	if(penetrationB >= 0)
+	if(penetrationB.best_distance >= 0)
 		return;
 
 	/** @type {number} */

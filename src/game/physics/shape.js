@@ -1,5 +1,7 @@
+// @ts-check
 import Body from './body';
 import {Mat2, Vec2, CrossVV, Dot} from './math';
+import Config from './../config';
 
 const MaxPolyVertexCount = 64;
 
@@ -17,14 +19,12 @@ export default class Shape {
 		this.u = new Mat2({radians: 0});
 	}
 
-	/** @returns {Shape} */
 	clone() {}
 	initialize() {}
 	computeMass(density) {}
 	/** @param {number} radians */
 	setOrient(radians) {}
 	draw() {}
-	/** @returns {number} */
 	getType() {}
 }
 
@@ -202,7 +202,7 @@ export class PolygonShape extends Shape {
 			// by computing cross products to find the most counter-clockwise
 			// vertex in the set, given the previos hull index
 			let nextHullIndex = 0;
-			for(let i = 1; i < vertices.length|0; ++i) {
+			for(let i = 1; i < (vertices.length|0); i++) {
 				// Skip if same coordinate as we need three unique
 				// points in the set to perform a cross product
 				if(nextHullIndex == indexHull) {
@@ -252,7 +252,7 @@ export class PolygonShape extends Shape {
 			let face = this.m_vertices[i2].clone().addVec( this.m_vertices[i1].clone().minus() );
 
 			// Ensure no zero-length edges, because that's bad
-			if( face.LenSqr( ) <= EPSILON * EPSILON )
+			if( face.LenSqr( ) <= Config.EPSILON * Config.EPSILON )
 				throw new Error('Incorrect vector length');
 
 			// Calculate normal with 2D cross product between vector and scalar

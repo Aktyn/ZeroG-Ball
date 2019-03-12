@@ -1,3 +1,4 @@
+// @ts-check
 import Config from './config';
 
 export default class SvgObject {
@@ -17,15 +18,15 @@ export default class SvgObject {
 		if(!prevent_centering) {
 			//place object in center of the svg
 			if(this.name === 'circle') {
-				this.node.setAttributeNS(null, 'r', Config.VIRT_SCALE/2);
-				this.node.setAttributeNS(null, 'cx', 0);
-				this.node.setAttributeNS(null, 'cy', 0);
+				this.node.setAttributeNS(null, 'r', String(Config.VIRT_SCALE/2));
+				this.node.setAttributeNS(null, 'cx', '0');
+				this.node.setAttributeNS(null, 'cy', '0');
 			}
 			else {
-				this.node.setAttributeNS(null, 'width', Config.VIRT_SCALE);
-				this.node.setAttributeNS(null, 'height', Config.VIRT_SCALE);
-				this.node.setAttributeNS(null, 'x', -Config.VIRT_SCALE/2);
-				this.node.setAttributeNS(null, 'y', -Config.VIRT_SCALE/2);
+				this.node.setAttributeNS(null, 'width', String(Config.VIRT_SCALE));
+				this.node.setAttributeNS(null, 'height', String(Config.VIRT_SCALE));
+				this.node.setAttributeNS(null, 'x', String(-Config.VIRT_SCALE/2));
+				this.node.setAttributeNS(null, 'y', String(-Config.VIRT_SCALE/2));
 			}
 
 			this.node.setAttributeNS(null, 'transform-origin', '0 0');
@@ -35,18 +36,23 @@ export default class SvgObject {
 	update() {//updates object transform
 		if(this.scale_changed === true) {
 			if(this.name === 'circle') {
+				//@ts-ignore
 				this.node.setAttributeNS(null, 'r', Config.VIRT_SCALE/2 * this.transform.w);
 				//this.node.setAttributeNS(null, 'cx', this.transform.x*Config.VIRT_SCALE/2);
 				//this.node.setAttributeNS(null, 'cy', this.transform.y*Config.VIRT_SCALE/2);
 			}
 			else {
+				//@ts-ignore
 				this.node.setAttributeNS(null, 'width', Config.VIRT_SCALE * this.transform.w);
+				//@ts-ignore
 				this.node.setAttributeNS(null, 'height', Config.VIRT_SCALE * this.transform.h);
 				//this.node.setAttributeNS(null, 'x', -Config.VIRT_SCALE/2 * this.transform.w +
 				//	this.transform.x*Config.VIRT_SCALE/2);
 				//this.node.setAttributeNS(null, 'y', -Config.VIRT_SCALE/2 * this.transform.h +
 				//	this.transform.y*Config.VIRT_SCALE/2);
+				//@ts-ignore
 				this.node.setAttributeNS(null, 'x', -Config.VIRT_SCALE/2 * this.transform.w);
+				//@ts-ignore
 				this.node.setAttributeNS(null, 'y', -Config.VIRT_SCALE/2 * this.transform.h);
 			}
 
