@@ -8,9 +8,8 @@ import Config from './config';
 import ball_texture from './../img/ball_texture.png';
 
 const BG_SMOOTHING = 0.7;
-//TODO - BACKGROUND_TILE_SCALE
-const MAP_SIZE_X = 4;
-const MAP_SIZE_Y = 2;
+const MAP_SIZE_X = 3;
+const MAP_SIZE_Y = 3;
 
 export default class Map {
 	constructor() {
@@ -49,9 +48,9 @@ export default class Map {
 		);
 	}
 
-	loadTextures() {
-		this.graphics.createTexture('ball-texture', ball_texture, 
-			Config.VIRT_SCALE*0.1, Config.VIRT_SCALE*0.1);
+	loadTextures() {//TODO
+		//this.graphics.createTexture('ball-texture', ball_texture, 
+		//	Config.VIRT_SCALE*0.1, Config.VIRT_SCALE*0.1);
 	}
 
 	loadObjects() {
@@ -73,7 +72,8 @@ export default class Map {
 			for(let j=0; j<4; j++) {
 				this.objects.push(
 					new Object2D(Type.CIRCLE, 0.1, 0.1, this.graphics, this.physics)
-						.set({'fill': 'url(#ball-texture)'}).setPos(-0.1 + i*0.25-j*0.05, -0.4 - 0.9*j),
+						.set({'fill': 'rgb(255, 128, 128)'}).setPos(-0.1 + i*0.25-j*0.05, -0.4 - 0.9*j),
+						//url(#ball-texture)
 				);
 			}
 		}

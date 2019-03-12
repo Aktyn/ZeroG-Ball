@@ -1,9 +1,11 @@
 import SvgEngine from './svg_engine';
 import SvgObject from './svg';
+import Config from './config';
 
-import bg_texture from './../img/backgrounds/bg3.png';
+import bg_texture from './../img/backgrounds/bg2.png';
 
 const BG_SMOOTHING = 0.9;
+const TILE_SCALE = 2;
 
 export default class Background {
 	/**
@@ -18,9 +20,16 @@ export default class Background {
 
 		for(var y=0; y<tiles_y; y++) {
 			for(var x=0; x<tiles_x; x++) {
-				let tile = SvgEngine.createObject('image').setClass('nearest')
-					.set({'href': bg_texture}).setPos(-tiles_x + 1 + x*2, -tiles_y + 1 + y*2);
+				let xx = (-tiles_x + 1 + x*2)*TILE_SCALE;
+				let yy = (-tiles_y + 1 + y*2)*TILE_SCALE
+				let tile = SvgEngine.createObject('image')//.setClass('nearest')
+					.set({'href': bg_texture}).setSize(TILE_SCALE, TILE_SCALE);
 				tile.update();
+				tile.set({
+					'transform': `translate(${
+						xx*Config.VIRT_SCALE/2-x} ${
+						yy*Config.VIRT_SCALE/2-y}) scale(${x%2 ? 1 : -1}, ${y%2 ? 1 : -1})`
+				});
 				this.tiles.push(tile);
 			}
 		}
