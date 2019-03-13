@@ -316,7 +316,7 @@ function _self(value) {
 	else if(typeof value === 'string')
 		return fromQuery(value);
 	else
-		throw new Error("Given argument type is incopatible (" + typeof value + ")");
+		throw new Error("Given argument type is incompatible (" + typeof value + ")");
 }
 
 /** @type {_self & static_methods} */
