@@ -192,10 +192,7 @@ $header-size: 35px;
 		margin: 0;
 		outline: 0;
 		top: 50%;
-		-ms-transform: translate(0, -50%);
-		-webkit-transform: translate(0, -50%);
 		transform: translate(0, -50%);
-		-webkit-transition: all 0.3s ease;
 		transition: all 0.3s ease;
 	}
 	.switch-label:before {
@@ -225,8 +222,6 @@ $header-size: 35px;
 	}
 	.switch-input:checked + .switch-label:after {
 		background-color: #4caf50;
-		-ms-transform: translate(80%, -50%);
-		-webkit-transform: translate(80%, -50%);
 		transform: translate(80%, -50%);
 	}
 	.switch-input:checked + .switch-label .toggle--on {
