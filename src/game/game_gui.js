@@ -117,8 +117,11 @@ export default class GameGUI {
 					$.create('button').addClass('close-btn').on('click', this.closeView.bind(this))
 				)
 			).addChild(
-				$.create('article').text('TODO')
-			)
+				$.create('article').addChild(
+					$.create('input').setAttrib('type', 'checkbox').setAttrib('id', 'IDcienie').addClass('switch-input')
+				).addChild(
+					$.create('label').setAttrib('for', 'IDcienie').addClass('switch-label').addText('Cienie')
+			))
 		);
 
 		this.is_view_open = true;
