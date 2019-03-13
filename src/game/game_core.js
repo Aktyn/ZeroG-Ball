@@ -1,6 +1,7 @@
 // @ts-check
 import $ from './../utils/html';
 import Map from './map';
+import MapData from './map_data';
 import Config from './config';
 
 /**
@@ -52,7 +53,10 @@ const ZOOM_STRENGTH = 0.1;
 
 export default class GameCore extends Map {
 	constructor() {
-		super();//load map
+		super();//map
+
+		this.map_data = new MapData();
+		super.loadObjects(this.map_data);
 
 		this._running = false;
 

@@ -1,4 +1,4 @@
-// @ts-check
+import MapData from './map_data';
 import SvgEngine from './svg_engine';
 import Physics from './physics/physics_engine';
 import Object2D, {Type} from './objects/object2d';
@@ -6,7 +6,9 @@ import {Circle, PolygonShape} from './physics/shape';
 import Background from './background';
 import Config from './config';
 
-//import ball_texture from './../img/ball_texture.png';
+// import ball_texture from './../img/ball_texture.png';
+
+// @ts-check
 
 const BG_SMOOTHING = 0.8;
 const MAP_SIZE_X = 3;//3;
@@ -15,9 +17,8 @@ const BG_SCALE = 2;
 
 export default class Map {
 	constructor() {
-		this.graphics = new SvgEngine();//.addClass('cartoon-style').addClass('flat-shadows');
-		this.graphics.foreground_layer.addClass('cartoon-style')
-			.addClass('flat-shadows');
+		this.graphics = new SvgEngine();
+		this.graphics.foreground_layer.addClass('cartoon-style').addClass('flat-shadows');
 
 		this.camera = {
 			x: 0, y: 0, zoom: 1
@@ -36,7 +37,7 @@ export default class Map {
 
 		/** @type {Object2D[] */
 		this.objects = [];
-		this.loadObjects();
+		//this.loadObjects();
 	}
 
 	getNode() {
@@ -67,12 +68,32 @@ export default class Map {
 	}
 
 	loadTextures() {//TODO
-		//this.graphics.createTexture('ball-texture', ball_texture, 
-		//	Config.VIRT_SCALE*0.1, Config.VIRT_SCALE*0.1);
+		/*this.graphics.createTexture('ball-texture', ball_texture, 
+			Config.VIRT_SCALE*0.1, Config.VIRT_SCALE*0.1);*/
 	}
 
-	loadObjects() {
-		this.objects.push( 
+	/** @param {MapData} data*/
+	loadObjects(data) {
+		console.log('Loading map data');
+		this.updateCamera(0, 0, 1);//reset camera
+
+		for(let obj of data.getObjects()) {
+			let shape = (type => {
+				switch(type) {
+					case MapData.SHAPE_TYPE.CIRCLE:	return Type.CIRCLE;
+					case MapData.SHAPE_TYPE.RECT:	return Type.RECT;
+				}
+			})(obj.shape_type);
+
+			let object2d = new Object2D(shape, obj.w||1, obj.h||1, this.graphics, this.physics)
+				.set({'fill': 'rgb(64, 192, 255)'}).setPos(obj.x||0, obj.y||0).setRot(obj.rot||0);
+
+			if(obj.physic_type === undefined || obj.physic_type === MapData.PHYSIC_TYPE.STATIC)
+				object2d.setStatic();
+			this.objects.push(object2d);
+		}
+
+		/*this.objects.push( 
 			new Object2D(Type.RECT, 0.8, 0.2, this.graphics, this.physics)
 				.set({'fill': 'rgb(64, 192, 255)'}).setPos(0, 0.3).setRot(Math.PI*0.).setStatic(),
 
@@ -94,7 +115,7 @@ export default class Map {
 						//url(#ball-texture)
 				);
 			}
-		}
+		}*/
 	}
 
 	/**

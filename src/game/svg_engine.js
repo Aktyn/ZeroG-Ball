@@ -40,7 +40,7 @@ export default class SvgEngine {
 	createFilter(id, ...effects) {
 		let filter = new SvgObject('filter', true).set({
 			'id': id,
-			'x': '0', 'y': '0', 'width': '200%', 'height': '200%'
+			'x': '-10%', 'y': '-10%', 'width': '120%', 'height': '120%'
 		});
 		for(let effect of effects) {
 			if(effect instanceof SvgObject)
