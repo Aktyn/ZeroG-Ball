@@ -23,7 +23,7 @@ export default class GameGUI {
 				).addChild(
 					$.create('button').text('EXPORT')//TODO
 				).addChild(
-					$.create('button').text('RESTART')//TODO
+					$.create('button').addClass('restart-btn').text('RESTART')//TODO
 				)
 			).addChild(
 				this.modes_panel = $.create('div').addClass('modes')
@@ -118,9 +118,11 @@ export default class GameGUI {
 				)
 			).addChild(
 				$.create('article').addChild(
-					$.create('input').setAttrib('type', 'checkbox').setAttrib('id', 'IDcienie').addClass('switch-input')
+					$.create('input').setAttrib('type', 'checkbox').setAttrib('id', 'IDcienie')
+						.addClass('switch-input')
 				).addChild(
-					$.create('label').setAttrib('for', 'IDcienie').addClass('switch-label').addText('Cienie')
+					$.create('label').setAttrib('for', 'IDcienie').addClass('switch-label')
+						.addText('Cienie')
 			))
 		);
 
