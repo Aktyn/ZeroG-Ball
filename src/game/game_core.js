@@ -58,7 +58,8 @@ export default class GameCore extends Map {
 
 		//this.mouse_pressed = false;
 		this.last_mouse_coords = null;
-		this.svg_rect = {x: 0, y: 0, width: 100, height: 100};
+		/** @type {DOMRect} */
+		this.svg_rect = null;//{x: 0, y: 0, width: 100, height: 100};
 
 		let node = super.getNode();
 
@@ -85,6 +86,7 @@ export default class GameCore extends Map {
 	onResize(w, h) {
 		super.onResize(w, h);
 
+		//@ts-ignore
 		this.svg_rect = super.getNode().getBoundingClientRect();//must goes after super.onResize
 	}
 
@@ -97,10 +99,11 @@ export default class GameCore extends Map {
 
 	onMouseWheel(e) {
 		let dt = e.wheelDelta/120;
-		//if(dt > 0)
-			super.updateCamera(this.camera.x, this.camera.y, this.camera.zoom*(1-ZOOM_STRENGTH*dt));
-		//else if(dt < 0)
-		//	super.updateCamera(this.camera.x, this.camera.y, this.camera.zoom*(1+ZOOM_STRENGTH*dt));
+
+		let new_zoom = this.camera.zoom*(1-ZOOM_STRENGTH*dt);
+		new_zoom = Math.max(0.2, Math.min(new_zoom, this.background.getMaxZoom()));
+		
+		super.updateCamera(this.camera.x, this.camera.y, new_zoom);
 	}
 
 	onMouseDown(e) {

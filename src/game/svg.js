@@ -33,8 +33,8 @@ export default class SvgObject {
 		}
 	}
 
-	update() {//updates object transform
-		if(this.scale_changed === true) {
+	update(scale_in_transform = false) {//updates object transform
+		if(!scale_in_transform && this.scale_changed === true) {
 			if(this.name === 'circle') {
 				//@ts-ignore
 				this.node.setAttributeNS(null, 'r', Config.VIRT_SCALE/2 * this.transform.w);
@@ -64,7 +64,9 @@ export default class SvgObject {
 			//	this.transform.x*Config.VIRT_SCALE/2} ${this.transform.y*Config.VIRT_SCALE/2}`);
 			this.node.setAttributeNS(null, 'transform', `translate(${
 				this.transform.x*Config.VIRT_SCALE/2} ${
-				this.transform.y*Config.VIRT_SCALE/2}) rotate(${this.transform.rot/Math.PI*180})`);
+				this.transform.y*Config.VIRT_SCALE/2}) rotate(${this.transform.rot/Math.PI*180}) ${
+					scale_in_transform ? `scale(${this.transform.w}, ${this.transform.h})` : ''
+				}`);
 		//}
 	}
 

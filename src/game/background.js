@@ -4,27 +4,27 @@ import Config from './config';
 
 import bg_texture from './../img/backgrounds/bg2.png';
 
-const BG_SMOOTHING = 0.9;
-const TILE_SCALE = 2;
-
 // @ts-check
 export default class Background {
 	/**
 	* @param {number} tiles_x
 	* @param {number} tiles_y
+	* @param {number} _smoothing
 	*/
-	constructor(tiles_x, tiles_y) {
+	constructor(tiles_x, tiles_y, _smoothing, _scale) {
 		this.tiles_x = tiles_x;
 		this.tiles_y = tiles_y;
+		this.smoothing = _smoothing;
+		this.scale = _scale;
 
 		this.tiles = [];//2d array
 
 		for(var y=0; y<tiles_y; y++) {
 			for(var x=0; x<tiles_x; x++) {
-				let xx = (-tiles_x + 1 + x*2)*TILE_SCALE;
-				let yy = (-tiles_y + 1 + y*2)*TILE_SCALE
+				let xx = (-tiles_x + 1 + x*2)*this.scale;
+				let yy = (-tiles_y + 1 + y*2)*this.scale
 				let tile = SvgEngine.createObject('image')//.setClass('nearest')
-					.set({'href': bg_texture}).setSize(TILE_SCALE, TILE_SCALE);
+					.set({'href': bg_texture}).setSize(this.scale, this.scale);
 				tile.update();
 				tile.set({
 					'transform': `translate(${
@@ -34,6 +34,20 @@ export default class Background {
 				this.tiles.push(tile);
 			}
 		}
+
+		this._maxZoom = this.calculateMaxZoom();
+	}
+
+	calculateMaxZoom() {
+		const max_zoom_x = Math.pow(this.tiles_x*this.scale / Config.ASPECT, 
+			1/(1-this.smoothing));
+		const max_zoom_y = Math.pow(this.tiles_y*this.scale, 
+			1/(1-this.smoothing));
+		return Math.min(max_zoom_x, max_zoom_y);
+	}
+
+	getMaxZoom() {
+		return this._maxZoom;
 	}
 
 	/**
@@ -41,17 +55,8 @@ export default class Background {
 	* @param {SvgObject} bg_layer
 	*/
 	update(camera, bg_layer) {
-		bg_layer.setPos(camera.x*BG_SMOOTHING, camera.y*BG_SMOOTHING).update();
-		/*for(var y=0; y<this.tiles_y; y++) {
-			for(var x=0; x<this.tiles_x; x++) {
-				var i = x + y*this.tiles_x;
-
-				//bg.setPos(xx, yy); //static background
-				this.tiles[i].setPos(
-					(-this.tiles_x + 1 + x*2) + camera_x/zoom*BG_SMOOTHING, 
-					(-this.tiles_y + 1 + y*2) + camera_y/zoom*BG_SMOOTHING
-				);
-			}
-		}*/
+		let scale = Math.pow(camera.zoom, this.smoothing);
+		bg_layer.setPos(camera.x*this.smoothing, camera.y*this.smoothing)
+			.setSize(scale).update(true);
 	}
 }

@@ -8,9 +8,10 @@ import Config from './config';
 
 //import ball_texture from './../img/ball_texture.png';
 
-const BG_SMOOTHING = 0.7;
-const MAP_SIZE_X = 3;
-const MAP_SIZE_Y = 3;
+const BG_SMOOTHING = 0.8;
+const MAP_SIZE_X = 3;//3;
+const MAP_SIZE_Y = 3;//3;
+const BG_SCALE = 2;
 
 export default class Map {
 	constructor() {
@@ -25,7 +26,7 @@ export default class Map {
 		this.loadFilters();
 		this.loadTextures();
 
-		this.background = new Background(MAP_SIZE_X, MAP_SIZE_Y);
+		this.background = new Background(MAP_SIZE_X, MAP_SIZE_Y, BG_SMOOTHING, BG_SCALE);
 		
 		this.graphics.addBackgroundObjects(//.setSize(0.5, 0.5)
 			...this.background.tiles,

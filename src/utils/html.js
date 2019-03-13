@@ -98,6 +98,11 @@ const static_methods = {//static methods
 		
 		document.head.appendChild( script );
 	},*/
+
+	/** 
+	*	@param {string} value 
+	*	@returns {Node & extender}
+	*/
 	create: function(value) {//creates DOM HTMLElement
 		var new_element = document.createElement( justLettersAndDigits(value) );
 		return static_methods.expand(new_element, extender);
@@ -117,26 +122,49 @@ const extender = {//extended methods of DOM HTMLElements
 		this.innerHTML = String(content);
 		return this;
 	},
+	/** 
+	*	@param {any} content 
+	*	@returns {Node & extender}
+	*/
 	text: function(content) {
 		this.innerText = String(content);
 		return this;
 	},
+	/** 
+	*	@param {any} content 
+	*	@returns {Node & extender}
+	*/
 	addText: function(content) {//this method does not cause losing marker issues
 		this.appendChild( document.createTextNode(String(content)) );
 		return this;
 	},
+	/** 
+	*	@param {string} class_name 
+	*	@returns {Node & extender}
+	*/
 	addClass: function(class_name) {
 		this.classList.add(class_name);
 		return this;
 	},
+	/** 
+	*	@param {string} class_name 
+	*	@returns {Node & extender}
+	*/
 	removeClass: function(class_name) {
 		this.classList.remove(class_name);
 		return this;
 	},
+	/** 
+	*	@param {string} class_name 
+	*	@returns {Node & extender}
+	*/
 	setClass: function(class_name) {
 		this.className = class_name;//overrides existing classes
 		return this;
 	},
+	/** 
+	*	@param {string} query 
+	*/
 	getChildren: function(query) {
 		return fromQuery(query, this);
 	},
@@ -159,14 +187,26 @@ const extender = {//extended methods of DOM HTMLElements
 		static_methods.expand(this.style, css, true);
 		return this;
 	},
+	/** 
+	*	@param {string} name 
+	*	@param {any} value 
+	*	@returns {Node & extender}
+	*/
 	setAttrib: function(name, value) {
 		this.setAttribute(name, String(value));
 		return this;
 	},
+	/** 
+	*	@param {string} name 
+	*	@returns {Node & extender}
+	*/
 	removeAttrib: function(name) {
 		this.removeAttribute(name);
 		return this;
 	},
+	/** 
+	*	@param {string} name 
+	*/
 	getAttrib: function(name) {
 		return this.getAttribute(name);
 	},
@@ -224,6 +264,11 @@ const extender = {//extended methods of DOM HTMLElements
 	}
 };
 
+/** 
+*	@param {string} query 
+*	@param {Node & extender} parent
+*	@returns {(Node & extender) | (Node & extender)[]}
+*/
 function fromQuery(query, parent) {
 	var value = Array.from((parent || document).querySelectorAll(query || '*'))
 		.map( _HTMLElement_ => static_methods.expand(_HTMLElement_, extender, true) );
@@ -234,7 +279,12 @@ function fromQuery(query, parent) {
 	return smartArrayExtend(value);
 }
 
-//smart extending array object of extender methods
+
+/** 
+*	smart extending array object of extender methods
+*	@param {string} class_name 
+*	@returns {(Node & extender) | (Node & extender)[]}
+*/
 function smartArrayExtend(arr) {
 	Object.getOwnPropertyNames(extender).forEach(function(method) {
 		if(typeof extender[method] !== 'function' || arr.hasOwnProperty(method))
@@ -255,10 +305,10 @@ function smartArrayExtend(arr) {
 
 /**
  * Description
- * @param {string} value
- * @returns {Node}
+ * @param {string|Node|HTMLElement} value
+ * @returns {Node & extender}
  */
-function __self(value) {
+function _self(value) {
 	if(value instanceof HTMLElement || value === window) {//DOM HTMLElement
 		static_methods.expand(value, extender, true);
 		return value;
@@ -268,8 +318,11 @@ function __self(value) {
 	else
 		throw new Error("Given argument type is incopatible (" + typeof value + ")");
 }
-static_methods.expand(__self, static_methods);
 
-export default __self;
+/** @type {_self & static_methods} */
+var self = _self;
+static_methods.expand(self, static_methods);
+
+export default self;
 //return __self;
 //})();
