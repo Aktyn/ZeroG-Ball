@@ -1,0 +1,15 @@
+svg.game-svg {
+	.cartoon-style {
+		stroke: #000;
+		stroke-width: 2px;
+		stroke-opacity: 0.5;
+	}
+
+	.flat-shadows {
+		filter: url(#flat-shadow);
+	}
+
+	image.nearest {
+		image-rendering: pixelated;
+	}
+}
