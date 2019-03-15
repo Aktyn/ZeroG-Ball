@@ -1,6 +1,6 @@
-import {Vec2} from './physics/math';
+//import {Vec2} from './physics/math';
 
-const gravity_scale = 5.0;
+//const gravity_scale = 5.0;
 
 export default {
 	//graphics
@@ -8,10 +8,13 @@ export default {
 	VIRT_SCALE: 720,//1<<10
 
 	//physics
-	gravityScale: gravity_scale,//5.0,//*10
-	gravity: new Vec2(0, 10. * gravity_scale),//5.0 - gravityScale
+	PHYSIC_STEP: 1 / 60,
+	gravity: 9.807,// * 0.01,
+	//gravityScale: gravity_scale,//5.0,//*10
+	//gravity: new Vec2(0, 10. * gravity_scale),//5.0 - gravityScale
 	//(Config.step * Config.gravity).LenSqr()
-	gravity_step: new Vec2(0, 10. * gravity_scale / 60.0).LenSqr(),//this.step * 10.*this.gravityScale
-	step: 1 / 60,
+	//gravity_step: new Vec2(0, 10. * gravity_scale / 60.0).LenSqr(),
+	//this.step * 10.*this.gravityScale
+	//step: 1 / 60,
 	EPSILON: 0.00001//0.0001
 }

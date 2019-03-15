@@ -1,10 +1,12 @@
 import MapData from './map_data';
 import SvgEngine from './svg_engine';
-import Physics from './physics/physics_engine';
+//import Physics from './physics/physics_engine';
 import Object2D, {Type} from './objects/object2d';
-import {Circle, PolygonShape} from './physics/shape';
+//import {Circle, PolygonShape} from './physics/shape';
 import Background from './background';
 import Config from './config';
+
+import SimplePhysics from './simple_physics/engine';
 
 // import ball_texture from './../img/ball_texture.png';
 
@@ -33,7 +35,8 @@ export default class Map {
 			...this.background.tiles,
 		);
 
-		this.physics = new Physics();
+		//this.physics = new Physics();
+		this.physics = new SimplePhysics();
 
 		/** @type {Object2D[] */
 		this.objects = [];
@@ -133,8 +136,7 @@ export default class Map {
 	}
 
 	update() {
+		this.physics.update();
 		this.graphics.update();
-		this.physics.step();
-		//console.log(this.physics.bodies[0].position, this.physics.bodies[1].position);
 	}
 }
