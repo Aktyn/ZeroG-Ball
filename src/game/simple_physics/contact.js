@@ -21,7 +21,7 @@ export default class Contact {
 		if(this.A.static)
 			return;
 
-		const bounce = 0.6;//0 - 1 -> bouncing factor
+		const bounce = 0.8;//0 - 1 -> bouncing factor
 
 		let normal = this.A.pos.clone().substractVec(this.point).normalize();
 
@@ -32,8 +32,9 @@ export default class Contact {
 			normal.scale(dotProduct(this.A.velocity, normal) * -2) 
 		).scale(bounce);
 
-		//let v2 = this.A.velocity.length();
-		//console.log(v2 - Math.pow(Config.gravity*Config.PHYSIC_STEP, 2));
+		let v2 = this.A.velocity.length();
+		if(v2 < Config.gravity_step)//if(v2 < Config.gravity*Config.PHYSIC_STEP)
+			this.A.velocity.set(0, 0);//this.A.velocity.scale(0.5);
 		
 		//resources used for velocity recalculation:
 		//https://en.wikipedia.org/wiki/Dot_product
@@ -44,5 +45,6 @@ export default class Contact {
 			this.A.pos.clone().substractVec(this.point).normalize().scale(solve_dst)
 		);
 
+		this.A.colliding = true;
 	}
 }

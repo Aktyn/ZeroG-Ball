@@ -29,12 +29,20 @@ export class Vec2 {
 	}
 
 	/**
+	* @param {number} x
+	* @param {number} y
+	*/
+	add(x, y) {
+		this.x += x;
+		this.y += y;
+		return this;
+	}
+
+	/**
 	* @param {Vec2} vec
 	*/
 	addVec(vec) {
-		this.x += vec.x;
-		this.y += vec.y;
-		return this;
+		return this.add(vec.x, vec.y);
 	}
 
 	/**

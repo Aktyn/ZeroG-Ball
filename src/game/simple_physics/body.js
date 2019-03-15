@@ -19,6 +19,8 @@ export class Body {
 
 		this.mass = 1;
 		this.velocity = new Vec2();
+
+		this.colliding = false;
 	}
 
 	/** 
@@ -46,7 +48,14 @@ export class Body {
 
 		//apply force and movement
 		this.pos.addVec(this.velocity);
-		this.velocity.y += Math.pow(Config.gravity * Config.PHYSIC_STEP, 2);
+
+		let g = Config.gravity_step;
+		this.velocity.y += g;
+
+		if(this.colliding) {
+			this.pos.add(0, g);//stick to the ground
+			this.colliding = false;
+		}
 	}
 }
 
