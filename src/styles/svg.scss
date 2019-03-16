@@ -12,4 +12,8 @@ svg.game-svg {
 	image.nearest {
 		image-rendering: pixelated;
 	}
+
+	& > * {
+		pointer-events: none;
+	}
 }

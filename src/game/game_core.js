@@ -67,7 +67,8 @@ export default class GameCore extends Map {
 
 		let node = super.getNode();
 
-		node.addEventListener('wheel', this.onMouseWheel.bind(this), false);
+		node.addEventListener('mousewheel', this.onMouseWheel.bind(this), false);
+		node.addEventListener('DOMMouseScroll', this.onMouseWheel.bind(this), false);
 		node.addEventListener('mousedown', this.onMouseDown.bind(this), false);
 		window.addEventListener('mouseup', this.onMouseUp.bind(this), false);
 		//window.addEventListener('mouseleave', this.onMouseLeave.bind(this), false);
@@ -102,7 +103,7 @@ export default class GameCore extends Map {
 	}
 
 	onMouseWheel(e) {
-		let dt = e.wheelDelta/120;
+		let dt = Math.max(-1, Math.min(1, e.wheelDelta || -e.detail));
 
 		let new_zoom = this.camera.zoom*(1-ZOOM_STRENGTH*dt);
 		new_zoom = Math.max(0.2, Math.min(new_zoom, this.background.getMaxZoom()));
@@ -115,7 +116,6 @@ export default class GameCore extends Map {
 			return;
 		//save position
 		this.last_mouse_coords = this.convertCoords(e);
-
 		let click_pos = super.castCoords(this.last_mouse_coords);
 		super.addTestCircle(click_pos);
 	}
