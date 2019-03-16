@@ -100,6 +100,10 @@ $header-size: 35px;
 		pointer-events: auto;
 	}
 
+	/*&:not(.view-open) .gui-center .view-container {
+		display: none;
+	}*/
+
 	.gui-center {
 		height: 100%;
 		width: auto;

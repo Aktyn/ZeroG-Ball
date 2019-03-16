@@ -79,7 +79,7 @@ export default class GameGUI {
 
 	changeMode(id) {
 		// console.log('TODO', id);
-		this.container.setClass(`game-gui-container mode-${id}`);
+		this.container.setClass(`game-gui-container mode-${id} ${this.is_view_open ? 'view-open' : ''}`);
 
 		//TODO - edit mode pauses game physics, play mode reloads map
 	}
@@ -103,6 +103,8 @@ export default class GameGUI {
 	closeView() {
 		if(this.gui_center)
 			this.gui_center.text('');
+		else
+			throw new Error('no gui center found');
 
 		this.is_view_open = false;
 		this.container.removeClass('view-open');
