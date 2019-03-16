@@ -31,7 +31,7 @@ class MapData {
 		this._objects = [];
 
 		//temp
-		this.addObject({shape_type: SHAPE_TYPE.CIRCLE, physic_type: PHYSIC_TYPE.DYNAMIC, x: 0.01, y: -0.8, w: 0.1, h: 0.1});
+		//this.addObject({shape_type: SHAPE_TYPE.CIRCLE, physic_type: PHYSIC_TYPE.DYNAMIC, x: 0.01, y: -0.8, w: 0.1, h: 0.1});
 		/*this.addObject({shape_type: SHAPE_TYPE.CIRCLE, x: -0.7, y: 0.2, w: 0.2, h: 0.2});
 		this.addObject({shape_type: SHAPE_TYPE.CIRCLE, x: 0, y: 0.5, w: 0.2, h: 0.2});
 		this.addObject({shape_type: SHAPE_TYPE.CIRCLE, x: 0.5, y: 0.5, w: 0.2, h: 0.2});

@@ -116,7 +116,8 @@ export default class GameCore extends Map {
 		//save position
 		this.last_mouse_coords = this.convertCoords(e);
 
-		console.log( this.last_mouse_coords );
+		let click_pos = super.castCoords(this.last_mouse_coords);
+		super.addTestCircle(click_pos);
 	}
 
 	onMouseUp(e) {

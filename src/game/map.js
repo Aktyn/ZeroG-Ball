@@ -55,6 +55,17 @@ export default class Map {
 		this.graphics.onResize(w, h);
 	}
 
+	/** 
+	* Casts coordinates according to current camera zoom and position
+	* @param {{x: number, y: number}} coords 
+	*/
+	castCoords({x, y}) {
+		return {
+			x: (x - 0.5) * Config.ASPECT * 2 * this.camera.zoom + this.camera.x,
+			y: (y - 0.5) * 2 * this.camera.zoom + this.camera.y
+		};
+	}
+
 	loadFilters() {
 		this.graphics.createFilter('flat-shadow', {
 				name: 'feOffset',
@@ -73,6 +84,15 @@ export default class Map {
 	loadTextures() {//TODO
 		/*this.graphics.createTexture('ball-texture', ball_texture, 
 			Config.VIRT_SCALE*0.1, Config.VIRT_SCALE*0.1);*/
+	}
+
+	/** 
+	* Casts coordinates according to current camera zoom and position
+	* @param {{x: number, y: number}} coords 
+	*/
+	addTestCircle({x, y}) {
+		let object2d = new Object2D(Type.CIRCLE, 0.1, 0.1, this.graphics, this.physics)
+			.set({'fill': 'rgb(255, 128, 128)'}).setPos(x||0, y||0);
 	}
 
 	/** @param {MapData} data*/
