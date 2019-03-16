@@ -22,6 +22,14 @@ export class Vec2 {
 	set(_x, _y) {
 		this.x = _x;
 		this.y = _y;
+		return this;
+	}
+
+	/**
+	* @param {Vec2} vec
+	*/
+	setVec(vec) {
+		return this.set(vec.x, vec.y);
 	}
 
 	clone() {
@@ -61,6 +69,30 @@ export class Vec2 {
 		return this;
 	}
 
+	/**
+	* @param {number} x
+	* @param {number} y
+	* @param {number} angle
+	*/
+	rotateAround(x, y, angle) {
+		//from the formula found at: https://academo.org/demos/rotation-about-point/
+		//x′=xcosθ−ysinθ
+		//y′=ycosθ+xsinθ
+		let s = Math.sin(angle);
+		let c = Math.cos(angle);
+		let xx = this.x * c - this.y * s;
+		let yy = this.y * c + this.x * s;
+		return this.set(xx, yy);
+	}
+
+	/**
+	* @param {Vec2} vec
+	* @param {number} angle
+	*/
+	rotateAroundVec(vec, angle) {
+		return this.rotateAround(vec.x, vec.y, angle);
+	}
+
 	normalize() {
 		let len = this.length();
 		if(len < Config.EPSILON) {
@@ -74,8 +106,12 @@ export class Vec2 {
 		return this;
 	}
 
+	lengthSqr() {
+		return pow(this.x) + pow(this.y);
+	}
+
 	length() {
-		return Math.sqrt( pow(this.x) + pow(this.y) );
+		return Math.sqrt( this.lengthSqr() );
 	}
 
 	/**
@@ -99,4 +135,26 @@ export class Vec2 {
 */
 export function dotProduct(v1, v2) {
 	return v1.x*v2.x + v1.y*v2.y;
+}
+
+/**
+* @param {Vec2} point
+* @param {Vec2} l1
+* @param {Vec2} l2
+* @param {Vec2} out_projection
+*/
+export function distanceToLineSegment(point, l1, l2, out_projection = new Vec2()) {
+	let len = l1.clone().substractVec(l2).lengthSqr();//segment length
+
+	const t = Math.max(0, //TODO - clamp
+		Math.min(1, dotProduct(point.clone().substractVec(l1), l2.clone().substractVec(l1)) / len)
+	);
+
+	//projection = v + t * (w - v);
+	out_projection.setVec( 
+		l1.clone().addVec(l2.clone().substractVec(l1).scale(t)) 
+	);
+	
+	//return projection.substractVec(point).length();
+	return point.clone().substractVec(out_projection).length();
 }

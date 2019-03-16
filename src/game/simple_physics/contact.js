@@ -24,18 +24,18 @@ export default class Contact {
 		const bounce = 0.8;//0 - 1 -> bouncing factor
 
 		let normal = this.A.pos.clone().substractVec(this.point).normalize();
-
+		// debugger;
 		//reflection vector equation
 		//Vnew = -2*(V dot N)*N + V
 		//Vnew += N * (V dot N) * -2
 		this.A.velocity.addVec(
-			normal.scale(dotProduct(this.A.velocity, normal) * -2) 
+			normal.scale(dotProduct(this.A.velocity, normal) * -2.0) 
 		).scale(bounce);
 
 		let v2 = this.A.velocity.length();
-		if(v2 < Config.gravity_step)//if(v2 < Config.gravity*Config.PHYSIC_STEP)
-			this.A.velocity.set(0, 0);//this.A.velocity.scale(0.5);
-		
+		if(v2 < Config.gravity*Config.PHYSIC_STEP)//if(v2 < Config.gravity_step)
+			this.A.velocity.scale(0.5);//this.A.velocity.set(0, 0);//
+		// debugger;
 		//resources used for velocity recalculation:
 		//https://en.wikipedia.org/wiki/Dot_product
 		//http://www.3dkingdoms.com/weekly/weekly.php?a=2
