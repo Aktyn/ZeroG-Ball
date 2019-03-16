@@ -91,6 +91,12 @@ export class Vec2 {
 		return this;
 	}
 
+	reverse() {
+		this.x = -this.x;
+		this.y = -this.y;
+		return this;
+	}
+
 	lengthSqr() {
 		return pow(this.x) + pow(this.y);
 	}

@@ -28,9 +28,35 @@ export default class Contact {
 		//reflection vector equation
 		//Vnew = -2*(V dot N)*N + V
 		//Vnew += N * (V dot N) * -2
+		/*let newVelocity = new Vec2(
+			(this.A.velocity.x * (this.A.mass - this.B.mass) + 
+				(2 * this.B.mass * this.B.velocity.x)) / (this.A.mass + this.B.mass),
+			(this.A.velocity.y * (this.A.mass - this.B.mass) + 
+				(2 * this.B.mass * this.B.velocity.y)) / (this.A.mass + this.B.mass)
+		);*/
+
+		//debugger;
+
 		this.A.velocity.addVec(
 			normal.scale(dotProduct(this.A.velocity, normal) * -2.0) 
-		).scale(bounce);
+		);//.scale(bounce);//.scale(newVelocity.length());
+
+		let Bvel = this.B.velocity.clone().addVec(
+			normal.scale(dotProduct(this.B.velocity, normal) * -2.0) 
+		).reverse();//.scale(bounce);
+
+		this.A.velocity.set(
+			this.A.velocity.x * this.A.mass + Bvel.x * this.B.mass,
+			this.A.velocity.y * this.A.mass + Bvel.y * this.B.mass,
+		).scale( 1.0 / (this.A.mass + this.B.mass) * bounce );
+
+
+		//let newVelX2 = (this.B.velocity.x * (this.B.mass – this.A.mass) + 
+		//	(2 * this.A.mass * this.A.velocity.x)) / (this.A.mass + this.B.mass);
+		//let newVelY2 = (this.B.velocity.y * (this.B.mass – this.A.mass) + 
+		//	(2 * this.A.mass * this.A.velocity.y)) / (this.A.mass + this.B.mass);
+		
+
 
 		let v2 = this.A.velocity.length();
 		if(v2 < Config.gravity*Config.PHYSIC_STEP)//if(v2 < Config.gravity_step)
@@ -42,7 +68,7 @@ export default class Contact {
 
 		let solve_dst = this.B.static ? this.overlap : this.overlap/2;
 		this.A.pos.addVec(
-			this.A.pos.clone().substractVec(this.point).normalize().scale(solve_dst)
+			this.A.pos.clone().substractVec(this.point).normalize().scale(solve_dst * 1.1)
 		);
 
 		this.A.colliding = true;
