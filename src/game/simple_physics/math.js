@@ -69,28 +69,13 @@ export class Vec2 {
 		return this;
 	}
 
-	/**
-	* @param {number} x
-	* @param {number} y
-	* @param {number} angle
-	*/
-	rotateAround(x, y, angle) {
-		//from the formula found at: https://academo.org/demos/rotation-about-point/
-		//x′=xcosθ−ysinθ
-		//y′=ycosθ+xsinθ
+	/** @param {number} angle */
+	rotate(angle) {//rotates around point [0, 0]
 		let s = Math.sin(angle);
 		let c = Math.cos(angle);
 		let xx = this.x * c - this.y * s;
 		let yy = this.y * c + this.x * s;
 		return this.set(xx, yy);
-	}
-
-	/**
-	* @param {Vec2} vec
-	* @param {number} angle
-	*/
-	rotateAroundVec(vec, angle) {
-		return this.rotateAround(vec.x, vec.y, angle);
 	}
 
 	normalize() {

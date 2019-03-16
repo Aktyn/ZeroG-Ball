@@ -39,14 +39,14 @@ function circleToCircle(circle1, circle2) {
 * @param {Rect} rect2
 */
 function rectToRect(rect1, rect2) {
-	throw new Error('Function not yet implemented');
+	return null;
 }
 
 /**
 * @param {Circle} circle
 * @param {Rect} rect
 */
-function circleToRect(circle, rect) {
+function circleToRect(circle, rect, flip = false) {
 	//TODO - cases in which the circle is inside rectangle
 
 
@@ -54,10 +54,10 @@ function circleToRect(circle, rect) {
 	// 0 1
 	// 3 2   y axis goes down
 	let v = [
-		rect.pos.clone().add(-rect.width, -rect.height).rotateAroundVec(rect.pos, rect.rot),
-		rect.pos.clone().add(rect.width, -rect.height).rotateAroundVec(rect.pos, rect.rot),
-		rect.pos.clone().add(rect.width, rect.height).rotateAroundVec(rect.pos, rect.rot),
-		rect.pos.clone().add(-rect.width, rect.height).rotateAroundVec(rect.pos, rect.rot),
+		new Vec2(-rect.width, -rect.height).rotate(rect.rot).addVec(rect.pos),
+		new Vec2(rect.width, -rect.height).rotate(rect.rot).addVec(rect.pos),
+		new Vec2(rect.width, rect.height).rotate(rect.rot).addVec(rect.pos),
+		new Vec2(-rect.width, rect.height).rotate(rect.rot).addVec(rect.pos)
 	];
 
 	//TODO - calculate minimum bounding rectangle from rotated points and check for not intersecting
@@ -69,8 +69,10 @@ function circleToRect(circle, rect) {
 
 		let overlap = circle.radius - distanceToLineSegment(circle.pos, p1, p2, projection);
 		if( overlap > 0 ) {
-			//debugger;
-			return new Contact(circle, rect, projection, overlap);
+			if(flip)
+				return new Contact(rect, circle, projection, overlap);
+			else
+				return new Contact(circle, rect, projection, overlap);
 		}
 	}
 
@@ -82,6 +84,6 @@ function circleToRect(circle, rect) {
 * @param {Circle} circle
 */
 function rectToCircle(rect, circle) {
-	return null;//TODO - flip objects while returning contact
-	//return circleToRect(circle, rect);
+	//Tflip objects while returning contact
+	return circleToRect(circle, rect, true);
 }

@@ -95,30 +95,6 @@ export default class Map {
 				object2d.setStatic();
 			this.objects.push(object2d);
 		}
-
-		/*this.objects.push( 
-			new Object2D(Type.RECT, 0.8, 0.2, this.graphics, this.physics)
-				.set({'fill': 'rgb(64, 192, 255)'}).setPos(0, 0.3).setRot(Math.PI*0.).setStatic(),
-
-			new Object2D(Type.RECT, 0.8, 0.1, this.graphics, this.physics)
-				.set({'fill': 'rgb(64, 192, 255)'}).setPos(-0.95, 0.).setRot(Math.PI/2).setStatic(),
-
-			new Object2D(Type.RECT, 0.8, 0.1, this.graphics, this.physics)
-				.set({'fill': 'rgb(64, 192, 255)'}).setPos(1.1, 0.1).setRot(-Math.PI*0.4).setStatic(),
-
-			new Object2D(Type.RECT, 0.1, 0.2, this.graphics, this.physics)
-				.set({'fill': 'rgb(128, 255, 128)'}).setPos(0.1, -0.8).setRot(Math.PI*0.1),
-		);
-
-		for(let i=0; i<4; i++) {
-			for(let j=0; j<4; j++) {
-				this.objects.push(
-					new Object2D(Type.CIRCLE, 0.1, 0.1, this.graphics, this.physics)
-						.set({'fill': 'rgb(255, 128, 128)'}).setPos(-0.1 + i*0.25-j*0.05, -0.4 - 0.9*j),
-						//url(#ball-texture)
-				);
-			}
-		}*/
 	}
 
 	/**
