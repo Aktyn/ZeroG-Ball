@@ -1,9 +1,8 @@
 // @ts-check
-//import {ShapeType} from './shape';
-
 import {Circle, Rect, Body} from './body';
 import {checkCollision} from './collision';
 import Contact from './contact';
+import Config from './../config';
 
 export default class Engine {
 	constructor() {
@@ -32,9 +31,9 @@ export default class Engine {
 
 	update() {
 		//update each body
-		for(let body of this.bodies) {
+		/*for(let body of this.bodies) {
 			body.update();
-		}
+		}*/
 		
 		//check for collisions
 		/** @type {Contact[]} */
@@ -50,8 +49,19 @@ export default class Engine {
 		}
 
 		//solving contacts
+		for(var j=0; j<Config.ITERATIONS; j++) {
+			for(let contact of contacts) {
+				contact.solveIteration();//solve();
+			}
+		}
+
+		for(let body of this.bodies) {
+			body.update();
+		}
+
+
 		for(let contact of contacts) {
-			contact.solve();
+			contact.fixCollision();//solve();
 		}
 	}
 }

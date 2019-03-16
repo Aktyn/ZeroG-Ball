@@ -13,6 +13,7 @@ export default {
 
 	//physics
 	PHYSIC_STEP: physic_step,
+	ITERATIONS: 10,
 	gravity: gravity,// * 0.01,
 	gravity_step: Math.pow(gravity*physic_step, 2),
 	//gravityScale: gravity_scale,//5.0,//*10

@@ -1,5 +1,5 @@
 // @ts-check
-import {Vec2} from './math';
+import {Vec2, crossVV} from './math';
 import Config from './../config';
 
 export const ShapeType = {
@@ -19,6 +19,7 @@ export class Body {
 
 		this.mass = 1;
 		this.velocity = new Vec2();
+		this.angular_velocity = 0;
 
 		this.colliding = false;
 	}
@@ -42,12 +43,24 @@ export class Body {
 		this.static = true;
 	}
 
+	/** 
+	*	@param {Vec2} impulse
+	*	@param {Vec2} contactVector
+	*/
+	applyImpulse(impulse, contactVector) {
+		// velocity += im * impulse;
+		this.velocity.x += /*this.im * */impulse.x;
+		this.velocity.y += /*this.im * */impulse.y;
+		this.angular_velocity += /*this.iI * */crossVV( contactVector, impulse );
+	}
+
 	update() {
 		if(this.static)
 			return;
 
-		//apply force and movement
-		this.pos.addVec(this.velocity);
+		//apply velocities
+		this.pos.addVec( this.velocity );
+		this.rot += this.angular_velocity * Config.PHYSIC_STEP;
 
 		let g = Config.gravity_step;
 		this.velocity.y += g;
