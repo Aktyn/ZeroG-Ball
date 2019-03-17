@@ -1,8 +1,8 @@
 import MapData from './map_data';
 import SvgEngine from './svg_engine';
-//import Physics from './physics/physics_engine';
+import Physics from './physics/physics_engine';
 import Object2D, {Type} from './objects/object2d';
-//import {Circle, PolygonShape} from './physics/shape';
+import {Circle, PolygonShape} from './physics/shape';
 import Background from './background';
 import Config from './config';
 
@@ -35,8 +35,10 @@ export default class Map {
 			...this.background.tiles,
 		);
 
-		//this.physics = new Physics();
-		this.physics = new SimplePhysics();
+		if(Config.PHYSICS_ENGINE === 'advanced')
+			this.physics = new Physics();
+		else
+			this.physics = new SimplePhysics();
 
 		/** @type {Object2D[] */
 		this.objects = [];
@@ -96,8 +98,11 @@ export default class Map {
 	}
 
 	/** @param {MapData} data*/
-	loadObjects(data) {
+	load(data) {
 		console.log('Loading map data');
+
+		this.graphics.clearForeground();
+		this.physics.removeObjects();
 		this.updateCamera(0, 0, 1);//reset camera
 
 		for(let obj of data.getObjects()) {

@@ -1,3 +1,4 @@
+// @ts-check
 import $ from './../utils/html';
 import Stage from './stage';
 
@@ -13,6 +14,7 @@ export default class GameStage extends Stage {
 	constructor(target, listeners) {
 		super(target, 'game-container', listeners);
 
+		this.game = new GameCore();
 		this.gui = new GameGUI({
 			onReturnToMenu: () => {
 				if(this.game) {
@@ -20,9 +22,18 @@ export default class GameStage extends Stage {
 					this.game = null;
 				}
 				this.listeners.onExit();
-			}
+			},
+			onClearMap: () => {
+				console.log('clear map');
+				this.game.clearMap();
+			},
+			undo: () => {
+				this.game.undoLastChange();
+			},
+			/*redo: () => {
+				
+			}*/
 		});
-		this.game = new GameCore();
 
 		this.container.addChild(
 			this.game.getNode(), this.gui.getNode()

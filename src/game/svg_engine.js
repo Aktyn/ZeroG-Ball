@@ -8,12 +8,7 @@ export default class SvgEngine {
 		this.width = Config.ASPECT*Config.VIRT_SCALE;
 		this.height = Config.VIRT_SCALE;//Math.round(1024/aspect);
 
-		/*this.camera = {
-			x: 0,
-			y: 0,
-			zoom: 1//works as scaling
-		}*/
-
+		/** @type {SvgObject[]} */
 		this.objects = [];
 
 		this.svg = new SvgObject('svg', true).set({
@@ -110,11 +105,18 @@ export default class SvgEngine {
 		}
 	}
 
+	/** @param {SvgObject[]} objs */
 	addObjects(...objs) {
 		for(let obj of objs) {
 			this.objects.push(obj);
 			this.foreground_layer.addChild(obj);
 		}
+	}
+
+	clearForeground() {//removes every child from foreground
+		for(let obj of this.objects)
+			obj.destroy();
+		this.objects = [];
 	}
 
 	addClass(name) {

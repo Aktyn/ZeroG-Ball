@@ -6,9 +6,10 @@ export default class GameGUI {
 		this.menu_return_confirm = null;
 
 		this.is_view_open = false;
+		this.mode = 0;
 
 		this.container = $.create('div').setClass('game-gui-container mode-0').addChild(
-			this.header = $.create('header').addClass('hidden').addChild(
+			this.header = $.create('header')/*.addClass('hidden')*/.addChild(
 				$.create('button').addClass('menu-btn').on('click', () => {
 					if(!this.header)
 						return;
@@ -41,18 +42,27 @@ export default class GameGUI {
 				if(e.target === this.gui_center && this.is_view_open)
 					this.closeView();
 			})
-		).addChild(
+		).addChild( //EDIT MENU
 			$.create('div').addClass('edit-tools').addChild(
 				$.create('div').addClass('assets').text('TODO')
 			).addChild(
 				$.create('div').addClass('tools').addChild(
-					$.create('button').text('USUŃ WSZYSTKO')//TODO
+					$.create('button').text('USUŃ WSZYSTKO').on('click', () => {
+						//edit mode
+						if(this.mode === 1 && typeof this.listeners.onClearMap === 'function')
+							this.listeners.onClearMap();
+					})
 				).addChild(
 					$.create('div').addChild(
-						$.create('button').text('COFNIJ')//TODO
-					).addChild(
-						$.create('button').text('PONÓW')//TODO
-					)
+						$.create('button').text('COFNIJ').on('click', () => {
+							if(this.mode === 1 && typeof this.listeners.undo === 'function')
+								this.listeners.undo();
+						})
+					)/*.addChild(
+						$.create('button').text('PONÓW').on('click', () => {
+							
+						})
+					)*/
 				)
 			)
 		);
@@ -65,7 +75,7 @@ export default class GameGUI {
 				});
 				this.changeMode(btn.target.id);
 			});
-			if(i === 0)//first element
+			if(i === this.mode)//first element
 				btn.disabled = true;//btn.setAttrib('disabled', undefined);
 			this.modes_panel.addChild(btn);
 		});
@@ -79,6 +89,7 @@ export default class GameGUI {
 
 	changeMode(id) {
 		// console.log('TODO', id);
+		this.mode = parseInt(id);
 		this.container.setClass(`game-gui-container mode-${id} ${this.is_view_open ? 'view-open' : ''}`);
 
 		//TODO - edit mode pauses game physics, play mode reloads map

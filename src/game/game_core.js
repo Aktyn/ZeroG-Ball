@@ -56,7 +56,7 @@ export default class GameCore extends Map {
 		super();//map
 
 		this.map_data = new MapData();
-		super.loadObjects(this.map_data);
+		super.load(this.map_data);
 
 		this._running = false;
 
@@ -117,7 +117,7 @@ export default class GameCore extends Map {
 		//save position
 		this.last_mouse_coords = this.convertCoords(e);
 		let click_pos = super.castCoords(this.last_mouse_coords);
-		super.addTestCircle(click_pos);
+		//super.addTestCircle(click_pos);//tmp
 	}
 
 	onMouseUp(e) {
@@ -142,6 +142,16 @@ export default class GameCore extends Map {
 		let dy = (this.last_mouse_coords.y - coords.y)*2 * this.camera.zoom;
 		super.updateCamera(this.camera.x+dx, this.camera.y+dy, this.camera.zoom);
 		this.last_mouse_coords = coords;
+	}
+
+	clearMap() {
+		this.map_data.removeAll();
+		super.load(this.map_data);
+	}
+
+	undoLastChange() {
+		if(this.map_data.undo())
+			super.load(this.map_data);
 	}
 
 	update(dt) {

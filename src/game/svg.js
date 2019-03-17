@@ -33,6 +33,10 @@ export default class SvgObject {
 		}
 	}
 
+	destroy() {
+		this.node.remove();
+	}
+
 	update(scale_in_transform = false) {//updates object transform
 		if(!scale_in_transform && this.scale_changed === true) {
 			if(this.name === 'circle') {
@@ -80,23 +84,36 @@ export default class SvgObject {
 		return this;
 	}
 
+	/**
+	* @param {string} name
+	*/
 	setClass(name) {
 		this.node.setAttributeNS(null, 'class', name);
 		return this;
 	}
 
+	/**
+	* @param {string} name
+	*/
 	addClass(name) {
 		this.node.classList.add(name);
 		return this;
 	}
 
+	/**
+	* @param {number} x
+	* @param {number} y
+	*/
 	setPos(x, y) {
 		this.transform.x = x;
 		this.transform.y = y;
-
 		return this;
 	}
 
+	/**
+	* @param {number} width
+	* @param {number} height
+	*/
 	setSize(width, height) {
 		this.transform.w = width;
 		this.transform.h = typeof height === 'number' ? height : width;
@@ -105,6 +122,9 @@ export default class SvgObject {
 		return this;
 	}
 
+	/**
+	* @param {number} rot
+	*/
 	setRot(rot) {
 		this.transform.rot = rot;
 

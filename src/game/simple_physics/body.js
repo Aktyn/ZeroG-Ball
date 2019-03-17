@@ -62,7 +62,7 @@ export class Body {
 		this.pos.addVec( this.velocity );
 		this.rot += this.angular_velocity * Config.PHYSIC_STEP;
 
-		let g = Config.gravity_step;
+		let g = Config.gravity_step_sqr;
 		this.velocity.y += g;
 
 		if(this.colliding) {

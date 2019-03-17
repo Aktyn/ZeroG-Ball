@@ -10,6 +10,10 @@ export default class Engine {
 		this.bodies = [];
 	}
 
+	removeObjects() {
+		this.bodies = [];
+	}
+
 	/** 
 	* 	@param {number} radius 
 	*/

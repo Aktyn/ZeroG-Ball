@@ -60,7 +60,6 @@ export default class Manifold {
 			//(Config.step * Config.gravity).LenSqr()
 			if(rv.LenSqr() < Config.gravity_step + Config.EPSILON)
 				this.e = 0;
-			//debugger;
 		}
 	}
 

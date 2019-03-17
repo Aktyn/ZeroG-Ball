@@ -6,7 +6,7 @@ import Body from './body';
 import Shape from './shape';
 import Manifold from './manifold';
 
-const STEP = Config.step;
+const STEP = Config.PHYSIC_STEP;
 
 /** 
 *	@param {Body} b
@@ -17,7 +17,7 @@ function integrateForces(b) {
 
 	//b.velocity += (b.force * b.im + gravity) * (STEP / 2.);
 	b.velocity.addVec( 
-		b.force.clone().scale(b.im).addVec(Config.gravity).scale(STEP/2.0)
+		b.force.clone().scale(b.im).addVec(Config.gravity_vec).scale(STEP/2.0)
 	);
 	b.angularVelocity += b.torque * b.iI * (STEP / 2.0);
 }
@@ -48,7 +48,12 @@ export default class PhysicsEngine {
 		this.contacts = [];
 	}
 
-	step() {
+	removeObjects() {
+		this.bodies = [];
+		this.contacts = [];
+	}
+
+	update() {
 		// Generate new collision info
 		this.contacts = [];
 		for(var i=0; i<this.bodies.length; i++) {//TODO - for of
