@@ -12,11 +12,10 @@ function runLoop(self) {
 	let last = 0, dt;
 
 	//time measurments
-	let timer, time_samples = [];
-	let timer_log = $.create('SPAN').text('0ms')
-		.setStyle({fontSize: '13px', fontFamily: 'Arial'});
+	//let timer, time_samples = [];
+	//let timer_log = $.create('SPAN').text('0ms').setStyle({fontSize: '13px', fontFamily: 'Arial'});
 	
-	$(document.body).addChild($.create('DIV').setStyle({
+	/*$(document.body).addChild($.create('DIV').setStyle({
 		'position': 'fixed',
 		'left': '0px',
 		'bottom': '0px',
@@ -25,22 +24,22 @@ function runLoop(self) {
 		'color': '#fff',
 		'fontSize': '13px',
 		'fontFamily': 'Arial'
-	}).text('updating + rendering: ').addChild(timer_log));
+	}).text('updating + rendering: ').addChild(timer_log));*/
 
 	var step = function(time) {
 		dt = time - last;
 		last = time;
 
 		if(self._running) {
-			timer = performance.now();
+			//timer = performance.now();
 			self.update(dt);
 			
-			time_samples.push(performance.now() - timer);
+			/*time_samples.push(performance.now() - timer);
 			if(time_samples.length >= 120) {
 				timer_log.text((time_samples.reduce( (a, b) => a+b ) / time_samples.length)
 					.toFixed(2) + 'ms');
 				time_samples = [];
-			}
+			}*/
 
 			window.requestAnimationFrame(step);
 		}
@@ -144,19 +143,19 @@ export default class GameCore extends Map {
 		this.last_mouse_coords = coords;
 	}
 
-	reload() {
-		super.load(this.map_data);
+	reload(reset_camera = false) {
+		super.load(this.map_data, reset_camera);
 	}
 
 	/** @param {string} data */
 	importMap(data) {
 		this.map_data.import(data);
-		this.reload();
+		this.reload(true);
 	}
 
 	clearMap() {
 		this.map_data.removeAll();
-		this.reload();
+		this.reload(true);
 	}
 
 	undoLastChange() {

@@ -100,12 +100,13 @@ export default class Map {
 	}
 
 	/** @param {MapData} data*/
-	load(data) {
+	load(data, reset_camera = false) {
 		console.log('Loading map data');
 
 		this.graphics.clearForeground();
 		this.physics.removeObjects();
-		this.updateCamera(0, 0, 1);//reset camera
+		if(reset_camera)
+			this.updateCamera(0, 0, 1);//reset camera
 
 		for(let obj of data.getObjects()) {
 			let shape = (type => {

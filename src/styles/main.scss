@@ -112,3 +112,26 @@ button {
 		//background-color: #B0BEC5;
 	}
 }
+
+/* SCROLLBARS */
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #37474F; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #00838F; 
+    border-radius: 8px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #00ACC1; 
+}

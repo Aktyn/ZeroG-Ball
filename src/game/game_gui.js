@@ -6,7 +6,7 @@ export default class GameGUI {
 		this.menu_return_confirm = null;
 
 		this.is_view_open = false;
-		this.mode = 0;
+		this.mode = 0;//0
 		this.download_export_confirm = null;
 		this.map_data = null;
 
@@ -50,7 +50,7 @@ export default class GameGUI {
 			})
 		).addChild( //EDIT MENU
 			$.create('div').addClass('edit-tools').addChild(
-				$.create('div').addClass('assets').text('TODO')
+				this.main_edit = $.create('div').addClass('main')
 			).addChild(
 				$.create('div').addClass('tools').addChild(
 					$.create('button').text('USUŃ WSZYSTKO').on('click', () => {
@@ -87,6 +87,7 @@ export default class GameGUI {
 		});
 
 		//this.showSettings();//temp test
+		this.changeMode(1);//temp test
 	}
 
 	getNode() {
@@ -100,9 +101,25 @@ export default class GameGUI {
 		this.mode = parseInt(id);
 		this.container.setClass(`game-gui-container mode-${id} ${this.is_view_open ? 'view-open' : ''}`);
 
+		if(this.mode === 1) {//edit mode open
+			this.showAssetsList();
+		}
+
 		//edit mode pauses game physics, play mode reloads map
 		if(typeof this.listeners.onModeChange === 'function')
 			this.listeners.onModeChange(this.mode);
+	}
+
+	showAssetsList() {
+		let container = $.create('div').addClass('assets_container');
+
+		for(var i=0; i<100; i++) {
+			container.appendChild(
+				$.create('div').text(i)
+			);
+		}
+
+		this.main_edit.text('').appendChild( container );
 	}
 
 	tryImport() {

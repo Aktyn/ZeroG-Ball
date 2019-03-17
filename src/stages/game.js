@@ -28,10 +28,10 @@ export default class GameStage extends Stage {
 					this.game.paused = false;
 				else
 					this.game.paused = true;
-				this.game.reload();
+				this.game.reload(mode === 0);
 			},
 			onRestart: () => {
-				this.game.reload();
+				this.game.reload(true);
 			},
 			onClearMap: () => {
 				console.log('clear map');
