@@ -49,11 +49,12 @@ export default class Engine {
 		}
 
 		//solving contacts
-		for(var j=0; j<Config.ITERATIONS; j++) {
+		//for(var j=0; j<Config.ITERATIONS; j++) {
 			for(let contact of contacts) {
-				contact.solveIteration();//solve();
+				//contact.solveIteration();
+				contact.solve();
 			}
-		}
+		//}
 
 		for(let body of this.bodies) {
 			body.update();
@@ -61,7 +62,7 @@ export default class Engine {
 
 
 		for(let contact of contacts) {
-			contact.fixCollision();//solve();
+			contact.fixCollision();
 		}
 	}
 }

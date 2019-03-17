@@ -17,7 +17,7 @@ export default class Contact {
 		this.overlap = overlap;
 	}
 
-	/*solve() {//solves only for A
+	solve() {//solves only for A
 		if(this.A.static)
 			return;
 
@@ -38,10 +38,10 @@ export default class Contact {
 		//https://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-oriented-rigid-bodies--gamedev-8032
 
 		//correct position
-		this.fixCollision();
+		//this.fixCollision();
 
 		this.A.colliding = true;
-	}*/
+	}
 
 	solveIteration() {
 		if(this.A.static)
