@@ -7,6 +7,8 @@ export default class GameGUI {
 
 		this.is_view_open = false;
 		this.mode = 0;
+		this.download_export_confirm = null;
+		this.map_data = null;
 
 		this.container = $.create('div').setClass('game-gui-container mode-0').addChild(
 			this.header = $.create('header')/*.addClass('hidden')*/.addChild(
@@ -20,11 +22,15 @@ export default class GameGUI {
 				})
 			).addChild(
 				$.create('div').addClass('game-buttons').addChild(
-					$.create('button').text('IMPORT')//TODO
+					$.create('button').text('IMPORT').on('click', this.tryImport.bind(this))
 				).addChild(
-					$.create('button').text('EXPORT')//TODO
+					this.map_export_btn =  $.create('button').text('EXPORT')
+						.on('click', this.tryExport.bind(this))
 				).addChild(
-					$.create('button').addClass('restart-btn').text('RESTART')//TODO
+					$.create('button').addClass('restart-btn').text('RESTART').on('click', () => {
+						if(this.mode === 0 && typeof this.listeners.onRestart === 'function')
+							this.listeners.onRestart();
+					})
 				)
 			).addChild(
 				this.modes_panel = $.create('div').addClass('modes')
@@ -37,7 +43,7 @@ export default class GameGUI {
 						.text('POWRÓT DO MENU').on('click', this.tryReturnToMenu.bind(this))
 				)
 			)
-		).addChild(
+		).addChild(//GUI CENTER
 			this.gui_center = $.create('div').addClass('gui-center').on('click', e => {
 				if(e.target === this.gui_center && this.is_view_open)
 					this.closeView();
@@ -88,11 +94,56 @@ export default class GameGUI {
 	}
 
 	changeMode(id) {
+		if(this.mode === parseInt(id))
+			return;
 		// console.log('TODO', id);
 		this.mode = parseInt(id);
 		this.container.setClass(`game-gui-container mode-${id} ${this.is_view_open ? 'view-open' : ''}`);
 
-		//TODO - edit mode pauses game physics, play mode reloads map
+		//edit mode pauses game physics, play mode reloads map
+		if(typeof this.listeners.onModeChange === 'function')
+			this.listeners.onModeChange(this.mode);
+	}
+
+	tryImport() {
+		$.create('input').setAttrib('type', 'file').setAttrib('accept', '.json,text/json')
+			.on('change', (e) => {
+				var file = e.target.files[0];
+				if (!file)
+					return;
+				
+				let reader = new FileReader();
+				reader.onload = (e) => {
+					if(typeof this.listeners.onImport === 'function')
+						this.listeners.onImport(e.target.result || '{}');
+				};
+				reader.readAsText(file);
+			}).click();
+	}
+
+	tryExport() {
+		if(typeof this.listeners.exportMapData !== 'function')
+			return;
+		if(this.download_export_confirm === null) {
+			this.map_data = 'text/json;charset=utf-8,' + this.listeners.exportMapData();
+			this.map_export_btn.text('POBIERZ PLIK');
+			this.download_export_confirm = setTimeout(() => {
+				this.map_export_btn.text('EXPORT');
+				this.map_data = null;
+				this.download_export_confirm = null;
+			}, 5000);
+		}
+		else {
+			let link = $.create('a').setAttrib('href', `data:${this.map_data}`).setAttrib('download', 'map.json').setStyle({'display': 'none'});
+			$(document.body).addChild(link);
+			link.click();
+
+			link.delete();
+
+			this.map_export_btn.text('EXPORT');
+			this.map_data = null;
+			this.download_export_confirm = null;
+		}
 	}
 
 	tryReturnToMenu() {

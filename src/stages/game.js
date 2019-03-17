@@ -23,6 +23,16 @@ export default class GameStage extends Stage {
 				}
 				this.listeners.onExit();
 			},
+			onModeChange: (mode) => {
+				if(mode === 0)
+					this.game.paused = false;
+				else
+					this.game.paused = true;
+				this.game.reload();
+			},
+			onRestart: () => {
+				this.game.reload();
+			},
 			onClearMap: () => {
 				console.log('clear map');
 				this.game.clearMap();
@@ -33,6 +43,13 @@ export default class GameStage extends Stage {
 			/*redo: () => {
 				
 			}*/
+
+			exportMapData: () => {
+				return this.game.map_data.export();
+			},
+			onImport: (json_data) => {
+				this.game.importMap(json_data);
+			}
 		});
 
 		this.container.addChild(

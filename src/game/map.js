@@ -22,6 +22,8 @@ export default class Map {
 		this.graphics = new SvgEngine();
 		this.graphics.foreground_layer.addClass('cartoon-style').addClass('flat-shadows');
 
+		this.paused = false;
+
 		this.camera = {
 			x: 0, y: 0, zoom: 1
 		};
@@ -137,7 +139,8 @@ export default class Map {
 	}
 
 	update() {
-		this.physics.update();
+		if(!this.paused)
+			this.physics.update();
 		this.graphics.update();
 	}
 }

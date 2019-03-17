@@ -144,24 +144,27 @@ export default class GameCore extends Map {
 		this.last_mouse_coords = coords;
 	}
 
+	reload() {
+		super.load(this.map_data);
+	}
+
+	/** @param {string} data */
+	importMap(data) {
+		this.map_data.import(data);
+		this.reload();
+	}
+
 	clearMap() {
 		this.map_data.removeAll();
-		super.load(this.map_data);
+		this.reload();
 	}
 
 	undoLastChange() {
 		if(this.map_data.undo())
-			super.load(this.map_data);
+			this.reload();
 	}
 
 	update(dt) {
-		/*let xx = Math.cos(t)*0.5;
-		let yy = Math.sin(-t*0.6)*0.28;
-		let zoom = 1.25;
-		super.updateCamera(xx, yy, zoom);
-
-		t += Math.PI * dt/1000 * 0.25;*/
-
 		super.update();
 	}
 }

@@ -86,6 +86,16 @@ class MapData {
 
 		return true;
 	}
+
+	export() {
+		return JSON.stringify(this.state);
+	}
+
+	/** @param {string} data */
+	import(data) {
+		this.pushHistory();
+		this.state = JSON.parse(data);
+	}
 }
 
 MapData.SHAPE_TYPE = SHAPE_TYPE;
