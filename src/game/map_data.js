@@ -1,3 +1,5 @@
+import Object2D, {Type} from './objects/object2d';
+
 // @ts-check
 var _enum_ = obj => Object.keys(obj).forEach((k, i) => obj[k] = i);
 
@@ -22,7 +24,8 @@ const HISTORY_CAPACITY = 32;
 		physic_type?: number,
 		x?: number, y?: number, 
 		w?: number, h?: number, 
-		rot?: number
+		rot?: number,
+		class_name?: string
 	}} 
 	ObjectSchema
 */
@@ -63,10 +66,23 @@ class MapData {
 	}
 
 
-	/** @param {ObjectSchema} schema */
+	/** @param {ObjectSchema | Object2D} schema */
 	addObject(schema) {
 		this.pushHistory();
-		this.state.objects.push(schema);
+
+		if(schema instanceof Object2D) {
+			console.log(schema.transform);
+			this.state.objects.push({
+				'shape_type': schema.type === Type.CIRCLE ? SHAPE_TYPE.CIRCLE : SHAPE_TYPE.RECT,
+				'physic_type': schema.static ? PHYSIC_TYPE.STATIC : PHYSIC_TYPE.DYNAMIC,
+				'x': schema.transform.x, y: schema.transform.y, 
+				'w': schema.transform.w, h: schema.transform.h, 
+				'rot': schema.transform.rot,
+				'class_name': schema.getClassName()
+			});
+		}
+		else
+			this.state.objects.push(schema);
 	}
 
 	removeAll() {

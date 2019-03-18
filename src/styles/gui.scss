@@ -100,10 +100,6 @@ $header-size: 35px;
 		pointer-events: auto;
 	}
 
-	/*&:not(.view-open) .gui-center .view-container {
-		display: none;
-	}*/
-
 	.gui-center {
 		height: 100%;
 		width: auto;
@@ -111,6 +107,10 @@ $header-size: 35px;
 		display: grid;
 		align-items: center;
 		justify-content: center;
+
+		/*&.event_cacher {
+			background-color: #0004;
+		}*/
 
 		.view-container {
 			margin: auto;
@@ -188,13 +188,18 @@ $header-size: 35px;
 					align-items: center;
 					justify-content: center;
 
+					cursor: pointer;
+
 					&:not(.selected):hover {
-						cursor: pointer;
 						background-color: #ef535080;
 					}
 
 					&.selected {
 						background-color: #ef5350;
+
+						&:hover {
+							background-color: #e57373;
+						}
 					}
 					/*& > * {
 						cursor: pointer;

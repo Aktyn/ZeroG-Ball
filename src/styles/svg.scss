@@ -1,4 +1,6 @@
 svg.game-svg {
+	shape-rendering: auto;
+
 	.cartoon-style {
 		stroke: #000;
 		stroke-width: 2px;
@@ -22,13 +24,13 @@ svg.game-svg {
 		//default values
 		fill: #fff;
 
-		.red {
+		&.red {
 			fill: #e57373;
 		}
-		.green {
+		&.green {
 			fill: #8BC34A;
 		}
-		.crate {
+		&.crate {
 			fill: #8D6E63;//TODO - fill with texture
 		}
 	}

@@ -119,10 +119,47 @@ export default class Map {
 			let object2d = new Object2D(shape, obj.w||1, obj.h||1, this.graphics, this.physics)
 				/*.set({'fill': 'rgb(64, 192, 255)'})*/.setPos(obj.x||0, obj.y||0).setRot(obj.rot||0);
 
+			if(obj.class_name)
+				object2d.set({'class': obj.class_name});
+
 			if(obj.physic_type === undefined || obj.physic_type === MapData.PHYSIC_TYPE.STATIC)
 				object2d.setStatic();
 			this.objects.push(object2d);
 		}
+	}
+
+	/** 
+	* Clone object and add it's copy to the map
+	* @param {Object2D} obj 
+	*/
+	addObjectClone(obj) {
+		this.objects.push( obj.clone(this.graphics, this.physics) );
+	}
+
+	addAsset(asset) {
+		//console.log(asset);
+
+		if(asset.shape === MapData.SHAPE_TYPE.CIRCLE) {
+			var object2d = new Object2D(Type.CIRCLE, asset.radius||1, asset.radus||1, this.graphics, this.physics).set({'class': asset.theme});
+		}
+		else {
+			var object2d = new Object2D(Type.RECT, asset.width||1, asset.height||1, this.graphics, this.physics).set({'class': asset.theme});
+		}
+
+		//change initial position to somewhere outside camera view
+		object2d.setPos(this.camera.x-this.camera.zoom-3, 0);
+
+		this.objects.push(object2d);
+		return object2d;
+	}
+
+	/** @param {Object2D} obj */
+	removeObject(obj) {
+		let i = this.objects.indexOf(obj);
+		if(i === -1)
+			return;
+		this.objects.splice(i, 1);
+		obj._destroy_(this.physics);
 	}
 
 	/**

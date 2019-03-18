@@ -110,6 +110,10 @@ export default class SvgObject {
 		return this;
 	}
 
+	getTransform() {
+		return this.transform;
+	}
+
 	/**
 	* @param {number} width
 	* @param {number} height

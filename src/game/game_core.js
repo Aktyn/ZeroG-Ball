@@ -3,6 +3,7 @@ import $ from './../utils/html';
 import Map from './map';
 import MapData from './map_data';
 import Config from './config';
+import Object2D from './objects/object2d';
 
 /**
 * Starts an update loop
@@ -63,8 +64,10 @@ export default class GameCore extends Map {
 		this.last_mouse_coords = null;
 		/** @type {DOMRect} */
 		this.svg_rect = null;//{x: 0, y: 0, width: 100, height: 100};
-
 		let node = super.getNode();
+
+		/** @type {Object2D | null} */
+		this.stamp = null;
 
 		node.addEventListener('mousewheel', this.onMouseWheel.bind(this), false);
 		node.addEventListener('DOMMouseScroll', this.onMouseWheel.bind(this), false);
@@ -115,8 +118,14 @@ export default class GameCore extends Map {
 			return;
 		//save position
 		this.last_mouse_coords = this.convertCoords(e);
+
 		let click_pos = super.castCoords(this.last_mouse_coords);
 		//super.addTestCircle(click_pos);//tmp
+
+		if(this.stamp) {//place stamp
+			this.map_data.addObject(this.stamp);
+			super.addObjectClone(this.stamp);
+		}
 	}
 
 	onMouseUp(e) {
@@ -131,6 +140,11 @@ export default class GameCore extends Map {
 	}*/
 
 	onMouseMove(e) {
+		if(this.stamp !== null) {
+			let c = super.castCoords(this.convertCoords(e));
+			this.stamp.setPos(c.x, c.y);
+		}
+
 		if(this.last_mouse_coords === null)
 			return;
 		//console.log(e.clientX, e.clientY);
@@ -141,6 +155,8 @@ export default class GameCore extends Map {
 		let dy = (this.last_mouse_coords.y - coords.y)*2 * this.camera.zoom;
 		super.updateCamera(this.camera.x+dx, this.camera.y+dy, this.camera.zoom);
 		this.last_mouse_coords = coords;
+
+		
 	}
 
 	reload(reset_camera = false) {
@@ -161,6 +177,16 @@ export default class GameCore extends Map {
 	undoLastChange() {
 		if(this.map_data.undo())
 			this.reload();
+	}
+
+	onAssetSelected(asset) {
+		if(this.stamp !== null) {
+			super.removeObject(this.stamp);
+			this.stamp = null;
+		}
+		//else
+		if(asset !== null)
+			this.stamp = super.addAsset(asset);
 	}
 
 	update(dt) {

@@ -53,6 +53,13 @@ export default class PhysicsEngine {
 		this.contacts = [];
 	}
 
+	/** @param {Body} body */
+	removeObject(body) {
+		let i = this.bodies.indexOf(body);
+		if(i !== -1)
+			this.bodies.splice(i, 1);
+	}
+
 	update() {
 		// Generate new collision info
 		this.contacts = [];

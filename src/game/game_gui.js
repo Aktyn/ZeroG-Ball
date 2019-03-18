@@ -114,7 +114,16 @@ export default class GameGUI {
 	}
 
 	showAssetsList() {
-		let container = $.create('div').addClass('assets_container');
+		let container = $.create('div').addClass('assets_container').on('click', e => {
+			if(e.target === container && typeof this.listeners.onAssetSelected === 'function') {
+				if(this.selected_asset !== null) {
+					this.selected_asset = null;
+					$('.asset_preview').removeClass('selected');
+					this.listeners.onAssetSelected(null);
+				}
+				//this.gui_center.removeClass('event_cacher');
+			}
+		});
 
 		const preview_size = 70;
 
@@ -155,12 +164,21 @@ export default class GameGUI {
 	}
 
 	selectAsset(obj, name) {
-		this.selected_asset = obj;
 		$('.asset_preview').removeClass('selected');
+
+		if(this.selected_asset === obj) {
+			this.selected_asset = null;
+			this.listeners.onAssetSelected(null);
+			return;
+		}
+		this.selected_asset = obj;
 		$(`.asset_preview.${name}`).addClass('selected');
+
+		this.listeners.onAssetSelected(obj);
 
 		//TODO - darken gui center to indicate drop area
 		//unselect asset when clicked outside
+		//this.gui_center.addClass('event_cacher');
 	}
 
 	tryImport() {

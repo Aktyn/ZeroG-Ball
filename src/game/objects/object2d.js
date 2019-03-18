@@ -50,11 +50,46 @@ export default class Object2D extends SvgObject {
 				throw new Error('Incorrect object2d type');
 		}
 
+		this.type = type;
+		this.static = false;
+
 		super.setSize(width, height);
 		graphics_engine.addObjects(this);
 	}
 
+	/** @param {SimplePhysics|Physics} physics_engine */
+	_destroy_(physics_engine) {
+		//@ts-ignore
+		physics_engine.removeObject(this.body);
+		super.destroy();
+	}
+
+	/**
+	* @param {SvgEngine} graphics_engine
+	* @param {SimplePhysics|Physics} physics_engine
+	*/
+	clone(graphics_engine, physics_engine) {
+		let copy = new Object2D(
+			this.type, this.transform.w, this.transform.h, graphics_engine, physics_engine
+		);
+		copy.setPos(this.transform.x, this.transform.y);
+		copy.setRot(this.transform.rot);
+
+		for(let att of this.node.attributes) {
+			let a = {};
+			a[att.name] = att.value;
+			copy.set(a);
+		}
+
+		return copy;
+	}
+
+	getClassName() {
+		return this.node.getAttributeNS(null, 'class') || undefined;
+	}
+
 	setStatic() {
+		this.static = true;
 		this.body.setStatic();
 		return this;
 	}

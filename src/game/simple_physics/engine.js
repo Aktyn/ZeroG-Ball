@@ -14,6 +14,13 @@ export default class Engine {
 		this.bodies = [];
 	}
 
+	/** @param {Body} body */
+	removeObject(body) {
+		let i = this.bodies.indexOf(body);
+		if(i !== -1)
+			this.bodies.splice(i, 1);
+	}
+
 	/** 
 	* 	@param {number} radius 
 	*/
