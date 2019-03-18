@@ -16,4 +16,37 @@ svg.game-svg {
 	& > * {
 		pointer-events: none;
 	}
+
+	/** predefined objects classes (correlated with themes object in predefined_assets.js) */
+	circle, rect, path {
+		//default values
+		fill: #fff;
+
+		.red {
+			fill: #e57373;
+		}
+		.green {
+			fill: #8BC34A;
+		}
+		.crate {
+			fill: #8D6E63;//TODO - fill with texture
+		}
+	}
+}
+
+.asset_preview {//TODO - use scss power to keep color values in one place
+	& > * {
+		box-sizing: border-box;
+		border: 1px solid #000a;
+	}
+
+	.red {
+		background-color: #e57373;
+	}
+	.green {
+		background-color: #8BC34A;
+	}
+	.crate {
+		background-color: #8D6E63;
+	}
 }

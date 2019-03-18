@@ -1,4 +1,6 @@
 import $ from './../utils/html';
+import {OBJECTS} from './predefined_assets';
+import MapData from './map_data';
 
 export default class GameGUI {
 	constructor(listeners = {}) {
@@ -9,6 +11,7 @@ export default class GameGUI {
 		this.mode = 0;//0
 		this.download_export_confirm = null;
 		this.map_data = null;
+		this.selected_asset = null;
 
 		this.container = $.create('div').setClass('game-gui-container mode-0').addChild(
 			this.header = $.create('header')/*.addClass('hidden')*/.addChild(
@@ -113,13 +116,51 @@ export default class GameGUI {
 	showAssetsList() {
 		let container = $.create('div').addClass('assets_container');
 
-		for(var i=0; i<100; i++) {
+		const preview_size = 70;
+
+		for(let [obj_name, obj] of Object.entries(OBJECTS)) {
+			let obj_preview = $.create('div').addClass(obj.theme);
+
+			if(obj.shape === MapData.SHAPE_TYPE.RECT) {
+				let aspect = obj.width / obj.height;
+				let w = preview_size, h = preview_size;
+				if(aspect > 1)
+					h *= aspect;
+				else
+					w *= aspect;
+				obj_preview.setStyle({
+					width: `${w}px`,
+					height: `${h}px`,
+				});
+			}
+			else if(obj.shape === MapData.SHAPE_TYPE.CIRCLE) {
+				let radius = (preview_size*0.61)|0;
+				obj_preview.setStyle({
+					width: `${radius}px`,
+					height: `${radius}px`,
+					'border-radius': `${radius}px`
+				});
+			}
 			container.appendChild(
-				$.create('div').text(i)
+				$.create('div').addClass('asset_preview').addClass(obj_name).setStyle({
+					width: `${preview_size}px`,
+					height: `${preview_size}px`,
+				}).addChild( obj_preview ).on('click', () => {
+					this.selectAsset(obj, obj_name);
+				})
 			);
 		}
 
 		this.main_edit.text('').appendChild( container );
+	}
+
+	selectAsset(obj, name) {
+		this.selected_asset = obj;
+		$('.asset_preview').removeClass('selected');
+		$(`.asset_preview.${name}`).addClass('selected');
+
+		//TODO - darken gui center to indicate drop area
+		//unselect asset when clicked outside
 	}
 
 	tryImport() {

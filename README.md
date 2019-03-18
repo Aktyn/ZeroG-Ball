@@ -8,4 +8,7 @@ Project created for learning purpouses.
 	<li>Object styles</li>
 	<li>Aspect ratio settings</li>
 	<li>Shadows settings</li>
+	<li>More assets themes</li>
+	<li>Drag and drop system for adding assets onto map</li>
+	<li>Create textures for some assets</li>
 </ul>

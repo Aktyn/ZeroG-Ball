@@ -173,13 +173,32 @@ $header-size: 35px;
 				display: flex;
 				flex-direction: row;
 				align-items: center;
+				justify-content: center;
 
-				& > * {
+				& > .asset_preview {
 					padding: 5px;
 					margin: 0px 5px;
+					box-sizing: content-box;
 					
-					border-radius: 50px;
+					border-radius: 5px;
 					background-color: #0008;
+					box-shadow: 0px 0px 5px #0008;
+
+					display: grid;
+					align-items: center;
+					justify-content: center;
+
+					&:not(.selected):hover {
+						cursor: pointer;
+						background-color: #ef535080;
+					}
+
+					&.selected {
+						background-color: #ef5350;
+					}
+					/*& > * {
+						cursor: pointer;
+					}*/
 				}
 			}
 		}

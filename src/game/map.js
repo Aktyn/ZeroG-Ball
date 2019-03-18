@@ -117,7 +117,7 @@ export default class Map {
 			})(obj.shape_type);
 
 			let object2d = new Object2D(shape, obj.w||1, obj.h||1, this.graphics, this.physics)
-				.set({'fill': 'rgb(64, 192, 255)'}).setPos(obj.x||0, obj.y||0).setRot(obj.rot||0);
+				/*.set({'fill': 'rgb(64, 192, 255)'})*/.setPos(obj.x||0, obj.y||0).setRot(obj.rot||0);
 
 			if(obj.physic_type === undefined || obj.physic_type === MapData.PHYSIC_TYPE.STATIC)
 				object2d.setStatic();
