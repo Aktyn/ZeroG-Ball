@@ -71,7 +71,6 @@ class MapData {
 		this.pushHistory();
 
 		if(schema instanceof Object2D) {
-			console.log(schema.transform);
 			this.state.objects.push({
 				'shape_type': schema.type === Type.CIRCLE ? SHAPE_TYPE.CIRCLE : SHAPE_TYPE.RECT,
 				'physic_type': schema.static ? PHYSIC_TYPE.STATIC : PHYSIC_TYPE.DYNAMIC,

@@ -100,6 +100,7 @@ export default class GameGUI {
 	changeMode(id) {
 		if(this.mode === parseInt(id))
 			return;
+		this.selected_asset = null
 		// console.log('TODO', id);
 		this.mode = parseInt(id);
 		this.container.setClass(`game-gui-container mode-${id} ${this.is_view_open ? 'view-open' : ''}`);
@@ -154,16 +155,19 @@ export default class GameGUI {
 				$.create('div').addClass('asset_preview').addClass(obj_name).setStyle({
 					width: `${preview_size}px`,
 					height: `${preview_size}px`,
-				}).addChild( obj_preview ).on('click', () => {
-					this.selectAsset(obj, obj_name);
-				})
+				}).addChild( obj_preview ).addChild(
+					$.create('button').text('DYNAMICZNY').on('click', () => 
+						this.selectAsset(obj, obj_name, true)),
+					$.create('button').text('STATYCZNY').on('click', () => 
+						this.selectAsset(obj, obj_name, false))
+				)
 			);
 		}
 
 		this.main_edit.text('').appendChild( container );
 	}
 
-	selectAsset(obj, name) {
+	selectAsset(obj, name, dynamic = false) {
 		$('.asset_preview').removeClass('selected');
 
 		if(this.selected_asset === obj) {
@@ -172,6 +176,7 @@ export default class GameGUI {
 			return;
 		}
 		this.selected_asset = obj;
+		this.selected_asset.dynamic = dynamic;
 		$(`.asset_preview.${name}`).addClass('selected');
 
 		this.listeners.onAssetSelected(obj);

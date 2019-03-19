@@ -146,6 +146,9 @@ export default class Map {
 			var object2d = new Object2D(Type.RECT, asset.width||1, asset.height||1, this.graphics, this.physics).set({'class': asset.theme});
 		}
 
+		if(asset.dynamic === false)
+			object2d.setStatic();
+
 		//change initial position to somewhere outside camera view
 		object2d.setPos(this.camera.x-this.camera.zoom-3, 0);
 
@@ -160,6 +163,41 @@ export default class Map {
 			return;
 		this.objects.splice(i, 1);
 		obj._destroy_(this.physics);
+	}
+
+	/** 
+	* @param {{x: number, y: number}} coords 
+	*/
+	getObjectAt(coords) {
+		for(let obj of this.objects) {
+			switch(obj.type) {
+				case Type.CIRCLE:
+					if(Math.pow(coords.x-obj.transform.x, 2) + Math.pow(coords.y-obj.transform.y, 2) < 
+						obj.transform.w*obj.transform.w) 
+					{
+						return obj;
+					}
+					break;
+				case Type.RECT: {
+					let x1 = coords.x - obj.transform.x;
+					let y1 = coords.y - obj.transform.y;
+
+					let s = Math.sin(-obj.transform.rot);
+					let c = Math.cos(-obj.transform.rot);
+
+					let x2 = x1 * c - y1 * s;
+					let y2 = y1 * c + x1 * s;
+
+					if(x2 < obj.transform.w && x2 > -obj.transform.w && y2 < obj.transform.h && y2 > -obj.transform.h)
+					{
+						return obj;
+					}
+
+				}	break;
+			}
+		}
+
+		return null;
 	}
 
 	/**

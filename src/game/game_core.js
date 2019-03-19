@@ -62,6 +62,7 @@ export default class GameCore extends Map {
 
 		//this.mouse_pressed = false;
 		this.last_mouse_coords = null;
+		this.click_pos = {x: 0, y: 0};
 		/** @type {DOMRect} */
 		this.svg_rect = null;//{x: 0, y: 0, width: 100, height: 100};
 		let node = super.getNode();
@@ -118,8 +119,10 @@ export default class GameCore extends Map {
 			return;
 		//save position
 		this.last_mouse_coords = this.convertCoords(e);
+		this.click_pos.x = this.last_mouse_coords.x;
+		this.click_pos.y = this.last_mouse_coords.y;
 
-		let click_pos = super.castCoords(this.last_mouse_coords);
+		//var click_pos = super.castCoords(this.last_mouse_coords);
 		//super.addTestCircle(click_pos);//tmp
 
 		if(this.stamp) {//place stamp
@@ -131,6 +134,16 @@ export default class GameCore extends Map {
 	onMouseUp(e) {
 		if(e.button !== 0)
 			return;
+
+		let c = this.convertCoords(e);
+		let not_moved = c.x === this.click_pos.x && c.y === this.click_pos.y;
+
+		if(this.stamp === null && this.paused && not_moved) {//no stamp and edit mode
+			//selecting object
+			console.log( super.getObjectAt(super.castCoords(this.convertCoords(e))) );
+			//TODO
+		}
+
 		this.last_mouse_coords = null;
 	}
 

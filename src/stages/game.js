@@ -28,6 +28,7 @@ export default class GameStage extends Stage {
 					this.game.paused = false;
 				else
 					this.game.paused = true;
+				this.game.stamp = null;
 				this.game.reload(mode === 0);
 			},
 			onAssetSelected: (asset) => {
