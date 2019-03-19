@@ -52,8 +52,10 @@ function runLoop(self) {
 const ZOOM_STRENGTH = 0.1;
 
 export default class GameCore extends Map {
-	constructor() {
+	constructor(listeners = {}) {
 		super();//map
+
+		this.listeners = listeners;
 
 		this.map_data = new MapData();
 		super.load(this.map_data);
@@ -131,7 +133,10 @@ export default class GameCore extends Map {
 			return;
 
 		let c = this.convertCoords(e);
-		let not_moved = c.x === this.click_pos.x && c.y === this.click_pos.y;
+
+		const tollerance = 0.005;
+		let not_moved = Math.abs(c.x-this.click_pos.x) <= tollerance && 
+			Math.abs(c.y-this.click_pos.y) <= tollerance;
 
 		if(not_moved) {
 			if(this.stamp !== null) {//place stamp
@@ -139,9 +144,12 @@ export default class GameCore extends Map {
 				super.addObjectClone(this.stamp);
 			}
 			else if(this.paused) {//no stamp and edit mode
-				//selecting object
-				console.log( super.getObjectAt(super.castCoords(this.convertCoords(e))) );
-				//TODO
+				//selecting object under mouse cursor
+				if(typeof this.listeners.onObjectSelect === 'function') {
+					this.listeners.onObjectSelect(
+						super.getObjectAt(super.castCoords(this.convertCoords(e)))
+					);
+				}
 			}
 		}
 

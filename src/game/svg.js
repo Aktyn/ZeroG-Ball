@@ -37,6 +37,10 @@ export default class SvgObject {
 		this.node.remove();
 	}
 
+	/*getNode() {
+		return this.node;
+	}*/
+
 	update(scale_in_transform = false) {//updates object transform
 		if(!scale_in_transform && this.scale_changed === true) {
 			if(this.name === 'circle') {
@@ -97,6 +101,14 @@ export default class SvgObject {
 	*/
 	addClass(name) {
 		this.node.classList.add(name);
+		return this;
+	}
+
+	/**
+	* @param {string} name
+	*/
+	removeClass(name) {
+		this.node.classList.remove(name);
 		return this;
 	}
 

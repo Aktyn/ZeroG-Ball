@@ -33,6 +33,24 @@ svg.game-svg {
 		&.crate {
 			fill: #8D6E63;//TODO - fill with texture
 		}
+
+		&.selected {
+			stroke: #f44336;
+			stroke-width: 4px;
+			stroke-linecap: round;
+			stroke-dasharray: 10;
+
+			animation: stroke-rotate 2s linear infinite both;
+
+			@keyframes stroke-rotate {
+				0% {
+					stroke-dashoffset: 0;
+				}
+				100% {
+					stroke-dashoffset: 100;
+				}
+			}
+		}
 	}
 }
 

@@ -1,5 +1,8 @@
+//@ts-check
+
 import $ from './../utils/html';
 import {OBJECTS} from './predefined_assets';
+import Object2D from './objects/object2d';
 import MapData from './map_data';
 
 export default class GameGUI {
@@ -11,7 +14,10 @@ export default class GameGUI {
 		this.mode = 0;//0
 		this.download_export_confirm = null;
 		this.map_data = null;
+
 		this.selected_asset = null;
+		/** @type {Object2D} */
+		this.selected_object = null;
 
 		this.container = $.create('div').setClass('game-gui-container mode-0').addChild(
 			this.header = $.create('header')/*.addClass('hidden')*/.addChild(
@@ -151,11 +157,11 @@ export default class GameGUI {
 					'border-radius': `${radius}px`
 				});
 			}
-			container.appendChild(
+			container.addChild(
 				$.create('div').addClass('asset_preview').addClass(obj_name).setStyle({
 					width: `${preview_size}px`,
 					height: `${preview_size}px`,
-				}).addChild( obj_preview ).addChild(
+				}).addChild( obj_preview,
 					$.create('button').text('DYNAMICZNY').on('click', () => 
 						this.selectAsset(obj, obj_name, true)),
 					$.create('button').text('STATYCZNY').on('click', () => 
@@ -164,7 +170,30 @@ export default class GameGUI {
 			);
 		}
 
-		this.main_edit.text('').appendChild( container );
+		this.main_edit.text('').addChild( container );
+	}
+
+	showObjectEditOptions() {
+		let container = $.create('div').addClass('edit_options').addChild(
+			$.create('div').addClass('transform-options').addChild(
+				$.create('label').text('pozycja x'),
+				$.create('input').setAttrib('type', 'number'),
+
+				$.create('label').text('pozycja y'),
+				$.create('input').setAttrib('type', 'number'),
+
+				$.create('label').text('szerokość'),
+				$.create('input').setAttrib('type', 'number'),
+
+				$.create('label').text('wysokość'),
+				$.create('input').setAttrib('type', 'number'),
+
+				$.create('label').text('rotacja'),
+				$.create('input').setAttrib('type', 'number'),
+			)
+		);
+
+		this.main_edit.text('').addChild( container );
 	}
 
 	selectAsset(obj, name, dynamic = false) {
@@ -186,6 +215,26 @@ export default class GameGUI {
 		//this.gui_center.addClass('event_cacher');
 	}
 
+	/** @param {Object2D | null} obj */
+	selectObject(obj) {
+		if(this.selected_object === obj)
+			return;
+		if(this.selected_object !== null) {
+			//unselect object
+			this.selected_object.removeClass('selected');
+		}
+
+		this.selected_object = obj;
+
+		if(obj !== null) {
+			console.log('selecting:', obj);
+			obj.addClass('selected');
+			this.showObjectEditOptions();
+		}
+		else
+			this.showAssetsList();
+	}
+
 	tryImport() {
 		$.create('input').setAttrib('type', 'file').setAttrib('accept', '.json,text/json')
 			.on('change', (e) => {
@@ -196,6 +245,7 @@ export default class GameGUI {
 				let reader = new FileReader();
 				reader.onload = (e) => {
 					if(typeof this.listeners.onImport === 'function')
+						//@ts-ignore
 						this.listeners.onImport(e.target.result || '{}');
 				};
 				reader.readAsText(file);

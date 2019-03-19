@@ -14,7 +14,12 @@ export default class GameStage extends Stage {
 	constructor(target, listeners) {
 		super(target, 'game-container', listeners);
 
-		this.game = new GameCore();
+		this.game = new GameCore({
+			onObjectSelect: (obj) => {
+				if(this.gui)
+					this.gui.selectObject(obj);
+			}
+		});
 		this.gui = new GameGUI({
 			onReturnToMenu: () => {
 				if(this.game) {

@@ -161,14 +161,14 @@ $header-size: 35px;
 			overflow-x: auto;
 			display: table-cell;
 
-			.assets_container {
-				//background-color: #f558;
-				
+			.assets_container, .edit_options {
 				width: 100%;
-				display: block;
+				height: 100%;
+			}
+
+			.assets_container {
 				overflow-x: auto;
 				overflow-y: hidden;
-				height: 100%;
 
 				display: flex;
 				flex-direction: row;
@@ -239,6 +239,38 @@ $header-size: 35px;
 					/*& > * {
 						cursor: pointer;
 					}*/
+				}
+			}
+
+			.edit_options {
+				display: grid;
+				grid-template-columns: fit-content(100%);
+				align-items: center;
+				justify-content: space-between;
+
+
+
+				.transform-options {
+					background-color: #0008;
+					padding: 0px 5px;
+					height: 100%;
+
+					display: grid;
+					align-items: center;
+					grid-template-columns: 1fr 1fr 1fr;
+					grid-template-rows: fit-content(100%) auto fit-content(100%) auto;
+					grid-auto-flow: column;
+					grid-column-gap: 10px;
+
+					label {
+						font-size: 12px;
+						font-weight: bold;
+						text-align: left;
+					}
+
+					input {
+
+					}
 				}
 			}
 		}
