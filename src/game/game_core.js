@@ -124,11 +124,6 @@ export default class GameCore extends Map {
 
 		//var click_pos = super.castCoords(this.last_mouse_coords);
 		//super.addTestCircle(click_pos);//tmp
-
-		if(this.stamp) {//place stamp
-			this.map_data.addObject(this.stamp);
-			super.addObjectClone(this.stamp);
-		}
 	}
 
 	onMouseUp(e) {
@@ -138,10 +133,16 @@ export default class GameCore extends Map {
 		let c = this.convertCoords(e);
 		let not_moved = c.x === this.click_pos.x && c.y === this.click_pos.y;
 
-		if(this.stamp === null && this.paused && not_moved) {//no stamp and edit mode
-			//selecting object
-			console.log( super.getObjectAt(super.castCoords(this.convertCoords(e))) );
-			//TODO
+		if(not_moved) {
+			if(this.stamp !== null) {//place stamp
+				this.map_data.addObject(this.stamp);
+				super.addObjectClone(this.stamp);
+			}
+			else if(this.paused) {//no stamp and edit mode
+				//selecting object
+				console.log( super.getObjectAt(super.castCoords(this.convertCoords(e))) );
+				//TODO
+			}
 		}
 
 		this.last_mouse_coords = null;

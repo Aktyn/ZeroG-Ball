@@ -105,6 +105,7 @@ export default class Map {
 
 		this.graphics.clearForeground();
 		this.physics.removeObjects();
+		this.objects = [];
 		if(reset_camera)
 			this.updateCamera(0, 0, 1);//reset camera
 
