@@ -127,11 +127,11 @@ class MapData {
 	*/
 	findSchema(obj) {
 		for(let schema of this.state.objects) {
-			if( (schema.x||0) === (obj.transform.x||0) && 
-				(schema.y||0) === (obj.transform.y||0) && 
-				(schema.rot||0) === (obj.transform.rot||0) && 
-				(schema.w||0) === (obj.transform.w||0) &&
-				(schema.h||0) === (obj.transform.h||0) &&
+			if( (schema.x||0) == (obj.transform.x||0) && 
+				(schema.y||0) == (obj.transform.y||0) && 
+				(schema.rot||0) == (obj.transform.rot||0) && 
+				(schema.w||0) == (obj.transform.w||0) &&
+				(schema.h||0) == (obj.transform.h||0) &&
 				(schema.class_name === undefined || obj.getClassName().includes(schema.class_name))
 			) {
 				//debugger;
