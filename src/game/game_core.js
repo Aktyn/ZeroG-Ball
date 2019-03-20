@@ -224,6 +224,16 @@ export default class GameCore extends Map {
 		obj.setRot(transform.rot);
 	}
 
+	/**
+	* @param {Object2D} obj
+	*/
+	deleteObject(obj) {
+		if(this.map_data.deleteObject(obj) === false)
+			return;
+
+		super.removeObject(obj);
+	}
+
 	update(dt) {
 		super.update();
 	}

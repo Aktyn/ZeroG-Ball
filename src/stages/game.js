@@ -46,7 +46,8 @@ export default class GameStage extends Stage {
 			onImport: this.game.importMap.bind(this.game),
 
 			//object edit listeners
-			updateObjectTransform: this.game.updateObjectTransform.bind(this.game)
+			updateObjectTransform: this.game.updateObjectTransform.bind(this.game),
+			deleteObject: this.game.deleteObject.bind(this.game),
 		});
 
 		this.container.addChild(

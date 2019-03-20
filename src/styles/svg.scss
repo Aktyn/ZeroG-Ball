@@ -35,7 +35,8 @@ svg.game-svg {
 		}
 
 		&.selected {
-			stroke: #f44336;
+			stroke: #ef5350;
+			stroke-opacity: 1;
 			stroke-width: 4px;
 			stroke-linecap: round;
 			stroke-dasharray: 10;

@@ -175,7 +175,6 @@ export default class GameGUI {
 
 	showObjectEditOptions() {
 		var x_input, y_input, w_input, h_input, rot_input;
-		//TODO - radius value instead of width and height for circles
 
 		let container = $.create('div').addClass('edit_options').addChild(
 			$.create('div').addClass('transform-options').addChild(...[
@@ -205,14 +204,17 @@ export default class GameGUI {
 
 							$.create('label').text('rotacja'),
 							rot_input = $.create('input').setAttrib('type', 'number')
-								.setAttrib('min', 0).setAttrib('max', 360),
+								.setAttrib('min', -360).setAttrib('max', 360),
 						];
 					}
 				})(this.selected_object.type === Type.CIRCLE),
 			]),
 
 			$.create('div').addClass('object-options').addChild(
-				$.create('button').text('USUŃ')
+				$.create('button').text('USUŃ').on('click', () => {
+					if(this.mode === 1 && typeof this.listeners.deleteObject === 'function')
+						this.listeners.deleteObject(this.selected_object);
+				})
 			)
 		);
 
@@ -223,7 +225,8 @@ export default class GameGUI {
 			if(h_input)
 				h_input.setAttrib('value', this.selected_object.transform.h);
 			if(rot_input)
-				rot_input.setAttrib('value', this.selected_object.transform.rot * 180.0/Math.PI);
+				rot_input.setAttrib('value', 
+					(this.selected_object.transform.rot * 180.0/Math.PI).toPrecision(2));
 
 			let steps = [0.1, 0.1, 0.1, 0.1, 1];
 			[x_input, y_input, w_input, h_input, rot_input].forEach((input, i) => {
@@ -239,11 +242,18 @@ export default class GameGUI {
 
 							rot: rot_input ? (parseInt(rot_input.value)*Math.PI/180.0) : 0
 						};
+						for(let num of Object.values(new_transform)) {
+							if(isNaN(num)) {
+								console.error('Discarding changes due to NaN value');
+								return;
+							}
+						}
 
 						if(typeof this.listeners.updateObjectTransform !== 'function')
 							return;
 
-						this.listeners.updateObjectTransform(this.selected_object, new_transform);
+						if(this.mode === 1)
+							this.listeners.updateObjectTransform(this.selected_object, new_transform);
 					});
 				}
 			});
