@@ -244,11 +244,9 @@ $header-size: 35px;
 
 			.edit_options {
 				display: grid;
-				grid-template-columns: fit-content(100%);
+				grid-template-columns: fit-content(100%) auto;
 				align-items: center;
-				justify-content: space-between;
-
-
+				justify-content: stretch;
 
 				.transform-options {
 					background-color: #0008;
@@ -257,7 +255,7 @@ $header-size: 35px;
 
 					display: grid;
 					align-items: center;
-					grid-template-columns: 1fr 1fr 1fr;
+					grid-template-columns: auto auto auto;
 					grid-template-rows: fit-content(100%) auto fit-content(100%) auto;
 					grid-auto-flow: column;
 					grid-column-gap: 10px;
@@ -269,8 +267,12 @@ $header-size: 35px;
 					}
 
 					input {
-
+						width: 100px;
 					}
+				}
+
+				.object-options {
+					align-self: left;
 				}
 			}
 		}

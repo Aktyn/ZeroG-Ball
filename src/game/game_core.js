@@ -211,6 +211,19 @@ export default class GameCore extends Map {
 			this.stamp = super.addAsset(asset);
 	}
 
+	/**
+	* @param {Object2D} obj
+	* @param {{x: number, y: number, w: number, h: number, rot: number}} transform
+	*/
+	updateObjectTransform(obj, transform) {
+		if(this.map_data.updateObjectTransform(obj, transform) === false)
+			return;
+
+		obj.setPos(transform.x, transform.y);
+		obj.setSize(transform.w, transform.h);
+		obj.setRot(transform.rot);
+	}
+
 	update(dt) {
 		super.update();
 	}

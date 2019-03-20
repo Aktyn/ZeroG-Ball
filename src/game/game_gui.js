@@ -2,7 +2,7 @@
 
 import $ from './../utils/html';
 import {OBJECTS} from './predefined_assets';
-import Object2D from './objects/object2d';
+import Object2D, {Type} from './objects/object2d';
 import MapData from './map_data';
 
 export default class GameGUI {
@@ -174,24 +174,83 @@ export default class GameGUI {
 	}
 
 	showObjectEditOptions() {
+		var x_input, y_input, w_input, h_input, rot_input;
+		//TODO - radius value instead of width and height for circles
+
 		let container = $.create('div').addClass('edit_options').addChild(
-			$.create('div').addClass('transform-options').addChild(
+			$.create('div').addClass('transform-options').addChild(...[
 				$.create('label').text('pozycja x'),
-				$.create('input').setAttrib('type', 'number'),
+				x_input = $.create('input').setAttrib('type', 'number'),
 
 				$.create('label').text('pozycja y'),
-				$.create('input').setAttrib('type', 'number'),
+				y_input = $.create('input').setAttrib('type', 'number'),
 
-				$.create('label').text('szerokość'),
-				$.create('input').setAttrib('type', 'number'),
+				...(is_circle => {
+					if(is_circle) {
+						return [
+							$.create('label').text('promień'),
+							w_input = $.create('input').setAttrib('type', 'number')
+								.setAttrib('min', 0),
+						];
+					}
+					else {
+						return [
+							$.create('label').text('szerokość'),
+							w_input = $.create('input').setAttrib('type', 'number')
+								.setAttrib('min', 0),
 
-				$.create('label').text('wysokość'),
-				$.create('input').setAttrib('type', 'number'),
+							$.create('label').text('wysokość'),
+							h_input = $.create('input').setAttrib('type', 'number')
+								.setAttrib('min', 0),
 
-				$.create('label').text('rotacja'),
-				$.create('input').setAttrib('type', 'number'),
+							$.create('label').text('rotacja'),
+							rot_input = $.create('input').setAttrib('type', 'number')
+								.setAttrib('min', 0).setAttrib('max', 360),
+						];
+					}
+				})(this.selected_object.type === Type.CIRCLE),
+			]),
+
+			$.create('div').addClass('object-options').addChild(
+				$.create('button').text('USUŃ')
 			)
 		);
+
+		try {
+			x_input.setAttrib('value', this.selected_object.transform.x);
+			y_input.setAttrib('value', this.selected_object.transform.y);
+			w_input.setAttrib('value', this.selected_object.transform.w);
+			if(h_input)
+				h_input.setAttrib('value', this.selected_object.transform.h);
+			if(rot_input)
+				rot_input.setAttrib('value', this.selected_object.transform.rot * 180.0/Math.PI);
+
+			let steps = [0.1, 0.1, 0.1, 0.1, 1];
+			[x_input, y_input, w_input, h_input, rot_input].forEach((input, i) => {
+				if(input) {
+					input.setAttrib('step', steps[i]);
+					input.on('input', () => {
+						let new_transform = {
+							x: parseFloat(x_input.value),
+							y: parseFloat(y_input.value),
+
+							w: parseFloat(w_input.value),
+							h: h_input ? parseFloat(h_input.value) : parseFloat(w_input.value),
+
+							rot: rot_input ? (parseInt(rot_input.value)*Math.PI/180.0) : 0
+						};
+
+						if(typeof this.listeners.updateObjectTransform !== 'function')
+							return;
+
+						this.listeners.updateObjectTransform(this.selected_object, new_transform);
+					});
+				}
+			});
+		}
+		catch(e) {
+			console.error(e);
+		}
 
 		this.main_edit.text('').addChild( container );
 	}

@@ -165,7 +165,7 @@ const extender = {//extended methods of DOM HTMLElements
 	/** 
 	*	@param {string} query 
 	*/
-	getChildren: function(query) {
+	getChildren: function(query = '*') {
 		return fromQuery(query, this);
 	},
 	addChild: function(...elements) {

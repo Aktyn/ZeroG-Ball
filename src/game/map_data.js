@@ -89,6 +89,40 @@ class MapData {
 		this.state.objects = [];
 	}
 
+	/**
+	* @param {Object2D} obj
+	* @param {{x: number, y: number, w: number, h: number, rot: number}} transform
+	*/
+	updateObjectTransform(obj, transform) {
+		let schema = this.findSchema(obj);
+
+		if(schema) {
+			this.pushHistory();
+			Object.assign(schema, transform);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	* @param {Object2D} obj
+	*/
+	findSchema(obj) {
+		for(let schema of this.state.objects) {
+			if( (schema.x||0) === (obj.transform.x||0) && 
+				(schema.y||0) === (obj.transform.y||0) && 
+				(schema.rot||0) == (obj.transform.rot||0) && 
+				(schema.w||0) === (obj.transform.w||0) &&
+				(schema.h||0) === (obj.transform.h||0)// &&
+				//(schema.class_name||'') === (obj.getClassName()||'')
+			) {
+				//debugger;
+				return schema;
+			}
+		}
+		return null;
+	}
+
 	getObjects() {
 		return this.state.objects;
 	}

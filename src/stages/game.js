@@ -36,29 +36,17 @@ export default class GameStage extends Stage {
 				this.game.stamp = null;
 				this.game.reload(mode === 0);
 			},
-			onAssetSelected: (asset) => {
-				this.game.onAssetSelected(asset);
-			},
-			onRestart: () => {
-				this.game.reload(true);
-			},
-			onClearMap: () => {
-				console.log('clear map');
-				this.game.clearMap();
-			},
-			undo: () => {
-				this.game.undoLastChange();
-			},
-			/*redo: () => {
-				
-			}*/
 
-			exportMapData: () => {
-				return this.game.map_data.export();
-			},
-			onImport: (json_data) => {
-				this.game.importMap(json_data);
-			}
+			onAssetSelected: this.game.onAssetSelected.bind(this.game),
+			onRestart: () => this.game.reload(true),
+			onClearMap: () => this.game.clearMap(),
+			undo: () => this.game.undoLastChange(),
+
+			exportMapData: () => this.game.map_data.export(),
+			onImport: this.game.importMap.bind(this.game),
+
+			//object edit listeners
+			updateObjectTransform: this.game.updateObjectTransform.bind(this.game)
 		});
 
 		this.container.addChild(
