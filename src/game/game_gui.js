@@ -96,7 +96,7 @@ export default class GameGUI {
 		});
 
 		//this.showSettings();//temp test
-		this.changeMode(1);//temp test
+		//this.changeMode(1);//temp test
 	}
 
 	getNode() {

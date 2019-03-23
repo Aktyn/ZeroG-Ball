@@ -8,8 +8,11 @@ export const ShapeType = {
 };
 
 export class Body {
-	/** @param {number} _shape_type */
-	constructor(_shape_type) {
+	/** 
+	* @param {number} _shape_type
+	* @param {number} _density
+	*/
+	constructor(_shape_type, _density = 1) {
 		this.shape_type = _shape_type;
 
 		this.pos = new Vec2();
@@ -17,8 +20,9 @@ export class Body {
 
 		this.static = false;
 
+		this.density = _density;//used for mass calculations
 		this.mass = 1;
-		this.velocity = new Vec2();
+		this.velocity = new Vec2(0, 0);
 		this.angular_velocity = 0;
 
 		this.colliding = false;
@@ -48,10 +52,9 @@ export class Body {
 	*	@param {Vec2} contactVector
 	*/
 	applyImpulse(impulse, contactVector) {
-		// velocity += im * impulse;
-		this.velocity.x += /*this.im * */impulse.x;
-		this.velocity.y += /*this.im * */impulse.y;
-		this.angular_velocity += /*this.iI * */crossVV( contactVector, impulse );
+		this.velocity.x += impulse.x;
+		this.velocity.y += impulse.y;
+		this.angular_velocity += crossVV( contactVector, impulse );
 	}
 
 	update() {
@@ -79,6 +82,7 @@ export class Circle extends Body {
 	constructor(_radius) {
 		super(ShapeType.CIRCLE);
 		this.radius = _radius;
+		this.mass = Math.PI * _radius * _radius * this.density;
 	}
 }
 
@@ -91,5 +95,6 @@ export class Rect extends Body {
 		super(ShapeType.RECT);
 		this.width = _width;
 		this.height = _height;
+		this.mass = _width*_height*4 * this.density;
 	}
 }

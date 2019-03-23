@@ -116,6 +116,8 @@ export default class Contact {
 		if(this.A.static)
 			return;
 		let solve_dst = this.B.static ? this.overlap : this.overlap/2;
-		this.A.pos.addVec(this.A.pos.clone().substractVec(this.point).normalize().scale(solve_dst*1.1));
+		this.A.pos.addVec(
+			this.A.pos.clone().substractVec(this.point).normalize().scale(solve_dst+0.01)
+		);
 	}
 }

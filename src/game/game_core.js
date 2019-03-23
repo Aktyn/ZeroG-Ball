@@ -123,9 +123,6 @@ export default class GameCore extends Map {
 		this.last_mouse_coords = this.convertCoords(e);
 		this.click_pos.x = this.last_mouse_coords.x;
 		this.click_pos.y = this.last_mouse_coords.y;
-
-		//var click_pos = super.castCoords(this.last_mouse_coords);
-		//super.addTestCircle(click_pos);//tmp
 	}
 
 	onMouseUp(e) {
@@ -150,6 +147,10 @@ export default class GameCore extends Map {
 						super.getObjectAt(super.castCoords(this.convertCoords(e)))
 					);
 				}
+			}
+
+			if(!this.paused) {
+				super.addTestCircle(super.castCoords(this.convertCoords(e)));
 			}
 		}
 

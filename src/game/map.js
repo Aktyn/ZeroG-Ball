@@ -95,7 +95,8 @@ export default class Map {
 	* @param {{x: number, y: number}} coords 
 	*/
 	addTestCircle({x, y}) {
-		let object2d = new Object2D(Type.CIRCLE, 0.1, 0.1, this.graphics, this.physics)
+		let rand_r = Math.random() * 0.1 + 0.05;
+		let object2d = new Object2D(Type.CIRCLE, rand_r, rand_r, this.graphics, this.physics)
 			.set({'fill': 'rgb(255, 128, 128)'}).setPos(x||0, y||0);
 	}
 
