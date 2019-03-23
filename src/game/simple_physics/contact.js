@@ -1,7 +1,9 @@
 //@ts-check
 import {Vec2, dotProduct, crossNV, crossVV} from './math';
-import {Body, Circle, Rect, ShapeType,} from './body';
+import {Body, Circle, Rect, ShapeType} from './body';
 import Config from './../config';
+
+const bounce = 1;//0.5;//0 - 1 -> bouncing factor
 
 export default class Contact {
 	/**
@@ -21,26 +23,81 @@ export default class Contact {
 		if(this.A.static)
 			return;
 
-		const bounce = 0.5;//0 - 1 -> bouncing factor
+		if(this.A.shape_type === ShapeType.CIRCLE) {
+			if(this.B.shape_type === ShapeType.RECT)
+				this.solveCircleToRect(this.A, this.B);
+			else if(this.B.shape_type === ShapeType.CIRCLE)
+				this.solveCircleToCircle(this.A, this.B);
+		}
 
-		let normal = this.A.pos.clone().substractVec(this.point).normalize();
-
-		this.A.velocity.addVec(
-			normal.scale(dotProduct(this.A.velocity, normal) * -2.0) 
-		).scale(bounce);
-
-		if(this.A.velocity.length() < Config.gravity*Config.PHYSIC_STEP)
-			this.A.velocity.scale(0.5);
+		this.A.colliding = true;
 
 		// resources used for velocity recalculation:
 		//https://en.wikipedia.org/wiki/Dot_product
 		//http://www.3dkingdoms.com/weekly/weekly.php?a=2
 		//https://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-oriented-rigid-bodies--gamedev-8032
+	}
 
-		//correct position
-		//this.fixCollision();
+	/**
+	* @param {Body} circle
+	* @param {Body} rect
+	*/
+	solveCircleToRect(circle, rect) {
+		let normal = circle.pos.clone().substractVec(this.point).normalize();
 
-		this.A.colliding = true;
+		circle.next_velocity = circle.velocity.clone().addVec(
+			normal.scale(dotProduct(circle.velocity, normal) * -2.0) 
+		).scale(bounce);
+
+		if(circle.next_velocity.length() < Config.gravity*Config.PHYSIC_STEP)
+			circle.next_velocity.scale(0.5);
+	}
+
+	/**
+	* @param {Body} c1
+	* @param {Body} c2
+	*/
+	solveCircleToCircle(c1, c2) {
+		//computations from 
+		//https://www.lucidar.me/en/mechanics/elastic-collision-equations-simulation-part-2/
+		let u1 = c1.velocity.clone();
+		let u2 = c2.velocity.clone();
+
+        let alpha1 = Math.atan2(c2.pos.y-c1.pos.y , c2.pos.x-c1.pos.x );//angle between circles
+        let beta1 = Math.atan2(u1.y, u1.x);//velocity angle
+        let gamma1 = beta1 - alpha1;
+        
+        let u12 = u1.length() * Math.cos(gamma1);
+        let u11 = u1.length() * Math.sin(gamma1);
+
+        let alpha2 = Math.atan2(c1.pos.y-c2.pos.y , c1.pos.x-c2.pos.x );//angle between circles reversed
+        let beta2 = Math.atan2(u2.y, u2.x);
+        let gamma2 = beta2 - alpha2;
+
+        let u21 = u2.length() * Math.cos(gamma2);
+        //let u22 = u2.length() * Math.sin(gamma2);
+
+        let v12 = ( (c1.mass-c2.mass)*u12 - 2.0*c2.mass*u21 ) / (c1.mass + c2.mass);
+        //let v21 = ( (c1.mass-c2.mass)*u21 + 2.0*c1.mass*u12 ) / (c1.mass + c2.mass)
+
+        //calculate resulting velocity
+        c1.next_velocity = new Vec2(
+        	u11 * -Math.sin(alpha1) + 	v12 * Math.cos(alpha1),
+        	u11 * Math.cos(alpha1) 	+ 	v12 * Math.sin(alpha1)
+        ).scale(bounce);
+
+        if(c1.next_velocity.length() < Config.gravity*Config.PHYSIC_STEP*Config.EPSILON)
+			c1.next_velocity.scale(0.5);
+
+		//V2=u22*[-sin(Alpha2),cos(Alpha2)] - v21*[cos(Alpha2),sin(Alpha2)];
+		/*if(c2.static)
+			return;
+		c2.velocity = new Vec2(
+        	u22 * -Math.sin(alpha2) - 	v21 * Math.cos(alpha2),
+        	u22 * Math.cos(alpha2) 	- 	v21 * Math.sin(alpha2)
+        ).scale(bounce);
+        if(c2.velocity.length() < Config.gravity*Config.PHYSIC_STEP*Config.EPSILON)
+			c2.velocity.scale(0.5);*/
 	}
 
 	solveIteration() {

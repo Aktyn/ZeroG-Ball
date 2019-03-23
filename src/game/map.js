@@ -98,6 +98,7 @@ export default class Map {
 		let rand_r = Math.random() * 0.1 + 0.05;
 		let object2d = new Object2D(Type.CIRCLE, rand_r, rand_r, this.graphics, this.physics)
 			.set({'fill': 'rgb(255, 128, 128)'}).setPos(x||0, y||0);
+		object2d.body.velocity.y = 0.3;
 	}
 
 	/** @param {MapData} data*/

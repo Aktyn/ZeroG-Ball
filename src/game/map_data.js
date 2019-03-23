@@ -36,6 +36,10 @@ const HISTORY_CAPACITY = 32;
 	}} State
 */
 
+const map_1 = {
+	"objects":[{"shape_type":0,"physic_type":0,"x":0,"y":0.85,"w":2.1,"h":0.1,"rot":0.05235987755982988},{"shape_type":0,"physic_type":0,"x":-1.6071675146146625,"y":-0.325174468614357,"w":0.05,"h":1,"rot":0,"class_name":"red"},{"shape_type":0,"physic_type":0,"x":2.0169907393081004,"y":-0.5888443991652759,"w":0.05,"h":1.2,"rot":0,"class_name":"red"},{"shape_type":0,"physic_type":0,"x":1.860833112568161,"y":0.7254823260434063,"w":0.1,"h":0.1,"rot":0,"class_name":"crate"},{"shape_type":0,"physic_type":0,"x":-1.4445033200938926,"y":0.5498049914858101,"w":0.1,"h":0.1,"rot":0,"class_name":"crate"},{"shape_type":0,"physic_type":0,"x":-1.4705295912172156,"y":-1.4412048001669457,"w":0.1,"h":0.1,"rot":0,"class_name":"crate"},{"shape_type":0,"physic_type":0,"x":-1.268825990011461,"y":-1.6624281103505851,"w":0.1,"h":0.1,"rot":0,"class_name":"crate"},{"shape_type":0,"physic_type":0,"x":-1.0736289565865362,"y":-1.8771448525876473,"w":0.1,"h":0.1,"rot":0,"class_name":"crate"},{"shape_type":0,"physic_type":0,"x":-0.8589122198191191,"y":-2.0723418909849762,"w":0.1,"h":0.1,"rot":0,"class_name":"crate"},{"shape_type":0,"physic_type":0,"x":-0.6441954830517023,"y":-2.078848458931554,"w":0.1,"h":0.1,"rot":0,"class_name":"crate"},{"shape_type":0,"physic_type":0,"x":0.7156771831419378,"y":-2.01138129866444,"w":1.2,"h":0.1,"rot":0.08726646259971647,"class_name":"crate"}]
+};
+
 class MapData {
 	constructor() {
 		/** @type {State} */
@@ -47,16 +51,17 @@ class MapData {
 		this.history = [];
 
 		//temp
-		this.addObject({shape_type: SHAPE_TYPE.CIRCLE, physic_type: PHYSIC_TYPE.DYNAMIC, x: 0.01, y: -0.8, w: 0.1, h: 0.1});
+		/*this.addObject({shape_type: SHAPE_TYPE.CIRCLE, physic_type: PHYSIC_TYPE.DYNAMIC, x: -0.1, y: -0.8, w: 0.1, h: 0.1});
 		this.addObject({shape_type: SHAPE_TYPE.CIRCLE, x: -0.7, y: 0.2, w: 0.2, h: 0.2});
 		this.addObject({shape_type: SHAPE_TYPE.CIRCLE, x: 0, y: 0.5, w: 0.2, h: 0.2});
 		this.addObject({shape_type: SHAPE_TYPE.CIRCLE, x: 0.5, y: 0.5, w: 0.2, h: 0.2});
 		this.addObject({shape_type: SHAPE_TYPE.CIRCLE, x: 1, y: 0.5, w: 0.2, h: 0.2});
-		this.addObject({shape_type: SHAPE_TYPE.RECT, physic_type: PHYSIC_TYPE.STATIC, x: 0, y: 0.85, w: 0.8, h: 0.1, rot: Math.PI*0.02});
+		this.addObject({shape_type: SHAPE_TYPE.RECT, physic_type: PHYSIC_TYPE.STATIC, x: 0, y: 0.85, w: 0.8, h: 0.1, rot: Math.PI*0.02});*/
 		/*this.addObject({shape_type: SHAPE_TYPE.RECT, physic_type: PHYSIC_TYPE.STATIC, x: 0, y: 0.9, w: 1, h: 0.1, rot: Math.PI*0});
 		this.addObject({shape_type: SHAPE_TYPE.RECT, physic_type: PHYSIC_TYPE.STATIC, x: -1.1, y: 0, w: 1, h: 0.1, rot: Math.PI/2});
 		this.addObject({shape_type: SHAPE_TYPE.RECT, physic_type: PHYSIC_TYPE.STATIC, x: 1.1, y: 0, w: 1, h: 0.1, rot: Math.PI/2});
 		//this.addObject({shape_type: SHAPE_TYPE.RECT, x: 0.99, y: -0.1, w: 0.8, h: 0.1, rot: Math.PI*0.5});*/
+		this.import(map_1);
 	}
 
 	pushHistory() {
@@ -158,10 +163,12 @@ class MapData {
 		return JSON.stringify(this.state);
 	}
 
-	/** @param {string} data */
+	/** @param {string|State} data */
 	import(data) {
+		if(typeof data === 'string')
+			data = JSON.parse(data);
 		this.pushHistory();
-		this.state = JSON.parse(data);
+		this.state = data;
 	}
 }
 

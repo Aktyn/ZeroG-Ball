@@ -3,7 +3,7 @@ import {Vec2} from './physics/math';
 
 const gravity_scale = 5.0;
 
-const gravity = 9.807;
+const gravity = 0;//9.807;
 const physic_step = 1 / 60;
 
 export default {

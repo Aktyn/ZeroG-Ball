@@ -23,6 +23,7 @@ export class Body {
 		this.density = _density;//used for mass calculations
 		this.mass = 1;
 		this.velocity = new Vec2(0, 0);
+		this.next_velocity = null;
 		this.angular_velocity = 0;
 
 		this.colliding = false;
@@ -62,6 +63,11 @@ export class Body {
 			return;
 
 		//apply velocities
+		if(this.next_velocity !== null) {
+			//debugger;
+			this.velocity = this.next_velocity;
+			this.next_velocity = null;
+		}
 		this.pos.addVec( this.velocity );
 		this.rot += this.angular_velocity * Config.PHYSIC_STEP;
 
