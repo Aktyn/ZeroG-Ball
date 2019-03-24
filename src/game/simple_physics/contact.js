@@ -60,25 +60,21 @@ export default class Contact {
 	solveCircleToCircle(c1, c2) {
 		//computations from 
 		//https://www.lucidar.me/en/mechanics/elastic-collision-equations-simulation-part-2/
-		let u1 = c1.velocity.clone();
-		let u2 = c2.velocity.clone();
 
         let alpha1 = Math.atan2(c2.pos.y-c1.pos.y , c2.pos.x-c1.pos.x );//angle between circles
-        let beta1 = Math.atan2(u1.y, u1.x);//velocity angle
+        let beta1 = Math.atan2(c1.velocity.y, c1.velocity.x);//velocity angle
         let gamma1 = beta1 - alpha1;
         
-        let u12 = u1.length() * Math.cos(gamma1);
-        let u11 = u1.length() * Math.sin(gamma1);
+        let u12 = c1.velocity.length() * Math.cos(gamma1);
+        let u11 = c1.velocity.length() * Math.sin(gamma1);
 
         let alpha2 = Math.atan2(c1.pos.y-c2.pos.y , c1.pos.x-c2.pos.x );//angle between circles reversed
-        let beta2 = Math.atan2(u2.y, u2.x);
+        let beta2 = Math.atan2(c2.velocity.y, c2.velocity.x);
         let gamma2 = beta2 - alpha2;
 
-        let u21 = u2.length() * Math.cos(gamma2);
-        //let u22 = u2.length() * Math.sin(gamma2);
+        let u21 = c2.velocity.length() * Math.cos(gamma2);
 
         let v12 = ( (c1.mass-c2.mass)*u12 - 2.0*c2.mass*u21 ) / (c1.mass + c2.mass);
-        //let v21 = ( (c1.mass-c2.mass)*u21 + 2.0*c1.mass*u12 ) / (c1.mass + c2.mass)
 
         //calculate resulting velocity
         c1.next_velocity = new Vec2(
@@ -88,16 +84,6 @@ export default class Contact {
 
         if(c1.next_velocity.length() < Config.gravity*Config.PHYSIC_STEP*Config.EPSILON)
 			c1.next_velocity.scale(0.5);
-
-		//V2=u22*[-sin(Alpha2),cos(Alpha2)] - v21*[cos(Alpha2),sin(Alpha2)];
-		/*if(c2.static)
-			return;
-		c2.velocity = new Vec2(
-        	u22 * -Math.sin(alpha2) - 	v21 * Math.cos(alpha2),
-        	u22 * Math.cos(alpha2) 	- 	v21 * Math.sin(alpha2)
-        ).scale(bounce);
-        if(c2.velocity.length() < Config.gravity*Config.PHYSIC_STEP*Config.EPSILON)
-			c2.velocity.scale(0.5);*/
 	}
 
 	solveIteration() {
