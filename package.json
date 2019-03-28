@@ -1,7 +1,7 @@
 {
-	"name": "dominosandbox",
+	"name": "zerog-ball",
 	"version": "1.0.0",
-	"description": "Domino game created for university project",
+	"description": "Login game created for university project",
 	"main": "src/main.js",
 	"scripts": {
 		"dev": "webpack-dev-server --config ./webpack.config.js",
@@ -12,7 +12,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Aktyn/DominoSandbox.git"
+		"url": "git+https://github.com/Aktyn/ZeroG-Ball.git"
 	},
 	"keywords": [
 		"domino",
@@ -26,9 +26,9 @@
 	"author": "Aktyn & Droni",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/Aktyn/DominoSandbox/issues"
+		"url": "https://github.com/Aktyn/ZeroG-Ball/issues"
 	},
-	"homepage": "https://github.com/Aktyn/DominoSandbox#readme",
+	"homepage": "https://github.com/Aktyn/ZeroG-Ball#readme",
 	"devDependencies": {
 		"@babel/core": "^7.3.4",
 		"autoprefixer": "^9.4.10",
