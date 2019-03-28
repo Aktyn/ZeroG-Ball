@@ -1,5 +1,5 @@
-# DominoSandbox
-Logic game with domino blocks that uses simple physics engine.
+# ZeroG-Ball
+Logic game with simple physics engine.
 Project created for learning purpouses.
 
 <b>TODO</b>
