@@ -62,7 +62,25 @@ export default class SvgEngine {
 			'width': width, 'height': height
 		}).addChild(
 			new SvgObject('image', true).set({
-				'x': 0, 'y': 0,
+				'x': width/2, 'y': height/2,
+				'width': width, 'height': height,
+				'href': source
+			})
+		).addChild(
+			new SvgObject('image', true).set({
+				'x': -width/2, 'y': height/2,
+				'width': width, 'height': height,
+				'href': source
+			})
+		).addChild(
+			new SvgObject('image', true).set({
+				'x': -width/2, 'y': -height/2,
+				'width': width, 'height': height,
+				'href': source
+			})
+		).addChild(
+			new SvgObject('image', true).set({
+				'x': width/2, 'y': -height/2,
 				'width': width, 'height': height,
 				'href': source
 			})

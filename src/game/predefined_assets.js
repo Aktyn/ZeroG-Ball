@@ -1,4 +1,5 @@
 import MapData from './map_data';
+import Config from './config';
 
 export const THEMES = {
 	'czerwony': 'red',
@@ -25,3 +26,16 @@ export const OBJECTS = {
 		height: 0.1
 	}
 };
+
+export const TEXTURES = {
+	'player_texture': {
+		src: require('./../img/textures/player.png'),
+		width: Config.VIRT_SCALE*0.1,
+		height: Config.VIRT_SCALE*0.1 
+	},
+	'crate_texture': {
+		src: require('./../img/textures/crate.jpg'),
+		width: Config.VIRT_SCALE*0.1,
+		height: Config.VIRT_SCALE*0.1 
+	}
+}

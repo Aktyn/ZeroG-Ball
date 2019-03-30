@@ -51,7 +51,7 @@ export default class Engine {
 		let contacts = [];
 		for(var i=0; i<this.bodies.length; i++) {
 			for(var j=0; j<this.bodies.length; j++) {
-				if(i == j)
+				if(i == j || this.bodies[i].static)//check for static body to optimize
 					continue;//ignore same objects
 				let c = checkCollision(this.bodies[i], this.bodies[j]);
 				if(c !== null)
@@ -60,12 +60,9 @@ export default class Engine {
 		}
 
 		//solving contacts
-		//for(var j=0; j<Config.ITERATIONS; j++) {
-			for(let contact of contacts) {
-				//contact.solveIteration();
-				contact.solve();
-			}
-		//}
+		for(let contact of contacts) {
+			contact.solve();
+		}
 
 		for(let body of this.bodies) {
 			body.update();

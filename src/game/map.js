@@ -1,16 +1,17 @@
+// @ts-check
+
 import MapData from './map_data';
 import SvgEngine from './svg_engine';
-import Physics from './physics/physics_engine';
 import Object2D, {Type} from './objects/object2d';
-import {Circle, PolygonShape} from './physics/shape';
+
 import Background from './background';
 import Config from './config';
 
 import SimplePhysics from './simple_physics/engine';
 
+import {TEXTURES} from './predefined_assets';
 // import ball_texture from './../img/ball_texture.png';
 
-// @ts-check
 
 const BG_SMOOTHING = 0.8;
 const MAP_SIZE_X = 3;//3;
@@ -37,10 +38,7 @@ export default class Map {
 			...this.background.tiles,
 		);
 
-		if(Config.PHYSICS_ENGINE === 'advanced')
-			this.physics = new Physics();
-		else
-			this.physics = new SimplePhysics();
+		this.physics = new SimplePhysics();
 
 		/** @type {Object2D[] */
 		this.objects = [];
@@ -85,7 +83,11 @@ export default class Map {
 		);
 	}
 
-	loadTextures() {//TODO
+	loadTextures() {
+		for(let [texture_name, texture] of Object.entries(TEXTURES)) {
+			//console.log(texture_name, texture);
+			this.graphics.createTexture(texture_name, texture.src, texture.width, texture.height);
+		}
 		/*this.graphics.createTexture('ball-texture', ball_texture, 
 			Config.VIRT_SCALE*0.1, Config.VIRT_SCALE*0.1);*/
 	}
@@ -131,14 +133,6 @@ export default class Map {
 		}
 	}
 
-	/** 
-	* Clone object and add it's copy to the map
-	* @param {Object2D} obj 
-	*/
-	addObjectClone(obj) {
-		this.objects.push( obj.clone(this.graphics, this.physics) );
-	}
-
 	addAsset(asset) {
 		//console.log(asset);
 
@@ -157,6 +151,19 @@ export default class Map {
 
 		this.objects.push(object2d);
 		return object2d;
+	}
+
+	/** 
+	* Clone object and add it's copy to the map
+	* @param {Object2D} obj 
+	*/
+	addObjectClone(obj) {
+		this.objects.push( obj.clone(this.graphics, this.physics) );
+	}
+
+	/** @param {Object2D} obj */
+	addObject(obj) {
+		this.objects.push(obj);
 	}
 
 	/** @param {Object2D} obj */

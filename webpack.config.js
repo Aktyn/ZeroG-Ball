@@ -123,7 +123,7 @@ const CONFIG = {
 		new HtmlWebpackPlugin({
 			hash: isDevelopment,
 			favicon: isDevelopment ? './src/img/favicon.png' : undefined,
-			title: 'Domino Sandbox',
+			title: 'ZeroG Ball',
 			minify: !isDevelopment,
 			template: './src/index.html',
 			filename: './index.html',

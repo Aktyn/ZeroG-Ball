@@ -2,7 +2,8 @@ import SvgEngine from './svg_engine';
 import SvgObject from './svg';
 import Config from './config';
 
-import bg_texture from './../img/backgrounds/bg2.png';
+import bg_texture from './../img/backgrounds/bg4.png';
+// import bg_texture from './../img/backgrounds/blured.png';
 
 // @ts-check
 export default class Background {
@@ -23,7 +24,7 @@ export default class Background {
 			for(var x=0; x<tiles_x; x++) {
 				let xx = (-tiles_x + 1 + x*2)*this.scale;
 				let yy = (-tiles_y + 1 + y*2)*this.scale
-				let tile = SvgEngine.createObject('image')//.setClass('nearest')
+				let tile = SvgEngine.createObject('image').setClass('nearest')
 					.set({'href': bg_texture}).setSize(this.scale, this.scale);
 				tile.update();
 				tile.set({

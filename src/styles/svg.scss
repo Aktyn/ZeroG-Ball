@@ -1,3 +1,16 @@
+$solid_colors: (
+	(red, #e57373),
+	(green, #8BC34A)
+	//crate: #8D6E63
+);
+
+$textures: (
+	crate: (
+		'crate_texture', 
+		"./../img/textures/crate.jpg"
+	)
+);
+
 svg.game-svg {
 	shape-rendering: auto;
 
@@ -24,14 +37,16 @@ svg.game-svg {
 		//default values
 		fill: #fff;
 
-		&.red {
-			fill: #e57373;
+		@each $name, $color in $solid_colors {
+			&.#{$name} {
+				fill: $color;
+			}
 		}
-		&.green {
-			fill: #8BC34A;
-		}
-		&.crate {
-			fill: #8D6E63;//TODO - fill with texture
+
+		@each $name, $data in $textures {
+			&.#{$name} {
+				fill: url(##{ nth($data, 1) });
+			}
 		}
 
 		&.selected {
@@ -52,22 +67,29 @@ svg.game-svg {
 				}
 			}
 		}
+
+		&.player {
+			fill: url(#player_texture);
+		}
 	}
 }
 
-.asset_preview {//TODO - use scss power to keep color values in one place
+.asset_preview {
 	& > * {
 		box-sizing: border-box;
 		border: 1px solid #000a;
 	}
 
-	.red {
-		background-color: #e57373;
+	@each $name, $color in $solid_colors {
+		.#{$name} {
+			background-color: $color;
+		}
 	}
-	.green {
-		background-color: #8BC34A;
-	}
-	.crate {
-		background-color: #8D6E63;
+
+	@each $name, $data in $textures {
+		&.#{$name} {
+			background-image: url(#{ nth($data, 2) });
+			background-size: contain;
+		}
 	}
 }

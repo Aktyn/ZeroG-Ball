@@ -3,6 +3,7 @@ import $ from './../utils/html';
 import Map from './map';
 import MapData from './map_data';
 import Config from './config';
+import Player from './objects/player';
 import Object2D from './objects/object2d';
 
 /**
@@ -12,36 +13,12 @@ import Object2D from './objects/object2d';
 function runLoop(self) {
 	let last = 0, dt;
 
-	//time measurments
-	//let timer, time_samples = [];
-	//let timer_log = $.create('SPAN').text('0ms').setStyle({fontSize: '13px', fontFamily: 'Arial'});
-	
-	/*$(document.body).addChild($.create('DIV').setStyle({
-		'position': 'fixed',
-		'left': '0px',
-		'bottom': '0px',
-		'zIndex': '99',
-		'background': '#0008',
-		'color': '#fff',
-		'fontSize': '13px',
-		'fontFamily': 'Arial'
-	}).text('updating + rendering: ').addChild(timer_log));*/
-
 	var step = function(time) {
 		dt = time - last;
 		last = time;
 
 		if(self._running) {
-			//timer = performance.now();
 			self.update(dt);
-			
-			/*time_samples.push(performance.now() - timer);
-			if(time_samples.length >= 120) {
-				timer_log.text((time_samples.reduce( (a, b) => a+b ) / time_samples.length)
-					.toFixed(2) + 'ms');
-				time_samples = [];
-			}*/
-
 			window.requestAnimationFrame(step);
 		}
 	};
@@ -60,6 +37,16 @@ export default class GameCore extends Map {
 		this.map_data = new MapData();
 		super.load(this.map_data);
 
+		/** @type {Player | null} */
+		this.player = null;
+
+		this.steering = {
+			left:	false,
+			right:	false,
+			up:		false,
+			down:	false
+		};
+
 		this._running = false;
 
 		//this.mouse_pressed = false;
@@ -72,21 +59,42 @@ export default class GameCore extends Map {
 		/** @type {Object2D | null} */
 		this.stamp = null;
 
-		node.addEventListener('mousewheel', this.onMouseWheel.bind(this), false);
-		node.addEventListener('DOMMouseScroll', this.onMouseWheel.bind(this), false);
-		node.addEventListener('mousedown', this.onMouseDown.bind(this), false);
-		window.addEventListener('mouseup', this.onMouseUp.bind(this), false);
-		//window.addEventListener('mouseleave', this.onMouseLeave.bind(this), false);
-		window.addEventListener('mousemove', this.onMouseMove.bind(this), false);
+		node.addEventListener('mousewheel', this.onMouseWheel.bind(this), true);
+		node.addEventListener('DOMMouseScroll', this.onMouseWheel.bind(this), true);
+		node.addEventListener('mousedown', this.onMouseDown.bind(this), true);
+		window.addEventListener('mouseup', this.onMouseUp.bind(this), true);
+		window.addEventListener('mousemove', this.onMouseMove.bind(this), true);
+
+		//steering
+		window.addEventListener('keydown', this.onKeyDown.bind(this), true);
+		window.addEventListener('keyup', this.onKeyUp.bind(this), true);
 	}
 
 	run() {
 		this._running = true;
 		runLoop(this);
+
+		this.spawnPlayer();
 	}
 
 	destroy() {
+		//removing listeners
+		let node = super.getNode();
+		node.removeEventListener('mousewheel', this.onMouseWheel.bind(this), true);
+		node.removeEventListener('DOMMouseScroll', this.onMouseWheel.bind(this), true);
+		node.removeEventListener('mousedown', this.onMouseDown.bind(this), true);
+		window.removeEventListener('mouseup', this.onMouseUp.bind(this), true);
+		window.removeEventListener('mousemove', this.onMouseMove.bind(this), true);
+
+		window.removeEventListener('keydown', this.onKeyDown.bind(this), true);
+		window.removeEventListener('keyup', this.onKeyUp.bind(this), true);
+
 		this._running = false;
+	}
+
+	spawnPlayer() {
+		this.player = new Player(this.graphics, this.physics);
+		super.addObject( this.player );
 	}
 
 	/**
@@ -178,12 +186,51 @@ export default class GameCore extends Map {
 		let dy = (this.last_mouse_coords.y - coords.y)*2 * this.camera.zoom;
 		super.updateCamera(this.camera.x+dx, this.camera.y+dy, this.camera.zoom);
 		this.last_mouse_coords = coords;
+	}
 
-		
+	/** @param {KeyboardEvent} e */
+	onKeyDown(e) {
+		this.updateSteering(e.keyCode, true);
+	}
+
+	/** @param {KeyboardEvent} e */
+	onKeyUp(e) {
+		this.updateSteering(e.keyCode, false);
+	}
+
+	/**
+	* @param {number} code
+	* @param {boolean} enable
+	*/
+	updateSteering(code, enable) {
+		//console.log(code);
+		switch(code) {
+			case 37:
+			case 65:
+				this.steering.left = enable;
+				return;
+			case 39:
+			case 68:
+				this.steering.right = enable;
+				return;
+			case 38:
+			case 87:
+				this.steering.up = enable;
+				return;
+			case 40:
+			case 83:
+				this.steering.down = enable;
+				return;
+		}
 	}
 
 	reload(reset_camera = false) {
 		super.load(this.map_data, reset_camera);
+
+		if(!this.paused)
+			this.spawnPlayer();
+		else
+			this.player = null;
 	}
 
 	/** @param {string} data */
@@ -236,6 +283,17 @@ export default class GameCore extends Map {
 	}
 
 	update(dt) {
+		if(this.player) {
+			if(this.steering.left)
+				this.player.move({x: -1, y: 0}, dt);
+			if(this.steering.right)
+				this.player.move({x: 1, y: 0}, dt);
+			if(this.steering.up)
+				this.player.move({x: 0, y: -1}, dt);
+			if(this.steering.down)
+				this.player.move({x: 0, y: 1}, dt);
+		}
+
 		super.update();
 	}
 }

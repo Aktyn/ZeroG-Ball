@@ -1,6 +1,6 @@
+// @ts-check
 import Object2D, {Type} from './objects/object2d';
 
-// @ts-check
 var _enum_ = obj => Object.keys(obj).forEach((k, i) => obj[k] = i);
 
 const SHAPE_TYPE = {//enumerator
@@ -138,10 +138,7 @@ class MapData {
 				(schema.w||0) == (obj.transform.w||0) &&
 				(schema.h||0) == (obj.transform.h||0) &&
 				(schema.class_name === undefined || obj.getClassName().includes(schema.class_name))
-			) {
-				//debugger;
-				return schema;
-			}
+			) return schema;
 		}
 		return null;
 	}
@@ -165,10 +162,11 @@ class MapData {
 
 	/** @param {string|State} data */
 	import(data) {
-		if(typeof data === 'string')
-			data = JSON.parse(data);
 		this.pushHistory();
-		this.state = data;
+		if(typeof data === 'string')
+			this.state = JSON.parse(data);
+		else
+			this.state = data;
 	}
 }
 

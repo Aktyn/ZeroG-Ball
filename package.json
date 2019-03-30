@@ -1,6 +1,6 @@
 {
 	"name": "zerog-ball",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"description": "Login game created for university project",
 	"main": "src/main.js",
 	"scripts": {

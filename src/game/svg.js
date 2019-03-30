@@ -78,6 +78,7 @@ export default class SvgObject {
 		//}
 	}
 
+	/** @param {SvgObject | Node} child */
 	addChild(child) {
 		if(child instanceof SvgObject)
 			this.node.appendChild(child.node);

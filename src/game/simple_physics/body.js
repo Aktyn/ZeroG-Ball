@@ -24,7 +24,6 @@ export class Body {
 		this.mass = 1;
 		this.velocity = new Vec2(0, 0);
 		this.next_velocity = null;
-		this.angular_velocity = 0;
 
 		this.colliding = false;
 	}
@@ -44,18 +43,27 @@ export class Body {
 		this.rot = _rot;
 	}
 
-	setStatic() {
-		this.static = true;
+	/**
+	* @param {number} x
+	* @param {number} y
+	* @param {number} speed_limit
+	*/
+	applyVelocity(x, y, speed_limit) {
+		let current_speed = this.velocity.length();
+		//console.log(current_speed);
+		if(current_speed > speed_limit) {
+			this.velocity.scale(speed_limit / current_speed);
+			this.velocity.x += x;
+			this.velocity.y += y;
+		}
+		else {
+			this.velocity.x += x;
+			this.velocity.y += y;
+		}
 	}
 
-	/** 
-	*	@param {Vec2} impulse
-	*	@param {Vec2} contactVector
-	*/
-	applyImpulse(impulse, contactVector) {
-		this.velocity.x += impulse.x;
-		this.velocity.y += impulse.y;
-		this.angular_velocity += crossVV( contactVector, impulse );
+	setStatic() {
+		this.static = true;
 	}
 
 	update() {
@@ -69,13 +77,8 @@ export class Body {
 			this.next_velocity = null;
 		}
 		this.pos.addVec( this.velocity );
-		this.rot += this.angular_velocity * Config.PHYSIC_STEP;
-
-		let g = Config.gravity_step_sqr;
-		this.velocity.y += g;
-
-		if(this.colliding) {
-			this.pos.add(0, g);//stick to the ground
+		if(this.colliding) {//deprecated - remove this variable
+			//this.pos.add(0, g);//stick to the ground
 			this.colliding = false;
 		}
 	}
