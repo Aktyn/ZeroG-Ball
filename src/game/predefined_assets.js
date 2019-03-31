@@ -9,6 +9,11 @@ export const THEMES = {
 };
 
 export const OBJECTS = {
+	'exit': {
+		theme: THEMES.wyjscie,
+		shape: MapData.SHAPE_TYPE.CIRCLE,
+		radius: 0.2
+	},
 	'domino_block': {
 		theme: THEMES.czerwony,
 		shape: MapData.SHAPE_TYPE.RECT,
@@ -25,11 +30,6 @@ export const OBJECTS = {
 		shape: MapData.SHAPE_TYPE.RECT,
 		width: 0.1,
 		height: 0.1
-	},
-	'exit': {
-		theme: THEMES.wyjscie,
-		shape: MapData.SHAPE_TYPE.CIRCLE,
-		radius: 0.2
 	},
 };
 

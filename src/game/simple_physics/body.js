@@ -26,6 +26,18 @@ export class Body {
 		this.next_velocity = null;
 
 		this.colliding = false;
+
+		this._custom_data_ = null;//designated for only single data assignment
+	}
+
+	setCustomData(data) {
+		if(this._custom_data_ !== null)
+			throw new Error('Custom data has been already assigned');
+		this._custom_data_ = data;
+	}
+
+	getCustomData() {
+		return this._custom_data_;
 	}
 
 	/** 

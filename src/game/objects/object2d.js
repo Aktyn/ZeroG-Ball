@@ -39,6 +39,8 @@ export default class Object2D extends SvgObject {
 
 		super.setSize(width, height);
 		graphics_engine.addObjects(this);
+
+		this.body.setCustomData(this);
 	}
 
 	/** @param {SimplePhysics} physics_engine */

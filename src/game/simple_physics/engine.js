@@ -1,13 +1,22 @@
-// @ts-check
+//@ts-check
 import {Circle, Rect, Body} from './body';
 import {checkCollision} from './collision';
 import Contact from './contact';
+import CollisionListener from './collision_listener';
 import Config from './../config';
 
 export default class Engine {
 	constructor() {
 		/** @type {Body[]} */
 		this.bodies = [];
+
+		/** @type {CollisionListener | null} */
+		this.listener = null;
+	}
+
+	/** @param {CollisionListener} listener */
+	assignCollisionListener(listener) {
+		this.listener = listener;
 	}
 
 	removeObjects() {
@@ -61,6 +70,8 @@ export default class Engine {
 
 		//solving contacts
 		for(let contact of contacts) {
+			if(this.listener)
+				this.listener.onCollision(contact.A, contact.B);
 			contact.solve();
 		}
 

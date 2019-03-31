@@ -3,12 +3,15 @@
 import MapData from './map_data';
 import SvgEngine from './svg_engine';
 import Object2D, {Type} from './objects/object2d';
+import Player from './objects/player';
 import Exit from './objects/exit';
 
 import Background from './background';
 import Config from './config';
 
 import SimplePhysics from './simple_physics/engine';
+import {Body} from './simple_physics/body';
+import CollisionListener from './simple_physics/collision_listener';
 
 import {TEXTURES} from './predefined_assets';
 // import ball_texture from './../img/ball_texture.png';
@@ -19,8 +22,10 @@ const MAP_SIZE_X = 3;//3;
 const MAP_SIZE_Y = 3;//3;
 const BG_SCALE = 2;
 
-export default class Map {
+export default class Map extends CollisionListener {
 	constructor() {
+		super();
+
 		this.graphics = new SvgEngine();
 		this.graphics.foreground_layer.addClass('cartoon-style').addClass('flat-shadows');
 
@@ -29,6 +34,9 @@ export default class Map {
 		this.camera = {
 			x: 0, y: 0, zoom: 1
 		};
+
+		/** @type {Player | null} */
+		this.player = null;
 
 		this.loadFilters();
 		this.loadTextures();
@@ -40,6 +48,7 @@ export default class Map {
 		);
 
 		this.physics = new SimplePhysics();
+		this.physics.assignCollisionListener(this);
 
 		/** @type {Object2D[] */
 		this.objects = [];
@@ -56,6 +65,18 @@ export default class Map {
 	*/
 	onResize(w, h) {
 		this.graphics.onResize(w, h);
+	}
+
+	/**
+	*	@param {Body} A
+	*	@param {Body} B
+	*/
+	onCollision(A, B) {
+		//console.log(A.getCustomData(), B.getCustomData());
+		if(A.getCustomData() === this.player) {
+			if(B.getCustomData().getClassName() === 'exit')
+				console.log('player has reach the exit');
+		}
 	}
 
 	/** 

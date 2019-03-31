@@ -91,7 +91,7 @@ svg.game-svg {
 	}
 
 	@each $name, $data in $textures {
-		&.#{$name} {
+		.#{$name} {
 			background-image: url(#{ nth($data, 2) });
 			background-size: contain;
 		}

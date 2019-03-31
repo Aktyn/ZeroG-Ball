@@ -38,9 +38,6 @@ export default class GameCore extends Map {
 		this.map_data = new MapData();
 		super.load(this.map_data);
 
-		/** @type {Player | null} */
-		this.player = null;
-
 		this.steering = {
 			left:	false,
 			right:	false,

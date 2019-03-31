@@ -150,6 +150,7 @@ export default class GameGUI {
 				});
 			}
 			else if(obj.shape === MapData.SHAPE_TYPE.CIRCLE) {
+				console.log(obj_name, obj);
 				let radius = (preview_size*0.61)|0;
 				obj_preview.setStyle({
 					width: `${radius}px`,
