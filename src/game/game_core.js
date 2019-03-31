@@ -27,6 +27,7 @@ function runLoop(self) {
 
 //let t = 0;//tmp
 const ZOOM_STRENGTH = 0.1;
+const CAMERA_SMOOTHNESS = 0.003;
 
 export default class GameCore extends Map {
 	constructor(listeners = {}) {
@@ -44,7 +45,8 @@ export default class GameCore extends Map {
 			left:	false,
 			right:	false,
 			up:		false,
-			down:	false
+			down:	false,
+			slow: 	false
 		};
 
 		this._running = false;
@@ -105,7 +107,7 @@ export default class GameCore extends Map {
 		super.onResize(w, h);
 
 		//@ts-ignore
-		this.svg_rect = super.getNode().getBoundingClientRect();//must goes after super.onResize
+		this.svg_rect = super.getNode().getBoundingClientRect();//must go after super.onResize
 	}
 
 	convertCoords(e) {
@@ -165,23 +167,16 @@ export default class GameCore extends Map {
 		this.last_mouse_coords = null;
 	}
 
-	/*onMouseLeave() {
-		console.log('x');
-		this.mouse_pressed = false;
-	}*/
-
 	onMouseMove(e) {
 		if(this.stamp !== null) {
 			let c = super.castCoords(this.convertCoords(e));
 			this.stamp.setPos(c.x, c.y);
 		}
 
-		if(this.last_mouse_coords === null)
+		if(this.last_mouse_coords === null || !this.paused)
 			return;
-		//console.log(e.clientX, e.clientY);
 
 		let coords = this.convertCoords(e);
-		//console.log(coords);
 		let dx = (this.last_mouse_coords.x - coords.x)*2*Config.ASPECT * this.camera.zoom;
 		let dy = (this.last_mouse_coords.y - coords.y)*2 * this.camera.zoom;
 		super.updateCamera(this.camera.x+dx, this.camera.y+dy, this.camera.zoom);
@@ -220,6 +215,9 @@ export default class GameCore extends Map {
 			case 40:
 			case 83:
 				this.steering.down = enable;
+				return;
+			case 32:
+				this.steering.slow = enable;
 				return;
 		}
 	}
@@ -282,7 +280,24 @@ export default class GameCore extends Map {
 		super.removeObject(obj);
 	}
 
+	/** @param {number} dt */
+	updateCameraSmoothly(dt) {
+		let dx = this.player.getTransform().x - this.camera.x;
+		let dy = this.player.getTransform().y - this.camera.y;
+
+		if(Math.abs(dx) < 1/Config.VIRT_SCALE && Math.abs(dy) < 1/Config.VIRT_SCALE)
+			return;
+
+		this.camera.x += dx * dt * CAMERA_SMOOTHNESS / this.camera.zoom;
+		this.camera.y += dy * dt * CAMERA_SMOOTHNESS / this.camera.zoom;
+		super.updateCamera(this.camera.x, this.camera.y, this.camera.zoom);
+	}
+
+	/** @param {number} dt */
 	update(dt) {
+		if(dt > 1000)
+			dt = 1000;
+
 		if(this.player) {
 			if(this.steering.left)
 				this.player.move({x: -1, y: 0}, dt);
@@ -292,8 +307,13 @@ export default class GameCore extends Map {
 				this.player.move({x: 0, y: -1}, dt);
 			if(this.steering.down)
 				this.player.move({x: 0, y: 1}, dt);
+			if(this.steering.slow)
+				this.player.slowDown(dt);
+
+			if(!this.paused)
+				this.updateCameraSmoothly(dt);
 		}
 
-		super.update();
+		super.update(dt);
 	}
 }

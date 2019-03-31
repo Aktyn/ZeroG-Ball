@@ -58,6 +58,6 @@ export default class Background {
 	update(camera, bg_layer) {
 		let scale = Math.pow(camera.zoom, this.smoothing);
 		bg_layer.setPos(camera.x*this.smoothing, camera.y*this.smoothing)
-			.setSize(scale).update(true);
+			.setSize(scale).update(0, true);
 	}
 }

@@ -13,9 +13,10 @@ export default class Player extends Object2D {
 	*/
 	constructor(graphics_engine, physics_engine) {
 		super(Type.CIRCLE, Config.player_size, Config.player_size, graphics_engine, physics_engine);
-		super.setClass('player');//TODO - style for this class
+		super.setClass('player');
 
 		this.acceleration = 0.0005;
+		this.breaks_strength = 0.003;
 	}
 
 	/**
@@ -29,5 +30,12 @@ export default class Player extends Object2D {
 			dir.x*this.acceleration*delta, dir.y*this.acceleration*delta, 
 			SPEED_LIMIT
 		);
+	}
+
+	/**
+	* @param {number} delta
+	*/
+	slowDown(delta) {
+		this.body.velocity.scale(1.0 - delta*this.breaks_strength);
 	}
 }

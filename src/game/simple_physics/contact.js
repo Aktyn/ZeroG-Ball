@@ -40,7 +40,6 @@ export default class Contact {
 
 	/**
 	* @param {Body} circle
-	* @param {Body} rect
 	*/
 	solveCircleToStatic(circle) {
 		let normal = circle.pos.clone().substractVec(this.point).normalize();

@@ -1,8 +1,9 @@
-// @ts-check
+//@ts-check
 
 import MapData from './map_data';
 import SvgEngine from './svg_engine';
 import Object2D, {Type} from './objects/object2d';
+import Exit from './objects/exit';
 
 import Background from './background';
 import Config from './config';
@@ -103,6 +104,15 @@ export default class Map {
 		object2d.body.velocity.y = 0.3;
 	}
 
+	createObject(class_name, shape, w, h, x = 0, y = 0, rot = 0) {
+		switch(class_name) {
+			case 'exit':
+				return new Exit(w||1, h||1, this.graphics, this.physics).setPos(x||0, y||0).setRot(rot||0);
+			default:
+				return new Object2D(shape, w||1, h||1, this.graphics, this.physics).setPos(x||0, y||0).setRot(rot||0);
+		}
+	}
+
 	/** @param {MapData} data*/
 	load(data, reset_camera = false) {
 		console.log('Loading map data');
@@ -121,8 +131,8 @@ export default class Map {
 				}
 			})(obj.shape_type);
 
-			let object2d = new Object2D(shape, obj.w||1, obj.h||1, this.graphics, this.physics)
-				/*.set({'fill': 'rgb(64, 192, 255)'})*/.setPos(obj.x||0, obj.y||0).setRot(obj.rot||0);
+			/*.set({'fill': 'rgb(64, 192, 255)'})*/
+			var object2d = this.createObject(obj.class_name, shape, obj.w, obj.h, obj.x, obj.y, obj.rot);
 
 			if(obj.class_name)
 				object2d.set({'class': obj.class_name});
@@ -135,13 +145,20 @@ export default class Map {
 
 	addAsset(asset) {
 		//console.log(asset);
+		//let w, h, type;
 
 		if(asset.shape === MapData.SHAPE_TYPE.CIRCLE) {
-			var object2d = new Object2D(Type.CIRCLE, asset.radius||1, asset.radus||1, this.graphics, this.physics).set({'class': asset.theme});
+			//var object2d = new Object2D(Type.CIRCLE, asset.radius||1, asset.radius||1, this.graphics, this.physics).set({'class': asset.theme});
+			var object2d = this.createObject(asset.theme, Type.CIRCLE, asset.radius||1, asset.radius||1)
+				.setClass(asset.theme);
 		}
 		else {
-			var object2d = new Object2D(Type.RECT, asset.width||1, asset.height||1, this.graphics, this.physics).set({'class': asset.theme});
+			//var object2d = new Object2D(Type.RECT, asset.width||1, asset.height||1, this.graphics, this.physics).set({'class': asset.theme});
+			var object2d = this.createObject(asset.theme, Type.RECT, asset.width||1, asset.height||1)
+				.setClass(asset.theme);
 		}
+
+		//console.log( asset.theme );
 
 		if(asset.dynamic === false)
 			object2d.setStatic();
@@ -224,9 +241,10 @@ export default class Map {
 		this.background.update(this.camera, this.graphics.background_layer);
 	}
 
-	update() {
+	/** @param {number} dt */
+	update(dt) {
 		if(!this.paused)
 			this.physics.update();
-		this.graphics.update();
+		this.graphics.update(dt);
 	}
 }

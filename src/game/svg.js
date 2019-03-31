@@ -41,7 +41,8 @@ export default class SvgObject {
 		return this.node;
 	}*/
 
-	update(scale_in_transform = false) {//updates object transform
+	/** @param {number} dt */
+	update(dt, scale_in_transform = false) {//updates object transform
 		if(!scale_in_transform && this.scale_changed === true) {
 			if(this.name === 'circle') {
 				//@ts-ignore
