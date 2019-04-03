@@ -1,18 +1,27 @@
 $solid_colors: (
-	(red, #e57373),
-	(green, #8BC34A)
+								(red, #e57373),
+								(green, #8BC34A)
 	//crate: #8D6E63
 );
 
 $textures: (
 	crate: (
-		'crate_texture', 
+		'crate_texture',
 		"./../img/textures/crate.jpg"
 	),
 	exit: (
-		'exit_texture', 
+		'exit_texture',
 		"./../img/textures/exit.png"
+	),
+	lava: (
+		'lava_texture',
+		"./../img/textures/lava.jpg"
+	),
+	grass: (
+		'grass_texture',
+		"./../img/textures/grass.png"
 	)
+
 );
 
 svg.game-svg {
@@ -50,32 +59,32 @@ svg.game-svg {
 		@each $name, $data in $textures {
 			&.#{$name} {
 				fill: url(##{ nth($data, 1) });
-			}
-		}
-
-		&.selected {
-			stroke: #ef5350;
-			stroke-opacity: 1;
-			stroke-width: 4px;
-			stroke-linecap: round;
-			stroke-dasharray: 10;
-
-			animation: stroke-rotate 2s linear infinite both;
-
-			@keyframes stroke-rotate {
-				0% {
-					stroke-dashoffset: 0;
-				}
-				100% {
-					stroke-dashoffset: 100;
-				}
-			}
-		}
-
-		&.player {
-			fill: url(#player_texture);
 		}
 	}
+
+	&.selected {
+		stroke: #ef5350;
+		stroke-opacity: 1;
+		stroke-width: 4px;
+		stroke-linecap: round;
+		stroke-dasharray: 10;
+
+		animation: stroke-rotate 2s linear infinite both;
+
+		@keyframes stroke-rotate {
+			0% {
+				stroke-dashoffset: 0;
+			}
+			100% {
+				stroke-dashoffset: 100;
+			}
+		}
+	}
+
+	&.player {
+		fill: url(#player_texture);
+	}
+}
 }
 
 .asset_preview {

@@ -5,7 +5,9 @@ export const THEMES = {
 	'czerwony':	'red',
 	'zielony': 	'green',
 	'skrzynia': 'crate',
-	'wyjscie':	'exit'
+	'wyjscie':	'exit',
+	'trawa': 'grass',
+	'lawa': 'lava'
 };
 
 export const OBJECTS = {
@@ -31,13 +33,25 @@ export const OBJECTS = {
 		width: 0.1,
 		height: 0.1
 	},
+	'lava': {
+		theme: THEMES.lawa,
+		shape: MapData.SHAPE_TYPE.RECT,
+		width: 0.1,
+		height: 0.1
+	},
+	'grass': {
+		theme: THEMES.trawa,
+		shape: MapData.SHAPE_TYPE.RECT,
+		width: 0.1,
+		height: 0.1
+	},
 };
 
 export const TEXTURES = {
 	'player_texture': {
 		src: require('./../img/textures/player.png'),
 		width: Config.VIRT_SCALE*0.1,
-		height: Config.VIRT_SCALE*0.1 
+		height: Config.VIRT_SCALE*0.1
 	},
 	'exit_texture': {
 		src: require('./../img/textures/exit.png'),
@@ -47,6 +61,16 @@ export const TEXTURES = {
 	'crate_texture': {
 		src: require('./../img/textures/crate.jpg'),
 		width: Config.VIRT_SCALE*0.1,
-		height: Config.VIRT_SCALE*0.1 
+		height: Config.VIRT_SCALE*0.1
+	},
+	'lava_texture': {
+		src: require('./../img/textures/lava.jpg'),
+		width: Config.VIRT_SCALE*0.2,
+		height: Config.VIRT_SCALE*0.2
+	},
+	'grass_texture': {
+		src: require('./../img/textures/grass.png'),
+		width: Config.VIRT_SCALE*0.2,
+		height: Config.VIRT_SCALE*0.2
 	}
 }
