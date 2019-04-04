@@ -65,12 +65,12 @@ export const TEXTURES = {
 	},
 	'lava_texture': {
 		src: require('./../img/textures/lava.jpg'),
-		width: Config.VIRT_SCALE*0.2,
-		height: Config.VIRT_SCALE*0.2
+		width: Config.VIRT_SCALE*0.1,
+		height: Config.VIRT_SCALE*0.1
 	},
 	'grass_texture': {
 		src: require('./../img/textures/grass.png'),
-		width: Config.VIRT_SCALE*0.2,
-		height: Config.VIRT_SCALE*0.2
+		width: Config.VIRT_SCALE*0.1,
+		height: Config.VIRT_SCALE*0.1
 	}
 }
