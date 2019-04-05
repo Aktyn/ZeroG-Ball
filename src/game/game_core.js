@@ -259,8 +259,10 @@ export default class GameCore extends Map {
 	* @param {{x: number, y: number, w: number, h: number, rot: number}} transform
 	*/
 	updateObjectTransform(obj, transform) {
-		if(this.map_data.updateObjectTransform(obj, transform) === false)
+		if(this.map_data.updateObjectTransform(obj, transform) === false) {
+			console.warn('Cannot update object transform');
 			return;
+		}
 
 		obj.setPos(transform.x, transform.y);
 		obj.setSize(transform.w, transform.h);
@@ -285,8 +287,10 @@ export default class GameCore extends Map {
 		if(Math.abs(dx) < 1/Config.VIRT_SCALE && Math.abs(dy) < 1/Config.VIRT_SCALE)
 			return;
 
-		this.camera.x += dx * dt * CAMERA_SMOOTHNESS / this.camera.zoom;
-		this.camera.y += dy * dt * CAMERA_SMOOTHNESS / this.camera.zoom;
+		let factor = dt * CAMERA_SMOOTHNESS / this.camera.zoom;
+
+		this.camera.x += dx * Math.min(1, factor);
+		this.camera.y += dy * Math.min(1, factor);
 		super.updateCamera(this.camera.x, this.camera.y, this.camera.zoom);
 	}
 

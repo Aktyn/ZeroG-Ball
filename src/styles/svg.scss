@@ -1,6 +1,6 @@
 $solid_colors: (
-								(red, #e57373),
-								(green, #8BC34A)
+	(red, #e57373),
+	(green, #8BC34A)
 	//crate: #8D6E63
 );
 
@@ -21,7 +21,6 @@ $textures: (
 		'grass_texture',
 		"./../img/textures/grass.png"
 	)
-
 );
 
 svg.game-svg {
@@ -30,7 +29,7 @@ svg.game-svg {
 	.cartoon-style {
 		stroke: #000;
 		stroke-width: 2px;
-		stroke-opacity: 0.5;
+		stroke-opacity: 0.61;
 	}
 
 	.flat-shadows {

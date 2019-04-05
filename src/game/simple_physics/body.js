@@ -53,6 +53,8 @@ export class Body {
 	*/
 	setRot(_rot) {
 		this.rot = _rot;
+		while(this.rot >= Math.PI*2) this.rot -= Math.PI*2;
+		while(this.rot < 0) this.rot += Math.PI*2;
 	}
 
 	/**

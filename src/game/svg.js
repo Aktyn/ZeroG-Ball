@@ -145,6 +145,8 @@ export default class SvgObject {
 	*/
 	setRot(rot) {
 		this.transform.rot = rot;
+		while(this.transform.rot >= Math.PI*2) this.transform.rot -= Math.PI*2;
+		while(this.transform.rot < 0) this.transform.rot += Math.PI*2;
 
 		return this;
 	}

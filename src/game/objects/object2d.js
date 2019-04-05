@@ -102,7 +102,7 @@ export default class Object2D extends SvgObject {
 		super.setPos( this.body.pos.x/SCALLER, this.body.pos.y/SCALLER );
 		super.setRot(this.body.rot);
 			
-		super.update();
+		super.update(dt);
 	}
 }
 

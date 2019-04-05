@@ -19,6 +19,25 @@ _enum_(PHYSIC_TYPE);
 const HISTORY_CAPACITY = 32;
 
 /**
+ * @param  {number}
+ * @param  {number}
+ * @return {Boolean}
+ */
+function isEqual(a, b) {
+	return Math.abs(a - b) < 1 / 2048;//equal numbers with some precision
+}
+
+/**
+ * @param  {number}
+ * @return {number}
+ */
+function fixRot(rot) {
+	while(rot >= Math.PI*2) rot -= Math.PI*2;
+	while(rot < 0) rot += Math.PI*2;
+	return rot;
+}
+
+/**
 * 	@typedef {{
 		shape_type: number,
 		physic_type?: number,
@@ -48,17 +67,6 @@ class MapData {
 		/** @type {State[]} */
 		this.history = [];
 
-		//temp
-		/*this.addObject({shape_type: SHAPE_TYPE.CIRCLE, physic_type: PHYSIC_TYPE.DYNAMIC, x: -0.1, y: -0.8, w: 0.1, h: 0.1});
-		this.addObject({shape_type: SHAPE_TYPE.CIRCLE, x: -0.7, y: 0.2, w: 0.2, h: 0.2});
-		this.addObject({shape_type: SHAPE_TYPE.CIRCLE, x: 0, y: 0.5, w: 0.2, h: 0.2});
-		this.addObject({shape_type: SHAPE_TYPE.CIRCLE, x: 0.5, y: 0.5, w: 0.2, h: 0.2});
-		this.addObject({shape_type: SHAPE_TYPE.CIRCLE, x: 1, y: 0.5, w: 0.2, h: 0.2});
-		this.addObject({shape_type: SHAPE_TYPE.RECT, physic_type: PHYSIC_TYPE.STATIC, x: 0, y: 0.85, w: 0.8, h: 0.1, rot: Math.PI*0.02});*/
-		/*this.addObject({shape_type: SHAPE_TYPE.RECT, physic_type: PHYSIC_TYPE.STATIC, x: 0, y: 0.9, w: 1, h: 0.1, rot: Math.PI*0});
-		this.addObject({shape_type: SHAPE_TYPE.RECT, physic_type: PHYSIC_TYPE.STATIC, x: -1.1, y: 0, w: 1, h: 0.1, rot: Math.PI/2});
-		this.addObject({shape_type: SHAPE_TYPE.RECT, physic_type: PHYSIC_TYPE.STATIC, x: 1.1, y: 0, w: 1, h: 0.1, rot: Math.PI/2});
-		//this.addObject({shape_type: SHAPE_TYPE.RECT, x: 0.99, y: -0.1, w: 0.8, h: 0.1, rot: Math.PI*0.5});*/
 		this.import(map_1);
 	}
 
@@ -130,11 +138,12 @@ class MapData {
 	*/
 	findSchema(obj) {
 		for(let schema of this.state.objects) {
-			if( (schema.x||0) == (obj.transform.x||0) && 
-				(schema.y||0) == (obj.transform.y||0) && 
-				(schema.rot||0) == (obj.transform.rot||0) && 
-				(schema.w||0) == (obj.transform.w||0) &&
-				(schema.h||0) == (obj.transform.h||0) &&
+			if( isEqual(schema.x||0, obj.transform.x||0) &&
+				isEqual(schema.y||0, obj.transform.y||0) &&
+				( isEqual(fixRot(schema.rot||0), fixRot(obj.transform.rot||0)) || 
+					schema.shape_type===SHAPE_TYPE.CIRCLE) &&
+				isEqual(schema.w||0, obj.transform.w||0) &&
+				isEqual(schema.h||0, obj.transform.h||0) &&
 				(schema.class_name === undefined || obj.getClassName().includes(schema.class_name))
 			) return schema;
 		}
@@ -145,6 +154,9 @@ class MapData {
 		return this.state.objects;
 	}
 
+	/**
+	 * @return {boolean}
+	 */
 	undo() {
 		if(this.history.length === 0)
 			return false;
@@ -154,6 +166,9 @@ class MapData {
 		return true;
 	}
 
+	/**
+	 * @return {string}
+	 */
 	export() {
 		return JSON.stringify(this.state);
 	}
