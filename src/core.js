@@ -2,7 +2,6 @@
 import $ from './utils/html';
 import MenuStage from './stages/menu';
 import GameStage from './stages/game';
-//import Settings from './game/settings';
 
 let initialized = false;
 
@@ -42,8 +41,6 @@ export default {
 	init: () => {
 		if(initialized)
 			throw new Error('game core is already initialized');
-
-		//Settings.load();
 
 		let main_div = $(document.getElementById('main'));
 		if(!main_div)

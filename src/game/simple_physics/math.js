@@ -121,6 +121,16 @@ export class Vec2 {
 }
 
 /**
+ * @param  {number} value
+ * @param  {number} min
+ * @param  {number} max
+ * @return {number}
+ */
+export function clamp(value, min, max) {
+	return Math.max(min, Math.min(max, value));
+}
+
+/**
 * @param {Vec2} v1
 * @param {Vec2} v2
 */
@@ -137,9 +147,7 @@ export function dotProduct(v1, v2) {
 export function distanceToLineSegment(point, l1, l2, out_projection = new Vec2()) {
 	let len = l1.clone().substractVec(l2).lengthSqr();//segment length
 
-	const t = Math.max(0, //TODO - clamp
-		Math.min(1, dotProduct(point.clone().substractVec(l1), l2.clone().substractVec(l1)) / len)
-	);
+	const t = clamp(dotProduct(point.clone().substractVec(l1), l2.clone().substractVec(l1)) / len, 0, 1);
 
 	//projection = v + t * (w - v);
 	out_projection.setVec( 

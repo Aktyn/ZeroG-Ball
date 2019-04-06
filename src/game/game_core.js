@@ -222,8 +222,10 @@ export default class GameCore extends Map {
 	reload(reset_camera = false) {
 		super.load(this.map_data, reset_camera);
 
-		if(!this.paused)
+		if(!this.paused) {
 			this.spawnPlayer();
+			this.graphics.getNode().focus();
+		}
 		else
 			this.player = null;
 	}

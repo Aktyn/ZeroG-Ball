@@ -29,9 +29,10 @@ const SETTINGS = {
 
 	/**
 	 * @param  {string} key
+	 * @param  {boolean | string | number} default_value
 	 * @returns {boolean | string | number | undefined}
 	 */
-	getValue: (key) => {
+	getValue: (key, default_value) => {
 		if(settings_store[key] !== undefined)
 			return settings_store[key];
 		else if (localStorage.getItem(key) !== null) {
@@ -44,7 +45,7 @@ const SETTINGS = {
 			}
 			throw new Error('Incorrect type: ' + item.type);
 		}
-		return undefined;
+		return default_value;
 	},
 
 	/**

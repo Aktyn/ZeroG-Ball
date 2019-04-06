@@ -111,7 +111,6 @@ export default class SvgObject {
 	*	@returns {boolean}
 	*/
 	hasClass(name) {
-		console.log(this.node.classList);
 		return this.node.classList.contains(name);
 	}
 

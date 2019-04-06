@@ -1,6 +1,7 @@
 //@ts-check
 import $ from './../utils/html';
 import Switcher from './../utils/switcher';
+import Slider from './../utils/slider';
 
 import {OBJECTS} from './predefined_assets';
 import Object2D, {Type} from './objects/object2d';
@@ -97,7 +98,7 @@ export default class GameGUI {
 			this.modes_panel.addChild(btn);
 		});
 
-		//this.showSettings();//temp test
+		this.showSettings();//temp test
 		//this.changeMode(1);//temp test
 	}
 
@@ -225,8 +226,10 @@ export default class GameGUI {
 
 			$.create('div').addClass('object-options').addChild(
 				$.create('button').text('USUŃ').on('click', () => {
-					if(this.mode === 1 && typeof this.listeners.deleteObject === 'function')
+					if(this.mode === 1 && typeof this.listeners.deleteObject === 'function') {
 						this.listeners.deleteObject(this.selected_object);
+						this.selectObject(null);
+					}
 				})
 			)
 		);
@@ -291,10 +294,6 @@ export default class GameGUI {
 		$(`.asset_preview.${name}`).addClass('selected');
 
 		this.listeners.onAssetSelected(obj);
-
-		//TODO - darken gui center to indicate drop area
-		//unselect asset when clicked outside
-		//this.gui_center.addClass('event_cacher');
 	}
 
 	/** @param {Object2D | null} obj */
@@ -401,7 +400,13 @@ export default class GameGUI {
 						$.create('label').text('Cienie'),
 						new Switcher(enabled => {
 							Settings.setValue('shadows', enabled);
-						}).setEnabled( !!Settings.getValue('shadows') ).getWidget()
+						}).setEnabled( !!Settings.getValue('shadows', true) ).getWidget(),
+
+						$.create('label').text('Proporcje'),
+						new Slider(1, 4, value => {
+							console.log(value);
+							//TODO - setting for aspect ratio
+						}).getWidget()
 					)
 				)
 			)
