@@ -58,6 +58,11 @@ svg.game-svg {
 		@each $name, $data in $textures {
 			&.#{$name} {
 				fill: url(##{ nth($data, 1) });
+			}
+		}
+
+		&.player {
+			fill: url('#player_texture');
 		}
 	}
 
@@ -79,11 +84,6 @@ svg.game-svg {
 			}
 		}
 	}
-
-	&.player {
-		fill: url(#player_texture);
-	}
-}
 }
 
 .asset_preview {

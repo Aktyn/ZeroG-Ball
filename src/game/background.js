@@ -3,7 +3,7 @@ import SvgObject from './svg';
 import Config from './config';
 
 import bg_texture from './../img/backgrounds/bg4.png';
-// import bg_texture from './../img/backgrounds/blured.png';
+// import bg_texture from './../img/backgrounds/blured_oil.png';
 
 // @ts-check
 export default class Background {

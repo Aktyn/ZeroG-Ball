@@ -96,7 +96,7 @@ export default class GameGUI {
 		});
 
 		//this.showSettings();//temp test
-		//this.changeMode(1);//temp test
+		this.changeMode(1);//temp test
 	}
 
 	getNode() {
@@ -158,17 +158,27 @@ export default class GameGUI {
 					'border-radius': `${radius}px`
 				});
 			}
-			container.addChild(
-				$.create('div').addClass('asset_preview').addClass(obj_name).setStyle({
-					width: `${preview_size}px`,
-					height: `${preview_size}px`,
-				}).addChild( obj_preview,
+			let asset_preview = $.create('div').addClass('asset_preview').addClass(obj_name).setStyle({
+				width: `${preview_size}px`,
+				height: `${preview_size}px`,
+			}).addChild( obj_preview );
+
+			if(obj.shape !== MapData.SHAPE_TYPE.RECT) {
+				asset_preview.addChild(
 					$.create('button').text('DYNAMICZNY').on('click', () => 
-						this.selectAsset(obj, obj_name, true)),
-					$.create('button').text('STATYCZNY').on('click', () => 
-						this.selectAsset(obj, obj_name, false))
-				)
+						this.selectAsset(obj, obj_name, true))
+				);
+			}
+			else
+				asset_preview.addClass('single_option');
+
+			asset_preview.addChild(
+				$.create('button').text('STATYCZNY').on('click', () => 
+					this.selectAsset(obj, obj_name, false)),
+				$.create('label').addClass('name-label').text(obj.name)
 			);
+
+			container.addChild(asset_preview);
 		}
 
 		this.main_edit.text('').addChild( container );
