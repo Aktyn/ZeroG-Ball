@@ -108,10 +108,6 @@ $header-size: 35px;
 		align-items: center;
 		justify-content: center;
 
-		/*&.event_cacher {
-			background-color: #0004;
-		}*/
-
 		.view-container {
 			margin: auto;
 			background-color: #fff;
@@ -119,24 +115,46 @@ $header-size: 35px;
 			border-radius: 5px;
 			box-shadow: 0px 1px 8px #0008;
 			overflow: hidden;
+			font-size: 14px;
 
 			header {
-				padding: 0px 10px;
+				padding: 0px;
 				height: 35px;
 				line-height: 35px;
 				color: #fff;
 				background-color: #455a64;
+				font-weight: bold;
+				display: grid;
+				width: 100%;
+				grid-template-columns: 30px auto 30px;
+				grid-column-gap: 10px;
+				align-items: center;
 
 				.close-btn {
-					margin: 5px 0px;
-					margin-left: 10px;
-					float: right;
+					// margin: 0px 10px;
+					// margin-right: 10px;
+					// float: right;
 				}
 			}
 
 			article {//main content
 				color: #455a64;
 				padding: 5px 5px;
+				text-align: center;
+
+				.settings {
+					font-size: inherit;
+					display: inline-grid;
+					margin: auto;
+					grid-template-columns: 1fr 1fr;
+					align-items: center;
+
+					label {
+						font-weight: bold;
+						text-align: right;
+						padding-right: 10px;
+					}
+				}
 			}
 		}
 	}
@@ -320,7 +338,7 @@ $header-size: 35px;
 
 	//cienie switch
 
-	.switch-input {
+	/*.switch-input {
 		display: none;
 	}
 	.switch-label {
@@ -377,5 +395,5 @@ $header-size: 35px;
 	}
 	.switch-input:checked + .switch-label .toggle--off {
 		display: none;
-	}
+	}*/
 }

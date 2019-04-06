@@ -1,7 +1,6 @@
 $solid_colors: (
 	(red, #e57373),
 	(green, #8BC34A)
-	//crate: #8D6E63
 );
 
 $textures: (
@@ -66,7 +65,7 @@ svg.game-svg {
 		}
 	}
 
-	&.selected {
+	.selected {
 		stroke: #ef5350;
 		stroke-opacity: 1;
 		stroke-width: 4px;

@@ -106,6 +106,15 @@ export default class SvgObject {
 		return this;
 	}
 
+	/** 
+	*	@param {string} name 
+	*	@returns {boolean}
+	*/
+	hasClass(name) {
+		console.log(this.node.classList);
+		return this.node.classList.contains(name);
+	}
+
 	/**
 	* @param {string} name
 	*/

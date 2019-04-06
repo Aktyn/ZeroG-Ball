@@ -1,9 +1,11 @@
 //@ts-check
-
 import $ from './../utils/html';
+import Switcher from './../utils/switcher';
+
 import {OBJECTS} from './predefined_assets';
 import Object2D, {Type} from './objects/object2d';
 import MapData from './map_data';
+import Settings from './settings';
 
 export default class GameGUI {
 	constructor(listeners = {}) {
@@ -96,7 +98,7 @@ export default class GameGUI {
 		});
 
 		//this.showSettings();//temp test
-		this.changeMode(1);//temp test
+		//this.changeMode(1);//temp test
 	}
 
 	getNode() {
@@ -388,17 +390,21 @@ export default class GameGUI {
 			return;
 		this.gui_center.text('').addChild(
 			$.create('div').addClass('view-container').addChild(
-				$.create('header').text('Ustawienia').addChild(
+				$.create('header').addChild(
+					$.create('span'),//separator
+					$.create('span').text('Ustawienia'),
 					$.create('button').addClass('close-btn').on('click', this.closeView.bind(this))
 				)
 			).addChild(
 				$.create('article').addChild(
-					$.create('input').setAttrib('type', 'checkbox').setAttrib('id', 'IDcienie')
-						.addClass('switch-input')
-				).addChild(
-					$.create('label').setAttrib('for', 'IDcienie').addClass('switch-label')
-						.addText('Cienie')
-			))
+					$.create('div').setClass('settings').addChild(
+						$.create('label').text('Cienie'),
+						new Switcher(enabled => {
+							Settings.setValue('shadows', enabled);
+						}).setEnabled( !!Settings.getValue('shadows') ).getWidget()
+					)
+				)
+			)
 		);
 
 		this.is_view_open = true;

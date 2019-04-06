@@ -1,6 +1,6 @@
 //@ts-check
 import {Body, Circle, Rect, ShapeType} from './body';
-import {Vec2, distanceToLineSegment} from './math';
+import {Vec2, distanceToLineSegment, dotProduct} from './math';
 import Contact from './contact';
 
 const collisionCases = [
@@ -47,9 +47,6 @@ function rectToRect(rect1, rect2) {
 * @param {Rect} rect
 */
 function circleToRect(circle, rect, flip = false) {
-	//TODO - cases in which the circle is inside rectangle
-
-
 	//calculating verticle positions of rectangle
 	// 0 1
 	// 3 2   y axis goes down
@@ -68,7 +65,14 @@ function circleToRect(circle, rect, flip = false) {
 		let p2 = v[(i+1) < v.length ? (i+1) : 0];
 
 		let overlap = circle.radius - distanceToLineSegment(circle.pos, p1, p2, projection);
+
 		if( overlap > 0 ) {
+			//check for edge normal
+			let edge_norm = p1.clone().addVec(p2).scale(0.5).substractVec(rect.pos).normalize();
+			let bounce_norm = circle.pos.clone().substractVec(projection).normalize();
+			if( dotProduct(edge_norm, bounce_norm) < -0.5 )//if circle gets trapped inside a rect then ...
+				overlap = -overlap - circle.radius;//...reverse bounce vector so it can escape
+			// debugger;
 			if(flip)
 				return new Contact(rect, circle, projection, overlap);
 			else

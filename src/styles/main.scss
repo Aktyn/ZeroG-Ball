@@ -10,6 +10,7 @@
 body, html, textarea, input, button, div {
 	padding: 0px;
     margin: 0px;
+    font-size: 12px;
 
     font-family: RobotoRegular, Arial;
     -webkit-font-smoothing: antialiased;
@@ -29,6 +30,7 @@ body, html {
 
 textarea, input {
     border: 1px solid rgb(169, 169, 169);
+    background: #fff;
     outline: none;
     padding: 2px 5px;
     color: #455a64;
@@ -44,6 +46,9 @@ button {
 	cursor: pointer;
 	border: none;
 	/*1px solid #CFD8DC;*/
+    line-height: 100%;
+	font-weight: bold;
+	background: #fff;
 	border-radius: 4px;
 	padding: 5px 10px;
 	color: #455a64;

@@ -1,7 +1,6 @@
 // @ts-check
-const gravity_scale = 5.0;
-
-const gravity = 0;//9.807;
+//const gravity_scale = 5.0;
+//const gravity = 0;//9.807;
 const physic_step = 1 / 60;
 
 export default {
@@ -11,7 +10,7 @@ export default {
 
 	//physics (simple)
 	PHYSIC_STEP: physic_step,
-	ITERATIONS: 10,
+	//ITERATIONS: 10,
 	EPSILON: 0.00001,//0.0001
 
 	//gameplay

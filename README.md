@@ -7,5 +7,5 @@ Project created for learning purpouses.
 	<li>Aspect ratio settings</li>
 	<li>Shadows settings</li>
 	<li>More assets themes</li>
-	<li>Selecting multiple objects with mouse</li>
+	<li>Selecting multiple objects with ctrl + mouse</li>
 </ul>

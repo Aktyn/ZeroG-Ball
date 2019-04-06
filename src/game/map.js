@@ -1,5 +1,4 @@
 //@ts-check
-
 import MapData from './map_data';
 import SvgEngine from './svg_engine';
 import Object2D, {Type} from './objects/object2d';
@@ -14,6 +13,7 @@ import {Body} from './simple_physics/body';
 import CollisionListener from './simple_physics/collision_listener';
 
 import {TEXTURES} from './predefined_assets';
+import Settings from './settings';
 // import ball_texture from './../img/ball_texture.png';
 
 
@@ -27,7 +27,16 @@ export default class Map extends CollisionListener {
 		super();
 
 		this.graphics = new SvgEngine();
-		this.graphics.foreground_layer.addClass('cartoon-style').addClass('flat-shadows');
+		this.graphics.foreground_layer.addClass('cartoon-style');
+		if(Settings.getValue('shadows') === true)
+			this.graphics.foreground_layer.addClass('flat-shadows');
+
+		Settings.watch('shadows', value => {
+			if(value && !this.graphics.foreground_layer.hasClass('flat-shadows'))
+				this.graphics.foreground_layer.addClass('flat-shadows');
+			if(!value && this.graphics.foreground_layer.hasClass('flat-shadows'))
+				this.graphics.foreground_layer.removeClass('flat-shadows');
+		});
 
 		this.paused = false;
 

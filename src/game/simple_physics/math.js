@@ -146,12 +146,11 @@ export function distanceToLineSegment(point, l1, l2, out_projection = new Vec2()
 		l1.clone().addVec(l2.clone().substractVec(l1).scale(t)) 
 	);
 	
-	//return projection.substractVec(point).length();
 	return point.clone().substractVec(out_projection).length();
 }
 
-// Two crossed vectors return a scalar
 /**
+* Two crossed vectors return a scalar
 * @param {Vec2} a
 * @param {Vec2} b
 */
