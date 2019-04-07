@@ -36,68 +36,6 @@ const static_methods = {//static methods
 			window.addEventListener('load', load_listener, false);
 		}
 	},
-	/*loadFile: function(source, callback) {
-		try {
-	        let xmlhttp = new XMLHttpRequest();
-	        xmlhttp.open("GET", source, true);
-
-	        xmlhttp.onreadystatechange = function() {
-	        	if(typeof callback !== 'function') return;
-	        	if(xmlhttp.readyState == 4)//complete
-	        		callback(xmlhttp.status == 200 ? xmlhttp.responseText : undefined);
-	        };
-	        
-	        xmlhttp.send();
-	    }
-	    catch(e) {
-	    	console.error('Cannot load file:', e);
-	    	if(typeof callback === 'function')
-	    		callback();
-	    }
-	},*/
-	/*postRequest: function(php_file, params, callback) {
-		try {
-			if(typeof params !== 'string')//format params object to string
-				params = Object.keys(params).map(pname => pname + '=' + params[pname]).join('&');
-
-			let xmlhttp = new XMLHttpRequest();
-			xmlhttp.open('POST', php_file, true);
-
-			xmlhttp.onreadystatechange = function() {//Call a function when the state changes.
-				if(typeof callback !== 'function') return;
-			    if(xmlhttp.readyState == 4)//complete
-			        callback(xmlhttp.status == 200 ? xmlhttp.responseText : undefined);//success
-			};
-
-			xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-			xmlhttp.send(params);
-		}
-		catch(e) {
-			console.error('Post request error:', e);
-			if(typeof callback === 'function')
-				callback(undefined);
-		}
-	},*/
-	/*loadScript: function(source, async, onload) {
-		assert(!!document.head, 'Document head not found');
-		let script = static_methods.create('SCRIPT');
-		script.setAttrib('type', 'text/javascript');
-		script.setAttrib('src', source);
-		script.setAttrib('async', String(!!async));
-
-		//searching for arleady loaded script
-		if(fromQuery(`img[src='${source}']`).length > 0) {
-			if(typeof onload === 'function')
-				onload();
-			return;
-		}
-
-		if(typeof onload === 'function')
-			script.onload = onload;
-
-		
-		document.head.appendChild( script );
-	},*/
 
 	/** 
 	*	@param {string} value 
@@ -153,6 +91,12 @@ const extender = {//extended methods of DOM HTMLElements
 	removeClass: function(class_name) {
 		this.classList.remove(class_name);
 		return this;
+	},
+	/** 
+	*	@param {string} class_name 
+	*/
+	hasClass: function(class_name) {
+		return this.classList.contains(class_name);
 	},
 	/** 
 	*	@param {string} class_name 

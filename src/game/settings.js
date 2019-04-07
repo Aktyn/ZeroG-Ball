@@ -2,6 +2,7 @@
 
 const DEFAULTS = {
 	'shadows': true,
+	'textures': true,
 	'aspect_ratio': 1280/720
 };
 
@@ -66,10 +67,8 @@ const SETTINGS = {
 	 * Set all settings to default values
 	 */
 	reset() {
-		for(let [key, value] of Object.entries(DEFAULTS)) {
-			console.log(key, value);
+		for(let [key, value] of Object.entries(DEFAULTS))
 			this.setValue(key, value);
-		}
 	},
 
 	/**

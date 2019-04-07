@@ -192,6 +192,7 @@ $header-size: 35px;
 			//width: 50%;
 			overflow-x: auto;
 			display: table-cell;
+			text-align: center;
 
 			.assets_container, .edit_options {
 				width: 100%;
@@ -202,10 +203,12 @@ $header-size: 35px;
 				overflow-x: auto;
 				overflow-y: hidden;
 
-				display: flex;
+				display: inline-flex;
+				width: auto;
+				margin: auto;
 				flex-direction: row;
 				align-items: center;
-				justify-content: center;
+				justify-content: stretch;
 
 				& > .asset_preview {
 					padding: 5px;
@@ -216,6 +219,7 @@ $header-size: 35px;
 					background-color: #0008;
 					box-shadow: 0px 0px 5px #0008;
 
+					min-width: 70px;
 					display: grid;
 					align-items: center;
 					justify-content: center;
@@ -328,14 +332,87 @@ $header-size: 35px;
 		}
 
 		.tools {
-			padding: 5px 0px;
-			& > * {
-				white-space: nowrap;
-				margin: 5px;
+			// background-color: blue;
+			grid-area: tools;
+
+			height: 100%;
+
+			display: inline-grid;
+			grid-template-columns: auto auto;
+
+			.enviroment {
+				$w: 100px;
+				$h: 20px;
+				
+				position: relative;
+				width: $w;
+				.background-selector {
+					width: $w;
+					height: $h;
+					overflow: hidden;
+					border-radius: 3px;
+					box-shadow: 0px 1px 5px #0008;
+					// background-color: red;
+					position: absolute;
+					
+					bottom: calc(50% - 10px);
+					margin: auto;
+
+				    display: flex;
+				    flex-direction: column;
+				    align-items: center;
+				    justify-content: flex-end;
+
+				    & > * {
+				    	width: 100%;
+				    	border: none;
+				    	border-radius: 0px;
+				    	background-color: #fff;
+
+				    	height: $h;
+				    	&:not(button) {
+				    		line-height: $h;
+				    		color: #607D8B;
+
+				    		transition: background-color 0.2s ease-in-out;
+				    	}
+				    	white-space: nowrap;
+				    }
+
+				    & > div:not(.selected) {//item to select
+				    	cursor: pointer;
+				    	&:hover {
+				    		background-color: #AED581;
+				    	}
+				    	&:active {
+				    		background-color: #8BC34A;
+				    	}
+				    }
+
+				    & > div.selected {
+				    	background-color: #4DB6AC;
+				    	font-weight: bold;
+				    	color: #fff;
+				    }
+
+				    transition: height 0.3s cubic-bezier(.36,.07,.19,.97);
+				    &.open {
+				    	height: var(--open-height);
+				    	//height: $h * 6;
+				    }
+				}
 			}
 
-			& > * > button {
-				margin: 0px 2px;
+			.buttons {
+				padding: 5px 0px;
+				& > * {
+					white-space: nowrap;
+					margin: 5px;
+				}
+
+				& > * > button {
+					margin: 0px 2px;
+				}
 			}
 		}
 

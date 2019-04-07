@@ -37,7 +37,7 @@ export default class GameCore extends Map {
 		this.listeners = listeners;
 
 		this.map_data = new MapData();
-		super.load(this.map_data);
+		//super.load(this.map_data);
 
 		this.steering = {
 			left:	false,
@@ -227,8 +227,11 @@ export default class GameCore extends Map {
 			this.spawnPlayer();
 			this.graphics.getNode().focus();
 		}
-		else
+		else {
 			this.player = null;
+			if(typeof this.listeners.onMapLoaded === 'function')
+				this.listeners.onMapLoaded();
+		}
 	}
 
 	/** @param {string} data */
@@ -280,6 +283,14 @@ export default class GameCore extends Map {
 			return;
 
 		super.removeObject(obj);
+	}
+
+	/** @param {number} id */
+	selectBackground(id) {
+		// console.log(id);
+		//this.background.selectBackground(id);
+		this.map_data.selectBackground(id);
+		this.reload();
 	}
 
 	/** @param {number} dt */

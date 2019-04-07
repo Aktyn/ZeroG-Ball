@@ -1,4 +1,4 @@
-// @ts-check
+//@ts-check
 import Config from './config';
 
 export default class SvgObject {
@@ -142,7 +142,7 @@ export default class SvgObject {
 	*/
 	setSize(width, height) {
 		this.transform.w = width;
-		this.transform.h = typeof height === 'number' ? height : width;
+		this.transform.h = height;//typeof height === 'number' ? height : width;
 		this.scale_changed = true;
 
 		return this;

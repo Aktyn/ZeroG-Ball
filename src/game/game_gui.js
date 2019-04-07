@@ -3,7 +3,7 @@ import $ from './../utils/html';
 import Switcher from './../utils/switcher';
 import Slider from './../utils/slider';
 
-import {OBJECTS} from './predefined_assets';
+import {OBJECTS, BACKGROUNDS} from './predefined_assets';
 import Object2D, {Type} from './objects/object2d';
 import MapData from './map_data';
 import Settings from './settings';
@@ -62,28 +62,46 @@ export default class GameGUI {
 			})
 		).addChild( //EDIT MENU
 			$.create('div').addClass('edit-tools').addChild(
-				this.main_edit = $.create('div').addClass('main')
-			).addChild(
+				this.main_edit = $.create('div').addClass('main'),
+
 				$.create('div').addClass('tools').addChild(
-					$.create('button').text('USUŃ WSZYSTKO').on('click', () => {
-						//edit mode
-						if(this.mode === 1 && typeof this.listeners.onClearMap === 'function')
-							this.listeners.onClearMap();
-					})
-				).addChild(
-					$.create('div').addChild(
+					$.create('section').addClass('enviroment').addChild(
+						this.bg_selector = $.create('div').addClass('background-selector')
+					),
+					$.create('section').addClass('buttons').addChild(
+						$.create('button').text('USUŃ WSZYSTKO').on('click', () => {
+							//edit mode
+							if(this.mode === 1 && typeof this.listeners.onClearMap === 'function')
+								this.listeners.onClearMap();
+						}),
 						$.create('button').text('COFNIJ').on('click', () => {
 							if(this.mode === 1 && typeof this.listeners.undo === 'function')
 								this.listeners.undo();
 						})
-					)/*.addChild(
-						$.create('button').text('PONÓW').on('click', () => {
-							
-						})
-					)*/
+					)
 				)
 			)
 		);
+
+		BACKGROUNDS.forEach((bg, i) => {
+			this.bg_selector.addChild(
+				$.create('div').text(bg.name).on('click', () => {
+					if(this.mode === 1 && typeof this.listeners.selectBackground === 'function')
+						this.listeners.selectBackground(i);
+					this.bg_selector.removeClass('open');
+				}),
+			);
+		});
+		this.bg_selector.addChild(
+			$.create('button').text('WYBÓR TŁA').on('click', () => {
+				if( this.bg_selector.hasClass('open') )
+					this.bg_selector.removeClass('open');
+				else
+					this.bg_selector.addClass('open');
+			})
+		);
+		
+		this.bg_selector.style.setProperty('--open-height', `${(BACKGROUNDS.length+1)*20}px`);
 
 		['GRA', 'EDYCJA'].forEach((mode, i) => {
 			let btn = $.create('button').text(mode).setAttrib('id', i).on('click', btn => {
@@ -98,8 +116,8 @@ export default class GameGUI {
 			this.modes_panel.addChild(btn);
 		});
 
-		this.showSettings();//temp test
-		//this.changeMode(1);//temp test
+		//this.showSettings();//temp test
+		this.changeMode(1);//temp test
 	}
 
 	getNode() {
@@ -121,6 +139,16 @@ export default class GameGUI {
 		//edit mode pauses game physics, play mode reloads map
 		if(typeof this.listeners.onModeChange === 'function')
 			this.listeners.onModeChange(this.mode);
+	}
+
+	/** @param {MapData} data */
+	reloadMapData(data) {
+		this.bg_selector.getChildren('div').forEach((div, i) => {
+			if(i == data.getBackgroundID())
+				div.addClass('selected');
+			else
+				div.removeClass('selected');
+		});
 	}
 
 	showAssetsList() {
@@ -153,7 +181,6 @@ export default class GameGUI {
 				});
 			}
 			else if(obj.shape === MapData.SHAPE_TYPE.CIRCLE) {
-				console.log(obj_name, obj);
 				let radius = (preview_size*0.61)|0;
 				obj_preview.setStyle({
 					width: `${radius}px`,
@@ -401,6 +428,11 @@ export default class GameGUI {
 						new Switcher(enabled => {
 							Settings.setValue('shadows', enabled);
 						}).setEnabled( !!Settings.getValue('shadows') ).getWidget(),
+
+						$.create('label').text('Textury'),
+						new Switcher(enabled => {
+							Settings.setValue('textures', enabled);
+						}).setEnabled( !!Settings.getValue('textures') ).getWidget(),
 
 						$.create('label').text('Proporcje'),
 						new Slider(1, 4, value => {

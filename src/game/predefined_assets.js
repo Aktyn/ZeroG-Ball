@@ -80,3 +80,33 @@ export const TEXTURES = {//names must much those in svg.scss
 		height: Config.VIRT_SCALE*0.1
 	}
 }
+
+/** @type {{name: string, src: string, color: string, linear?: boolean}[]} */
+export const BACKGROUNDS = [//default value for linear attribute is: true
+	{//first one is default for empty map
+		name: 'Labirynt',
+		src: require('./../img/backgrounds/bg1.png'),
+		color: '#2b8177',
+		linear: false
+	},
+	{
+		name: 'Chmury',
+		src: require('./../img/backgrounds/bg2.jpg'),
+		color: '#8ab0c4',
+	},
+	{
+		name: 'Lato',
+		src: require('./../img/backgrounds/bg3.jpg'),
+		color: '#dbb78b',
+	},
+	{
+		name: 'Zima',
+		src: require('./../img/backgrounds/bg4.jpg'),
+		color: '#1a619f',
+	},
+	{
+		name: 'Gradient',
+		src: require('./../img/backgrounds/bg6.jpg'),
+		color: '#a7a1be',
+	},
+];

@@ -6,19 +6,23 @@ $solid_colors: (
 $textures: (
 	crate: (
 		'crate_texture',
-		"./../img/textures/crate.jpg"
+		'./../img/textures/crate.jpg',
+		#292b3d
 	),
 	exit: (
 		'exit_texture',
-		"./../img/textures/exit.png"
+		'./../img/textures/exit.png',
+		#99ca61
 	),
 	lava: (
 		'lava_texture',
-		"./../img/textures/lava.jpg"
+		'./../img/textures/lava.jpg',
+		#41281e
 	),
 	grass: (
 		'grass_texture',
-		"./../img/textures/grass.png"
+		'./../img/textures/grass.png',
+		#70992c
 	)
 );
 
@@ -44,6 +48,7 @@ svg.game-svg {
 	}
 
 	/** predefined objects classes (correlated with themes object in predefined_assets.js) */
+
 	circle, rect, path {
 		//default values
 		fill: #fff;
@@ -53,7 +58,9 @@ svg.game-svg {
 				fill: $color;
 			}
 		}
+	}
 
+	&:not(.no-textures) circle, &:not(.no-textures) rect, &:not(.no-textures) path {
 		@each $name, $data in $textures {
 			&.#{$name} {
 				fill: url(##{ nth($data, 1) });
@@ -62,6 +69,18 @@ svg.game-svg {
 
 		&.player {
 			fill: url('#player_texture');
+		}
+	}
+
+	&.no-textures circle, &.no-textures rect, &.no-textures path {
+		@each $name, $data in $textures {
+			&.#{$name} {
+				fill: nth($data, 3);
+			}
+		}
+
+		&.player {
+			fill: #749de2;
 		}
 	}
 

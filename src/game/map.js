@@ -28,15 +28,6 @@ export default class Map extends CollisionListener {
 
 		this.graphics = new SvgEngine();
 		this.graphics.foreground_layer.addClass('cartoon-style');
-		if(Settings.getValue('shadows') === true)
-			this.graphics.foreground_layer.addClass('flat-shadows');
-
-		Settings.watch('shadows', value => {
-			if(value && !this.graphics.foreground_layer.hasClass('flat-shadows'))
-				this.graphics.foreground_layer.addClass('flat-shadows');
-			if(!value && this.graphics.foreground_layer.hasClass('flat-shadows'))
-				this.graphics.foreground_layer.removeClass('flat-shadows');
-		});
 
 		this.paused = false;
 
@@ -52,7 +43,7 @@ export default class Map extends CollisionListener {
 		this.loadFilters();
 		this.loadTextures();
 
-		this.background = new Background(MAP_SIZE_X, MAP_SIZE_Y, BG_SMOOTHING, BG_SCALE);
+		this.background = new Background(MAP_SIZE_X, MAP_SIZE_Y, BG_SMOOTHING, BG_SCALE, this.graphics);
 		
 		this.graphics.addBackgroundObjects(//.setSize(0.5, 0.5)
 			...this.background.tiles,
@@ -64,6 +55,26 @@ export default class Map extends CollisionListener {
 		/** @type {Object2D[] */
 		this.objects = [];
 		//this.loadObjects();
+		
+		if(Settings.getValue('shadows') === true)
+			this.graphics.foreground_layer.addClass('flat-shadows');
+
+		Settings.watch('shadows', value => {
+			if(value && !this.graphics.foreground_layer.hasClass('flat-shadows'))
+				this.graphics.foreground_layer.addClass('flat-shadows');
+			if(!value && this.graphics.foreground_layer.hasClass('flat-shadows'))
+				this.graphics.foreground_layer.removeClass('flat-shadows');
+		});
+
+		if(Settings.getValue('textures') === false) {
+			this.background.enableTextures(false);
+			this.graphics.enableTextures(false);
+		}
+
+		Settings.watch('textures', enabled => {
+			this.background.enableTextures(!!enabled);
+			this.graphics.enableTextures(!!enabled);
+		});
 	}
 
 	getNode() {
@@ -77,6 +88,7 @@ export default class Map extends CollisionListener {
 	*/
 	onResize(w, h, aspect) {
 		this.graphics.onResize(w, h, aspect);
+		this.graphics.updateView(this.camera);
 	}
 
 	/**
@@ -174,6 +186,8 @@ export default class Map extends CollisionListener {
 				object2d.setStatic();
 			this.objects.push(object2d);
 		}
+
+		this.background.selectBackground( data.getBackgroundID() );
 	}
 
 	addAsset(asset) {

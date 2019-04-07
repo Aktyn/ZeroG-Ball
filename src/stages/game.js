@@ -19,6 +19,10 @@ export default class GameStage extends Stage {
 			onObjectSelect: (obj) => {
 				if(this.gui)
 					this.gui.selectObject(obj);
+			},
+			onMapLoaded: () => {
+				if(this.gui)
+					this.gui.reloadMapData(this.game.map_data);
 			}
 		});
 		this.gui = new GameGUI({
@@ -49,7 +53,12 @@ export default class GameStage extends Stage {
 			//object edit listeners
 			updateObjectTransform: this.game.updateObjectTransform.bind(this.game),
 			deleteObject: this.game.deleteObject.bind(this.game),
+
+			//other edit listeners
+			selectBackground: this.game.selectBackground.bind(this.game)
 		});
+
+		this.gui.reloadMapData(this.game.map_data);
 
 		this.container.addChild(
 			this.game.getNode(), this.gui.getNode()
@@ -87,6 +96,7 @@ export default class GameStage extends Stage {
 			res.height = res.width/aspect;
 
 		Object.assign(this.container.style, {width: `${res.width}px`, height: `${res.height}px`});
-		this.game.onResize(res.width, res.height, aspect);
+		if(this.game)
+			this.game.onResize(res.width, res.height, aspect);
 	}
 }

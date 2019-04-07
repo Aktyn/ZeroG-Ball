@@ -4,7 +4,6 @@ Project created for learning purpouses.
 
 <b>TODO</b>
 <ul>
-	<li>Aspect ratio settings</li>
 	<li>More assets themes</li>
 	<li>Selecting multiple objects with ctrl + mouse</li>
 </ul>

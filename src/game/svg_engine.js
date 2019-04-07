@@ -44,6 +44,16 @@ export default class SvgEngine {
 		this.svg.node.style.transform = `scale(${_height/Config.VIRT_SCALE})`;
 	}
 
+	/**
+	 * @param {boolean} enabled
+	 */
+	enableTextures(enabled) {
+		if(enabled && this.svg.hasClass('no-textures'))
+			this.svg.removeClass('no-textures');
+		if(!enabled && !this.svg.hasClass('no-textures'))
+			this.svg.addClass('no-textures');
+	}
+
 	static createObject(name, prevent_centering = false) {
 		return new SvgObject(name, prevent_centering);
 	}
@@ -118,13 +128,13 @@ export default class SvgEngine {
 	updateView(opts) {
 		this.svg.set({
 			'viewBox': `${
-				(-this.width/2 + this.height * (opts.x/opts.zoom) / 2)*opts.zoom
+				((-this.width/2 + this.height * (opts.x/opts.zoom) / 2)*opts.zoom).toFixed(2)
 			}, ${
-				(this.height * (opts.y/opts.zoom-1) / 2)*opts.zoom
+				((this.height * (opts.y/opts.zoom-1) / 2)*opts.zoom).toFixed(2)
 			}, ${
-				this.width * opts.zoom
+				(this.width * opts.zoom).toFixed(2)
 			}, ${
-				this.height * opts.zoom
+				(this.height * opts.zoom).toFixed(2)
 			}`
 		});
 	}
