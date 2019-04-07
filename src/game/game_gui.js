@@ -400,13 +400,29 @@ export default class GameGUI {
 						$.create('label').text('Cienie'),
 						new Switcher(enabled => {
 							Settings.setValue('shadows', enabled);
-						}).setEnabled( !!Settings.getValue('shadows', true) ).getWidget(),
+						}).setEnabled( !!Settings.getValue('shadows') ).getWidget(),
 
 						$.create('label').text('Proporcje'),
 						new Slider(1, 4, value => {
-							console.log(value);
-							//TODO - setting for aspect ratio
-						}).getWidget()
+							Settings.setValue('aspect_ratio', value);
+						}).setValue( Number(Settings.getValue('aspect_ratio')) ).getWidget(),
+
+						$.create('div').setClass('single-row').addChild(
+							$.create('button').text('DOPASUJ PROPORCJE').on('click', e => {
+								let res = $.getScreenSize();
+								Settings.setValue('aspect_ratio', res.width / res.height);
+								this.showSettings();
+							})
+						)
+					),
+
+					$.create('hr'),
+
+					$.create('div').addChild(
+						$.create('button').text('ZRESETUJ').on('click', e => {
+							Settings.reset();
+							this.showSettings();
+						})
 					)
 				)
 			)

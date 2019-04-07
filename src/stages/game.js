@@ -5,7 +5,8 @@ import Stage from './stage';
 import GameCore from './../game/game_core';
 import GameGUI from './../game/game_gui';
 
-import Config from './../game/config';
+// import Config from './../game/config';
+import Settings from './../game/settings';
 
 import './../styles/game.scss';
 import './../styles/gui.scss';
@@ -54,9 +55,13 @@ export default class GameStage extends Stage {
 			this.game.getNode(), this.gui.getNode()
 		);
 
-		window.addEventListener('resize', this.onResize.bind(this), false);
+		window.addEventListener('resize', () => {
+			this.onResize( Number(Settings.getValue('aspect_ratio')) );
+		}, false);
+
+		Settings.watch( 'aspect_ratio', val => this.onResize(Number(val)) );
 		
-		setTimeout(() => this.onResize(), 1);
+		setTimeout(() => this.onResize( Number(Settings.getValue('aspect_ratio')) ), 1);
 
 		//this.running = false;
 		//this.run();
@@ -70,15 +75,18 @@ export default class GameStage extends Stage {
 		super.close();
 	}
 
-	onResize() {//window resize event
+	/**
+	 * @param  {number} aspect
+	 */
+	onResize(aspect) {//window resize event
 		let res = $.getScreenSize();
 
-		if(res.width / res.height > Config.ASPECT)
-			res.width = res.height*Config.ASPECT;
+		if(res.width / res.height > aspect)
+			res.width = res.height*aspect;
 		else
-			res.height = res.width/Config.ASPECT;
+			res.height = res.width/aspect;
 
 		Object.assign(this.container.style, {width: `${res.width}px`, height: `${res.height}px`});
-		this.game.onResize(res.width, res.height);
+		this.game.onResize(res.width, res.height, aspect);
 	}
 }

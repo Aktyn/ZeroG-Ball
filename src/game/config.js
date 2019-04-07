@@ -5,8 +5,8 @@ const physic_step = 1 / 60;
 
 export default {
 	//graphics
-	ASPECT: 1280/720,//width / height
-	VIRT_SCALE: 720,//1<<10
+	// --- moved to settings ---	ASPECT: 1280/720,//width / height
+	VIRT_SCALE: 720,
 
 	//physics (simple)
 	PHYSIC_STEP: physic_step,

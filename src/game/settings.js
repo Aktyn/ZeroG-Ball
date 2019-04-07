@@ -1,5 +1,10 @@
 //@ts-check
 
+const DEFAULTS = {
+	'shadows': true,
+	'aspect_ratio': 1280/720
+};
+
 /** @type {{[index: string]: boolean | string | number}} stores key: value pairs */
 let settings_store = {};
 
@@ -29,10 +34,9 @@ const SETTINGS = {
 
 	/**
 	 * @param  {string} key
-	 * @param  {boolean | string | number} default_value
 	 * @returns {boolean | string | number | undefined}
 	 */
-	getValue: (key, default_value) => {
+	getValue: (key) => {
 		if(settings_store[key] !== undefined)
 			return settings_store[key];
 		else if (localStorage.getItem(key) !== null) {
@@ -45,7 +49,9 @@ const SETTINGS = {
 			}
 			throw new Error('Incorrect type: ' + item.type);
 		}
-		return default_value;
+		if(DEFAULTS[key])
+			return DEFAULTS[key];
+		throw new Error('Cannot retrieve setting value.');
 	},
 
 	/**
@@ -54,6 +60,16 @@ const SETTINGS = {
 	remove(key) {
 		delete settings_store['key'];
 		localStorage.removeItem(key);
+	},
+
+	/**
+	 * Set all settings to default values
+	 */
+	reset() {
+		for(let [key, value] of Object.entries(DEFAULTS)) {
+			console.log(key, value);
+			this.setValue(key, value);
+		}
 	},
 
 	/**

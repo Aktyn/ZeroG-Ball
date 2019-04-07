@@ -3,6 +3,7 @@ import $ from './../utils/html';
 import Map from './map';
 import MapData from './map_data';
 import Config from './config';
+//import Settings from './settings';
 import Player from './objects/player';
 import Object2D from './objects/object2d';
 
@@ -99,11 +100,11 @@ export default class GameCore extends Map {
 	/**
 	* @param {number} w
 	* @param {number} h
+	* @param {number} aspect
 	*/
-	onResize(w, h) {
-		super.onResize(w, h);
-
-		//@ts-ignore
+	onResize(w, h, aspect) {
+		this.aspect = aspect;
+		super.onResize(w, h, aspect);
 		this.svg_rect = super.getNode().getBoundingClientRect();//must go after super.onResize
 	}
 
@@ -118,7 +119,7 @@ export default class GameCore extends Map {
 		let dt = Math.max(-1, Math.min(1, e.wheelDelta || -e.detail));
 
 		let new_zoom = this.camera.zoom*(1-ZOOM_STRENGTH*dt);
-		new_zoom = Math.max(0.2, Math.min(new_zoom, this.background.getMaxZoom()));
+		new_zoom = Math.max(0.2, Math.min(new_zoom, this.background.getMaxZoom(this.aspect)));
 		
 		super.updateCamera(this.camera.x, this.camera.y, new_zoom);
 	}
@@ -174,7 +175,7 @@ export default class GameCore extends Map {
 			return;
 
 		let coords = this.convertCoords(e);
-		let dx = (this.last_mouse_coords.x - coords.x)*2*Config.ASPECT * this.camera.zoom;
+		let dx = (this.last_mouse_coords.x - coords.x)*2*this.aspect * this.camera.zoom;
 		let dy = (this.last_mouse_coords.y - coords.y)*2 * this.camera.zoom;
 		super.updateCamera(this.camera.x+dx, this.camera.y+dy, this.camera.zoom);
 		this.last_mouse_coords = coords;

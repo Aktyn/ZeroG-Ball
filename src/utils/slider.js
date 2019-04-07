@@ -28,12 +28,14 @@ export default class Slider extends Widget {
 				return;
 			let rect = this.widget.getBoundingClientRect();
 			let percent = (e.clientX - rect.left)/rect.width;
-			this.setValue( this.min + percent*this.length );
+			this.setValue( this.min + percent*this.length, false );
 		};
 
 		this.value_btn = $.create('button').text('0').setStyle({
 			'width': `${this.btn_width}px`
 		});
+
+		let saved_value = this.value;
 
 		this.widget.addClass('slider').addChild( this.value_btn ).setStyle({
 			'width': `${this.width}px`
@@ -45,8 +47,13 @@ export default class Slider extends Widget {
 
 		window.addEventListener('mousemove', _updateSlider);
 		window.addEventListener('mouseup', e => {
+			if(saved_value === this.value)
+				return;
+			saved_value = this.value;
 			this.hold = false;
 			this.value_btn.removeClass('hold');
+			if(typeof this.onChange === 'function')
+				this.onChange(this.value);
 		});
 	}
 
@@ -54,14 +61,14 @@ export default class Slider extends Widget {
 	 * @param {number} value
 	 * @returns {Slider}
 	 */
-	setValue(value) {
+	setValue(value, emit_event = true) {
 		value = Math.max(this.min, Math.min(this.max, value));
 		this.value = value;
 		this.value_btn.text( ((this.value*100)|0)/100 ).setStyle({
 			'transform': `translateX(${(this.width-this.btn_width) * (value-this.min)/this.length}px)`
 		});
 
-		if(typeof this.onChange === 'function')
+		if(emit_event && typeof this.onChange === 'function')
 			this.onChange(value);
 
 		return this;

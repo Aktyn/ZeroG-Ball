@@ -1,6 +1,7 @@
 import SvgEngine from './svg_engine';
 import SvgObject from './svg';
 import Config from './config';
+import Settings from './settings';
 
 import bg_texture from './../img/backgrounds/bg4.png';
 // import bg_texture from './../img/backgrounds/blured_oil.png';
@@ -36,18 +37,24 @@ export default class Background {
 			}
 		}
 
+		this.aspect = Number(Settings.getValue('aspect_ratio'));
 		this._maxZoom = this.calculateMaxZoom();
 	}
 
 	calculateMaxZoom() {
-		const max_zoom_x = Math.pow(this.tiles_x*this.scale / Config.ASPECT, 
+		const max_zoom_x = Math.pow(this.tiles_x*this.scale / this.aspect,
 			1/(1-this.smoothing));
 		const max_zoom_y = Math.pow(this.tiles_y*this.scale, 
 			1/(1-this.smoothing));
 		return Math.min(max_zoom_x, max_zoom_y);
 	}
 
-	getMaxZoom() {
+	/** @param {number} aspect */
+	getMaxZoom(aspect) {
+		if(this.aspect !== aspect) {
+			this.aspect = aspect;
+			this._maxZoom = this.calculateMaxZoom();
+		}
 		return this._maxZoom;
 	}
 

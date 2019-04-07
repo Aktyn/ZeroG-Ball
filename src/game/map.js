@@ -7,13 +7,13 @@ import Exit from './objects/exit';
 
 import Background from './background';
 import Config from './config';
+import Settings from './settings';
 
 import SimplePhysics from './simple_physics/engine';
 import {Body} from './simple_physics/body';
 import CollisionListener from './simple_physics/collision_listener';
 
 import {TEXTURES} from './predefined_assets';
-import Settings from './settings';
 // import ball_texture from './../img/ball_texture.png';
 
 
@@ -44,6 +44,8 @@ export default class Map extends CollisionListener {
 			x: 0, y: 0, zoom: 1
 		};
 
+		this.aspect = Number( Settings.getValue('aspect_ratio') );
+
 		/** @type {Player | null} */
 		this.player = null;
 
@@ -71,9 +73,10 @@ export default class Map extends CollisionListener {
 	/**
 	* @param {number} w
 	* @param {number} h
+	* @param {number} aspect
 	*/
-	onResize(w, h) {
-		this.graphics.onResize(w, h);
+	onResize(w, h, aspect) {
+		this.graphics.onResize(w, h, aspect);
 	}
 
 	/**
@@ -94,7 +97,7 @@ export default class Map extends CollisionListener {
 	*/
 	castCoords({x, y}) {
 		return {
-			x: (x - 0.5) * Config.ASPECT * 2 * this.camera.zoom + this.camera.x,
+			x: (x - 0.5) * this.aspect * 2 * this.camera.zoom + this.camera.x,
 			y: (y - 0.5) * 2 * this.camera.zoom + this.camera.y
 		};
 	}

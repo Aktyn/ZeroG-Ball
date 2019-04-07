@@ -142,6 +142,10 @@ $header-size: 35px;
 				padding: 5px 5px;
 				text-align: center;
 
+				* {
+					// font-size: inherit;
+				}
+
 				.settings {
 					font-size: inherit;
 					display: inline-grid;
@@ -155,6 +159,14 @@ $header-size: 35px;
 						font-weight: bold;
 						text-align: right;
 						padding-right: 10px;
+					}
+
+					div {
+						font-size: inherit;
+					}
+
+					.single-row {
+						grid-column: 1 / span 2;
 					}
 				}
 			}

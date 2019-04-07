@@ -1,11 +1,12 @@
 // @ts-check
 import SvgObject from './svg';
 import Config from './config';
+import Settings from './settings';
 import './../styles/svg.scss';
 
 export default class SvgEngine {
 	constructor() {
-		this.width = Config.ASPECT*Config.VIRT_SCALE;
+		this.width = Config.VIRT_SCALE * Number(Settings.getValue('aspect_ratio')); //*Config.ASPECT
 		this.height = Config.VIRT_SCALE;//Math.round(1024/aspect);
 
 		/** @type {SvgObject[]} */
@@ -25,6 +26,22 @@ export default class SvgEngine {
 		this.svg.addChild(this.defs);
 		this.svg.addChild(this.background_layer);
 		this.svg.addChild(this.foreground_layer);
+	}
+
+	/**
+	 * @param  {number} _width  
+	 * @param  {number} _height 
+	 * @param  {number} aspect 
+	 */
+	onResize(_width, _height, aspect) {
+		this.width = Config.VIRT_SCALE * aspect;
+		this.svg.set({
+			'width': this.width.toString(),
+			'viewBox': `${-this.width/2}, ${-this.height/2}, ${this.width}, ${this.height}`
+		});
+
+		this.svg.node.style.transformOrigin = '0 0';
+		this.svg.node.style.transform = `scale(${_height/Config.VIRT_SCALE})`;
 	}
 
 	static createObject(name, prevent_centering = false) {
@@ -110,11 +127,6 @@ export default class SvgEngine {
 				this.height * opts.zoom
 			}`
 		});
-	}
-
-	onResize(width, height) {
-		this.svg.node.style.transformOrigin = '0 0';
-		this.svg.node.style.transform = `scale(${height/Config.VIRT_SCALE})`;
 	}
 
 	addBackgroundObjects(...objs) {
