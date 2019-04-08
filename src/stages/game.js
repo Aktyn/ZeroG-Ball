@@ -12,7 +12,7 @@ import './../styles/game.scss';
 import './../styles/gui.scss';
 
 export default class GameStage extends Stage {
-	constructor(target, listeners) {
+	constructor(target, listeners = {}, map_data = undefined) {
 		super(target, 'game-container', listeners);
 
 		this.game = new GameCore({
@@ -24,7 +24,7 @@ export default class GameStage extends Stage {
 				if(this.gui)
 					this.gui.reloadMapData(this.game.map_data);
 			}
-		});
+		}, map_data);
 		this.gui = new GameGUI({
 			onReturnToMenu: () => {
 				if(this.game) {

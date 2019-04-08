@@ -1,3 +1,33 @@
 .menu-container {
 	padding: 10px 0px;
+
+	.avaible_maps_list {
+		margin: 5px 0px;
+		// width: min-content;
+		display: inline-grid;
+		grid-template-rows: auto;
+		align-items: center;
+		justify-content: center;
+
+		& > * {
+			padding: 0px 0px;
+			min-width: 200px;
+			height: 25px;
+			line-height: 25px;
+			display: inline-table;
+			cursor: pointer;
+			&:hover {
+				// background-color: #fff2;
+				background: linear-gradient(90deg, #fff0 0%, #B0BEC580 50%, #fff0 100%);
+			}
+			&:not(:last-child)::after {
+				//border-bottom: 1px solid #78909C;
+				content: '';
+				display: block;
+				height: 1px;
+				width: 100%;
+				background: linear-gradient(90deg, #fff0 0%, #B0BEC5 50%, #fff0 100%);
+			}
+		}
+	}
 }

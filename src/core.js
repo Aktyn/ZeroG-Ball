@@ -13,26 +13,27 @@ let current_stage = null;
  */
 function initMenu(main_div) {
 	current_stage = new MenuStage(main_div, {
-		onStart: function() {
+		onStart: function(map_data) {
 			current_stage.close();
-			initGame(main_div);
+			initGame(main_div, map_data);
 		}
 	});
 
-	current_stage.listeners.onStart();//temp test
+	//current_stage.listeners.onStart();//temp test
 }
 
 /**
  * Initializes the game
  * @param {Node} main_div
+ * @param {{name: string, json: any}} map_data
  */
-function initGame(main_div) {
+function initGame(main_div, map_data) {
 	current_stage = new GameStage(main_div, {
-		onExit() {//TODO - invoke from game class
+		onExit() {
 			current_stage.close();
 			initMenu(main_div);
 		}
-	});
+	}, map_data);
 
 	//current_stage.listeners.onEnd();//temp test
 }

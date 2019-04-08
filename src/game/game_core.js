@@ -31,13 +31,13 @@ const ZOOM_STRENGTH = 0.1;
 const CAMERA_SMOOTHNESS = 0.003;
 
 export default class GameCore extends Map {
-	constructor(listeners = {}) {
+	constructor(listeners = {}, map_data = undefined) {
 		super();//map
 
 		this.listeners = listeners;
 
-		this.map_data = new MapData();
-		//super.load(this.map_data);
+		this.map_data = new MapData(map_data);
+		super.load(this.map_data);
 
 		this.steering = {
 			left:	false,
@@ -157,9 +157,9 @@ export default class GameCore extends Map {
 				}
 			}
 
-			if(!this.paused) {
+			/*if(!this.paused) {
 				super.addTestCircle(super.castCoords(this.convertCoords(e)));
-			}
+			}*/
 		}
 
 		this.last_mouse_coords = null;

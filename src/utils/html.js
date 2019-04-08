@@ -1,5 +1,3 @@
-//export default (function() {
-
 function assert(condition, message) {
     if(!condition)
         throw new Error(message || "Assertion failed");
@@ -39,7 +37,7 @@ const static_methods = {//static methods
 
 	/** 
 	*	@param {string} value 
-	*	@returns {Node & extender}
+	*	@returns {Node & typeof extender}
 	*/
 	create: function(value) {//creates DOM HTMLElement
 		var new_element = document.createElement( justLettersAndDigits(value) );
@@ -249,7 +247,7 @@ function smartArrayExtend(arr) {
 
 /**
  * Description
- * @param {string|Node|HTMLElement} value
+ * @param {string|Node|HTMLElement|Window} value
  * @returns {Node & extender}
  */
 function _self(value) {
