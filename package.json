@@ -2,13 +2,14 @@
 	"name": "zerog-ball",
 	"version": "2.0.0",
 	"description": "Login game created for university project",
-	"main": "src/main.js",
+	"main": "electron_src/main.js",
 	"scripts": {
 		"dev": "webpack-dev-server --config ./webpack.config.js",
 		"build": "rm -rf dist && webpack --config ./webpack.config.js",
 		"publish": "rm -rf dist && NODE_ENV='production' webpack --config ./webpack.config.js -p",
 		"w:publish": "set NODE_ENV=production&&webpack --config ./webpack.config.js -p",
-		"test": "BABEL_DISABLE_CACHE=1 node ./tests/main.js"
+		"test": "BABEL_DISABLE_CACHE=1 node ./tests/main.js",
+        "electron": "webpack --config ./webpack.config.js && electron ."
 	},
 	"repository": {
 		"type": "git",
