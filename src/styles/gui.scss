@@ -9,6 +9,7 @@ $header-size: 35px;
 	align-items: center;
 	justify-content: space-between;
 	height: 100%;
+	position: relative;
 
 	& > header {
 		pointer-events: auto;
@@ -369,7 +370,9 @@ $header-size: 35px;
 				    	border-radius: 0px;
 				    	background-color: #fff;
 
-				    	height: $h;
+				    	height: $h !important;
+				    	margin: 0px;
+				    	padding: 0px;
 				    	&:not(button) {
 				    		line-height: $h;
 				    		color: #607D8B;
@@ -377,6 +380,11 @@ $header-size: 35px;
 				    		transition: background-color 0.2s ease-in-out;
 				    	}
 				    	white-space: nowrap;
+				    }
+
+				    & > button {
+				    	padding: 4px 0px;
+				    	line-height: auto;
 				    }
 
 				    & > div:not(.selected) {//item to select
@@ -425,5 +433,88 @@ $header-size: 35px;
 
 	&:not(.mode-0) .restart-btn {
 		display: none;
+	}
+
+	.game-info {
+		position: absolute;
+		right: 0px;
+		top: 0px;
+
+		padding: 0px 5px;
+		text-align: right;
+
+		transform: translateY($header-size);
+		transition: transform 0.4s 200ms ease-in-out;
+
+		& > * {
+			font-size: 14px;
+			margin: 5px 0px;
+		}
+	}
+
+	header.hidden ~ .game-info {
+		transform: translateY(0px);
+	}
+}
+
+.game-gui-container.finished {
+	pointer-events: auto;
+	display: grid;
+	grid-template-columns: auto;
+	grid-template-rows: auto;
+	align-items: center;
+	justify-content: center;
+
+	& > article {
+		width: auto;
+		min-width: 400px;
+		padding: 10px;
+		border-radius: 5px;
+		box-shadow: 0px 1px 5px #0008;
+		background-color: #fff;
+		color: #455A64;
+		&, * {
+			font-size: 14px;
+		}
+
+		h1 {
+			font-size: 17px;
+		}
+
+		.record-info {
+			color: #ef5350;
+			font-weight: bold;
+			margin-top: 5px; 
+		}
+
+		opacity: 0;
+		animation: show-in 0.7s ease-in-out forwards;
+
+		& > * {
+			animation: show-in 0.3s cubic-bezier(.36,.07,.19,.97) forwards;
+
+			opacity: 0;
+			transform: translateY(-50px);
+
+			@keyframes show-in {
+				0% {
+					opacity: 0;
+					transform: translateY(-50px);
+				}
+				50% {
+					//opacity: 0.5;
+				}
+				100% {
+					opacity: 1;
+					transform: translateY(0px);
+				}
+			}
+
+			@for $i from 1 through 10 {//number of children of article selector
+				&:nth-child(#{$i}) {
+					animation-delay: #{$i * 50ms};
+				}
+			}
+		}
 	}
 }

@@ -1,6 +1,15 @@
 //@ts-check
 import Config from './config';
 
+/**
+ * @param  {{x: number, y: number, w: number, h: number, rot: number}} t1
+ * @param  {{x: number, y: number, w: number, h: number, rot: number}} t2
+ * @return {boolean}
+ */
+function transformEquals(t1, t2) {
+	return t1.x === t2.x && t1.y === t2.y && t1.w === t2.w && t1.h === t2.h && t1.rot === t2.rot;
+}
+
 export default class SvgObject {
 	constructor(name, prevent_centering = false) {
 		this.name = name;
@@ -13,6 +22,7 @@ export default class SvgObject {
 			h: 1,
 			rot: 0
 		};
+		this.prev_transform = JSON.parse(JSON.stringify(this.transform));
 		this.scale_changed = false;
 
 		if(!prevent_centering) {
@@ -37,46 +47,40 @@ export default class SvgObject {
 		this.node.remove();
 	}
 
-	/*getNode() {
-		return this.node;
-	}*/
+	_preserveTransform() {
+		this.prev_transform.x 	= this.transform.x;
+		this.prev_transform.y 	= this.transform.y;
+		this.prev_transform.w 	= this.transform.w;
+		this.prev_transform.h 	= this.transform.h;
+		this.prev_transform.rot	= this.transform.rot;
+	}
 
 	/** @param {number} dt */
 	update(dt, scale_in_transform = false) {//updates object transform
+		if(transformEquals(this.transform, this.prev_transform))
+			return;
+		this._preserveTransform();
+
 		if(!scale_in_transform && this.scale_changed === true) {
-			if(this.name === 'circle') {
-				//@ts-ignore
+			if(this.name === 'circle')
 				this.node.setAttributeNS(null, 'r', Config.VIRT_SCALE/2 * this.transform.w);
-				//this.node.setAttributeNS(null, 'cx', this.transform.x*Config.VIRT_SCALE/2);
-				//this.node.setAttributeNS(null, 'cy', this.transform.y*Config.VIRT_SCALE/2);
-			}
 			else {
-				//@ts-ignore
+				
 				this.node.setAttributeNS(null, 'width', Config.VIRT_SCALE * this.transform.w);
-				//@ts-ignore
 				this.node.setAttributeNS(null, 'height', Config.VIRT_SCALE * this.transform.h);
-				//this.node.setAttributeNS(null, 'x', -Config.VIRT_SCALE/2 * this.transform.w +
-				//	this.transform.x*Config.VIRT_SCALE/2);
-				//this.node.setAttributeNS(null, 'y', -Config.VIRT_SCALE/2 * this.transform.h +
-				//	this.transform.y*Config.VIRT_SCALE/2);
-				//@ts-ignore
+				
 				this.node.setAttributeNS(null, 'x', -Config.VIRT_SCALE/2 * this.transform.w);
-				//@ts-ignore
 				this.node.setAttributeNS(null, 'y', -Config.VIRT_SCALE/2 * this.transform.h);
 			}
 
 			this.scale_changed = false;
 		}
 
-		//if(this.transform.rot !== 0) {
-			//this.node.setAttributeNS(null, 'transform-origin', `${
-			//	this.transform.x*Config.VIRT_SCALE/2} ${this.transform.y*Config.VIRT_SCALE/2}`);
-			this.node.setAttributeNS(null, 'transform', `translate(${
-				this.transform.x*Config.VIRT_SCALE/2} ${
-				this.transform.y*Config.VIRT_SCALE/2}) rotate(${this.transform.rot/Math.PI*180}) ${
-					scale_in_transform ? `scale(${this.transform.w}, ${this.transform.h})` : ''
-				}`);
-		//}
+		this.node.setAttributeNS(null, 'transform', `translate(${
+			this.transform.x*Config.VIRT_SCALE/2} ${
+			this.transform.y*Config.VIRT_SCALE/2}) rotate(${this.transform.rot/Math.PI*180}) ${
+				scale_in_transform ? `scale(${this.transform.w}, ${this.transform.h})` : ''
+			}`);
 	}
 
 	/** @param {SvgObject | Node} child */

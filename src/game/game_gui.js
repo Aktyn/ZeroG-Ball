@@ -1,11 +1,13 @@
 //@ts-check
 import $ from './../utils/html';
+import MapRecords from './../game/map_records';
+import Common from './../utils/common';
 import Switcher from './../utils/switcher';
 import Slider from './../utils/slider';
 
 import {OBJECTS, BACKGROUNDS} from './predefined_assets';
 import Object2D, {Type} from './objects/object2d';
-import MapData from './map_data';
+import MapData, {AVAIBLE_MAPS} from './map_data';
 import Settings from './settings';
 
 export default class GameGUI {
@@ -17,12 +19,14 @@ export default class GameGUI {
 		this.mode = 0;//0
 		this.download_export_confirm = null;
 		this.map_data = null;
+		//this.map_name_holder = '';//AVAIBLE_MAPS[0].name;
 
 		this.selected_asset = null;
 		/** @type {Object2D} */
 		this.selected_object = null;
 
 		this.container = $.create('div').setClass('game-gui-container mode-0').addChild(
+			//HEADER
 			this.header = $.create('header')/*.addClass('hidden')*/.addChild(
 				$.create('button').addClass('menu-btn').on('click', () => {
 					if(!this.header)
@@ -54,13 +58,15 @@ export default class GameGUI {
 					this.menu_return_btn = $.create('button').addClass('exit-btn')
 						.text('POWRÓT DO MENU').on('click', this.tryReturnToMenu.bind(this))
 				)
-			)
-		).addChild(//GUI CENTER
+			),
+
+			//GUI CENTER
 			this.gui_center = $.create('div').addClass('gui-center').on('click', e => {
 				if(e.target === this.gui_center && this.is_view_open)
 					this.closeView();
-			})
-		).addChild( //EDIT MENU
+			}),
+
+			//EDIT MENU
 			$.create('div').addClass('edit-tools').addChild(
 				this.main_edit = $.create('div').addClass('main'),
 
@@ -80,6 +86,12 @@ export default class GameGUI {
 						})
 					)
 				)
+			),
+
+			//GAME INFO
+			this.game_info = $.create('div').addClass('game-info').addChild(
+				this.map_name = $.create('div').text(''),
+				this.elapsed_time = $.create('div').text('00:00')
 			)
 		);
 
@@ -118,6 +130,7 @@ export default class GameGUI {
 
 		//this.showSettings();//temp test
 		//this.changeMode(1);//temp test
+		//this.onMapFinished(1337 * 69);//temp test
 	}
 
 	getNode() {
@@ -134,7 +147,10 @@ export default class GameGUI {
 
 		if(this.mode === 1) {//edit mode open
 			this.showAssetsList();
+			this.game_info.setStyle({'display': 'none'});
 		}
+		else
+			this.game_info.setStyle({'display': 'inline-block'});
 
 		//edit mode pauses game physics, play mode reloads map
 		if(typeof this.listeners.onModeChange === 'function')
@@ -149,6 +165,23 @@ export default class GameGUI {
 			else
 				div.removeClass('selected');
 		});
+	}
+
+	/**
+	 * @param {string} name
+	 */
+	setMapName(name) {
+		//this.map_name_holder = name;
+		this.map_name.text(name);
+	}
+
+	/** 
+	 * @param {number} time elapsed game time in miliseconds
+	 */
+	setTimer(time) {
+		let t = Common.milisToTime(time|0, ':');
+		if(this.elapsed_time.innerText !== t)
+			this.elapsed_time.text(t);
 	}
 
 	showAssetsList() {
@@ -462,5 +495,84 @@ export default class GameGUI {
 
 		this.is_view_open = true;
 		this.container.addClass('view-open');
+	}
+
+	/**
+	 * @param  {string} name name of completed map
+	 * @param  {number} time elapsed time in miliseconds
+	 * @param  {boolean} edited
+	 */
+	onMapFinished(name, time, edited) {
+		//TODO - use edited param to display different raport
+		this.closeView();
+
+		let current_record = MapRecords.getRecord(name);
+		let new_record = current_record === null ? true : (current_record > time);
+
+		let current_map_index = AVAIBLE_MAPS.findIndex(map => map.name === name);
+		let next_map = AVAIBLE_MAPS[current_map_index+1] || null;
+
+		let next_map_info = $.create('div');
+
+		if(next_map === null)
+			next_map_info.text('Wszystkie poziomy w grze zostały odblokowane. Gratulacje.');
+		else {
+			next_map_info.addChild(
+				$.create('label').text('Nowy poziom odblokowany: ').addChild(
+					$.create('strong').text( next_map.name )
+				),
+				$.create('br'),
+				$.create('button').text('GRAJ').setStyle({
+					'margin-top': '5px',
+					'border': '1px solid #B0BEC5'
+				}).on('click', () => {
+					if(typeof this.listeners.onMapStart === 'function')
+						this.listeners.onMapStart(next_map);
+				})
+			);
+		}
+
+		this.container.text('').addClass('finished').addChild(
+			$.create('article').addChild(
+				$.create('h1').text('GRATULACJE!'),
+				$.create('div').text('Ukończony poziom: ').addChild(
+					$.create('strong').text( name )
+				),
+				$.create('div').text('Twój czas: ').addChild(
+					$.create('strong').text( Common.milisToTime(time, ' ', {
+						hours: ' godzin', 
+						minutes: ' minut',
+						seconds: ' sekund'
+					}))
+				),
+				$.create('div').setClass(new_record ? 'record-info' : '')
+					.text(
+						new_record ? 'Nowy rekord!' : `Rekord: ${Common.milisToTime(current_record, ' ', {
+							hours: ' godzin', 
+							minutes: ' minut',
+							seconds: ' sekund'
+						})}`
+					),
+				$.create('hr'),
+
+				$.create('div').setClass('nextlvl-info').addChild(
+					next_map_info
+				),
+
+				$.create('hr'),
+				$.create('button').text('POWTÓRZ POZIOM').on('click', () => {
+					if(typeof this.listeners.onMapStart === 'function') {
+						this.listeners.onMapStart(
+							AVAIBLE_MAPS.find(map => map.name === name)
+						);
+					}
+				}),
+				$.create('br'),
+				this.menu_return_btn = $.create('button').addClass('exit-btn')
+					.text('POWRÓT DO MENU').on('click', this.tryReturnToMenu.bind(this)).setStyle({
+						'margin-top': '10px'
+					})
+			)
+		);
 	}
 }

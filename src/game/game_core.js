@@ -1,18 +1,20 @@
 // @ts-check
 import $ from './../utils/html';
-import Map from './map';
+import Map, {STATE} from './map';
 import MapData from './map_data';
 import Config from './config';
 //import Settings from './settings';
 import Player from './objects/player';
 import Object2D from './objects/object2d';
+import {Body} from './simple_physics/body';
+import handleCollision from './collision_handler';
 
 /**
 * Starts an update loop
 * @param {GameCore} self
 */
 function runLoop(self) {
-	let last = 0, dt;
+	let last = performance.now(), dt = 0;
 
 	var step = function(time) {
 		dt = time - last;
@@ -23,12 +25,12 @@ function runLoop(self) {
 			window.requestAnimationFrame(step);
 		}
 	};
-	step(0);
+	step(last);
 }
 
-//let t = 0;//tmp
-const ZOOM_STRENGTH = 0.1;
 const CAMERA_SMOOTHNESS = 0.003;
+const ZOOM_SMOTHNESS = 0.006;
+const ZOOM_STRENGTH = 0.2;
 
 export default class GameCore extends Map {
 	constructor(listeners = {}, map_data = undefined) {
@@ -48,6 +50,9 @@ export default class GameCore extends Map {
 		};
 
 		this._running = false;
+		this.elapsed_time = 0;
+
+		this.target_zoom = 1;
 
 		//this.mouse_pressed = false;
 		this.last_mouse_coords = null;
@@ -72,6 +77,7 @@ export default class GameCore extends Map {
 
 	run() {
 		this._running = true;
+		this.elapsed_time = 0;
 		runLoop(this);
 
 		this.spawnPlayer();
@@ -98,6 +104,14 @@ export default class GameCore extends Map {
 	}
 
 	/**
+	*	@param {Body} A
+	*	@param {Body} B
+	*/
+	onCollision(A, B) {
+		handleCollision(this, A, B);
+	}
+
+	/**
 	* @param {number} w
 	* @param {number} h
 	* @param {number} aspect
@@ -118,10 +132,11 @@ export default class GameCore extends Map {
 	onMouseWheel(e) {
 		let dt = Math.max(-1, Math.min(1, e.wheelDelta || -e.detail));
 
-		let new_zoom = this.camera.zoom*(1-ZOOM_STRENGTH*dt);
-		new_zoom = Math.max(0.2, Math.min(new_zoom, this.background.getMaxZoom(this.aspect)));
+		this.target_zoom = this.camera.zoom*(1-ZOOM_STRENGTH*dt);
+		this.target_zoom = Math.max(0.2, 
+			Math.min(this.target_zoom, this.background.getMaxZoom(this.aspect)));
 		
-		super.updateCamera(this.camera.x, this.camera.y, new_zoom);
+		//super.updateCamera(this.camera.x, this.camera.y, this.target_zoom);
 	}
 
 	onMouseDown(e) {
@@ -148,7 +163,7 @@ export default class GameCore extends Map {
 				this.map_data.addObject(this.stamp);
 				super.addObjectClone(this.stamp);
 			}
-			else if(this.paused) {//no stamp and edit mode
+			else if(this.state === STATE.EDIT_MODE) {//no stamp and edit mode
 				//selecting object under mouse cursor
 				if(typeof this.listeners.onObjectSelect === 'function') {
 					this.listeners.onObjectSelect(
@@ -171,7 +186,7 @@ export default class GameCore extends Map {
 			this.stamp.setPos(c.x, c.y);
 		}
 
-		if(this.last_mouse_coords === null || !this.paused)
+		if(this.last_mouse_coords === null || this.state === STATE.RUNNING)
 			return;
 
 		let coords = this.convertCoords(e);
@@ -220,14 +235,29 @@ export default class GameCore extends Map {
 		}
 	}
 
-	reload(reset_camera = false) {
-		super.load(this.map_data, reset_camera);
+	/** @param {number} state */
+	changeState(state) {
+		if(this.state === STATE.FINISHED)
+			return;
+		if(state === STATE.RUNNING)
+			this.state = STATE.RUNNING;//this.game.paused = false;
+		else
+			this.state = STATE.EDIT_MODE;
+		this.stamp = null;
+		this.reload(state === STATE.RUNNING);
+	}
 
-		if(!this.paused) {
+	reload(reset_camera = false) {
+		if(this.state === STATE.FINISHED)
+			return;
+		super.load(this.map_data, reset_camera);
+		this.elapsed_time = 0;
+
+		if(this.state === STATE.RUNNING) {
 			this.spawnPlayer();
 			this.graphics.getNode().focus();
 		}
-		else {
+		else if(this.state === STATE.EDIT_MODE) {
 			this.player = null;
 			if(typeof this.listeners.onMapLoaded === 'function')
 				this.listeners.onMapLoaded();
@@ -295,16 +325,30 @@ export default class GameCore extends Map {
 
 	/** @param {number} dt */
 	updateCameraSmoothly(dt) {
+		let zx = this.target_zoom - this.camera.zoom;
+
+		if(!this.player) {
+			if(Math.abs(zx) < 0.0001)
+				return;
+			this.camera.zoom += zx * dt * ZOOM_SMOTHNESS;
+			super.updateCamera(this.camera.x, this.camera.y, this.camera.zoom);
+			return;
+		}
 		let dx = this.player.getTransform().x - this.camera.x;
 		let dy = this.player.getTransform().y - this.camera.y;
 
-		if(Math.abs(dx) < 1/Config.VIRT_SCALE && Math.abs(dy) < 1/Config.VIRT_SCALE)
+		if(Math.abs(dx) < 1/Config.VIRT_SCALE && 
+			Math.abs(dy) < 1/Config.VIRT_SCALE && 
+			Math.abs(zx) < 0.0001)
+		{
 			return;
+		}
 
-		let factor = dt * CAMERA_SMOOTHNESS / this.camera.zoom;
+		let factor = Math.min( 1, dt * CAMERA_SMOOTHNESS / this.camera.zoom );
 
-		this.camera.x += dx * Math.min(1, factor);
-		this.camera.y += dy * Math.min(1, factor);
+		this.camera.x += dx * factor;
+		this.camera.y += dy * factor;
+		this.camera.zoom += zx * dt * ZOOM_SMOTHNESS;
 		super.updateCamera(this.camera.x, this.camera.y, this.camera.zoom);
 	}
 
@@ -313,22 +357,25 @@ export default class GameCore extends Map {
 		if(dt > 1000)
 			dt = 1000;
 
-		if(this.player) {
-			if(this.steering.left)
-				this.player.move({x: -1, y: 0}, dt);
-			if(this.steering.right)
-				this.player.move({x: 1, y: 0}, dt);
-			if(this.steering.up)
-				this.player.move({x: 0, y: -1}, dt);
-			if(this.steering.down)
-				this.player.move({x: 0, y: 1}, dt);
-			if(this.steering.slow)
-				this.player.slowDown(dt);
+		if(this.state === STATE.RUNNING) {
+			this.elapsed_time += dt;
+			this.listeners.onTimerUpdate(this.elapsed_time);
 
-			if(!this.paused)
-				this.updateCameraSmoothly(dt);
+			if(this.player) {
+				if(this.steering.left)
+					this.player.move({x: -1, y: 0}, dt);
+				if(this.steering.right)
+					this.player.move({x: 1, y: 0}, dt);
+				if(this.steering.up)
+					this.player.move({x: 0, y: -1}, dt);
+				if(this.steering.down)
+					this.player.move({x: 0, y: 1}, dt);
+				if(this.steering.slow)
+					this.player.slowDown(dt);
+			}
 		}
 
+		this.updateCameraSmoothly(dt);
 		super.update(dt);
 	}
 }

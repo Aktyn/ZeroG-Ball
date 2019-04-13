@@ -16,6 +16,11 @@ import CollisionListener from './simple_physics/collision_listener';
 import {TEXTURES} from './predefined_assets';
 // import ball_texture from './../img/ball_texture.png';
 
+export const STATE = {
+	RUNNING: 0,
+	EDIT_MODE: 1,
+	FINISHED: 2
+};
 
 const BG_SMOOTHING = 0.8;
 const MAP_SIZE_X = 3;//3;
@@ -29,7 +34,8 @@ export default class Map extends CollisionListener {
 		this.graphics = new SvgEngine();
 		this.graphics.foreground_layer.addClass('cartoon-style');
 
-		this.paused = false;
+		//this.paused = false;
+		this.state = STATE.RUNNING;
 
 		this.camera = {
 			x: 0, y: 0, zoom: 1
@@ -89,18 +95,6 @@ export default class Map extends CollisionListener {
 	onResize(w, h, aspect) {
 		this.graphics.onResize(w, h, aspect);
 		this.graphics.updateView(this.camera);
-	}
-
-	/**
-	*	@param {Body} A
-	*	@param {Body} B
-	*/
-	onCollision(A, B) {
-		//console.log(A.getCustomData(), B.getCustomData());
-		if(A.getCustomData() === this.player) {
-			if(B.getCustomData().getClassName() === 'exit')
-				console.log('player has reach the exit');
-		}
 	}
 
 	/** 
@@ -290,7 +284,7 @@ export default class Map extends CollisionListener {
 
 	/** @param {number} dt */
 	update(dt) {
-		if(!this.paused)
+		if(this.state === STATE.RUNNING)//if(!this.paused)
 			this.physics.update();
 		this.graphics.update(dt);
 	}

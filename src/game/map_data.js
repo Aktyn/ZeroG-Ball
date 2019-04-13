@@ -59,10 +59,16 @@ function fixRot(rot) {
 const empty_map = {"background":0,"objects":[]};
 /*{"background":0,"objects":[{"shape_type":0,"physic_type":0,"x":0,"y":0.85,"w":2.1,"h":0.1,"rot":0.05235987755982988},{"shape_type":0,"physic_type":0,"x":-1.6071675146146625,"y":-0.325174468614357,"w":0.05,"h":1,"rot":0,"class_name":"red"},{"shape_type":0,"physic_type":0,"x":2.0169907393081004,"y":-0.5888443991652759,"w":0.05,"h":1.2,"rot":0,"class_name":"red"},{"shape_type":0,"physic_type":0,"x":1.860833112568161,"y":0.7254823260434063,"w":0.1,"h":0.1,"rot":0,"class_name":"crate"},{"shape_type":0,"physic_type":0,"x":-1.4445033200938926,"y":0.5498049914858101,"w":0.1,"h":0.1,"rot":0,"class_name":"crate"},{"shape_type":0,"physic_type":0,"x":-1.4705295912172156,"y":-1.4412048001669457,"w":0.1,"h":0.1,"rot":0,"class_name":"crate"},{"shape_type":0,"physic_type":0,"x":-1.268825990011461,"y":-1.6624281103505851,"w":0.1,"h":0.1,"rot":0,"class_name":"crate"},{"shape_type":0,"physic_type":0,"x":-1.0736289565865362,"y":-1.8771448525876473,"w":0.1,"h":0.1,"rot":0,"class_name":"crate"},{"shape_type":0,"physic_type":0,"x":-0.8589122198191191,"y":-2.0723418909849762,"w":0.1,"h":0.1,"rot":0,"class_name":"crate"},{"shape_type":0,"physic_type":0,"x":-0.6441954830517023,"y":-2.078848458931554,"w":0.1,"h":0.1,"rot":0,"class_name":"crate"},{"shape_type":0,"physic_type":0,"x":0.7156771831419378,"y":-2.01138129866444,"w":1.2,"h":0.1,"rot":0.08726646259971647,"class_name":"crate"},{"shape_type":1,"physic_type":1,"x":1.6457124043715865,"y":0.3259155938069219,"w":0.2,"h":1,"rot":0,"class_name":"exit"}]};*/
 
+
 /** @type {{name: string, json: State}[]} */
-export const AVAIBLE_MAPS = [
+export const AVAIBLE_MAPS = [//NOTE - names should be unique
 	{
 		name: 'Rozgrzewka',
+		//@ts-ignore
+		json: require('./../maps/1.json') 
+	},
+	{
+		name: 'TODO - level 2',
 		//@ts-ignore
 		json: require('./../maps/1.json') 
 	}
@@ -79,10 +85,12 @@ class MapData {
 			objects: []
 		}
 
+		this.name = (map_data && map_data.name) || 'Unknown map name';
+
 		/** @type {State[]} */
 		this.history = [];
 
-		this.import((map_data && map_data.json) || empty_map);
+		this.import((map_data && map_data.json) || empty_map, true);
 	}
 
 	pushHistory() {
@@ -91,6 +99,9 @@ class MapData {
 			this.history.shift();
 	}
 
+	get wasEdited() {
+		return this.history.length > 0;
+	}
 
 	/** @param {ObjectSchema | Object2D} schema */
 	addObject(schema) {
@@ -199,8 +210,9 @@ class MapData {
 	}
 
 	/** @param {string|State} data */
-	import(data) {
-		this.pushHistory();
+	import(data, ignore_history = false) {
+		if(!ignore_history)
+			this.pushHistory();
 		if(typeof data === 'string')
 			this.state = JSON.parse(data);
 		else

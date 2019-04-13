@@ -1,8 +1,10 @@
 //@ts-check
 import $ from './../utils/html';
+import Common from './../utils/common';
 import Stage from './stage';
 import './../styles/menu.scss';
 import {AVAIBLE_MAPS} from './../game/map_data';
+import MapRecords from './../game/map_records';
 
 const _void_func = ()=>{};
 
@@ -11,12 +13,21 @@ class MapItem {
 	 * @param {{name: string, json: any}} data
 	 * @param {(data: any) => void | undefined} listener
 	 */
-	constructor( data, listener) {
-		this.data = data;
+	constructor(data, listener) {
+		this.data = JSON.parse(JSON.stringify(data));
 		this.listener = listener;
+		let record = MapRecords.getRecord(data.name);
+
 		this.widget = $.create('div').on('click', this.onClick.bind(this)).addChild(
 			$.create('div').text(data.name).setStyle({'font-weight': 'bold'}),
-			$.create('div').text('TODO - best time')
+			$.create('div').setStyle({'color': '#90A4AE'}).text( 
+				record === null ? '---' : 
+				`Rekord: ${Common.milisToTime(record, ' ', {
+					hours: ' godzin', 
+					minutes: ' minut',
+					seconds: ' sekund'
+				})}` 
+			)
 		);
 	}
 
@@ -46,11 +57,9 @@ export default class MenuStage extends Stage {
 		}
 
 		this.container.addChild(
-			//this.start_btn, 
-			$.create('h1').text('Dostępne mapy'),
+			$.create('h1').text('Dostępne poziomy'),
 			this.avaible_maps,
-			//$.create('hr'),
-			$.create('div').text('Ukończ wszystkie dostępne mapy aby odblokować kolejne').setStyle({
+			$.create('div').text('Ukończ wszystkie dostępne poziomy aby odblokować kolejne').setStyle({
 				'color': '#90A4AE'
 			})
 		);
@@ -59,6 +68,8 @@ export default class MenuStage extends Stage {
 		//secrets
 		$(window).on('keydown', this.onKey.bind(this));
 		this.secret_code = '';
+
+		//setTimeout(()=>this.listeners.onStart(JSON.parse(JSON.stringify(AVAIBLE_MAPS[0]))), 100);//TEMP
 	}
 
 	/** @param {KeyboardEvent} e */

@@ -1,7 +1,3 @@
-/*
-const webpack = require('webpack');
-*/
-
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -15,8 +11,13 @@ const CONFIG = {
 		main: './src/main.js'
 	},
 	output: {
-	  path:	path.resolve(__dirname, 'dist'),
-	  filename: 'main.js',
+	  	path:	path.resolve(__dirname, 'dist'),
+	  	filename: 'main.js',
+	},
+	watch: true,
+	watchOptions: {
+  		poll: true,
+  		ignored: /node_modules/
 	},
 	mode: isDevelopment ? 'development' : 'production',
 	devtool: isDevelopment && "source-map",

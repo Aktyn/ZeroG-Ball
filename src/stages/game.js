@@ -3,7 +3,9 @@ import $ from './../utils/html';
 import Stage from './stage';
 
 import GameCore from './../game/game_core';
+import {STATE} from './../game/map';
 import GameGUI from './../game/game_gui';
+import MapRecords from './../game/map_records';
 
 // import Config from './../game/config';
 import Settings from './../game/settings';
@@ -23,6 +25,23 @@ export default class GameStage extends Stage {
 			onMapLoaded: () => {
 				if(this.gui)
 					this.gui.reloadMapData(this.game.map_data);
+			},
+			/** @param {number} time */
+			onTimerUpdate: (time) => {
+				if(this.gui)
+					this.gui.setTimer(time);
+			},
+
+			/**
+			 * @param  {string} name  
+			 * @param  {number} time  
+			 * @param  {boolean} edited
+			 */
+			onMapFinished: (name, time, edited) => {
+				this.gui.onMapFinished(name, time, edited);
+
+				//NOTE - changing local storage must go after invoking gui method
+				MapRecords.saveRecord(name, time);
 			}
 		}, map_data);
 		this.gui = new GameGUI({
@@ -34,13 +53,10 @@ export default class GameStage extends Stage {
 				this.listeners.onExit();
 			},
 			onModeChange: (mode) => {
-				if(mode === 0)
-					this.game.paused = false;
-				else
-					this.game.paused = true;
-				this.game.stamp = null;
-				this.game.reload(mode === 0);
+				this.game.changeState(mode === 0 ? STATE.RUNNING : STATE.EDIT_MODE);
 			},
+
+			onMapStart: listeners.onMapStart,
 
 			onAssetSelected: this.game.onAssetSelected.bind(this.game),
 			onRestart: () => this.game.reload(true),
@@ -59,6 +75,7 @@ export default class GameStage extends Stage {
 		});
 
 		this.gui.reloadMapData(this.game.map_data);
+		this.gui.setMapName(map_data.name);
 
 		this.container.addChild(
 			this.game.getNode(), this.gui.getNode()
@@ -82,6 +99,9 @@ export default class GameStage extends Stage {
 	close() {
 		window.removeEventListener('resize', this.onResize.bind(this), false);
 		super.close();
+		if(this.game)
+			this.game.destroy();
+		this.gui = null;
 	}
 
 	/**

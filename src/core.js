@@ -29,9 +29,13 @@ function initMenu(main_div) {
  */
 function initGame(main_div, map_data) {
 	current_stage = new GameStage(main_div, {
-		onExit() {
+		onExit: function() {
 			current_stage.close();
 			initMenu(main_div);
+		},
+		onMapStart: function(map) {
+			current_stage.close();
+			initGame(main_div, map);
 		}
 	}, map_data);
 
