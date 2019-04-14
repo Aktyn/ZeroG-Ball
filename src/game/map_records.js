@@ -1,11 +1,12 @@
 //@ts-check
+import {AVAIBLE_MAPS} from './map_data';
 
 /** @param  {string} map_name */
 function build_key(map_name) {
 	return `map_result:${map_name}`;
 }
 
-export default {
+const MapRecords = {
 	/** 
 	 * @param  {string} map_name
 	 * @return {number | null}
@@ -29,5 +30,28 @@ export default {
 			console.log('new map record saved');
 			localStorage.setItem(record_key, time.toString());
 		}
+	},
+
+	clear: () => {
+		for(let map of AVAIBLE_MAPS) localStorage.removeItem(build_key(map.name));
+	},
+
+	/** 
+	 * @param  {string} map_name
+	 * @return {boolean}
+	 */
+	isUnlocked: (map_name) => {
+		if( MapRecords.getRecord(map_name) !== null )
+			return true;
+
+		let curr_index = AVAIBLE_MAPS.findIndex(map => map.name === map_name);
+		if(curr_index === 0)//first map is always avaible for player
+			return true;
+		else if(curr_index > 0)
+			return MapRecords.getRecord( AVAIBLE_MAPS[curr_index-1].name ) !== null;
+		else
+			return false;
 	}
-}
+};
+
+export default MapRecords;

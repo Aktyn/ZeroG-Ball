@@ -1,5 +1,6 @@
 // @ts-check
 import $ from './../utils/html';
+import Common from './../utils/common';
 import Stage from './stage';
 
 import GameCore from './../game/game_core';
@@ -41,7 +42,8 @@ export default class GameStage extends Stage {
 				this.gui.onMapFinished(name, time, edited);
 
 				//NOTE - changing local storage must go after invoking gui method
-				MapRecords.saveRecord(name, time);
+				if(!edited)
+					MapRecords.saveRecord(name, time);
 			}
 		}, map_data);
 		this.gui = new GameGUI({
@@ -54,6 +56,8 @@ export default class GameStage extends Stage {
 			},
 			onModeChange: (mode) => {
 				this.game.changeState(mode === 0 ? STATE.RUNNING : STATE.EDIT_MODE);
+				if(this.game.state === STATE.RUNNING && this.game.map_data.wasEdited)
+					this.gui.setMapName( 'map_'+Common.MD5(Date.now().toString()).substr(0, 8) );
 			},
 
 			onMapStart: listeners.onMapStart,

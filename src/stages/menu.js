@@ -50,17 +50,20 @@ export default class MenuStage extends Stage {
 		this.map_items = [];
 
 		this.avaible_maps = $.create('section').setClass('avaible_maps_list');
-		for(let map of AVAIBLE_MAPS) {
-			let item = new MapItem(map, this.listeners.onStart);
-			this.map_items.push(item);
-			this.avaible_maps.addChild( item.widget );
-		}
+		this.loadAvaibleMaps();
+
+		this.clear_progress_confirm = null;
 
 		this.container.addChild(
 			$.create('h1').text('Dostępne poziomy'),
 			this.avaible_maps,
 			$.create('div').text('Ukończ wszystkie dostępne poziomy aby odblokować kolejne').setStyle({
 				'color': '#90A4AE'
+			}),
+
+			$.create('hr').setStyle({'background-color': '#546E7A'}),
+			this.clear_progress_btn = $.create('button').text('WYCZYŚĆ POSTĘP').on('click', () => {
+				this._tryClearProgress();
 			})
 		);
 
@@ -72,6 +75,17 @@ export default class MenuStage extends Stage {
 		//setTimeout(()=>this.listeners.onStart(JSON.parse(JSON.stringify(AVAIBLE_MAPS[0]))), 100);//TEMP
 	}
 
+	loadAvaibleMaps() {
+		this.avaible_maps.text('');
+		for(let map of AVAIBLE_MAPS) {
+			if(!MapRecords.isUnlocked(map.name))
+				break;
+			let item = new MapItem(map, this.listeners.onStart);
+			this.map_items.push(item);
+			this.avaible_maps.addChild( item.widget );
+		}
+	}
+
 	/** @param {KeyboardEvent} e */
 	onKey(e) {
 		this.secret_code += e.key;
@@ -79,6 +93,33 @@ export default class MenuStage extends Stage {
 			this.secret_code = '';
 		else if(this.secret_code === 'odblokuj')
 			console.log('TODO');
+	}
+
+	_tryClearProgress() {
+		if(!this.clear_progress_btn)
+			return;
+		if(this.clear_progress_confirm === null) {
+			this.clear_progress_btn.text('NA PEWNO?');
+			this.clear_progress_confirm = setTimeout(() => {
+				this.clear_progress_btn.text('WYCZYŚĆ POSTĘP');
+				this.clear_progress_confirm = null;
+			}, 5000);
+		}
+		else {
+			//clearing progress data
+			MapRecords.clear();
+
+			if(this.clear_progress_confirm) {
+				clearTimeout(this.clear_progress_confirm);
+				this.clear_progress_confirm = null;
+			}
+			this.clear_progress_btn.text('WYCZYSZCZONO').setAttrib('disabled', 'true').setStyle({
+				'background-color': '#66BB6A',
+				'color': '#fff'
+			});
+			this.clear_progress_btn = null;
+			this.loadAvaibleMaps();
+		}
 	}
 
 	close() {

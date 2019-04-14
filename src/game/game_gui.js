@@ -40,7 +40,7 @@ export default class GameGUI {
 				$.create('div').addClass('game-buttons').addChild(
 					$.create('button').text('IMPORT').on('click', this.tryImport.bind(this))
 				).addChild(
-					this.map_export_btn =  $.create('button').text('EXPORT')
+					this.map_export_btn = $.create('button').text('EXPORT')
 						.on('click', this.tryExport.bind(this))
 				).addChild(
 					$.create('button').addClass('restart-btn').text('RESTART').on('click', () => {
@@ -503,8 +503,32 @@ export default class GameGUI {
 	 * @param  {boolean} edited
 	 */
 	onMapFinished(name, time, edited) {
-		//TODO - use edited param to display different raport
 		this.closeView();
+
+		if(edited) {
+			this.container.text('').addClass('finished').addChild(
+				$.create('article').addChild(
+					$.create('h1').text('GRATULACJE!'),
+					$.create('div').addChild(
+						$.create('span').text('Własny poziom ukończony w czasie: '),
+						$.create('strong').text(Common.milisToTime(time, ' ', {
+							hours: ' godzin', 
+							minutes: ' minut',
+							seconds: ' sekund'
+						}))
+					),
+					$.create('hr'),
+					this.map_export_btn = $.create('button').text('EXPORTUJ')
+						.on('click', this.tryExport.bind(this)),
+					$.create('br'),
+					this.menu_return_btn = $.create('button').addClass('exit-btn')
+						.text('POWRÓT DO MENU').on('click', this.tryReturnToMenu.bind(this)).setStyle({
+							'margin-top': '10px'
+						})
+				)
+			);
+			return;
+		}
 
 		let current_record = MapRecords.getRecord(name);
 		let new_record = current_record === null ? true : (current_record > time);
