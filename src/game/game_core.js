@@ -54,7 +54,6 @@ export default class GameCore extends Map {
 
 		this.target_zoom = 1;
 
-		//this.mouse_pressed = false;
 		this.last_mouse_coords = null;
 		this.click_pos = {x: 0, y: 0};
 		/** @type {DOMRect} */
@@ -99,8 +98,23 @@ export default class GameCore extends Map {
 	}
 
 	spawnPlayer() {
+		this.target_zoom = 1;
 		this.player = new Player(this.graphics, this.physics);
 		super.addObject( this.player );
+	}
+
+	/** @param {number} damage */
+	onPlayerDamage(damage) {
+		//this.player.setPos(0, 0);
+		//this.player.resetVelocities();
+		
+		this.player.health -= damage;
+
+		if(typeof this.listeners.onPlayerDamage === 'function')
+			this.listeners.onPlayerDamage(this.player.health);
+
+		if(this.player.health <= 0)
+			this.reload();
 	}
 
 	/**
@@ -244,35 +258,35 @@ export default class GameCore extends Map {
 		else
 			this.state = STATE.EDIT_MODE;
 		this.stamp = null;
-		this.reload(state === STATE.RUNNING);
+		this.reload();
 	}
 
-	reload(reset_camera = false) {
+	reload() {
 		if(this.state === STATE.FINISHED)
 			return;
-		super.load(this.map_data, reset_camera);
+		super.load(this.map_data);
 		this.elapsed_time = 0;
 
 		if(this.state === STATE.RUNNING) {
 			this.spawnPlayer();
 			this.graphics.getNode().focus();
 		}
-		else if(this.state === STATE.EDIT_MODE) {
+		else if(this.state === STATE.EDIT_MODE)
 			this.player = null;
-			if(typeof this.listeners.onMapLoaded === 'function')
-				this.listeners.onMapLoaded();
-		}
+
+		if(typeof this.listeners.onMapLoaded === 'function')
+			this.listeners.onMapLoaded();
 	}
 
 	/** @param {string} data */
 	importMap(data) {
 		this.map_data.import(data);
-		this.reload(true);
+		this.reload();
 	}
 
 	clearMap() {
 		this.map_data.removeAll();
-		this.reload(true);
+		this.reload();
 	}
 
 	undoLastChange() {
@@ -285,7 +299,7 @@ export default class GameCore extends Map {
 			super.removeObject(this.stamp);
 			this.stamp = null;
 		}
-		//else
+		
 		if(asset !== null)
 			this.stamp = super.addAsset(asset);
 	}

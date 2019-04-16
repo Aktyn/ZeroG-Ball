@@ -1,6 +1,7 @@
 //@ts-check
 import $ from './../utils/html';
 import MapRecords from './../game/map_records';
+import Player from './../game/objects/player';
 import Common from './../utils/common';
 import Switcher from './../utils/switcher';
 import Slider from './../utils/slider';
@@ -9,6 +10,35 @@ import {OBJECTS, BACKGROUNDS} from './predefined_assets';
 import Object2D, {Type} from './objects/object2d';
 import MapData, {AVAIBLE_MAPS} from './map_data';
 import Settings from './settings';
+
+function createClockWidget() {
+	let widget = $.create('span').setClass('clock-widget');
+	widget.innerHTML = `<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+		<circle r="9" cx="10" cy="10"></circle>
+		<text x="10" y="15">
+			<tspan x="10" dy="0">UmFkZWsK</tspan>
+			<tspan x="10" dy="2">S2Fyb2wK</tspan>
+		</text>
+		
+		<line x1="10" y1="10" x2="10" y2="5"/>
+		<line x1="10" y1="10" x2="10" y2="1"/>
+
+		<circle r="0.75" cx="10" cy="10" stroke-width="0"></circle>
+	</svg>`;
+	/** @param {MouseEvent} event */
+	widget.onmousedown = (event) => {
+		if(event.button !== 2)
+			return;
+		if(widget.hasClass('open'))
+			widget.removeClass('open');
+		else
+			widget.addClass('open');
+		event.preventDefault();
+		event.stopPropagation();
+	};
+	widget.oncontextmenu = () => false;
+	return widget;
+}
 
 export default class GameGUI {
 	constructor(listeners = {}) {
@@ -91,7 +121,11 @@ export default class GameGUI {
 			//GAME INFO
 			this.game_info = $.create('div').addClass('game-info').addChild(
 				this.map_name = $.create('div').text(''),
-				this.elapsed_time = $.create('div').text('00:00')
+				$.create('div').setClass('timer-container').addChild(
+					this.elapsed_time = $.create('span').text('00'),
+					createClockWidget()
+				),
+				this.player_hearts = $.create('div').setClass('hearts')
 			)
 		);
 
@@ -157,6 +191,12 @@ export default class GameGUI {
 			this.listeners.onModeChange(this.mode);
 	}
 
+	setHealth(health = Player.INITIAL_HEALTH) {
+		this.player_hearts.text('');
+		for(let i=0; i<health; i++)
+			this.player_hearts.addChild($.create('span'));
+	}
+
 	/** @param {MapData} data */
 	reloadMapData(data) {
 		this.bg_selector.getChildren('div').forEach((div, i) => {
@@ -165,6 +205,20 @@ export default class GameGUI {
 			else
 				div.removeClass('selected');
 		});
+		this.setHealth();
+	}
+
+	/** @param {number} health */
+	onPlayerDamage(health) {
+		this.setHealth(health);
+		let damage_effect = $.create('div').text('DAMAGE');//TODO - style it as a damage effect
+		this.container.addChild(damage_effect);
+		setTimeout(() => {
+			damage_effect.delete();
+		}, 5000);
+		if(health <= 0) {
+			//TODO - kill player notification
+		}
 	}
 
 	/**
@@ -199,7 +253,7 @@ export default class GameGUI {
 		const preview_size = 70;
 
 		for(let [obj_name, obj] of Object.entries(OBJECTS)) {
-			let obj_preview = $.create('div').addClass(obj.theme);
+			let obj_preview = $.create('div').addClass(obj.class_name);
 
 			if(obj.shape === MapData.SHAPE_TYPE.RECT) {
 				let aspect = obj.width / obj.height;
@@ -447,6 +501,7 @@ export default class GameGUI {
 	showSettings() {
 		if(!this.gui_center)
 			return;
+		let auto_aspect = !!Settings.getValue('aspect_auto');
 		this.gui_center.text('').addChild(
 			$.create('div').addClass('view-container').addChild(
 				$.create('header').addChild(
@@ -467,18 +522,36 @@ export default class GameGUI {
 							Settings.setValue('textures', enabled);
 						}).setEnabled( !!Settings.getValue('textures') ).getWidget(),
 
-						$.create('label').text('Proporcje'),
-						new Slider(1, 4, value => {
-							Settings.setValue('aspect_ratio', value);
-						}).setValue( Number(Settings.getValue('aspect_ratio')) ).getWidget(),
+						$.create('label').text('Auto proporcje'),
+						new Switcher(enabled => {
+							Settings.setValue('aspect_auto', enabled);
+							if(!this.aspect_ratio_label || !this.aspect_ratio_slider)
+								return;
+							for(let el of [this.aspect_ratio_label, this.aspect_ratio_slider])
+								el.setStyle({'display': enabled ? 'none' : 'block'});
 
-						$.create('div').setClass('single-row').addChild(
+							if(enabled) {
+								let res = $.getScreenSize();
+								Settings.setValue('aspect_ratio', res.width / res.height);
+							}
+							
+						}).setEnabled( auto_aspect ).getWidget(),
+
+						this.aspect_ratio_label = $.create('label').text('Proporcje').setStyle({
+							'display': auto_aspect ? 'none' : 'block'
+						}),
+						this.aspect_ratio_slider = new Slider(1, 4, value => {
+							Settings.setValue('aspect_ratio', value);
+						}).setValue( Number(Settings.getValue('aspect_ratio')) ).getWidget().setStyle({
+							'display': auto_aspect ? 'none' : 'block'
+						}),
+						/*$.create('div').setClass('single-row').addChild(
 							$.create('button').text('DOPASUJ PROPORCJE').on('click', e => {
 								let res = $.getScreenSize();
 								Settings.setValue('aspect_ratio', res.width / res.height);
 								this.showSettings();
 							})
-						)
+						)*/
 					),
 
 					$.create('hr'),

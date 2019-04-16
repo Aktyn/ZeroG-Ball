@@ -40,6 +40,10 @@ export class Body {
 		return this._custom_data_;
 	}
 
+	resetVelocities() {
+		this.velocity.set(0, 0);
+	}
+
 	/** 
 	* 	@param {number} x
 	* 	@param {number} y

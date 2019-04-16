@@ -117,6 +117,7 @@ $header-size: 35px;
 			box-shadow: 0px 1px 8px #0008;
 			overflow: hidden;
 			font-size: 14px;
+			min-width: 350px;
 
 			header {
 				padding: 0px;
@@ -448,7 +449,112 @@ $header-size: 35px;
 
 		& > * {
 			font-size: 14px;
-			margin: 5px 0px;
+			height: 20px;
+			line-height: 20px;
+			margin: 0px;
+		}
+
+		.timer-container {
+			/*&::after {
+				content: "";
+				display: inline-block;
+				float: right;
+				height: 20px;
+				width: 20px;
+				background-color: yellow;
+			}*/
+			
+			height: 20px;
+			display: grid;
+			grid-template-columns: auto fit-content(100%);
+		}
+
+		.clock-widget {
+			// background-color: red;
+			width: 20px;
+			height: 20px;
+			margin-left: 5px;
+
+			position: relative;
+			pointer-events: auto;
+
+			box-shadow: 0px 1px 2px #0006;
+			border-radius: 20px;
+			transition: box-shadow 0.5s cubic-bezier(.36,.07,.19,.97);
+			&.open {
+				box-shadow: 0px 1px 2px #0000;
+				svg {
+					transform: scale(10);
+				}
+			}
+
+			svg {
+				position: absolute;
+				top: 0px;
+				right: 0px;
+
+				transform-origin: 20px 0px;
+				transition: transform 0.5s cubic-bezier(.36,.07,.19,.97);
+				
+				circle {
+					&:first-child {
+						stroke: #009688;
+						stroke-width: 2px;
+					}
+					fill: #4DB6AC;
+				}
+				line {
+					stroke: #B2DFDB;
+					stroke-width: 2px;
+					stroke-linecap: round;
+					
+					transform-origin: 10px 10px;
+					
+					$speed: 12s;
+					
+					animation: ticktock $speed*12 $speed/2 cubic-bezier(.87,-.41,.19,1.44) infinite;
+					&:nth-child(4) {
+						animation: ticktock-delayed $speed cubic-bezier(.36,.07,.19,.97) infinite;
+						stroke-width: 1px;
+					}
+
+					@keyframes ticktock {
+						@for $i from 0 through 11 {
+							#{$i * 8.3%} {
+								transform: rotate(#{$i * 30deg});
+							}
+						}
+						100% { transform: rotate(360deg); }
+					}
+
+					@keyframes ticktock-delayed {
+						//0% { 	transform: rotate(0deg); 	}
+						//100% {	transform: rotate(360deg);	}
+						@for $i from 0 through 11 {
+							#{$i * 8.3%} {
+								transform: rotate(#{$i * 30deg});
+							}
+						}
+						100% { transform: rotate(360deg); }
+					}
+				}
+
+				text {
+					text-shadow: none;
+					fill: #28afa1;
+					font-size: 1.75px;
+					text-anchor: middle;
+				}
+			}
+		}
+
+		.hearts {
+			& > *::before {
+				display: inline-block;
+				font-size: 18px;
+				color: #ef9a9a;
+				content: "❤";
+			}
 		}
 	}
 

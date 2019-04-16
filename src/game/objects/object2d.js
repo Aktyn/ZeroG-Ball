@@ -79,6 +79,11 @@ export default class Object2D extends SvgObject {
 		return this;
 	}
 
+	resetVelocities() {
+		this.body.resetVelocities();
+		return this;
+	}
+
 	/**
 	* @param {number} x
 	* @param {number} y

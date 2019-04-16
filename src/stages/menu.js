@@ -59,20 +59,24 @@ export default class MenuStage extends Stage {
 			this.avaible_maps,
 			$.create('div').text('Ukończ wszystkie dostępne poziomy aby odblokować kolejne').setStyle({
 				'color': '#90A4AE'
-			}),
-
-			$.create('hr').setStyle({'background-color': '#546E7A'}),
-			this.clear_progress_btn = $.create('button').text('WYCZYŚĆ POSTĘP').on('click', () => {
-				this._tryClearProgress();
 			})
 		);
+
+		if(MapRecords.getRecord(AVAIBLE_MAPS[0].name) !== null) {
+			this.container.addChild(
+				$.create('hr').setStyle({'background-color': '#546E7A'}),
+				this.clear_progress_btn = $.create('button').text('WYCZYŚĆ POSTĘP').on('click', () => {
+					this._tryClearProgress();
+				})
+			);
+		}
 
 
 		//secrets
 		$(window).on('keydown', this.onKey.bind(this));
 		this.secret_code = '';
 
-		//setTimeout(()=>this.listeners.onStart(JSON.parse(JSON.stringify(AVAIBLE_MAPS[0]))), 100);//TEMP
+		setTimeout(()=>this.listeners.onStart(JSON.parse(JSON.stringify(AVAIBLE_MAPS[0]))), 100);//TEMP
 	}
 
 	loadAvaibleMaps() {

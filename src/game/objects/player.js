@@ -5,6 +5,7 @@ import SvgEngine from './../svg_engine';
 import SimplePhysics from './../simple_physics/engine';
 
 const SPEED_LIMIT = 0.8;
+const INITIAL_HEALTH = 3;
 
 export default class Player extends Object2D {
 	/**
@@ -15,8 +16,10 @@ export default class Player extends Object2D {
 		super(Type.CIRCLE, Config.player_size, Config.player_size, graphics_engine, physics_engine);
 		super.setClass('player');
 
-		this.acceleration = 0.0005;
-		this.breaks_strength = 0.003;
+		this.health = INITIAL_HEALTH;//number of health segments
+
+		this._acceleration = 0.0005;
+		this._breaks_strength = 0.003;
 	}
 
 	/**
@@ -27,7 +30,7 @@ export default class Player extends Object2D {
 		//console.log(dir, delta);
 
 		this.body.applyVelocity(
-			dir.x*this.acceleration*delta, dir.y*this.acceleration*delta, 
+			dir.x*this._acceleration*delta, dir.y*this._acceleration*delta, 
 			SPEED_LIMIT
 		);
 	}
@@ -36,6 +39,8 @@ export default class Player extends Object2D {
 	* @param {number} delta
 	*/
 	slowDown(delta) {
-		this.body.velocity.scale(1.0 - delta*this.breaks_strength);
+		this.body.velocity.scale(1.0 - delta*this._breaks_strength);
 	}
 }
+
+Player.INITIAL_HEALTH = INITIAL_HEALTH;

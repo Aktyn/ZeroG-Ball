@@ -4,6 +4,7 @@ import SvgEngine from './svg_engine';
 import Object2D, {Type} from './objects/object2d';
 import Player from './objects/player';
 import Exit from './objects/exit';
+import SawBlade from './objects/sawblade';
 
 import Background from './background';
 import Config from './config';
@@ -147,20 +148,21 @@ export default class Map extends CollisionListener {
 		switch(class_name) {
 			case 'exit':
 				return new Exit(w||1, h||1, this.graphics, this.physics).setPos(x||0, y||0).setRot(rot||0);
+			case 'sawblade':
+				return new SawBlade(w||1, h||1, this.graphics, this.physics).setPos(x||0, y||0)
+					.setRot(rot||0);
 			default:
 				return new Object2D(shape, w||1, h||1, this.graphics, this.physics).setPos(x||0, y||0).setRot(rot||0);
 		}
 	}
 
 	/** @param {MapData} data*/
-	load(data, reset_camera = false) {
+	load(data) {
 		console.log('Loading map data');
 
 		this.graphics.clearForeground();
 		this.physics.removeObjects();
 		this.objects = [];
-		if(reset_camera)
-			this.updateCamera(0, 0, 1);//reset camera
 
 		for(let obj of data.getObjects()) {
 			let shape = (type => {
@@ -174,7 +176,7 @@ export default class Map extends CollisionListener {
 			var object2d = this.createObject(obj.class_name, shape, obj.w, obj.h, obj.x, obj.y, obj.rot);
 
 			if(obj.class_name)
-				object2d.set({'class': obj.class_name});
+				object2d.setClass(obj.class_name);
 
 			if(obj.physic_type === undefined || obj.physic_type === MapData.PHYSIC_TYPE.STATIC)
 				object2d.setStatic();
@@ -190,16 +192,16 @@ export default class Map extends CollisionListener {
 
 		if(asset.shape === MapData.SHAPE_TYPE.CIRCLE) {
 			//var object2d = new Object2D(Type.CIRCLE, asset.radius||1, asset.radius||1, this.graphics, this.physics).set({'class': asset.theme});
-			var object2d = this.createObject(asset.theme, Type.CIRCLE, asset.radius||1, asset.radius||1)
-				.setClass(asset.theme);
+			var object2d = this.createObject(asset.class_name, Type.CIRCLE, asset.radius||1, asset.radius||1)
+				.setClass(asset.class_name);
 		}
 		else {
 			//var object2d = new Object2D(Type.RECT, asset.width||1, asset.height||1, this.graphics, this.physics).set({'class': asset.theme});
-			var object2d = this.createObject(asset.theme, Type.RECT, asset.width||1, asset.height||1)
-				.setClass(asset.theme);
+			var object2d = this.createObject(asset.class_name, Type.RECT, asset.width||1, asset.height||1)
+				.setClass(asset.class_name);
 		}
 
-		//console.log( asset.theme );
+		//console.log( asset.class_name );
 
 		if(asset.dynamic === false)
 			object2d.setStatic();
@@ -216,7 +218,11 @@ export default class Map extends CollisionListener {
 	* @param {Object2D} obj 
 	*/
 	addObjectClone(obj) {
-		this.objects.push( obj.clone(this.graphics, this.physics) );
+		let t = obj.getTransform();
+		let clone = this.createObject(obj.getClassName(), obj.type, t.w, t.h, t.x, t.y, t.rot);
+		clone.setClass(obj.getClassName());
+		this.objects.push( clone );
+		//this.objects.push( obj.clone(this.graphics, this.physics) );
 	}
 
 	/** @param {Object2D} obj */

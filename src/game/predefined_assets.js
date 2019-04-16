@@ -1,52 +1,59 @@
 import MapData from './map_data';
 import Config from './config';
 
-export const THEMES = {
+/*export const THEMES = {//deprecated
 	'czerwony':	'red',
 	'zielony': 	'green',
 	'skrzynia': 'crate',
-	'wyjscie':	'exit',
+	'wyjście':	'exit',
+	'piła':		'sawblade',
 	'trawa': 	'grass',
 	'lawa': 	'lava'
-};
+};*/
 
 export const OBJECTS = {//some of those name must not be changed due to correlation with other code
 	'exit': {
 		name: 'Wyjście',
-		theme: THEMES.wyjscie,
+		class_name: 'exit',
 		shape: MapData.SHAPE_TYPE.CIRCLE,
 		radius: 0.2
 	},
+	'sawblade': {
+		name: 'Piła tarczowa',
+		class_name: 'sawblade',
+		shape: MapData.SHAPE_TYPE.CIRCLE,
+		radius: 0.15
+	},
 	'domino_block': {
 		name: 'Blok domina',
-		theme: THEMES.czerwony,
+		class_name: 'red',
 		shape: MapData.SHAPE_TYPE.RECT,
 		width: 0.05,
 		height: 0.15
 	},
 	'red_ball': {
 		name: 'Piłka',
-		theme: THEMES.zielony,
+		class_name: 'green',
 		shape: MapData.SHAPE_TYPE.CIRCLE,
 		radius: 0.1
 	},
 	'crate': {
 		name: 'Skrzynia',
-		theme: THEMES.skrzynia,
+		class_name: 'crate',
 		shape: MapData.SHAPE_TYPE.RECT,
 		width: 0.1,
 		height: 0.1
 	},
 	'lava': {
 		name: 'Lawa',
-		theme: THEMES.lawa,
+		class_name: 'lava',
 		shape: MapData.SHAPE_TYPE.RECT,
 		width: 0.1,
 		height: 0.1
 	},
 	'grass': {
 		name: 'Trawa',
-		theme: THEMES.trawa,
+		class_name: 'grass',
 		shape: MapData.SHAPE_TYPE.RECT,
 		width: 0.1,
 		height: 0.1
@@ -64,6 +71,11 @@ export const TEXTURES = {//names must much those in svg.scss
 		width: Config.VIRT_SCALE*0.2,
 		height: Config.VIRT_SCALE*0.2
 	},
+	'sawblade_texture': {
+		src: require('./../img/textures/sawblade.png'),
+		width: Config.VIRT_SCALE*0.15,
+		height: Config.VIRT_SCALE*0.15
+	},
 	'crate_texture': {
 		src: require('./../img/textures/crate.jpg'),
 		width: Config.VIRT_SCALE*0.1,
@@ -75,7 +87,7 @@ export const TEXTURES = {//names must much those in svg.scss
 		height: Config.VIRT_SCALE*0.1
 	},
 	'grass_texture': {
-		src: require('./../img/textures/grass.png'),
+		src: require('./../img/textures/grass.jpg'),
 		width: Config.VIRT_SCALE*0.1,
 		height: Config.VIRT_SCALE*0.1
 	}

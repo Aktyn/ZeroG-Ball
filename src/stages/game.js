@@ -32,6 +32,10 @@ export default class GameStage extends Stage {
 				if(this.gui)
 					this.gui.setTimer(time);
 			},
+			/** @param {number} health */
+			onPlayerDamage: (health) => {
+				this.gui.onPlayerDamage(health);
+			},
 
 			/**
 			 * @param  {string} name  
@@ -63,7 +67,7 @@ export default class GameStage extends Stage {
 			onMapStart: listeners.onMapStart,
 
 			onAssetSelected: this.game.onAssetSelected.bind(this.game),
-			onRestart: () => this.game.reload(true),
+			onRestart: () => this.game.reload(),
 			onClearMap: () => this.game.clearMap(),
 			undo: () => this.game.undoLastChange(),
 
@@ -114,10 +118,15 @@ export default class GameStage extends Stage {
 	onResize(aspect) {//window resize event
 		let res = $.getScreenSize();
 
-		if(res.width / res.height > aspect)
-			res.width = res.height*aspect;
-		else
-			res.height = res.width/aspect;
+		if(true === !!Settings.getValue('aspect_auto')) {
+			aspect = res.width / res.height;
+		}
+		else {
+			if(res.width / res.height > aspect)
+				res.width = res.height*aspect;
+			else
+				res.height = res.width/aspect;
+		}
 
 		Object.assign(this.container.style, {width: `${res.width}px`, height: `${res.height}px`});
 		if(this.game)

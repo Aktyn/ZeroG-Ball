@@ -1,9 +1,10 @@
 //@ts-check
 
 const DEFAULTS = {
-	'shadows': true,
+	'shadows': false,
 	'textures': true,
-	'aspect_ratio': 1280/720
+	'aspect_ratio': 1280/720,//value doesnt't matter if aspect_auto is true
+	'aspect_auto': true
 };
 
 /** @type {{[index: string]: boolean | string | number}} stores key: value pairs */
