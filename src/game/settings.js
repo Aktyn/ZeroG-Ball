@@ -51,7 +51,7 @@ const SETTINGS = {
 			}
 			throw new Error('Incorrect type: ' + item.type);
 		}
-		if(DEFAULTS[key])
+		if(DEFAULTS[key] !== undefined)
 			return DEFAULTS[key];
 		throw new Error('Cannot retrieve setting value.');
 	},

@@ -20,13 +20,13 @@ class MapItem {
 
 		this.widget = $.create('div').on('click', this.onClick.bind(this)).addChild(
 			$.create('div').text(data.name).setStyle({'font-weight': 'bold'}),
-			$.create('div').setStyle({'color': '#90A4AE'}).text( 
-				record === null ? '---' : 
+			$.create('div').setStyle({'color': '#90A4AE'}).text(
+				record === null ? '---' :
 				`Rekord: ${Common.milisToTime(record, ' ', {
 					hours: ' godzin', 
 					minutes: ' minut',
 					seconds: ' sekund'
-				})}` 
+				})}`
 			)
 		);
 	}
@@ -45,7 +45,7 @@ export default class MenuStage extends Stage {
 	constructor(target, listeners) {
 		super(target, 'menu-container', listeners)
 		
-		//this.start_btn = $.create('button').text('START').on('click', listeners.onStart);
+		// this.start_btn = $.create('button').text('START').on('click', listeners.onStart);
 		/** @type {MapItem[]} */
 		this.map_items = [];
 
@@ -62,6 +62,17 @@ export default class MenuStage extends Stage {
 			})
 		);
 
+		this.container.addChild(
+			$.create('hr').setStyle({'background-color': '#546E7A'}),
+			$.create('button').text('PUSTA MAPA').on('click', () => {
+				this.listeners.onStart('empty_map', {
+					"background": 0,
+					"objects": []
+				})
+			})
+
+		);
+
 		if(MapRecords.getRecord(AVAIBLE_MAPS[0].name) !== null) {
 			this.container.addChild(
 				$.create('hr').setStyle({'background-color': '#546E7A'}),
@@ -76,7 +87,7 @@ export default class MenuStage extends Stage {
 		$(window).on('keydown', this.onKey.bind(this));
 		this.secret_code = '';
 
-		setTimeout(()=>this.listeners.onStart(JSON.parse(JSON.stringify(AVAIBLE_MAPS[0]))), 100);//TEMP
+		// setTimeout(()=>this.listeners.onStart(JSON.parse(JSON.stringify(AVAIBLE_MAPS[0]))), 100);//TEMP
 	}
 
 	loadAvaibleMaps() {
