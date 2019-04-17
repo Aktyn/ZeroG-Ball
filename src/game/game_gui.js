@@ -211,14 +211,16 @@ export default class GameGUI {
 	/** @param {number} health */
 	onPlayerDamage(health) {
 		this.setHealth(health);
-		let damage_effect = $.create('div').text('DAMAGE');//TODO - style it as a damage effect
+		let damage_effect = $.create('div').setClass('damage-effect');
+		if(health <= 0)
+			damage_effect.addClass('killed');
 		this.container.addChild(damage_effect);
 		setTimeout(() => {
 			damage_effect.delete();
 		}, 5000);
-		if(health <= 0) {
+		//if(health <= 0) {
 			//TODO - kill player notification
-		}
+		//}
 	}
 
 	/**

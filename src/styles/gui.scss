@@ -455,15 +455,6 @@ $header-size: 35px;
 		}
 
 		.timer-container {
-			/*&::after {
-				content: "";
-				display: inline-block;
-				float: right;
-				height: 20px;
-				width: 20px;
-				background-color: yellow;
-			}*/
-			
 			height: 20px;
 			display: grid;
 			grid-template-columns: auto fit-content(100%);
@@ -510,7 +501,7 @@ $header-size: 35px;
 					
 					transform-origin: 10px 10px;
 					
-					$speed: 12s;
+					$speed: 10s;
 					
 					animation: ticktock $speed*12 $speed/2 cubic-bezier(.87,-.41,.19,1.44) infinite;
 					&:nth-child(4) {
@@ -554,6 +545,69 @@ $header-size: 35px;
 				font-size: 18px;
 				color: #ef9a9a;
 				content: "❤";
+			}
+		}
+	}
+
+	.damage-effect {
+		position: absolute;
+		margin: auto;
+		left: 0px;
+		right: 0px;
+		top: 0px;
+		bottom: 0px;
+
+		display: grid;
+		grid-template-rows: auto;
+		align-items: center;
+		justify-content: center;
+
+		&::before {
+			content: "❤";
+			display: inline-block;
+			font-size: 100px;
+			color: #ef9a9a;
+			
+			animation: pop 1s cubic-bezier(.36,.07,.19,.97) forwards;
+
+			@keyframes pop {
+				0% {
+					opacity: 0;
+					transform: scale(0);
+				}
+				80% {
+					opacity: 1;
+					transform: scale(4);
+				}
+				100% {
+					opacity: 0;
+					transform: scale(5);
+				}
+			}
+		}
+
+		&.killed {
+			background-color: #f558;
+			animation: blood-wash 2s cubic-bezier(.36,.07,.19,.97) forwards;
+
+			@keyframes blood-wash {
+				0% {
+					background-color: #f550;
+				}
+				80% {
+					background-color: #f558;
+				}
+				100% {
+					background-color: #f550;
+				}
+			}
+
+			&::before {
+				content: "Koniec żyć 😵";
+				font-size: 25px;
+				color: #fff;
+
+				animation-duration: 2s;
 			}
 		}
 	}
