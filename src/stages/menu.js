@@ -6,8 +6,6 @@ import './../styles/menu.scss';
 import {AVAIBLE_MAPS} from './../game/map_data';
 import MapRecords from './../game/map_records';
 
-const _void_func = ()=>{};
-
 class MapItem {
 	/**
 	 * @param {{name: string, json: any}} data
@@ -43,7 +41,7 @@ class MapItem {
 
 export default class MenuStage extends Stage {
 	constructor(target, listeners) {
-		super(target, 'menu-container', listeners)
+		super(target, 'menu-container', listeners);
 		
 		// this.start_btn = $.create('button').text('START').on('click', listeners.onStart);
 		/** @type {MapItem[]} */
@@ -65,12 +63,11 @@ export default class MenuStage extends Stage {
 		this.container.addChild(
 			$.create('hr').setStyle({'background-color': '#546E7A'}),
 			$.create('button').text('PUSTA MAPA').on('click', () => {
-				this.listeners.onStart('empty_map', {
-					"background": 0,
-					"objects": []
+				this.listeners.onStart({name: 'empty_map', json: JSON.parse(JSON.stringify({
+                        "background": 0,
+                        "objects": []}))
 				})
 			})
-
 		);
 
 		if(MapRecords.getRecord(AVAIBLE_MAPS[0].name) !== null) {

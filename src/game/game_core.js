@@ -1,5 +1,5 @@
 // @ts-check
-import $ from './../utils/html';
+// import $ from './../utils/html';
 import Map, {STATE} from './map';
 import MapData from './map_data';
 import Config from './config';

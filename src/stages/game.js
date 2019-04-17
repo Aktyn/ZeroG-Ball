@@ -109,7 +109,8 @@ export default class GameStage extends Stage {
 		super.close();
 		if(this.game)
 			this.game.destroy();
-		this.gui = null;
+		if(this.gui)
+			this.gui.destroy();
 	}
 
 	/**

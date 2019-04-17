@@ -42,6 +42,7 @@ function createClockWidget() {
 
 export default class GameGUI {
 	constructor(listeners = {}) {
+		window.addEventListener('keydown', this.onKeyDown.bind(this), true);
 		this.listeners = listeners;
 		this.menu_return_confirm = null;
 
@@ -116,7 +117,12 @@ export default class GameGUI {
 						})
 					)
 				)
-			),
+			).on('click', () => {
+				if(this.selected_asset !== null) {
+					this.selected_asset = null;
+					this.listeners.onAssetSelected(null);
+				}
+			}),
 
 			//GAME INFO
 			this.game_info = $.create('div').addClass('game-info').addChild(
@@ -167,6 +173,20 @@ export default class GameGUI {
 		//this.onMapFinished(1337 * 69);//temp test
 	}
 
+	/** @param {KeyboardEvent} e */
+	onKeyDown(e) {
+		if(e.keyCode === 27) {
+			if(this.selected_asset !== null) {
+				this.selected_asset = null;
+				this.listeners.onAssetSelected(null);
+			}
+		}
+	}
+
+	destroy() {
+		window.removeEventListener('keydown', this.onKeyDown.bind(this), true);
+	}
+
 	getNode() {
 		return this.container;
 	}
@@ -174,7 +194,7 @@ export default class GameGUI {
 	changeMode(id) {
 		if(this.mode === parseInt(id))
 			return;
-		this.selected_asset = null
+		this.selected_asset = null;
 		// console.log('TODO', id);
 		this.mode = parseInt(id);
 		this.container.setClass(`game-gui-container mode-${id} ${this.is_view_open ? 'view-open' : ''}`);
@@ -200,7 +220,7 @@ export default class GameGUI {
 	/** @param {MapData} data */
 	reloadMapData(data) {
 		this.bg_selector.getChildren('div').forEach((div, i) => {
-			if(i == data.getBackgroundID())
+			if(i === data.getBackgroundID())
 				div.addClass('selected');
 			else
 				div.removeClass('selected');
@@ -284,16 +304,20 @@ export default class GameGUI {
 
 			if(obj.shape !== MapData.SHAPE_TYPE.RECT) {
 				asset_preview.addChild(
-					$.create('button').text('DYNAMICZNY').on('click', () => 
-						this.selectAsset(obj, obj_name, true))
-				);
+					$.create('button').text('DYNAMICZNY').on('click', (e) => {
+						this.selectAsset(obj, obj_name, true);
+						e.stopPropagation();
+					}
+				));
 			}
 			else
 				asset_preview.addClass('single_option');
 
 			asset_preview.addChild(
-				$.create('button').text('STATYCZNY').on('click', () => 
-					this.selectAsset(obj, obj_name, false)),
+				$.create('button').text('STATYCZNY').on('click', (e) => {
+					this.selectAsset(obj, obj_name, false);
+					e.stopPropagation();
+				}),
 				$.create('label').addClass('name-label').text(obj.name)
 			);
 
@@ -559,7 +583,7 @@ export default class GameGUI {
 					$.create('hr'),
 
 					$.create('div').addChild(
-						$.create('button').text('ZRESETUJ').on('click', e => {
+						$.create('button').text('ZRESETUJ').on('click', () => {
 							Settings.reset();
 							this.showSettings();
 						})
