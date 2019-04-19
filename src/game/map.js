@@ -292,6 +292,24 @@ export default class Map extends CollisionListener {
 	update(dt) {
 		if(this.state === STATE.RUNNING)//if(!this.paused)
 			this.physics.update();
-		this.graphics.update(dt);
+		// this.graphics.update(dt);
+		//this loop was moved from SvgEngine.update method
+		let to_remove;
+		for(let obj of this.objects) {
+			obj.update(dt);
+			if(obj.isOutOfRange()) {
+				if(obj === this.player) {
+					this.player.kill();
+					continue;
+				}
+				to_remove = to_remove || [];
+				to_remove.push(obj);
+			}
+		}
+
+		if(to_remove) {
+			console.log('removing objects:', to_remove);
+			to_remove.forEach(this.removeObject.bind(this));
+		}
 	}
 }

@@ -53,7 +53,7 @@ const SETTINGS = {
 		}
 		if(DEFAULTS[key] !== undefined)
 			return DEFAULTS[key];
-		throw new Error('Cannot retrieve setting value.');
+		throw new Error('Cannot retrieve setting value of key: ' + key);
 	},
 
 	/**

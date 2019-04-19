@@ -229,7 +229,7 @@ export default class GameGUI {
 	}
 
 	/** @param {number} health */
-	onPlayerDamage(health) {
+	onPlayerHpChange(health) {
 		this.setHealth(health);
 		let damage_effect = $.create('div').setClass('damage-effect');
 		if(health <= 0)

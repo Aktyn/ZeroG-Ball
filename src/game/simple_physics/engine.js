@@ -50,11 +50,6 @@ export default class Engine {
 	}
 
 	update() {
-		//update each body
-		/*for(let body of this.bodies) {
-			body.update();
-		}*/
-		
 		//check for collisions
 		/** @type {Contact[]} */
 		let contacts = [];
@@ -75,13 +70,12 @@ export default class Engine {
 			contact.solve();
 		}
 
-		for(let body of this.bodies) {
+		//update each body
+		for(let body of this.bodies)
 			body.update();
-		}
 
-
-		for(let contact of contacts) {
+		//resolve collisions
+		for(let contact of contacts)
 			contact.fixCollision();
-		}
 	}
 }

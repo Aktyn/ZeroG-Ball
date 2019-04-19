@@ -99,19 +99,14 @@ export default class GameCore extends Map {
 
 	spawnPlayer() {
 		this.target_zoom = 1;
-		this.player = new Player(this.graphics, this.physics);
+		this.player = new Player(this.graphics, this.physics, this.onPlayerHpChange.bind(this));
 		super.addObject( this.player );
 	}
 
-	/** @param {number} damage */
-	onPlayerDamage(damage) {
-		//this.player.setPos(0, 0);
-		//this.player.resetVelocities();
-		
-		this.player.health -= damage;
-
-		if(typeof this.listeners.onPlayerDamage === 'function')
-			this.listeners.onPlayerDamage(this.player.health);
+	/** @param {number} hp */
+	onPlayerHpChange(hp) {
+		if(typeof this.listeners.onPlayerHpChange === 'function')
+			this.listeners.onPlayerHpChange(hp);
 
 		if(this.player.health <= 0)
 			this.reload();

@@ -12,6 +12,8 @@ export const Type = {
 	RECT: 1
 };
 
+const MAX_RANGE = 50;
+
 export default class Object2D extends SvgObject {
 	/**
 	* @param {number} type
@@ -69,6 +71,13 @@ export default class Object2D extends SvgObject {
 		return copy;
 	}
 
+	isOutOfRange() {
+		return !this.static && (//only dynamic objects
+			this.transform.x < -MAX_RANGE || this.transform.x > MAX_RANGE ||
+			this.transform.y < -MAX_RANGE || this.transform.y > MAX_RANGE
+		);
+	}
+
 	getClassName() {
 		return this.node.getAttributeNS(null, 'class') || undefined;
 	}
@@ -102,7 +111,7 @@ export default class Object2D extends SvgObject {
 		return super.setRot(rot);
 	}
 
-	/** @param {any} dt */
+	/** @param {number?} dt */
 	update(dt) {
 		super.setPos( this.body.pos.x/SCALLER, this.body.pos.y/SCALLER );
 		super.setRot(this.body.rot);

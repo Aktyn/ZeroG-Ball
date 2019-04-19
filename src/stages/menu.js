@@ -63,10 +63,10 @@ export default class MenuStage extends Stage {
 		this.container.addChild(
 			$.create('hr').setStyle({'background-color': '#546E7A'}),
 			$.create('button').text('PUSTA MAPA').on('click', () => {
-				this.listeners.onStart({name: 'empty_map', json: JSON.parse(JSON.stringify({
-                        "background": 0,
-                        "objects": []}))
-				})
+				this.listeners.onStart({name: 'Pusta mapa', json: JSON.parse(JSON.stringify({
+                    "background": 0,
+                    "objects": []}))
+				});
 			})
 		);
 
@@ -84,7 +84,7 @@ export default class MenuStage extends Stage {
 		$(window).on('keydown', this.onKey.bind(this));
 		this.secret_code = '';
 
-		// setTimeout(()=>this.listeners.onStart(JSON.parse(JSON.stringify(AVAIBLE_MAPS[0]))), 100);//TEMP
+		setTimeout(()=>this.listeners.onStart(JSON.parse(JSON.stringify(AVAIBLE_MAPS[0]))), 100);//TEMP
 	}
 
 	loadAvaibleMaps() {

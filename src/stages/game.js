@@ -33,8 +33,8 @@ export default class GameStage extends Stage {
 					this.gui.setTimer(time);
 			},
 			/** @param {number} health */
-			onPlayerDamage: (health) => {
-				this.gui.onPlayerDamage(health);
+			onPlayerHpChange: (health) => {
+				this.gui.onPlayerHpChange(health);
 			},
 
 			/**

@@ -116,11 +116,11 @@ export default class SvgEngine {
 		this.defs.addChild(texture);
 	}
 
-	/** @param {number} dt */
-	update(dt) {
+	/*** @param {number} dt */
+	/*update(dt) {
 		for(let obj of this.objects)
 			obj.update(dt);
-	}
+	}*/
 
 	/**
 	* @param {{x: number, y: number, zoom: number}} opts

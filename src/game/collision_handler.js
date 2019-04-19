@@ -22,7 +22,8 @@ export default function handleCollision(game_core, A, B) {
 				}
 				break;
 			case 'sawblade':
-				game_core.onPlayerDamage(1);
+				//game_core.onPlayerDamage(1);
+				game_core.player.damage(1);
 				break;
 		}
 	}
