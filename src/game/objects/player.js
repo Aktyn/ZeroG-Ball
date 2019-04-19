@@ -6,6 +6,7 @@ import SimplePhysics from './../simple_physics/engine';
 
 const SPEED_LIMIT = 0.8;
 const INITIAL_HEALTH = 3;
+const DAMAGE_IMMUNITY = 0.5;
 /**
 * @callback on_hp_change_cb
  * @param {number} damage
@@ -24,6 +25,7 @@ export default class Player extends Object2D {
 		this.on_hp_change = on_hp_change;
 
 		this.health = INITIAL_HEALTH;//number of health segments
+		this.immunity = DAMAGE_IMMUNITY;
 
 		this._acceleration = 0.0005;
 		this._breaks_strength = 0.003;
@@ -51,6 +53,9 @@ export default class Player extends Object2D {
 
 	/** @param {number} strength */
 	damage(strength) {
+		if(this.immunity > 0)
+			return;
+		this.immunity = DAMAGE_IMMUNITY;
 		this.health -= strength;
 		this.on_hp_change(this.health);
 	}
@@ -58,6 +63,13 @@ export default class Player extends Object2D {
 	kill() {
 		this.health = 0;
 		this.on_hp_change(this.health);
+	}
+
+	/** @param {number?} dt */
+	update(dt) {
+		this.immunity = Math.max(0, this.immunity-dt/1000.0);
+			
+		super.update(dt);
 	}
 }
 

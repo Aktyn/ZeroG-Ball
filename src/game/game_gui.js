@@ -597,12 +597,14 @@ export default class GameGUI {
 	}
 
 	/**
-	 * @param  {string} name name of completed map
-	 * @param  {number} time elapsed time in miliseconds
-	 * @param  {boolean} edited
+	 * @param  	{string} name name of completed map
+	 * @param  	{number} time elapsed time in miliseconds
+	 * @param  	{boolean} edited
+	 * @param 	{any} map_data
 	 */
-	onMapFinished(name, time, edited) {
+	onMapFinished(name, time, edited, map_data) {
 		this.closeView();
+		//console.log(name, time, edited, map_data);
 
 		if(edited) {
 			this.container.text('').addClass('finished').addChild(
@@ -620,6 +622,16 @@ export default class GameGUI {
 					this.map_export_btn = $.create('button').text('EXPORTUJ')
 						.on('click', this.tryExport.bind(this)),
 					$.create('br'),
+					/*this.map_export_btn = $.create('button').text('POWTÓRZ').on('click', () => {
+						if(typeof this.listeners.onMapStart === 'function')
+							this.listeners.onMapStart( {
+								name: this.map_name.innerText,
+								json: map_data
+							} );
+					}).setStyle({
+						'margin-top': '10px'
+					}),
+					$.create('br'),*/
 					this.menu_return_btn = $.create('button').addClass('exit-btn')
 						.text('POWRÓT DO MENU').on('click', this.tryReturnToMenu.bind(this)).setStyle({
 							'margin-top': '10px'
@@ -684,11 +696,8 @@ export default class GameGUI {
 
 				$.create('hr'),
 				$.create('button').text('POWTÓRZ POZIOM').on('click', () => {
-					if(typeof this.listeners.onMapStart === 'function') {
-						this.listeners.onMapStart(
-							AVAIBLE_MAPS.find(map => map.name === name)
-						);
-					}
+					if(typeof this.listeners.onMapStart === 'function')
+						this.listeners.onMapStart( AVAIBLE_MAPS.find(map => map.name === name) );
 				}),
 				$.create('br'),
 				this.menu_return_btn = $.create('button').addClass('exit-btn')

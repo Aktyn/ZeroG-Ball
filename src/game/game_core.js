@@ -48,6 +48,7 @@ export default class GameCore extends Map {
 			down:	false,
 			slow: 	false
 		};
+		this.sticky_stamp = false;
 
 		this._running = false;
 		this.elapsed_time = 0;
@@ -192,6 +193,10 @@ export default class GameCore extends Map {
 	onMouseMove(e) {
 		if(this.stamp !== null) {
 			let c = super.castCoords(this.convertCoords(e));
+			if(this.sticky_stamp) {//round position to 0.1
+				c.x = ((c.x*10)|0)/10;
+				c.y = ((c.y*10)|0)/10;
+			}
 			this.stamp.setPos(c.x, c.y);
 		}
 
@@ -240,6 +245,9 @@ export default class GameCore extends Map {
 				return;
 			case 32:
 				this.steering.slow = enable;
+				return;
+			case 17://ctrl
+				this.sticky_stamp = enable;
 				return;
 		}
 	}

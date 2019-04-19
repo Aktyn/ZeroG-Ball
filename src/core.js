@@ -33,6 +33,7 @@ function initGame(main_div, map_data) {
 			current_stage.close();
 			initMenu(main_div);
 		},
+		/** @param {{name: string, json: any}} map */
 		onMapStart: function(map) {
 			current_stage.close();
 			initGame(main_div, map);

@@ -90,7 +90,7 @@ class MapData {
 		/** @type {State[]} */
 		this.history = [];
 
-		this.import((map_data && map_data.json) || empty_map, true);
+		this.import(JSON.parse(JSON.stringify( (map_data && map_data.json) || empty_map )), true);
 	}
 
 	pushHistory() {

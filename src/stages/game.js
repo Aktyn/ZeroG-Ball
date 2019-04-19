@@ -43,7 +43,7 @@ export default class GameStage extends Stage {
 			 * @param  {boolean} edited
 			 */
 			onMapFinished: (name, time, edited) => {
-				this.gui.onMapFinished(name, time, edited);
+				this.gui.onMapFinished(name, time, edited, this.game.map_data.state);
 
 				//NOTE - changing local storage must go after invoking gui method
 				if(!edited)
