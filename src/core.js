@@ -2,6 +2,7 @@
 import $ from './utils/html';
 import MenuStage from './stages/menu';
 import GameStage from './stages/game';
+import SPEECH_COMMANDS from "./game/speech_recognition";
 
 let initialized = false;
 
@@ -39,6 +40,12 @@ function initGame(main_div, map_data) {
 			initGame(main_div, map);
 		}
 	}, map_data);
+
+	SPEECH_COMMANDS.start();
+    SPEECH_COMMANDS.result('ustawienia', () => {
+        console.log('word detected');
+    });
+	SPEECH_COMMANDS.match();
 
 	//current_stage.listeners.onEnd();//temp test
 }
