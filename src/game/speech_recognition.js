@@ -3,6 +3,8 @@ var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
 var recognition = new SpeechRecognition();
 recognition.lang = 'pl-PL';
 recognition.continuous = true;
+recognition.interimResults = false;
+recognition.maxAlternatives = 5;
 
 const SPEECH_COMMANDS = {
     start : () => {
@@ -30,16 +32,21 @@ const SPEECH_COMMANDS = {
 
         if(!result.isFinal) {
             console.log(result[0].transcript);
-            index = COMMANDS.findIndex(i => i.value === result[0].transcript);
+            index = COMMANDS.findIndex(i => i.value.replace(/\s/g, '').toLowerCase() === result[0].transcript.replace(/\s/g, '').toLowerCase());
             if(index !== -1)
                 COMMANDS[index].callback();
             return;
+
         }
 
         console.log(event.resultIndex, result[0].transcript, result[0].confidence);
+        index = COMMANDS.findIndex(i => i.value.replace(/\s/g, '').toLowerCase() === result[0].transcript.replace(/\s/g, '').toLocaleLowerCase());
+
+        if(index !== -1) COMMANDS[index].callback();
+
         for(let j=1; j<result.length; j++) {
             console.log('\talternative:', result[j].transcript);
-            index = COMMANDS.findIndex(i => i.value === result[j].transcript);
+            index = COMMANDS.findIndex(i => i.value.replace(/\s/g, '').toLowerCase() === result[j].transcript.replace(/\s/g, '').toLowerCase());
             if(index !== -1) {
                 COMMANDS[index].callback();
                 return;
