@@ -10,6 +10,7 @@ import {OBJECTS, BACKGROUNDS} from './predefined_assets';
 import Object2D, {Type} from './objects/object2d';
 import MapData, {AVAIBLE_MAPS} from './map_data';
 import Settings from './settings';
+import SPEECH_COMMANDS from './speech_recognition';
 
 function createClockWidget() {
 	let widget = $.create('span').setClass('clock-widget');
@@ -167,6 +168,14 @@ export default class GameGUI {
 				btn.disabled = true;//btn.setAttrib('disabled', undefined);
 			this.modes_panel.addChild(btn);
 		});
+
+		SPEECH_COMMANDS.onCommand('open_settings', () => {
+	        console.log('opening settings due to speech command');
+	        if(this.is_view_open)
+	        	this.closeView();
+	        else
+	        	this.showSettings();
+	    });
 
 		//this.showSettings();//temp test
 		//this.changeMode(1);//temp test

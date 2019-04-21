@@ -41,12 +41,6 @@ function initGame(main_div, map_data) {
 		}
 	}, map_data);
 
-	SPEECH_COMMANDS.start();
-    SPEECH_COMMANDS.result('ustawienia', () => {
-        console.log('word detected');
-    });
-	SPEECH_COMMANDS.match();
-
 	//current_stage.listeners.onEnd();//temp test
 }
 
@@ -61,6 +55,8 @@ export default {
 		main_div.text('');//clear any previous content
 
 		initMenu(main_div);
+
+		SPEECH_COMMANDS.start();//init speech recognition
 
 		initialized = true;
 	}
