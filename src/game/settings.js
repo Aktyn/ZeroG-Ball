@@ -1,11 +1,17 @@
 //@ts-check
+export const SPEECH_RECOGNITION_DEFAULTS = {//speech recognition commands
+	'open_settings': 'ustawienia, preferencje'
+};
 
 const DEFAULTS = {
 	'shadows': false,
 	'textures': true,
 	'aspect_ratio': 1280/720,//value doesnt't matter if aspect_auto is true
-	'aspect_auto': true
+	'aspect_auto': true,
 };
+
+Object.assign(DEFAULTS, SPEECH_RECOGNITION_DEFAULTS);
+console.log(DEFAULTS);
 
 /** @type {{[index: string]: boolean | string | number}} stores key: value pairs */
 let settings_store = {};

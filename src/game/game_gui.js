@@ -541,12 +541,17 @@ export default class GameGUI {
 			'open_settings': 'Otwórz ustawienia'
 		};
 		var sr_container = $.create('div').setClass('settings');
-		console.log(COMMANDS);
+		
 		for(let command in COMMANDS) {
-			sr_container.addChild(
-				$.create('label').text(commands_desc[command]),
-				$.create('input').setAttrib('type', 'text').setAttrib('value', COMMANDS[command].join(',')),
-			)
+			var keyword_input = $.create('input').setAttrib('type', 'text')
+				.setAttrib('value', COMMANDS[command].join(', ')).on('change', e => {
+					//console.log( command, keyword_input.value );
+					Settings.setValue(command, keyword_input.value);
+					//update with proper formating
+					setTimeout(() => keyword_input.value = COMMANDS[command].join(', '), 10);
+				});
+
+			sr_container.addChild( $.create('label').text(commands_desc[command]), keyword_input );
 		}
 		this.gui_center.text('').addChild(
 			$.create('div').addClass('view-container').addChild(

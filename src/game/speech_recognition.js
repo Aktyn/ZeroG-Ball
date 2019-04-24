@@ -1,9 +1,8 @@
 //@ts-check
+import Settings, {SPEECH_RECOGNITION_DEFAULTS} from './settings';
 
-/** @type {{[index: string]: string[]}} list of avaible coomands with their corresponding keywords */
-export var COMMANDS = {
-	'open_settings': ['ustawienia', 'settings', 'preferencje']
-};
+/** @type {{[index: string]: string[]}} list of avaible commands with their corresponding keywords */
+export var COMMANDS = {};//loads from Settings
 
 /** @type {{[index: string]: Function}} */
 var listeners = {};
@@ -36,17 +35,25 @@ recognition.interimResults = true;
 recognition.maxAlternatives = 5;
 
 var recognition_active = false;
+var recognition_start_timestamp = 0;
 var ignore_index = -1;
 
-recognition.onstart = () => console.log('recognition started');
+recognition.onstart = () => {
+	recognition_start_timestamp = Date.now();
+	console.log('recognition started');
+};
 recognition.onend = () => {
 	if(recognition_active) {
 		console.log('recognition restarted');
-		// SPEECH_COMMANDS.start();//restart recognition
+		
+		if(Date.now() - recognition_start_timestamp > 1000*10) {//at least 10 seconds difference
+			recognition_start_timestamp = Date.now();
+			recognition.start();//restart recognition
+		}
 	}
 	else
 		console.log('recognition ended');
-}
+};
 
 /** @param {SpeechRecognitionEvent} event */
 recognition.onresult = (event) => {
@@ -62,7 +69,6 @@ recognition.onresult = (event) => {
 		console.log('\tinterim:', result[0].transcript);
 		if( checkResult(result[0].transcript) )
 			ignore_index = event.resultIndex;
-		//event.stopPropagation();
 		return;
 
 	}
@@ -77,11 +83,33 @@ recognition.onresult = (event) => {
 const SPEECH_COMMANDS = {
 	start: () => {
 		recognition_active = true;
-		recognition.start()
+		recognition_start_timestamp = 0;
+		recognition.start();
+
+		/**
+		 * @param  {string} command_name
+		 * @param  {string} keywords_str
+		 */
+		let applyKeywords = (command_name, keywords_str) => 
+			COMMANDS[command_name] = keywords_str.split(',').map(c => c.trim()).filter(c => c.length > 0);
+
+		//load keyword from settings
+		for(let command in SPEECH_RECOGNITION_DEFAULTS) {
+			//@ts-ignore
+			applyKeywords(command, Settings.getValue(command));
+
+			Settings.watch(command, keywords => {
+				console.log('test', command, keywords);
+				//@ts-ignore
+				applyKeywords(command, keywords);
+			});
+		}
+		
+		//console.log(COMMANDS);
 	},
 	stop: () => {
 		recognition_active = false;
-		recognition.stop()
+		recognition.stop();
 	},
 
 	/**
