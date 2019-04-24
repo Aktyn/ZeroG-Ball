@@ -177,6 +177,36 @@ export default class GameGUI {
 	        	this.showSettings();
 	    });
 
+		SPEECH_COMMANDS.onCommand('edit', () => {
+		    console.log('entering edit mode due to speech command');
+		    if(this.mode === 0)
+		        this.changeMode(1);
+		    else
+		        this.changeMode(0);
+        });
+
+        SPEECH_COMMANDS.onCommand('restart', () => {
+            console.log('restarting the game due to speech command');
+            listeners.onRestart();
+        });
+
+        SPEECH_COMMANDS.onCommand('import', () => {
+            console.log('opening import window due to speech command');
+            this.tryImport();
+        });
+
+        SPEECH_COMMANDS.onCommand('export', () => {
+            console.log('opening export window due to speech command');
+            this.download_export_confirm = false;
+            this.tryExport();
+        });
+
+        SPEECH_COMMANDS.onCommand('menu', () => {
+            console.log('opening menu due to speech command');
+            this.menu_return_confirm = false;
+            this.tryReturnToMenu();
+        });
+
 		//this.showSettings();//temp test
 		//this.changeMode(1);//temp test
 		//this.onMapFinished(1337 * 69);//temp test
@@ -538,7 +568,12 @@ export default class GameGUI {
 			return;
 		let auto_aspect = !!Settings.getValue('aspect_auto');
 		var commands_desc = {
-			'open_settings': 'Otwórz ustawienia'
+			'open_settings': 'Otwórz ustawienia',
+            'edit': 'Edytuj mapę',
+            'restart': 'Restart rozgrywki',
+            'import': 'Zaimportuj mapę',
+            'export': 'Wyeksportuj mapę',
+            'menu': "Powrót do menu"
 		};
 		var sr_container = $.create('div').setClass('settings');
 		

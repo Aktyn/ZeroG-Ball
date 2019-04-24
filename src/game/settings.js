@@ -1,6 +1,11 @@
 //@ts-check
 export const SPEECH_RECOGNITION_DEFAULTS = {//speech recognition commands
-	'open_settings': 'ustawienia, preferencje'
+	'open_settings': 'ustawienia, preferencje',
+	'edit': 'edycja',
+	'restart': 'restart',
+	'import': 'import',
+	'export': 'eksport, pobierz mapę',
+	'menu': 'menu, powrót do menu'
 };
 
 const DEFAULTS = {

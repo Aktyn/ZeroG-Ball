@@ -46,7 +46,7 @@ recognition.onend = () => {
 	if(recognition_active) {
 		console.log('recognition restarted');
 		
-		if(Date.now() - recognition_start_timestamp > 1000*10) {//at least 10 seconds difference
+		if(Date.now() - recognition_start_timestamp > 1000) {//at least 10 seconds difference
 			recognition_start_timestamp = Date.now();
 			recognition.start();//restart recognition
 		}
