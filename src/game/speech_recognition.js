@@ -1,7 +1,7 @@
 //@ts-check
 
 /** @type {{[index: string]: string[]}} list of avaible coomands with their corresponding keywords */
-var COMMANDS = {
+export var COMMANDS = {
 	'open_settings': ['ustawienia', 'settings', 'preferencje']
 };
 
@@ -42,7 +42,7 @@ recognition.onstart = () => console.log('recognition started');
 recognition.onend = () => {
 	if(recognition_active) {
 		console.log('recognition restarted');
-		SPEECH_COMMANDS.start();//restart recognition
+		// SPEECH_COMMANDS.start();//restart recognition
 	}
 	else
 		console.log('recognition ended');

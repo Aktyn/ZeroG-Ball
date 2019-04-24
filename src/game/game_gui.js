@@ -10,7 +10,7 @@ import {OBJECTS, BACKGROUNDS} from './predefined_assets';
 import Object2D, {Type} from './objects/object2d';
 import MapData, {AVAIBLE_MAPS} from './map_data';
 import Settings from './settings';
-import SPEECH_COMMANDS from './speech_recognition';
+import SPEECH_COMMANDS, {COMMANDS} from './speech_recognition';
 
 function createClockWidget() {
 	let widget = $.create('span').setClass('clock-widget');
@@ -537,6 +537,17 @@ export default class GameGUI {
 		if(!this.gui_center)
 			return;
 		let auto_aspect = !!Settings.getValue('aspect_auto');
+		var commands_desc = {
+			'open_settings': 'Otwórz ustawienia'
+		};
+		var sr_container = $.create('div').setClass('settings');
+		console.log(COMMANDS);
+		for(let command in COMMANDS) {
+			sr_container.addChild(
+				$.create('label').text(commands_desc[command]),
+				$.create('input').setAttrib('type', 'text').setAttrib('value', COMMANDS[command].join(',')),
+			)
+		}
 		this.gui_center.text('').addChild(
 			$.create('div').addClass('view-container').addChild(
 				$.create('header').addChild(
@@ -569,7 +580,6 @@ export default class GameGUI {
 								let res = $.getScreenSize();
 								Settings.setValue('aspect_ratio', res.width / res.height);
 							}
-							
 						}).setEnabled( auto_aspect ).getWidget(),
 
 						this.aspect_ratio_label = $.create('label').text('Proporcje').setStyle({
@@ -588,6 +598,10 @@ export default class GameGUI {
 							})
 						)*/
 					),
+
+					$.create('hr'),
+					$.create('h3').text('Rozpoznawanie mowy'),
+					sr_container,
 
 					$.create('hr'),
 
@@ -622,7 +636,7 @@ export default class GameGUI {
 					$.create('div').addChild(
 						$.create('span').text('Własny poziom ukończony w czasie: '),
 						$.create('strong').text(Common.milisToTime(time, ' ', {
-							hours: ' godzin', 
+							hours: ' godzin',
 							minutes: ' minut',
 							seconds: ' sekund'
 						}))
