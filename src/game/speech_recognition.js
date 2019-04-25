@@ -7,6 +7,11 @@ export var COMMANDS = {};//loads from Settings
 /** @type {{[index: string]: Function}} */
 var listeners = {};
 
+/** @type {Function} */
+var start_listener = null;
+/** @type {Function} */
+var end_listener = null;
+
 /** 
  * @param  {string} result
  * @return {boolean}
@@ -39,20 +44,27 @@ var recognition_start_timestamp = 0;
 var ignore_index = -1;
 
 recognition.onstart = () => {
+	recognition_active = true;
 	recognition_start_timestamp = Date.now();
 	console.log('recognition started');
+	if(typeof start_listener === 'function')
+		start_listener();
 };
 recognition.onend = () => {
 	if(recognition_active) {
-		console.log('recognition restarted');
-		
-		if(Date.now() - recognition_start_timestamp > 1000) {//at least 10 seconds difference
+		if(Date.now() - recognition_start_timestamp > 1000) {//at least 1 second difference
+			console.log('recognition restarted');
+			recognition_active = false;
 			recognition_start_timestamp = Date.now();
 			recognition.start();//restart recognition
+			return;
 		}
 	}
 	else
 		console.log('recognition ended');
+
+	if(typeof end_listener === 'function')
+		end_listener();
 };
 
 /** @param {SpeechRecognitionEvent} event */
@@ -82,7 +94,7 @@ recognition.onresult = (event) => {
 
 const SPEECH_COMMANDS = {
 	start: () => {
-		recognition_active = true;
+		//recognition_active = true;
 		recognition_start_timestamp = 0;
 		recognition.start();
 
@@ -98,10 +110,9 @@ const SPEECH_COMMANDS = {
 			//@ts-ignore
 			applyKeywords(command, Settings.getValue(command));
 
-			Settings.watch(command, keywords => {
-				console.log('test', command, keywords);
+			Settings.watch(command, (_keywords) => {
 				//@ts-ignore
-				applyKeywords(command, keywords);
+				applyKeywords(command, _keywords);
 			});
 		}
 		
@@ -110,6 +121,18 @@ const SPEECH_COMMANDS = {
 	stop: () => {
 		recognition_active = false;
 		recognition.stop();
+	},
+
+	onStart: (callback) => {
+		start_listener = callback;
+	},
+
+	onEnd: (callback) => {
+		end_listener = callback;
+	},
+
+	isActive: () => {
+		return recognition_active;
 	},
 
 	/**

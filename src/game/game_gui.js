@@ -67,8 +67,8 @@ export default class GameGUI {
 						this.header.classList.remove('hidden');
 					else
 						this.header.classList.add('hidden');
-				})
-			).addChild(
+				}),
+			
 				$.create('div').addClass('game-buttons').addChild(
 					$.create('button').text('IMPORT').on('click', this.tryImport.bind(this))
 				).addChild(
@@ -79,14 +79,15 @@ export default class GameGUI {
 						if(this.mode === 0 && typeof this.listeners.onRestart === 'function')
 							this.listeners.onRestart();
 					})
-				)
-			).addChild(
-				this.modes_panel = $.create('div').addClass('modes')
-			).addChild(
+				),
+
+				this.speech_indicator = $.create('button').addClass('speech-indicator'),
+			
+				this.modes_panel = $.create('div').addClass('modes'),
+			
 				$.create('div').addClass('actions').addChild(
 					$.create('button').text('USTAWIENIA')
-						.on('click', this.showSettings.bind(this))
-				).addChild(
+						.on('click', this.showSettings.bind(this)),
 					this.menu_return_btn = $.create('button').addClass('exit-btn')
 						.text('POWRÓT DO MENU').on('click', this.tryReturnToMenu.bind(this))
 				)
@@ -159,15 +160,31 @@ export default class GameGUI {
 		['GRA', 'EDYCJA'].forEach((mode, i) => {
 			let btn = $.create('button').text(mode).setAttrib('id', i).on('click', btn => {
 				//console.log(btn.target.id);
-				this.modes_panel.getChildren().forEach(ex_btn => {
-					ex_btn.disabled = ex_btn.id === btn.target.id;
-				});
-				this.changeMode(btn.target.id);
+				this.modes_panel.getChildren().forEach( ex_btn => ex_btn.disabled = ex_btn.id == i );
+				this.changeMode(i);
 			});
 			if(i === this.mode)//first element
 				btn.disabled = true;//btn.setAttrib('disabled', undefined);
 			this.modes_panel.addChild(btn);
 		});
+
+		this.speech_indicator.on('click', () => {
+			if(this.speech_indicator.hasClass('active')) {
+				SPEECH_COMMANDS.stop();
+				//this.speech_indicator.removeClass('active');
+			}
+			else {
+				SPEECH_COMMANDS.start();
+				//this.speech_indicator.addClass('active');
+			}
+		});
+		//setTimeout(() => {
+		if(SPEECH_COMMANDS.isActive())
+			this.speech_indicator.addClass('active');
+		//}, 500);
+
+		SPEECH_COMMANDS.onStart(() => this.speech_indicator.addClass('active'));
+		SPEECH_COMMANDS.onEnd(() => this.speech_indicator.removeClass('active'));
 
 		SPEECH_COMMANDS.onCommand('open_settings', () => {
 	        console.log('opening settings due to speech command');
@@ -183,6 +200,7 @@ export default class GameGUI {
 		        this.changeMode(1);
 		    else
 		        this.changeMode(0);
+		    this.modes_panel.getChildren().forEach( ex_btn => ex_btn.disabled = ex_btn.id == this.mode );
         });
 
         SPEECH_COMMANDS.onCommand('restart', () => {
@@ -197,14 +215,12 @@ export default class GameGUI {
 
         SPEECH_COMMANDS.onCommand('export', () => {
             console.log('opening export window due to speech command');
-            this.download_export_confirm = false;
-            this.tryExport();
+            this.tryExport(true);
         });
 
         SPEECH_COMMANDS.onCommand('menu', () => {
             console.log('opening menu due to speech command');
-            this.menu_return_confirm = false;
-            this.tryReturnToMenu();
+            this.tryReturnToMenu(true);
         });
 
 		//this.showSettings();//temp test
@@ -512,10 +528,10 @@ export default class GameGUI {
 			}).click();
 	}
 
-	tryExport() {
+	tryExport(force = false) {
 		if(typeof this.listeners.exportMapData !== 'function')
 			return;
-		if(this.download_export_confirm === null) {
+		if(this.download_export_confirm === null && !force) {
 			this.map_data = 'text/json;charset=utf-8,' + this.listeners.exportMapData();
 			this.map_export_btn.text('POBIERZ PLIK');
 			this.download_export_confirm = setTimeout(() => {
@@ -537,8 +553,8 @@ export default class GameGUI {
 		}
 	}
 
-	tryReturnToMenu() {
-		if(this.menu_return_confirm === null) {
+	tryReturnToMenu(force = false) {
+		if(this.menu_return_confirm === null && !force) {
 			this.menu_return_btn.text('NA PEWNO?');
 			this.menu_return_confirm = setTimeout(() => {
 				this.menu_return_btn.text('POWRÓT DO MENU');
@@ -578,7 +594,7 @@ export default class GameGUI {
 		var sr_container = $.create('div').setClass('settings');
 		
 		for(let command in COMMANDS) {
-			var keyword_input = $.create('input').setAttrib('type', 'text')
+			let keyword_input = $.create('input').setAttrib('type', 'text')
 				.setAttrib('value', COMMANDS[command].join(', ')).on('change', e => {
 					//console.log( command, keyword_input.value );
 					Settings.setValue(command, keyword_input.value);
