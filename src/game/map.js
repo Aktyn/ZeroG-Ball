@@ -5,6 +5,7 @@ import Object2D, {Type} from './objects/object2d';
 import Player from './objects/player';
 import Exit from './objects/exit';
 import SawBlade from './objects/sawblade';
+import Forcefield from './objects/forcefield';
 
 import Background from './background';
 import Config from './config';
@@ -145,15 +146,24 @@ export default class Map extends CollisionListener {
 	}
 
 	createObject(class_name, shape, w, h, x = 0, y = 0, rot = 0) {
+		/** @type {Object2D} */
+		let obj;
 		switch(class_name) {
 			case 'exit':
-				return new Exit(w||1, h||1, this.graphics, this.physics).setPos(x||0, y||0).setRot(rot||0);
+				obj = new Exit(w||1, h||1, this.graphics, this.physics);
+				break;
 			case 'sawblade':
-				return new SawBlade(w||1, h||1, this.graphics, this.physics).setPos(x||0, y||0)
-					.setRot(rot||0);
+				obj = new SawBlade(w||1, h||1, this.graphics, this.physics);
+				break;
+			case 'forcefield':
+				obj = new Forcefield(w||1, h||1, this.graphics, this.physics);
+				break;
 			default:
-				return new Object2D(shape, w||1, h||1, this.graphics, this.physics).setPos(x||0, y||0).setRot(rot||0);
+				obj = new Object2D(shape, w||1, h||1, this.graphics, this.physics);
+				break;
 		}
+		obj.setPos(x||0, y||0).setRot(rot||0);
+		return obj;
 	}
 
 	/** @param {MapData} data*/
@@ -297,7 +307,7 @@ export default class Map extends CollisionListener {
 		let to_remove;
 		for(let obj of this.objects) {
 			obj.update(dt);
-			if(obj.isOutOfRange()) {
+			if(obj.isOutOfRange() || obj.to_destroy) {
 				if(obj === this.player) {
 					this.player.kill();
 					continue;

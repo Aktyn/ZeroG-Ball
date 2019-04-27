@@ -137,6 +137,10 @@ $header-size: 35px;
 			font-size: 14px;
 			min-width: 350px;
 
+			&, & > * {
+				animation: show-in 0.7s ease-in-out forwards;
+			}
+
 			header {
 				padding: 0px;
 				height: 35px;
@@ -162,8 +166,17 @@ $header-size: 35px;
 				padding: 5px 5px;
 				text-align: center;
 
-				* {
-					// font-size: inherit;
+				& > * {
+					animation: show-in 0.3s cubic-bezier(.36,.07,.19,.97) forwards;
+
+					opacity: 0;
+					transform: translateY(-50px);
+
+					@for $i from 1 through 10 {//number of children of article selector
+						&:nth-child(#{$i}) {
+							animation-delay: #{$i * 50ms};
+						}
+					}
 				}
 
 				.settings {
@@ -358,7 +371,33 @@ $header-size: 35px;
 			height: 100%;
 
 			display: inline-grid;
-			grid-template-columns: auto auto;
+			grid-template-columns: auto auto auto;
+
+			.categories {
+				display: grid;
+				grid-template-rows: 1fr 1fr 1fr 1fr;
+				grid-auto-flow: column;
+				align-items: stretch;
+				padding-right: 10px;
+
+				& > * {
+					border-radius: 0px;
+					border: none;
+					box-shadow: none;
+
+					&:not(:last-child) {
+						border-bottom: 1px solid #555;
+					}
+
+					transition: background-color 0.5s linear;
+				}
+
+				& > .selected {
+					cursor: auto;
+					background-color: #5f5;
+					color: #fff;
+				}
+			}
 
 			.enviroment {
 				$w: 100px;
@@ -674,25 +713,22 @@ $header-size: 35px;
 			opacity: 0;
 			transform: translateY(-50px);
 
-			@keyframes show-in {
-				0% {
-					opacity: 0;
-					transform: translateY(-50px);
-				}
-				50% {
-					//opacity: 0.5;
-				}
-				100% {
-					opacity: 1;
-					transform: translateY(0px);
-				}
-			}
-
 			@for $i from 1 through 10 {//number of children of article selector
 				&:nth-child(#{$i}) {
 					animation-delay: #{$i * 50ms};
 				}
 			}
+		}
+	}
+
+	@keyframes show-in {
+		0% {
+			opacity: 0;
+			transform: translateY(-50px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0px);
 		}
 	}
 }

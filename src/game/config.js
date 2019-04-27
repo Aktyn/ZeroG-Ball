@@ -14,5 +14,6 @@ export default {
 	EPSILON: 0.00001,//0.0001
 
 	//gameplay
-	player_size: 0.1
+	player_size: 0.1,
+	forcefield_duration: 15
 };

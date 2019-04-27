@@ -25,6 +25,9 @@ export default function handleCollision(game_core, A, B) {
 				//game_core.onPlayerDamage(1);
 				game_core.player.damage(1);
 				break;
+			case 'forcefield':
+				B.getCustomData().activate(game_core.player);
+				break;
 		}
 	}
 }

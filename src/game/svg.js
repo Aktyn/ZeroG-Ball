@@ -84,13 +84,15 @@ export default class SvgObject {
 	}
 
 	/** @param {SvgObject | Node} child */
-	addChild(child) {
-		if(child instanceof SvgObject)
-			this.node.appendChild(child.node);
-		else if(child instanceof Node)
-			this.node.appendChild(child);
-		else
+	addChild(child, push_below = false) {
+		let node = (child instanceof SvgObject) ? child.node : child;
+		if(!(node instanceof Node))
 			throw new Error('Incorrect child');
+		
+		if(push_below)
+			this.node.insertAdjacentElement('afterbegin', node);
+		else
+			this.node.appendChild(node);
 		return this;
 	}
 

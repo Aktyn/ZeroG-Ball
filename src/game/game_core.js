@@ -142,11 +142,9 @@ export default class GameCore extends Map {
 	onMouseWheel(e) {
 		let dt = Math.max(-1, Math.min(1, e.wheelDelta || -e.detail));
 
-		this.target_zoom = this.camera.zoom*(1-ZOOM_STRENGTH*dt);
+		let next_zoom = Math.min(6, this.camera.zoom*(1-ZOOM_STRENGTH*dt));
 		this.target_zoom = Math.max(0.2, 
-			Math.min(this.target_zoom, this.background.getMaxZoom(this.aspect)));
-		
-		//super.updateCamera(this.camera.x, this.camera.y, this.target_zoom);
+			Math.min(next_zoom, this.background.getMaxZoom(this.aspect)));
 	}
 
 	onMouseDown(e) {

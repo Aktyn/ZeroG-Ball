@@ -1,18 +1,21 @@
 // @ts-check
 import {Vec2, crossVV} from './math';
-import Config from './../config';
+import Config from '../config';
+import Filter from './filter';
 
 export const ShapeType = {
 	CIRCLE: 0,
 	RECT: 1
 };
 
-export class Body {
+export class Body extends Filter {
 	/** 
 	* @param {number} _shape_type
 	* @param {number} _density
 	*/
 	constructor(_shape_type, _density = 1) {
+		super();
+
 		this.shape_type = _shape_type;
 
 		this.pos = new Vec2();
@@ -42,6 +45,16 @@ export class Body {
 
 	resetVelocities() {
 		this.velocity.set(0, 0);
+	}
+
+	/** @param {number} _density */
+	setDensity(_density) {//abstract
+		this.density = _density;
+		this.recalculateMass();
+	}
+
+	recalculateMass() {
+		throw new Error('this is abstract function and must be inherited');
 	}
 
 	/** 
@@ -109,7 +122,11 @@ export class Circle extends Body {
 	constructor(_radius) {
 		super(ShapeType.CIRCLE);
 		this.radius = _radius;
-		this.mass = Math.PI * _radius * _radius * this.density;
+		this.recalculateMass();
+	}
+
+	recalculateMass() {
+		this.mass = Math.PI * this.radius * this.radius * this.density;
 	}
 }
 
@@ -122,6 +139,11 @@ export class Rect extends Body {
 		super(ShapeType.RECT);
 		this.width = _width;
 		this.height = _height;
-		this.mass = _width*_height*4 * this.density;
+		
+		this.recalculateMass();
+	}
+
+	recalculateMass() {
+		this.mass = this.width*this.height*4 * this.density;
 	}
 }

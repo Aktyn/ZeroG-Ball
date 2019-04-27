@@ -1,16 +1,16 @@
 //@ts-check
 import $ from './../utils/html';
-import MapRecords from './../game/map_records';
 import Player from './../game/objects/player';
 import Common from './../utils/common';
-import Switcher from './../utils/switcher';
-import Slider from './../utils/slider';
 
-import {OBJECTS, BACKGROUNDS} from './predefined_assets';
+import ResultView from './gui/result_view';
+import SettingsView from './gui/settings_view';
+
+import {OBJECTS, BACKGROUNDS, CATEGORIES} from './predefined_assets';
 import Object2D, {Type} from './objects/object2d';
-import MapData, {AVAIBLE_MAPS} from './map_data';
-import Settings from './settings';
-import SPEECH_COMMANDS, {COMMANDS} from './speech_recognition';
+import MapData from './map_data';
+
+import SPEECH_COMMANDS from './speech_recognition';
 
 function createClockWidget() {
 	let widget = $.create('span').setClass('clock-widget');
@@ -104,6 +104,7 @@ export default class GameGUI {
 				this.main_edit = $.create('div').addClass('main'),
 
 				$.create('div').addClass('tools').addChild(
+					this.asset_categories = $.create('section').addClass('categories'),
 					$.create('section').addClass('enviroment').addChild(
 						this.bg_selector = $.create('div').addClass('background-selector')
 					),
@@ -122,6 +123,7 @@ export default class GameGUI {
 			).on('click', () => {
 				if(this.selected_asset !== null) {
 					this.selected_asset = null;
+					$('.asset_preview.selected').removeClass('selected');
 					this.listeners.onAssetSelected(null);
 				}
 			}),
@@ -154,6 +156,14 @@ export default class GameGUI {
 					this.bg_selector.addClass('open');
 			})
 		);
+
+		for(let cat of Object.values(CATEGORIES)) {
+			this.asset_categories.addChild(
+				$.create('button').text(cat).on('click', () => {
+					this.showAssetsList(cat);
+				})
+			);
+		}
 		
 		this.bg_selector.style.setProperty('--open-height', `${(BACKGROUNDS.length+1)*20}px`);
 
@@ -169,19 +179,14 @@ export default class GameGUI {
 		});
 
 		this.speech_indicator.on('click', () => {
-			if(this.speech_indicator.hasClass('active')) {
-				SPEECH_COMMANDS.stop();
-				//this.speech_indicator.removeClass('active');
-			}
-			else {
+			if(this.speech_indicator.hasClass('active'))
+				SPEECH_COMMANDS.stop()
+			else
 				SPEECH_COMMANDS.start();
-				//this.speech_indicator.addClass('active');
-			}
 		});
-		//setTimeout(() => {
+		
 		if(SPEECH_COMMANDS.isActive())
 			this.speech_indicator.addClass('active');
-		//}, 500);
 
 		SPEECH_COMMANDS.onStart(() => this.speech_indicator.addClass('active'));
 		SPEECH_COMMANDS.onEnd(() => this.speech_indicator.removeClass('active'));
@@ -224,8 +229,8 @@ export default class GameGUI {
         });
 
 		//this.showSettings();//temp test
-		//this.changeMode(1);//temp test
 		//this.onMapFinished(1337 * 69);//temp test
+		//setTimeout(() => this.changeMode(1), 1);//temp test
 	}
 
 	/** @param {KeyboardEvent} e */
@@ -233,8 +238,11 @@ export default class GameGUI {
 		if(e.keyCode === 27) {
 			if(this.selected_asset !== null) {
 				this.selected_asset = null;
+				$('.asset_preview.selected').removeClass('selected');
 				this.listeners.onAssetSelected(null);
 			}
+			if(this.is_view_open)
+				this.closeView();
 		}
 	}
 
@@ -315,7 +323,7 @@ export default class GameGUI {
 			this.elapsed_time.text(t);
 	}
 
-	showAssetsList() {
+	showAssetsList(category = CATEGORIES.all) {
 		let container = $.create('div').addClass('assets_container').on('click', e => {
 			if(e.target === container && typeof this.listeners.onAssetSelected === 'function') {
 				if(this.selected_asset !== null) {
@@ -323,13 +331,18 @@ export default class GameGUI {
 					$('.asset_preview').removeClass('selected');
 					this.listeners.onAssetSelected(null);
 				}
-				//this.gui_center.removeClass('event_cacher');
 			}
+		});
+
+		this.asset_categories.getChildren().forEach(ch => {
+			ch.setClass(category === ch.innerText ? 'selected' : '')
 		});
 
 		const preview_size = 70;
 
 		for(let [obj_name, obj] of Object.entries(OBJECTS)) {
+			if(!obj.categories.includes(category))
+				continue;
 			let obj_preview = $.create('div').addClass(obj.class_name);
 
 			if(obj.shape === MapData.SHAPE_TYPE.RECT) {
@@ -531,7 +544,8 @@ export default class GameGUI {
 	tryExport(force = false) {
 		if(typeof this.listeners.exportMapData !== 'function')
 			return;
-		if(this.download_export_confirm === null && !force) {
+		console.log(force);
+		if(this.download_export_confirm === null && force !== true) {
 			this.map_data = 'text/json;charset=utf-8,' + this.listeners.exportMapData();
 			this.map_export_btn.text('POBIERZ PLIK');
 			this.download_export_confirm = setTimeout(() => {
@@ -582,94 +596,8 @@ export default class GameGUI {
 	showSettings() {
 		if(!this.gui_center)
 			return;
-		let auto_aspect = !!Settings.getValue('aspect_auto');
-		var commands_desc = {
-			'open_settings': 'Otwórz ustawienia',
-            'edit': 'Edytuj mapę',
-            'restart': 'Restart rozgrywki',
-            'import': 'Zaimportuj mapę',
-            'export': 'Wyeksportuj mapę',
-            'menu': "Powrót do menu"
-		};
-		var sr_container = $.create('div').setClass('settings');
-		
-		for(let command in COMMANDS) {
-			let keyword_input = $.create('input').setAttrib('type', 'text')
-				.setAttrib('value', COMMANDS[command].join(', ')).on('change', e => {
-					//console.log( command, keyword_input.value );
-					Settings.setValue(command, keyword_input.value);
-					//update with proper formating
-					setTimeout(() => keyword_input.value = COMMANDS[command].join(', '), 10);
-				});
 
-			sr_container.addChild( $.create('label').text(commands_desc[command]), keyword_input );
-		}
-		this.gui_center.text('').addChild(
-			$.create('div').addClass('view-container').addChild(
-				$.create('header').addChild(
-					$.create('span'),//separator
-					$.create('span').text('Ustawienia'),
-					$.create('button').addClass('close-btn').on('click', this.closeView.bind(this))
-				)
-			).addChild(
-				$.create('article').addChild(
-					$.create('div').setClass('settings').addChild(
-						$.create('label').text('Cienie'),
-						new Switcher(enabled => {
-							Settings.setValue('shadows', enabled);
-						}).setEnabled( !!Settings.getValue('shadows') ).getWidget(),
-
-						$.create('label').text('Textury'),
-						new Switcher(enabled => {
-							Settings.setValue('textures', enabled);
-						}).setEnabled( !!Settings.getValue('textures') ).getWidget(),
-
-						$.create('label').text('Auto proporcje'),
-						new Switcher(enabled => {
-							Settings.setValue('aspect_auto', enabled);
-							if(!this.aspect_ratio_label || !this.aspect_ratio_slider)
-								return;
-							for(let el of [this.aspect_ratio_label, this.aspect_ratio_slider])
-								el.setStyle({'display': enabled ? 'none' : 'block'});
-
-							if(enabled) {
-								let res = $.getScreenSize();
-								Settings.setValue('aspect_ratio', res.width / res.height);
-							}
-						}).setEnabled( auto_aspect ).getWidget(),
-
-						this.aspect_ratio_label = $.create('label').text('Proporcje').setStyle({
-							'display': auto_aspect ? 'none' : 'block'
-						}),
-						this.aspect_ratio_slider = new Slider(1, 4, value => {
-							Settings.setValue('aspect_ratio', value);
-						}).setValue( Number(Settings.getValue('aspect_ratio')) ).getWidget().setStyle({
-							'display': auto_aspect ? 'none' : 'block'
-						}),
-						/*$.create('div').setClass('single-row').addChild(
-							$.create('button').text('DOPASUJ PROPORCJE').on('click', e => {
-								let res = $.getScreenSize();
-								Settings.setValue('aspect_ratio', res.width / res.height);
-								this.showSettings();
-							})
-						)*/
-					),
-
-					$.create('hr'),
-					$.create('h3').text('Rozpoznawanie mowy'),
-					sr_container,
-
-					$.create('hr'),
-
-					$.create('div').addChild(
-						$.create('button').text('ZRESETUJ').on('click', () => {
-							Settings.reset();
-							this.showSettings();
-						})
-					)
-				)
-			)
-		);
+		SettingsView.open(this.gui_center, this.closeView.bind(this));
 
 		this.is_view_open = true;
 		this.container.addClass('view-open');
@@ -684,106 +612,7 @@ export default class GameGUI {
 	onMapFinished(name, time, edited, map_data) {
 		this.closeView();
 		//console.log(name, time, edited, map_data);
-
-		if(edited) {
-			this.container.text('').addClass('finished').addChild(
-				$.create('article').addChild(
-					$.create('h1').text('GRATULACJE!'),
-					$.create('div').addChild(
-						$.create('span').text('Własny poziom ukończony w czasie: '),
-						$.create('strong').text(Common.milisToTime(time, ' ', {
-							hours: ' godzin',
-							minutes: ' minut',
-							seconds: ' sekund'
-						}))
-					),
-					$.create('hr'),
-					this.map_export_btn = $.create('button').text('EXPORTUJ')
-						.on('click', this.tryExport.bind(this)),
-					$.create('br'),
-					/*this.map_export_btn = $.create('button').text('POWTÓRZ').on('click', () => {
-						if(typeof this.listeners.onMapStart === 'function')
-							this.listeners.onMapStart( {
-								name: this.map_name.innerText,
-								json: map_data
-							} );
-					}).setStyle({
-						'margin-top': '10px'
-					}),
-					$.create('br'),*/
-					this.menu_return_btn = $.create('button').addClass('exit-btn')
-						.text('POWRÓT DO MENU').on('click', this.tryReturnToMenu.bind(this)).setStyle({
-							'margin-top': '10px'
-						})
-				)
-			);
-			return;
-		}
-
-		let current_record = MapRecords.getRecord(name);
-		let new_record = current_record === null ? true : (current_record > time);
-
-		let current_map_index = AVAIBLE_MAPS.findIndex(map => map.name === name);
-		let next_map = AVAIBLE_MAPS[current_map_index+1] || null;
-
-		let next_map_info = $.create('div');
-
-		if(next_map === null)
-			next_map_info.text('Wszystkie poziomy w grze zostały odblokowane. Gratulacje.');
-		else {
-			next_map_info.addChild(
-				$.create('label').text('Nowy poziom odblokowany: ').addChild(
-					$.create('strong').text( next_map.name )
-				),
-				$.create('br'),
-				$.create('button').text('GRAJ').setStyle({
-					'margin-top': '5px',
-					'border': '1px solid #B0BEC5'
-				}).on('click', () => {
-					if(typeof this.listeners.onMapStart === 'function')
-						this.listeners.onMapStart(next_map);
-				})
-			);
-		}
-
-		this.container.text('').addClass('finished').addChild(
-			$.create('article').addChild(
-				$.create('h1').text('GRATULACJE!'),
-				$.create('div').text('Ukończony poziom: ').addChild(
-					$.create('strong').text( name )
-				),
-				$.create('div').text('Twój czas: ').addChild(
-					$.create('strong').text( Common.milisToTime(time, ' ', {
-						hours: ' godzin', 
-						minutes: ' minut',
-						seconds: ' sekund'
-					}))
-				),
-				$.create('div').setClass(new_record ? 'record-info' : '')
-					.text(
-						new_record ? 'Nowy rekord!' : `Rekord: ${Common.milisToTime(current_record, ' ', {
-							hours: ' godzin', 
-							minutes: ' minut',
-							seconds: ' sekund'
-						})}`
-					),
-				$.create('hr'),
-
-				$.create('div').setClass('nextlvl-info').addChild(
-					next_map_info
-				),
-
-				$.create('hr'),
-				$.create('button').text('POWTÓRZ POZIOM').on('click', () => {
-					if(typeof this.listeners.onMapStart === 'function')
-						this.listeners.onMapStart( AVAIBLE_MAPS.find(map => map.name === name) );
-				}),
-				$.create('br'),
-				this.menu_return_btn = $.create('button').addClass('exit-btn')
-					.text('POWRÓT DO MENU').on('click', this.tryReturnToMenu.bind(this)).setStyle({
-						'margin-top': '10px'
-					})
-			)
-		);
+		
+		ResultView.open(this, this.container, name, time, edited, map_data);
 	}
 }

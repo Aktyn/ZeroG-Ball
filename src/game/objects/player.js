@@ -1,5 +1,6 @@
 //@ts-check
 import Object2D, {Type} from './object2d';
+import CollisionCategories from './collision_categories';
 import Config from './../config';
 import SvgEngine from './../svg_engine';
 import SimplePhysics from './../simple_physics/engine';
@@ -19,8 +20,10 @@ export default class Player extends Object2D {
 	* @param {on_hp_change_cb} on_hp_change
 	*/
 	constructor(graphics_engine, physics_engine, on_hp_change) {
-		super(Type.CIRCLE, Config.player_size, Config.player_size, graphics_engine, physics_engine);
+		super(Type.CIRCLE, Config.player_size, Config.player_size, graphics_engine, physics_engine, true);
 		super.setClass('player');
+
+		this.body.setCategory( CollisionCategories.player );
 
 		this.on_hp_change = on_hp_change;
 

@@ -154,6 +154,14 @@ export default class SvgEngine {
 		}
 	}
 
+	/** @param {SvgObject[]} objs */
+	addObjectsBelow(...objs) {
+		for(let obj of objs) {
+			this.objects.push(obj);
+			this.foreground_layer.addChild(obj, true);
+		}
+	}
+
 	clearForeground() {//removes every child from foreground
 		for(let obj of this.objects)
 			obj.destroy();

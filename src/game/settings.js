@@ -16,7 +16,6 @@ const DEFAULTS = {
 };
 
 Object.assign(DEFAULTS, SPEECH_RECOGNITION_DEFAULTS);
-console.log(DEFAULTS);
 
 /** @type {{[index: string]: boolean | string | number}} stores key: value pairs */
 let settings_store = {};

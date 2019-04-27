@@ -1,6 +1,7 @@
 //@ts-check
 import {Vec2, dotProduct, crossNV, crossVV} from './math';
 import {Body, Circle, Rect, ShapeType} from './body';
+import Filter from './filter';
 import Config from './../config';
 
 const bounce = 1;//0.5;//0 - 1 -> bouncing factor
@@ -19,8 +20,12 @@ export default class Contact {
 		this.overlap = overlap;
 	}
 
+	_doesCollide() {
+		return this.A.static || !Filter.collide(this.A, this.B);
+	}
+
 	solve() {//solves only for A
-		if(this.A.static)
+		if(this._doesCollide())
 			return;
 
 		if(this.A.shape_type === ShapeType.CIRCLE) {
@@ -86,7 +91,7 @@ export default class Contact {
 	}
 
 	fixCollision() {//moves object so it is no more colliding
-		if(this.A.static)
+		if(this._doesCollide())
 			return;
 		let solve_dst = this.B.static ? this.overlap : this.overlap/2;
 		this.A.pos.addVec(
