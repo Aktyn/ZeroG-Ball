@@ -1,16 +1,6 @@
 import MapData from './map_data';
 import Config from './config';
 
-/*export const THEMES = {//deprecated
-	'czerwony':	'red',
-	'zielony': 	'green',
-	'skrzynia': 'crate',
-	'wyjście':	'exit',
-	'piła':		'sawblade',
-	'trawa': 	'grass',
-	'lawa': 	'lava'
-};*/
-
 export const CATEGORIES = {
 	all: 				'WSZYSTKIE',
 	active: 			'INTERAKTYWNE',
@@ -38,6 +28,27 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 		class_name: 'forcefield',
 		shape: MapData.SHAPE_TYPE.CIRCLE,
 		radius: 0.225,
+		categories: [CATEGORIES.all, CATEGORIES.active]
+	},
+	'portal1': {
+		name: 'Portal 1',
+		class_name: 'portal1',
+		shape: MapData.SHAPE_TYPE.CIRCLE,
+		radius: 0.15,
+		categories: [CATEGORIES.all, CATEGORIES.active]
+	},
+	'portal2': {
+		name: 'Portal 2',
+		class_name: 'portal2',
+		shape: MapData.SHAPE_TYPE.CIRCLE,
+		radius: 0.15,
+		categories: [CATEGORIES.all, CATEGORIES.active]
+	},
+	'portal3': {
+		name: 'Portal 3',
+		class_name: 'portal3',
+		shape: MapData.SHAPE_TYPE.CIRCLE,
+		radius: 0.15,
 		categories: [CATEGORIES.all, CATEGORIES.active]
 	},
 	'domino_block': {
@@ -101,6 +112,21 @@ export const TEXTURES = {//names must much those in svg.scss
 		src: require('./../img/textures/forcefield.png'),
 		width: Config.VIRT_SCALE * OBJECTS.forcefield.radius,
 		height: Config.VIRT_SCALE * OBJECTS.forcefield.radius
+	},
+	'portal1_texture': {
+		src: require('./../img/textures/portal1.png'),
+		width: Config.VIRT_SCALE * OBJECTS.portal1.radius,
+		height: Config.VIRT_SCALE * OBJECTS.portal1.radius
+	},
+	'portal2_texture': {
+		src: require('./../img/textures/portal2.png'),
+		width: Config.VIRT_SCALE * OBJECTS.portal2.radius,
+		height: Config.VIRT_SCALE * OBJECTS.portal2.radius
+	},
+	'portal3_texture': {
+		src: require('./../img/textures/portal3.png'),
+		width: Config.VIRT_SCALE * OBJECTS.portal3.radius,
+		height: Config.VIRT_SCALE * OBJECTS.portal3.radius
 	},
 	'crate_texture': {
 		src: require('./../img/textures/crate.jpg'),

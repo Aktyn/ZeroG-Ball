@@ -54,8 +54,8 @@ export default class Forcefield extends Object2D {
 			);
 
 			this.body.velocity.set(
-				this.body.velocity.x + vx*dt*0.01, 
-				this.body.velocity.y + vy*dt*0.01 
+				this.body.velocity.x + vx*dt*0.05, 
+				this.body.velocity.y + vy*dt*0.05 
 			);
 
 			if( (this.lifetime-=dt) < 0) {

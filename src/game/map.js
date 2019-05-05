@@ -6,6 +6,7 @@ import Player from './objects/player';
 import Exit from './objects/exit';
 import SawBlade from './objects/sawblade';
 import Forcefield from './objects/forcefield';
+import Portal from './objects/portal';
 
 import Background from './background';
 import Config from './config';
@@ -158,6 +159,12 @@ export default class Map extends CollisionListener {
 			case 'forcefield':
 				obj = new Forcefield(w||1, h||1, this.graphics, this.physics);
 				break;
+			case 'portal1':
+			case 'portal2':
+			case 'portal3': {
+				let type = ['portal1', 'portal2', 'portal3'].indexOf(class_name);
+				obj = new Portal(w||1, h||1, this.graphics, this.physics, type);
+			}	break;
 			default:
 				obj = new Object2D(shape, w||1, h||1, this.graphics, this.physics);
 				break;

@@ -2,7 +2,9 @@
 import GameCore from './game_core';
 import {STATE} from './map';
 import Object2D, {Type} from './objects/object2d';
+import Portal from './objects/portal';
 import {Body} from './simple_physics/body';
+import Filter from './simple_physics/filter';
 
 /**
  * @param  {GameCore} game_core
@@ -22,12 +24,37 @@ export default function handleCollision(game_core, A, B) {
 				}
 				break;
 			case 'sawblade':
-				//game_core.onPlayerDamage(1);
 				game_core.player.damage(1);
 				break;
 			case 'forcefield':
 				B.getCustomData().activate(game_core.player);
 				break;
 		}
+	}
+	if(A.getCustomData() instanceof Portal) {
+		/** @type {Object2D} */
+		let target_obj = B.getCustomData();
+		//static object and other portals doesn't teleport
+		if(target_obj.static || target_obj instanceof Portal)
+			return;
+
+		//get another portal instance with same type
+		/** @type {Portal} collided portal handle */
+		let p = A.getCustomData();
+
+		if(Filter.collide(target_obj.body, p.body))
+			return;
+
+		/** @type {Portal[]} [potential destination portals] */
+		let other_portals = [];
+
+		for(let obj of game_core.objects) {
+			if(obj !== p && obj instanceof Portal && obj.type === p.type && !obj.locked)
+				other_portals.push(obj);
+		}
+
+		//get random target portal and init teleportation
+		if(other_portals.length > 0)
+			p.teleport( other_portals[ (Math.random()*other_portals.length)|0 ], target_obj );
 	}
 }
