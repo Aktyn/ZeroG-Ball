@@ -9,6 +9,7 @@ import SpikyCrate from './objects/spiky_crate';
 import Forcefield from './objects/forcefield';
 import Portal from './objects/portal';
 import Cannon from './objects/cannon';
+import Key from './objects/key';
 
 import Background from './background';
 import Config from './config';
@@ -167,8 +168,12 @@ export default class Map extends CollisionListener {
 				obj = new Forcefield(w||1, h||1, this.graphics, this.physics);
 				break;
 			case 'cannon':
-				obj = new Cannon(w||1, h||1, this.graphics, this.physics);
+				obj = new Cannon(w||1, h||1, this.graphics, this.physics, this.objects, this.state);
 				break;
+			case 'key1': {//ADD MORE KEYS HERE
+				let type = ['key1'].indexOf(class_name);
+				obj = new Key(w||1, h||1, this.graphics, this.physics, type);
+			}	break;
 			case 'portal1':
 			case 'portal2':
 			case 'portal3': {
@@ -319,8 +324,7 @@ export default class Map extends CollisionListener {
 	update(dt) {
 		if(this.state === STATE.RUNNING)//if(!this.paused)
 			this.physics.update();
-		// this.graphics.update(dt);
-		//this loop was moved from SvgEngine.update method
+		
 		let to_remove;
 		for(let obj of this.objects) {
 			obj.update(dt);
@@ -335,7 +339,7 @@ export default class Map extends CollisionListener {
 		}
 
 		if(to_remove) {
-			console.log('removing objects:', to_remove);
+			//console.log('removing objects:', to_remove);
 			to_remove.forEach(this.removeObject.bind(this));
 		}
 	}

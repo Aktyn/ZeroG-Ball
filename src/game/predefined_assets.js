@@ -6,6 +6,7 @@ export const CATEGORIES = {
 	active: 			'INTERAKTYWNE',
 	dynamic: 			'DYNAMICZNE',
 	building_blocks: 	'BUDULCE',
+	logic: 				'LOGICZNE' 
 };
 
 export const OBJECTS = {//some of those name must not be changed due to correlation with other code
@@ -105,6 +106,15 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 		height: 0.1,
 		categories: [CATEGORIES.all, CATEGORIES.building_blocks]
 	},
+
+	//keys and doors
+	'key1': {
+		name: 'Klucz 1',
+		class_name: 'key1',
+		shape: MapData.SHAPE_TYPE.CIRCLE,
+		radius: 0.1,
+		categories: [CATEGORIES.all, CATEGORIES.logic]
+	}
 };
 
 export const TEXTURES = {//names must much those in svg.scss
@@ -160,13 +170,18 @@ export const TEXTURES = {//names must much those in svg.scss
 	},
 	'lava_texture': {
 		src: require('./../img/textures/lava.jpg'),
-		width: Config.VIRT_SCALE*0.1,
-		height: Config.VIRT_SCALE*0.1
+		width: Config.VIRT_SCALE * OBJECTS.lava.width,
+		height: Config.VIRT_SCALE * OBJECTS.lava.height
 	},
 	'grass_texture': {
 		src: require('./../img/textures/grass.jpg'),
-		width: Config.VIRT_SCALE*0.1,
-		height: Config.VIRT_SCALE*0.1
+		width: Config.VIRT_SCALE * OBJECTS.grass.width,
+		height: Config.VIRT_SCALE * OBJECTS.grass.height
+	},
+	'key1_texture': {
+		src: require('./../img/textures/key1.png'),
+		width: Config.VIRT_SCALE * OBJECTS.key1.radius,
+		height: Config.VIRT_SCALE * OBJECTS.key1.radius
 	}
 }
 

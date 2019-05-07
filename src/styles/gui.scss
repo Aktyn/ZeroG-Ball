@@ -375,7 +375,7 @@ $header-size: 35px;
 
 			.categories {
 				display: grid;
-				grid-template-rows: 1fr 1fr 1fr 1fr;
+				grid-template-rows: 1fr 1fr 1fr;// 1fr;
 				grid-auto-flow: column;
 				align-items: stretch;
 				padding-right: 10px;

@@ -3,6 +3,7 @@ import GameCore from './game_core';
 import {STATE} from './map';
 import Object2D, {Type} from './objects/object2d';
 import Portal from './objects/portal';
+import Cannon from './objects/cannon';
 import Bullet from './objects/bullet';
 import {Body} from './simple_physics/body';
 import Filter from './simple_physics/filter';
@@ -61,7 +62,9 @@ export default function handleCollision(game_core, A, B) {
 			p.teleport( other_portals[ (Math.random()*other_portals.length)|0 ], target_obj );
 	}
 
-	if(A.getCustomData() instanceof Bullet) {
+	if(A.getCustomData() instanceof Bullet && !(B.getCustomData() instanceof Portal)
+		&& !(B.getCustomData() instanceof Cannon)) 
+	{
 		/** @type {Bullet} */
 		let bullet = A.getCustomData();
 

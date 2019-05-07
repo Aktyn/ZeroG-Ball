@@ -23,11 +23,12 @@ export default class Portal extends Object2D {
 
 		this.type = _type;
 		//everything except ...
-		this.body.setMask( 
+		this.body.setMask(//list of filters that portal can teleport
 			~CollisionCategories.player & 
 			~CollisionCategories.sawblade & 
 			~CollisionCategories.exit_portal &
-			~CollisionCategories.bullet
+			~CollisionCategories.bullet &
+			~CollisionCategories.key
 		);
 
 		/** @type {Object2D} teleporting object */

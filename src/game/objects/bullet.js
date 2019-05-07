@@ -13,19 +13,18 @@ const SHRINKING_TIME = 1000 * 0.5;//last half of a second of existence
 
 export default class Bullet extends Object2D {
 	/**
-	* @param {number} w
-	* @param {number} h
+	* @param {number} size
 	* @param {SvgEngine} graphics_engine
 	* @param {SimplePhysics} physics_engine
 	* @param {number} type one of Types
 	*/
-	constructor(w, h, graphics_engine, physics_engine, type) {
-		super(Type.CIRCLE, w, h, graphics_engine, physics_engine);
+	constructor(size, graphics_engine, physics_engine, type) {
+		super(Type.CIRCLE, size, size, graphics_engine, physics_engine);
 
 		this.body.setCategory( CollisionCategories.bullet );
 		this.type = type;//TODO - make use of it when more bullet will be created
 
-		this.r = (w+h)/2;//average of w and h
+		this.r = size;
 
 		for(let type_name of Object.keys(Types)) {
 			if(Types[type_name] === type)
@@ -43,6 +42,7 @@ export default class Bullet extends Object2D {
 			let s = this.r * (this.lifetime / SHRINKING_TIME);
 			this.setSize(s, s);
 		}
+
 		super.update(dt);
 	}
 }
