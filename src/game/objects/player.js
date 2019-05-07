@@ -20,7 +20,7 @@ export default class Player extends Object2D {
 	* @param {on_hp_change_cb} on_hp_change
 	*/
 	constructor(graphics_engine, physics_engine, on_hp_change) {
-		super(Type.CIRCLE, Config.player_size, Config.player_size, graphics_engine, physics_engine, true);
+		super(Type.CIRCLE, Config.player_size, Config.player_size, graphics_engine, physics_engine);
 		super.setClass('player');
 
 		this.body.setCategory( CollisionCategories.player );

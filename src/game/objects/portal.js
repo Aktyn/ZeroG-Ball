@@ -26,7 +26,8 @@ export default class Portal extends Object2D {
 		this.body.setMask( 
 			~CollisionCategories.player & 
 			~CollisionCategories.sawblade & 
-			~CollisionCategories.exit_portal 
+			~CollisionCategories.exit_portal &
+			~CollisionCategories.bullet
 		);
 
 		/** @type {Object2D} teleporting object */

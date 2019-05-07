@@ -38,7 +38,7 @@ $header-size: 35px;
 			text-align: right;
 		}
 
-		.game-buttons, .actions, .modes {
+		.game-buttons, .actions, .modes, .speech-indicator {
 			transition: opacity 0.3s linear, transform 0.3s ease-in-out;
 		}
 
@@ -64,7 +64,7 @@ $header-size: 35px;
 			padding: 0px;
 			margin: 0px;
 			opacity: 0.3;
-			transition: opacity 0.5s ease-in-out;
+			//transition: opacity 0.5s ease-in-out;
 
 			&.active {
 				opacity: 1;
@@ -92,7 +92,7 @@ $header-size: 35px;
 		&.hidden {
 			background-color: rgba(0, 0, 0, 0);
 			//box-shadow: 0px 0px 5px #0000;
-			.game-buttons, .actions, .modes {
+			.game-buttons, .actions, .modes, .speech-indicator {
 				opacity: 0;
 				transform: translateY(-100%);
 				button {

@@ -70,24 +70,40 @@ export default class GameGUI {
 				}),
 			
 				$.create('div').addClass('game-buttons').addChild(
-					$.create('button').text('IMPORT').on('click', this.tryImport.bind(this))
+					$.create('button').text('IMPORT').on('click', () => {
+						this.tryImport();
+						//@ts-ignore
+						document.activeElement.blur();
+					})
 				).addChild(
 					this.map_export_btn = $.create('button').text('EXPORT')
-						.on('click', this.tryExport.bind(this))
+						.on('click', () => {
+							this.tryExport();
+							//@ts-ignore
+							document.activeElement.blur();
+						})
 				).addChild(
 					$.create('button').addClass('restart-btn').text('RESTART').on('click', () => {
 						if(this.mode === 0 && typeof this.listeners.onRestart === 'function')
 							this.listeners.onRestart();
+						//@ts-ignore
+						document.activeElement.blur();
 					})
 				),
 
-				this.speech_indicator = $.create('button').addClass('speech-indicator'),
+				//$.create('div').addChild(
+					this.speech_indicator = $.create('button').addClass('speech-indicator'),
+				//),
 			
 				this.modes_panel = $.create('div').addClass('modes'),
 			
 				$.create('div').addClass('actions').addChild(
 					$.create('button').text('USTAWIENIA')
-						.on('click', this.showSettings.bind(this)),
+						.on('click', () => {
+							this.showSettings();
+							//@ts-ignore
+							document.activeElement.blur();
+						}),
 					this.menu_return_btn = $.create('button').addClass('exit-btn')
 						.text('POWRÓT DO MENU').on('click', this.tryReturnToMenu.bind(this))
 				)
@@ -398,6 +414,7 @@ export default class GameGUI {
 	showObjectEditOptions() {
 		var x_input, y_input, w_input, h_input, rot_input;
 
+		let exception_rot = this.selected_object.getClassName().split(' ').includes('cannon');
 		let container = $.create('div').addClass('edit_options').addChild(
 			$.create('div').addClass('transform-options').addChild(...[
 				$.create('label').text('pozycja x'),
@@ -406,12 +423,24 @@ export default class GameGUI {
 				$.create('label').text('pozycja y'),
 				y_input = $.create('input').setAttrib('type', 'number'),
 
-				...(is_circle => {
+				...((is_circle) => {
 					if(is_circle) {
 						return [
 							$.create('label').text('promień'),
 							w_input = $.create('input').setAttrib('type', 'number')
 								.setAttrib('min', 0),
+
+							...(() => {
+								if(exception_rot) {
+									return [
+										$.create('label').text('rotacja'),
+											rot_input = $.create('input').setAttrib('type', 'number')
+											.setAttrib('min', -360).setAttrib('max', 360)
+									]
+								}
+								else
+									return [];
+							})()
 						];
 					}
 					else {
@@ -468,7 +497,7 @@ export default class GameGUI {
 						};
 						for(let num of Object.values(new_transform)) {
 							if(isNaN(num)) {
-								console.error('Discarding changes due to NaN value');
+								console.warn('Discarding changes due to NaN value');
 								return;
 							}
 						}
@@ -544,7 +573,6 @@ export default class GameGUI {
 	tryExport(force = false) {
 		if(typeof this.listeners.exportMapData !== 'function')
 			return;
-		console.log(force);
 		if(this.download_export_confirm === null && force !== true) {
 			this.map_data = 'text/json;charset=utf-8,' + this.listeners.exportMapData();
 			this.map_export_btn.text('POBIERZ PLIK');

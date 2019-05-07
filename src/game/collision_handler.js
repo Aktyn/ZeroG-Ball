@@ -3,6 +3,7 @@ import GameCore from './game_core';
 import {STATE} from './map';
 import Object2D, {Type} from './objects/object2d';
 import Portal from './objects/portal';
+import Bullet from './objects/bullet';
 import {Body} from './simple_physics/body';
 import Filter from './simple_physics/filter';
 
@@ -24,6 +25,8 @@ export default function handleCollision(game_core, A, B) {
 				}
 				break;
 			case 'sawblade':
+			case 'spiky_crate':
+			case 'cannon_bullet':
 				game_core.player.damage(1);
 				break;
 			case 'forcefield':
@@ -31,7 +34,7 @@ export default function handleCollision(game_core, A, B) {
 				break;
 		}
 	}
-	if(A.getCustomData() instanceof Portal) {
+	if(A.getCustomData() instanceof Portal) {//TODO - case when portal is body B
 		/** @type {Object2D} */
 		let target_obj = B.getCustomData();
 		//static object and other portals doesn't teleport
@@ -56,5 +59,12 @@ export default function handleCollision(game_core, A, B) {
 		//get random target portal and init teleportation
 		if(other_portals.length > 0)
 			p.teleport( other_portals[ (Math.random()*other_portals.length)|0 ], target_obj );
+	}
+
+	if(A.getCustomData() instanceof Bullet) {
+		/** @type {Bullet} */
+		let bullet = A.getCustomData();
+
+		bullet.to_destroy = true;
 	}
 }

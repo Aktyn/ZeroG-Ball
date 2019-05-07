@@ -17,7 +17,7 @@ export default class Forcefield extends Object2D {
 	* @param {SimplePhysics} physics_engine
 	*/
 	constructor(w, h, graphics_engine, physics_engine) {
-		super(Type.CIRCLE, w, h, graphics_engine, physics_engine);
+		super(Type.CIRCLE, w, h, graphics_engine, physics_engine, 2);
 
 		this.body.setMask( ~CollisionCategories.player );//everything except player
 

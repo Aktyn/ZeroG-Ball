@@ -22,7 +22,7 @@ export default class Object2D extends SvgObject {
 	* @param {SvgEngine} graphics_engine
 	* @param {SimplePhysics} physics_engine
 	*/
-	constructor(type, width, height, graphics_engine, physics_engine, push_at_beginning = false) {
+	constructor(type, width, height, graphics_engine, physics_engine, layer_index = 1) {
 		switch(type) {
 			case Type.CIRCLE: {
 				super('circle');
@@ -42,10 +42,10 @@ export default class Object2D extends SvgObject {
 		this.to_destroy = false;
 
 		super.setSize(width, height);
-		if(push_at_beginning)
-			graphics_engine.addObjectsBelow(this);
-		else
-			graphics_engine.addObjects(this);
+		//if(push_at_beginning)
+		//	graphics_engine.addObjectsBelow(1, this);
+		//else
+		graphics_engine.addObjects(layer_index, this);
 
 		this.body.setCustomData(this);
 	}

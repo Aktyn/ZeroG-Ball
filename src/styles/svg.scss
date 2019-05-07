@@ -1,6 +1,7 @@
 $solid_colors: (
 	(red, #e57373),
-	(green, #8BC34A)
+	(green, #8BC34A),
+	(cannon_bullet, #263238)
 );
 
 $textures: (
@@ -32,12 +33,22 @@ $textures: (
 	portal2: (
 		'portal2_texture',
 		'./../img/textures/portal2.png',
-		#87cd98
+		#f07ae6
 	),
 	portal3: (
 		'portal3_texture',
 		'./../img/textures/portal3.png',
-		#f07ae6
+		#87cd98
+	),
+	spiky_crate: (
+		'spiky_crate_texture',
+		'./../img/textures/spiky_crate.png',
+		#e46d53
+	),
+	cannon: (
+		'cannon_texture',
+		'./../img/textures/cannon.png',
+		#d67458
 	),
 	lava: (
 		'lava_texture',

@@ -20,12 +20,22 @@ export default class SvgEngine {
 		});
 
 		this.defs = new SvgObject('defs', true);
-		this.background_layer = new SvgObject('g');
-		this.foreground_layer = new SvgObject('g');
-
 		this.svg.addChild(this.defs);
-		this.svg.addChild(this.background_layer);
-		this.svg.addChild(this.foreground_layer);
+
+		//this.background_layer = new SvgObject('g');
+		//this.foreground_layer = new SvgObject('g');
+		
+		/** @type {SvgObject[]} */
+		this.layers = new Array(3).fill(0).map(() => new SvgObject('g'));
+		this.layers.forEach(layer => this.svg.addChild(layer));
+		
+		//this.svg.addChild(this.background_layer);
+		//this.svg.addChild(this.foreground_layer);
+	}
+
+	/** @param {number} index */
+	getLayer(index) {
+		return this.layers[index];
 	}
 
 	/**
@@ -140,25 +150,29 @@ export default class SvgEngine {
 	}
 
 	addBackgroundObjects(...objs) {
+		for(let obj of objs)
+			this.layers[0].addChild(obj);
+	}
+
+	/** 
+	 * @param {number} layer_index
+	 * @param {...SvgObject} objs
+	 */
+	addObjects(layer_index, ...objs) {
 		for(let obj of objs) {
-			//this.objects.push(obj);//assuming that the background objects doesn't need update
-			this.background_layer.addChild(obj);
+			this.objects.push(obj);
+			this.layers[layer_index].addChild(obj);
 		}
 	}
 
-	/** @param {SvgObject[]} objs */
-	addObjects(...objs) {
+	/** 
+	 * @param {number} layer_index
+	 * @param {...SvgObject} objs
+	 */
+	addObjectsBelow(layer_index, ...objs) {
 		for(let obj of objs) {
 			this.objects.push(obj);
-			this.foreground_layer.addChild(obj);
-		}
-	}
-
-	/** @param {SvgObject[]} objs */
-	addObjectsBelow(...objs) {
-		for(let obj of objs) {
-			this.objects.push(obj);
-			this.foreground_layer.addChild(obj, true);
+			this.layers[layer_index].addChild(obj, true);
 		}
 	}
 

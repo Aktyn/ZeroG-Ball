@@ -5,8 +5,10 @@ import Object2D, {Type} from './objects/object2d';
 import Player from './objects/player';
 import Exit from './objects/exit';
 import SawBlade from './objects/sawblade';
+import SpikyCrate from './objects/spiky_crate';
 import Forcefield from './objects/forcefield';
 import Portal from './objects/portal';
+import Cannon from './objects/cannon';
 
 import Background from './background';
 import Config from './config';
@@ -35,7 +37,7 @@ export default class Map extends CollisionListener {
 		super();
 
 		this.graphics = new SvgEngine();
-		this.graphics.foreground_layer.addClass('cartoon-style');
+		this.graphics.getLayer(1).addClass('cartoon-style');
 
 		//this.paused = false;
 		this.state = STATE.RUNNING;
@@ -54,9 +56,7 @@ export default class Map extends CollisionListener {
 
 		this.background = new Background(MAP_SIZE_X, MAP_SIZE_Y, BG_SMOOTHING, BG_SCALE, this.graphics);
 		
-		this.graphics.addBackgroundObjects(//.setSize(0.5, 0.5)
-			...this.background.tiles,
-		);
+		this.graphics.addBackgroundObjects(...this.background.tiles);
 
 		this.physics = new SimplePhysics();
 		this.physics.assignCollisionListener(this);
@@ -65,14 +65,18 @@ export default class Map extends CollisionListener {
 		this.objects = [];
 		//this.loadObjects();
 		
-		if(Settings.getValue('shadows') === true)
-			this.graphics.foreground_layer.addClass('flat-shadows');
+		if(Settings.getValue('shadows') === true) {
+			for(let l=1; l<=2; l++)
+				this.graphics.getLayer(l).addClass('flat-shadows');
+		}
 
 		Settings.watch('shadows', value => {
-			if(value && !this.graphics.foreground_layer.hasClass('flat-shadows'))
-				this.graphics.foreground_layer.addClass('flat-shadows');
-			if(!value && this.graphics.foreground_layer.hasClass('flat-shadows'))
-				this.graphics.foreground_layer.removeClass('flat-shadows');
+			for(let l=1; l<=2; l++) {
+				if(value && !this.graphics.getLayer(l).hasClass('flat-shadows'))
+					this.graphics.getLayer(l).addClass('flat-shadows');
+				if(!value && this.graphics.getLayer(l).hasClass('flat-shadows'))
+					this.graphics.getLayer(l).removeClass('flat-shadows');
+			}
 		});
 
 		if(Settings.getValue('textures') === false) {
@@ -156,8 +160,14 @@ export default class Map extends CollisionListener {
 			case 'sawblade':
 				obj = new SawBlade(w||1, h||1, this.graphics, this.physics);
 				break;
+			case 'spiky_crate':
+				obj = new SpikyCrate(w||1, h||1, this.graphics, this.physics);
+				break;
 			case 'forcefield':
 				obj = new Forcefield(w||1, h||1, this.graphics, this.physics);
+				break;
+			case 'cannon':
+				obj = new Cannon(w||1, h||1, this.graphics, this.physics);
 				break;
 			case 'portal1':
 			case 'portal2':
@@ -302,7 +312,7 @@ export default class Map extends CollisionListener {
 		this.camera.zoom = zoom;
 
 		this.graphics.updateView(this.camera);
-		this.background.update(this.camera, this.graphics.background_layer);
+		this.background.update(this.camera, this.graphics.getLayer(0));
 	}
 
 	/** @param {number} dt */

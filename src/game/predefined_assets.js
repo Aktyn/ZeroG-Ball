@@ -51,6 +51,21 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 		radius: 0.15,
 		categories: [CATEGORIES.all, CATEGORIES.active]
 	},
+	'spiky_crate': {
+		name: 'Kolczasta skrzynia',
+		class_name: 'spiky_crate',
+		shape: MapData.SHAPE_TYPE.RECT,
+		width: 0.3,
+		height: 0.3,
+		categories: [CATEGORIES.all, CATEGORIES.active, CATEGORIES.building_blocks]
+	},
+	'cannon': {
+		name: 'Armata',
+		class_name: 'cannon',
+		shape: MapData.SHAPE_TYPE.CIRCLE,
+		radius: 0.15,
+		categories: [CATEGORIES.all, CATEGORIES.active]
+	},
 	'domino_block': {
 		name: 'Blok domina',
 		class_name: 'red',
@@ -127,6 +142,16 @@ export const TEXTURES = {//names must much those in svg.scss
 		src: require('./../img/textures/portal3.png'),
 		width: Config.VIRT_SCALE * OBJECTS.portal3.radius,
 		height: Config.VIRT_SCALE * OBJECTS.portal3.radius
+	},
+	'spiky_crate_texture': {
+		src: require('./../img/textures/spiky_crate.png'),
+		width: Config.VIRT_SCALE * OBJECTS.spiky_crate.width,
+		height: Config.VIRT_SCALE * OBJECTS.spiky_crate.height
+	},
+	'cannon_texture': {
+		src: require('./../img/textures/cannon.png'),
+		width: Config.VIRT_SCALE * OBJECTS.cannon.radius,
+		height: Config.VIRT_SCALE * OBJECTS.cannon.radius
 	},
 	'crate_texture': {
 		src: require('./../img/textures/crate.jpg'),
