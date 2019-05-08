@@ -4,5 +4,6 @@ export default {//64 available categories
 	spiky_crate: 	1 << 2,
 	exit_portal: 	1 << 3,
 	bullet: 		1 << 4,
-	key: 			1 << 5
+	key: 			1 << 5,
+	//door: 			1 << 6
 };

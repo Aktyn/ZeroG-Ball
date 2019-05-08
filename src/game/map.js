@@ -10,6 +10,7 @@ import Forcefield from './objects/forcefield';
 import Portal from './objects/portal';
 import Cannon from './objects/cannon';
 import Key from './objects/key';
+import Door from './objects/door';
 
 import Background from './background';
 import Config from './config';
@@ -174,6 +175,10 @@ export default class Map extends CollisionListener {
 				let type = ['key1'].indexOf(class_name);
 				obj = new Key(w||1, h||1, this.graphics, this.physics, type);
 			}	break;
+			case 'door1': {
+				let type = ['door1'].indexOf(class_name);
+				obj = new Door(w||1, h||1, this.graphics, this.physics, type, this.objects);
+			} break;
 			case 'portal1':
 			case 'portal2':
 			case 'portal3': {
@@ -204,7 +209,6 @@ export default class Map extends CollisionListener {
 				}
 			})(obj.shape_type);
 
-			/*.set({'fill': 'rgb(64, 192, 255)'})*/
 			var object2d = this.createObject(obj.class_name, shape, obj.w, obj.h, obj.x, obj.y, obj.rot);
 
 			if(obj.class_name)

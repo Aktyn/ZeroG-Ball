@@ -5,6 +5,8 @@ import Object2D, {Type} from './objects/object2d';
 import Portal from './objects/portal';
 import Cannon from './objects/cannon';
 import Bullet from './objects/bullet';
+import Door from './objects/door';
+import Key from './objects/key';
 import {Body} from './simple_physics/body';
 import Filter from './simple_physics/filter';
 
@@ -53,7 +55,7 @@ export default function handleCollision(game_core, A, B) {
 		let other_portals = [];
 
 		for(let obj of game_core.objects) {
-			if(obj !== p && obj instanceof Portal && obj.type === p.type && !obj.locked)
+			if(obj !== p && obj instanceof Portal && obj.portal_type === p.portal_type && !obj.locked)
 				other_portals.push(obj);
 		}
 
@@ -69,5 +71,15 @@ export default function handleCollision(game_core, A, B) {
 		let bullet = A.getCustomData();
 
 		bullet.to_destroy = true;
+	}
+
+	if((B.getCustomData() instanceof Door) && (A.getCustomData() instanceof Key)) {
+		/** @type {Door} */
+		let door = B.getCustomData();
+		/** @type {Key} */
+		let key = A.getCustomData();
+
+		if(door.door_type === key.key_type)//compatible key and door
+			door.open(key);
 	}
 }

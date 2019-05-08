@@ -21,7 +21,7 @@ export default class Portal extends Object2D {
 	constructor(w, h, graphics_engine, physics_engine, _type) {
 		super(Type.CIRCLE, w, h, graphics_engine, physics_engine);
 
-		this.type = _type;
+		this.portal_type = _type;
 		//everything except ...
 		this.body.setMask(//list of filters that portal can teleport
 			~CollisionCategories.player & 

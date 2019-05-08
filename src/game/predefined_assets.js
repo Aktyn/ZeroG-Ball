@@ -114,6 +114,14 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 		shape: MapData.SHAPE_TYPE.CIRCLE,
 		radius: 0.1,
 		categories: [CATEGORIES.all, CATEGORIES.logic]
+	},
+	'door1': {
+		name: 'Drzwi 1',
+		class_name: 'door1',
+		shape: MapData.SHAPE_TYPE.RECT,
+		width: 0.075,
+		height: 0.4,
+		categories: [CATEGORIES.all, CATEGORIES.logic]
 	}
 };
 
