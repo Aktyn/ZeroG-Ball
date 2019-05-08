@@ -203,6 +203,16 @@ export const TEXTURES = {//names must much those in svg.scss
 		src: require('./../img/textures/elevator.png'),
 		width: Config.VIRT_SCALE * OBJECTS.elevator.width,
 		height: Config.VIRT_SCALE * OBJECTS.elevator.height
+	},
+	'elevator_texture_up': {
+		src: require('./../img/textures/elevatorUp.png'),
+		width: Config.VIRT_SCALE * OBJECTS.elevator.width,
+		height: Config.VIRT_SCALE * OBJECTS.elevator.height
+	},
+	'elevator_texture_down': {
+		src: require('./../img/textures/elevatorDown.png'),
+		width: Config.VIRT_SCALE * OBJECTS.elevator.width,
+		height: Config.VIRT_SCALE * OBJECTS.elevator.height
 	}
 };
 

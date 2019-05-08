@@ -70,8 +70,18 @@ $textures: (
 	elevator: (
 		'elevator_texture',
 		'./../img/textures/elevator.png',
-		#8BC34A
-	)
+		#D17400
+	),
+	elevator_up: (
+		'elevator_texture_up',
+		'./../img/textures/elevatorUp.png',
+		#D17400
+	),
+	elevator_down: (
+		'elevator_texture_down',
+		'./../img/textures/elevatorDown.png',
+		#D17400
+	),
 );
 
 svg.game-svg {
@@ -150,7 +160,17 @@ svg.game-svg {
 			}
 		}
 	}
+
+	.elevator.up {
+		fill: url('#elevator_texture_up');
+	}
+
+	.elevator.down {
+		fill: url('#elevator_texture_down');
+	}
+
 }
+
 
 .asset_preview {
 	& > * {
