@@ -11,13 +11,14 @@ import Portal from './objects/portal';
 import Cannon from './objects/cannon';
 import Key from './objects/key';
 import Door from './objects/door';
+import Elevator from './objects/elevator';
 
 import Background from './background';
 import Config from './config';
 import Settings from './settings';
 
 import SimplePhysics from './simple_physics/engine';
-import {Body} from './simple_physics/body';
+// import {Body} from './simple_physics/body';
 import CollisionListener from './simple_physics/collision_listener';
 
 import {TEXTURES} from './predefined_assets';
@@ -184,6 +185,9 @@ export default class Map extends CollisionListener {
 			case 'portal3': {
 				let type = ['portal1', 'portal2', 'portal3'].indexOf(class_name);
 				obj = new Portal(w||1, h||1, this.graphics, this.physics, type);
+			}	break;
+			case 'elevator': {
+				obj = new Elevator(w||1, h||1, this.graphics, this.physics, this.objects);
 			}	break;
 			default:
 				obj = new Object2D(shape, w||1, h||1, this.graphics, this.physics);

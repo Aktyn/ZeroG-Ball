@@ -2,7 +2,8 @@ $solid_colors: (
 	(red, #e57373),
 	(green, #8BC34A),
 	(cannon_bullet, #263238),
-	(door1, #8BC34A)//same color as key1
+	(door1, #8BC34A),//same color as key1
+	(orange, #D17400)
 );
 
 $textures: (
@@ -64,6 +65,11 @@ $textures: (
 	key1: (
 		'key1_texture',
 		'./../img/textures/key1.png',
+		#8BC34A
+	),
+	elevator: (
+		'elevator_texture',
+		'./../img/textures/elevator.png',
 		#8BC34A
 	)
 );

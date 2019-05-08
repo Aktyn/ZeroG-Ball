@@ -1,6 +1,6 @@
 //@ts-check
 import Object2D, {Type} from './object2d';
-import CollisionCategories from './collision_categories';
+// import CollisionCategories from './collision_categories';
 import SvgEngine from './../svg_engine';
 import SimplePhysics from './../simple_physics/engine';
 import {OBJECTS} from './../predefined_assets';

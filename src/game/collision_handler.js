@@ -7,6 +7,8 @@ import Cannon from './objects/cannon';
 import Bullet from './objects/bullet';
 import Door from './objects/door';
 import Key from './objects/key';
+import Elevator from './objects/elevator';
+import Player from './objects/player';
 import {Body} from './simple_physics/body';
 import Filter from './simple_physics/filter';
 
@@ -81,5 +83,9 @@ export default function handleCollision(game_core, A, B) {
 
 		if(door.door_type === key.key_type)//compatible key and door
 			door.open(key);
+	}
+
+	if((A.getCustomData() instanceof Player) && (B.getCustomData() instanceof Elevator)) {
+		B.getCustomData().onPlayerEnter(A.getCustomData());
 	}
 }

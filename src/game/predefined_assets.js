@@ -122,6 +122,14 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 		width: 0.075,
 		height: 0.4,
 		categories: [CATEGORIES.all, CATEGORIES.logic]
+	},
+	'elevator': {
+		name: 'Winda',
+		class_name: 'elevator',
+		shape: MapData.SHAPE_TYPE.RECT,
+		width: 0.1,
+		height: 0.1,
+		categories: [CATEGORIES.all, CATEGORIES.logic]
 	}
 };
 
@@ -190,8 +198,13 @@ export const TEXTURES = {//names must much those in svg.scss
 		src: require('./../img/textures/key1.png'),
 		width: Config.VIRT_SCALE * OBJECTS.key1.radius,
 		height: Config.VIRT_SCALE * OBJECTS.key1.radius
+	},
+	'elevator_texture': {
+		src: require('./../img/textures/elevator.png'),
+		width: Config.VIRT_SCALE * OBJECTS.elevator.width,
+		height: Config.VIRT_SCALE * OBJECTS.elevator.height
 	}
-}
+};
 
 /** @type {{name: string, src: string, color: string, linear?: boolean}[]} */
 export const BACKGROUNDS = [//default value for linear attribute is: true
