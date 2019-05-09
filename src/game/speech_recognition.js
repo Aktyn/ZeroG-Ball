@@ -44,6 +44,7 @@ var recognition_start_timestamp = 0;
 var ignore_index = -1;
 
 recognition.onstart = () => {
+	ignore_index = -1;
 	recognition_active = true;
 	recognition_start_timestamp = Date.now();
 	console.log('recognition started');

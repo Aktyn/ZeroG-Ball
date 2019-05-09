@@ -87,7 +87,8 @@ export default class MenuStage extends Stage {
 		$(window).on('keydown', this.onKey.bind(this));
 		this.secret_code = '';
 
-		setTimeout(()=>this.listeners.onStart(AVAIBLE_MAPS[0]), 100);//TEMP
+		//disables menu
+		//setTimeout(()=>this.listeners.onStart(AVAIBLE_MAPS[0]), 100);//TEMP
 	}
 
 	loadAvaibleMaps() {

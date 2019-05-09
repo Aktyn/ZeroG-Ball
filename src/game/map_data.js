@@ -68,9 +68,9 @@ export const AVAIBLE_MAPS = [//NOTE - names should be unique
 		json: require('./../maps/1.json') 
 	},
 	{
-		name: 'TODO - level 2',
+		name: 'level 2',
 		//@ts-ignore
-		json: require('./../maps/1.json') 
+		json: require('./../maps/2.json') 
 	}
 ];
 
