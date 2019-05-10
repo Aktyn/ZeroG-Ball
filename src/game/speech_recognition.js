@@ -31,6 +31,12 @@ function checkResult(result) {
 	return false;
 }
 
+if(typeof webkitSpeechRecognition === 'undefined') {
+	var webkitSpeechRecognition = function Failback() {
+		this.start = function(){};
+	};
+}
+
 //@ts-ignore
 var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
 var recognition = new SpeechRecognition();

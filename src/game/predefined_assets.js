@@ -127,8 +127,8 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 		name: 'Winda',
 		class_name: 'elevator',
 		shape: MapData.SHAPE_TYPE.RECT,
-		width: 0.1,
-		height: 0.1,
+		width: 0.4,
+		height: 0.4,
 		categories: [CATEGORIES.all, CATEGORIES.logic]
 	}
 };

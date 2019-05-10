@@ -18,11 +18,9 @@ import Config from './config';
 import Settings from './settings';
 
 import SimplePhysics from './simple_physics/engine';
-// import {Body} from './simple_physics/body';
 import CollisionListener from './simple_physics/collision_listener';
 
 import {TEXTURES} from './predefined_assets';
-// import ball_texture from './../img/ball_texture.png';
 
 export const STATE = {
 	RUNNING: 0,

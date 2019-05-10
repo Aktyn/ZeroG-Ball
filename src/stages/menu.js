@@ -88,7 +88,7 @@ export default class MenuStage extends Stage {
 		this.secret_code = '';
 
 		//disables menu
-		//setTimeout(()=>this.listeners.onStart(AVAIBLE_MAPS[0]), 100);//TEMP
+		setTimeout(()=>this.listeners.onStart(AVAIBLE_MAPS[0]), 100);//TEMP
 	}
 
 	loadAvaibleMaps() {
