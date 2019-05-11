@@ -103,8 +103,11 @@ export default class Elevator extends Object2D {
 		return super.setRot(rot);
 	}
 
-	/** @param {number} dt */
-	update(dt) {
+	/** 
+	 * @param  {number?} dt
+	 * @param  {boolean?} paused
+	 */
+	update(dt, paused = false) {
 		if(this.player) {
 			const dst = Math.pow(this.player.getTransform().x - this.getTransform().x, 2) + 
 			Math.pow(this.player.getTransform().y - this.getTransform().y, 2);
@@ -151,6 +154,6 @@ export default class Elevator extends Object2D {
 		else if(this.locked > 0)
 			this.locked--;
 
-		super.update(dt);
+		super.update(dt, paused);
 	}
 }

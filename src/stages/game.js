@@ -76,6 +76,7 @@ export default class GameStage extends Stage {
 
 			//object edit listeners
 			updateObjectTransform: this.game.updateObjectTransform.bind(this.game),
+			updateObjectKeyframes: this.game.updateObjectKeyframes.bind(this.game),
 			deleteObject: this.game.deleteObject.bind(this.game),
 
 			//other edit listeners

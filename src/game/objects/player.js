@@ -68,11 +68,14 @@ export default class Player extends Object2D {
 		this.on_hp_change(this.health);
 	}
 
-	/** @param {number?} dt */
-	update(dt) {
+	/** 
+	 * @param  {number?} dt
+	 * @param  {boolean?} paused
+	 */
+	update(dt, paused = false) {
 		this.immunity = Math.max(0, this.immunity-dt/1000.0);
 			
-		super.update(dt);
+		super.update(dt, paused);
 	}
 }
 

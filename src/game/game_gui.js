@@ -6,6 +6,8 @@ import Common from './../utils/common';
 import ResultView from './gui/result_view';
 import SettingsView from './gui/settings_view';
 
+import editObjectOptions from './gui/object_edit_code';
+
 import {OBJECTS, BACKGROUNDS, CATEGORIES} from './predefined_assets';
 import Object2D, {Type} from './objects/object2d';
 import MapData from './map_data';
@@ -117,7 +119,9 @@ export default class GameGUI {
 
 			//EDIT MENU
 			$.create('div').addClass('edit-tools').addChild(
-				this.main_edit = $.create('div').addClass('main'),
+				this.main_edit = $.create('div').addClass('main').on('mousewheel', e => {
+					this.main_edit.scrollLeft += e.deltaY;
+				}),
 
 				$.create('div').addClass('tools').addChild(
 					this.asset_categories = $.create('section').addClass('categories'),
@@ -251,12 +255,12 @@ export default class GameGUI {
 
 	/** @param {KeyboardEvent} e */
 	onKeyDown(e) {
-		if(e.keyCode === 27) {
+		if(e.keyCode === 27) {//esc
 			if(this.selected_asset !== null) {
 				this.selected_asset = null;
 				$('.asset_preview.selected').removeClass('selected');
-				this.listeners.onAssetSelected(null);
 			}
+			this.listeners.onAssetSelected(null);
 			if(this.is_view_open)
 				this.closeView();
 		}
@@ -412,108 +416,24 @@ export default class GameGUI {
 	}
 
 	showObjectEditOptions() {
-		var x_input, y_input, w_input, h_input, rot_input;
-
-		let exception_rot = this.selected_object.getClassName().split(' ').includes('cannon');
-		let container = $.create('div').addClass('edit_options').addChild(
-			$.create('div').addClass('transform-options').addChild(...[
-				$.create('label').text('pozycja x'),
-				x_input = $.create('input').setAttrib('type', 'number'),
-
-				$.create('label').text('pozycja y'),
-				y_input = $.create('input').setAttrib('type', 'number'),
-
-				...((is_circle) => {
-					if(is_circle) {
-						return [
-							$.create('label').text('promień'),
-							w_input = $.create('input').setAttrib('type', 'number')
-								.setAttrib('min', 0),
-
-							...(() => {
-								if(exception_rot) {
-									return [
-										$.create('label').text('rotacja'),
-											rot_input = $.create('input').setAttrib('type', 'number')
-											.setAttrib('min', -360).setAttrib('max', 360)
-									]
-								}
-								else
-									return [];
-							})()
-						];
-					}
-					else {
-						return [
-							$.create('label').text('szerokość'),
-							w_input = $.create('input').setAttrib('type', 'number')
-								.setAttrib('min', 0),
-
-							$.create('label').text('wysokość'),
-							h_input = $.create('input').setAttrib('type', 'number')
-								.setAttrib('min', 0),
-
-							$.create('label').text('rotacja'),
-							rot_input = $.create('input').setAttrib('type', 'number')
-								.setAttrib('min', -360).setAttrib('max', 360),
-						];
-					}
-				})(this.selected_object.type === Type.CIRCLE),
-			]),
-
-			$.create('div').addClass('object-options').addChild(
-				$.create('button').text('USUŃ').on('click', () => {
-					if(this.mode === 1 && typeof this.listeners.deleteObject === 'function') {
-						this.listeners.deleteObject(this.selected_object);
-						this.selectObject(null);
-					}
-				})
-			)
-		);
-
-		try {
-			x_input.setAttrib('value', this.selected_object.transform.x);
-			y_input.setAttrib('value', this.selected_object.transform.y);
-			w_input.setAttrib('value', this.selected_object.transform.w);
-			if(h_input)
-				h_input.setAttrib('value', this.selected_object.transform.h);
-			if(rot_input)
-				rot_input.setAttrib('value', 
-					(this.selected_object.transform.rot * 180.0/Math.PI).toPrecision(2));
-
-			let steps = [0.1, 0.1, 0.1, 0.1, 1];
-			[x_input, y_input, w_input, h_input, rot_input].forEach((input, i) => {
-				if(input) {
-					input.setAttrib('step', steps[i]);
-					input.on('input', () => {
-						let new_transform = {
-							x: parseFloat(x_input.value),
-							y: parseFloat(y_input.value),
-
-							w: parseFloat(w_input.value),
-							h: h_input ? parseFloat(h_input.value) : parseFloat(w_input.value),
-
-							rot: rot_input ? (parseInt(rot_input.value)*Math.PI/180.0) : 0
-						};
-						for(let num of Object.values(new_transform)) {
-							if(isNaN(num)) {
-								console.warn('Discarding changes due to NaN value');
-								return;
-							}
-						}
-
-						if(typeof this.listeners.updateObjectTransform !== 'function')
-							return;
-
-						if(this.mode === 1)
-							this.listeners.updateObjectTransform(this.selected_object, new_transform);
-					});
-				}
-			});
-		}
-		catch(e) {
-			console.error(e);
-		}
+		let container = editObjectOptions(this.selected_object, () => {
+			if(this.mode === 1 && typeof this.listeners.deleteObject === 'function') {
+				this.listeners.deleteObject(this.selected_object);
+				this.selectObject(null);
+			}
+		}, () => {
+			if(this.mode === 1) {
+				let classname = this.selected_object.getClassName().split(' ')[0];
+				this.listeners.onAssetSelected(this.selected_object);
+				this.selectObject(null);
+			}
+		}, (new_transform) => {
+			if(typeof this.listeners.updateObjectTransform === 'function' && this.mode === 1)
+				this.listeners.updateObjectTransform(this.selected_object, new_transform);
+		}, (keyframes) => {
+			if(typeof this.listeners.updateObjectKeyframes === 'function' && this.mode === 1)
+				this.listeners.updateObjectKeyframes(this.selected_object, keyframes);
+		});
 
 		this.main_edit.text('').addChild( container );
 	}
@@ -527,9 +447,8 @@ export default class GameGUI {
 			return;
 		}
 		this.selected_asset = obj;
-		this.selected_asset.dynamic = dynamic;
+		this.selected_asset.dynamic = obj.dynamic = dynamic;
 		$(`.asset_preview.${name}`).addClass('selected');
-
 		this.listeners.onAssetSelected(obj);
 	}
 
@@ -545,7 +464,6 @@ export default class GameGUI {
 		this.selected_object = obj;
 
 		if(obj !== null) {
-			console.log('selecting:', obj);
 			obj.addClass('selected');
 			this.showObjectEditOptions();
 		}

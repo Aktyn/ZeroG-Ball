@@ -16,9 +16,12 @@ export default class Exit extends Object2D {
 		this.body.setCategory( CollisionCategories.exit_portal );
 	}
 
-	/** @param {number} dt */
-	update(dt) {
+	/** 
+	 * @param  {number?} dt
+	 * @param  {boolean?} paused
+	 */
+	update(dt, paused = false) {
 		super.setRot(this.transform.rot + Math.PI * dt * -0.0003);
-		super.update(dt);
+		super.update(dt, paused);
 	}
 }

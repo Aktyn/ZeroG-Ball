@@ -17,9 +17,12 @@ export default class SawBlade extends Object2D {
 		this.body.setCategory( CollisionCategories.sawblade );
 	}
 
-	/** @param {number} dt */
-	update(dt) {
+	/** 
+	 * @param  {number?} dt
+	 * @param  {boolean?} paused
+	 */
+	update(dt, paused = false) {
 		super.setRot(this.transform.rot + Math.PI * dt * -0.00075);
-		super.update(dt);
+		super.update(dt, paused);
 	}
 }

@@ -10,6 +10,15 @@ import {Body} from './simple_physics/body';
 import handleCollision from './collision_handler';
 
 /**
+* 	@typedef {{
+		x: number, y: number, 
+		w: number, h: number, 
+		rot: number,
+	}} 
+	Transform
+*/
+
+/**
 * Starts an update loop
 * @param {GameCore} self
 */
@@ -179,10 +188,6 @@ export default class GameCore extends Map {
 					);
 				}
 			}
-
-			/*if(!this.paused) {
-				super.addTestCircle(super.castCoords(this.convertCoords(e)));
-			}*/
 		}
 
 		this.last_mouse_coords = null;
@@ -322,6 +327,19 @@ export default class GameCore extends Map {
 
 	/**
 	* @param {Object2D} obj
+	* @param {{time: number, transform: Transform}[]} keyframes
+	*/
+	updateObjectKeyframes(obj, keyframes) {
+		if(this.map_data.updateObjectKeyframes(obj, keyframes) === false) {
+			console.warn('Cannot update object keyframes');
+			return;
+		}
+
+		obj.setKeyframes(keyframes);
+	}
+
+	/**
+	* @param {Object2D} obj
 	*/
 	deleteObject(obj) {
 		if(this.map_data.deleteObject(obj) === false)
@@ -376,7 +394,7 @@ export default class GameCore extends Map {
 			this.elapsed_time += dt;
 			this.listeners.onTimerUpdate(this.elapsed_time);
 
-			if(this.player) {
+			if(this.player && !this.paused) {
 				if(this.steering.left)
 					this.player.move({x: -1, y: 0}, dt);
 				if(this.steering.right)

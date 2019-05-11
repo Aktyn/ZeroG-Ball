@@ -31,20 +31,13 @@ export default class Cannon extends Object2D {
 		this._graphics = graphics_engine;
 		this._physics = physics_engine;
 		this.objects = objects;
-
-		/** @type {Bullet[]} */
-		//this.bullets = [];
 	}
 
-	/*** @param {SimplePhysics} physics_engine */
-	/*_destroy_(physics_engine) {
-		for(let b of this.bullets)
-			b._destroy_(physics_engine);
-		super._destroy_(physics_engine);
-	}*/
-
-	/** @param {number} dt */
-	update(dt) {
+	/** 
+	 * @param  {number?} dt
+	 * @param  {boolean?} paused
+	 */
+	update(dt, paused = false) {
 		if(this.state === STATE.RUNNING && (this.time_to_shoot -= dt) <= 0 ) {//shoot
 			this.time_to_shoot += SHOOTING_FREQUENCY;
 
@@ -59,21 +52,9 @@ export default class Cannon extends Object2D {
 				transform.y + sin * (this.r + BULLET_SIZE)
 			);
 			bullet.body.velocity.set(cos*BULLET_SPEED, sin*BULLET_SPEED);
-			//this.bullets.push( bullet );
 			this.objects.push( bullet );
 		}
-		/*let to_remove = [];
-		for(let b of this.bullets) {
-			if(b.to_destroy)
-				to_remove.push(b);
-			else
-				b.update(dt);
-		}
-		
-		to_remove.forEach(b => {
-			this.bullets.splice(this.bullets.indexOf(b), 1);
-			b._destroy_(this._physics);
-		});*/
-		super.update(dt);
+
+		super.update(dt, paused);
 	}
 }

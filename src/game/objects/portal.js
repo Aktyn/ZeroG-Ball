@@ -57,8 +57,11 @@ export default class Portal extends Object2D {
 		this.suckingSpeed = INITIAL_SUCKING_SPEED;
 	}
 
-	/** @param {number} dt */
-	update(dt) {
+	/** 
+	 * @param  {number?} dt
+	 * @param  {boolean?} paused
+	 */
+	update(dt, paused = false) {
 		if(this.obj !== null) {
 			let dx = this.obj.getTransform().x - this.getTransform().x;
 			let dy = this.obj.getTransform().y - this.getTransform().y;
@@ -81,6 +84,6 @@ export default class Portal extends Object2D {
 			this.locked--;
 
 		super.setRot(this.transform.rot + Math.PI * dt * -0.0003);
-		super.update(dt);
+		super.update(dt, paused);
 	}
 }

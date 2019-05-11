@@ -33,8 +33,11 @@ export default class Forcefield extends Object2D {
 		this.player = _player;
 	}
 
-	/** @param {number} dt */
-	update(dt) {
+	/** 
+	 * @param  {number?} dt
+	 * @param  {boolean?} paused
+	 */
+	update(dt, paused = false) {
 		if(this.player) {
 			let dx = this.player.getTransform().x - this.getTransform().x;
 			let dy = this.player.getTransform().y - this.getTransform().y;
@@ -69,6 +72,6 @@ export default class Forcefield extends Object2D {
 
 			super.setRot(this.transform.rot + Math.PI * dt * -0.00055);
 		}
-		super.update(dt);
+		super.update(dt, paused);
 	}
 }

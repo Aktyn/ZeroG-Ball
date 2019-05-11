@@ -40,7 +40,6 @@ export default class Map extends CollisionListener {
 		this.graphics = new SvgEngine();
 		this.graphics.getLayer(1).addClass('cartoon-style');
 
-		//this.paused = false;
 		this.state = STATE.RUNNING;
 
 		this.camera = {
@@ -64,7 +63,6 @@ export default class Map extends CollisionListener {
 
 		/** @type {Object2D[] */
 		this.objects = [];
-		//this.loadObjects();
 		
 		if(Settings.getValue('shadows') === true) {
 			for(let l=1; l<=2; l++)
@@ -123,7 +121,6 @@ export default class Map extends CollisionListener {
 			}, {
 				name: 'feColorMatrix',
 				attribs: {'result': "matrixOut", 'in': "offOut", 'type': "matrix", 'values': "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"}
-				//0.6 0 0 0 0 0 0.6 0 0 0 0 0 0.6 0 0 0 0 0 1 0
 			}, {
 				name: 'feBlend',
 				attribs: {'result': 'out1', 'in': "SourceGraphic", 'in2': "matrixOut", 'mode': "normal"}
@@ -132,12 +129,8 @@ export default class Map extends CollisionListener {
 	}
 
 	loadTextures() {
-		for(let [texture_name, texture] of Object.entries(TEXTURES)) {
-			//console.log(texture_name, texture);
+		for(let [texture_name, texture] of Object.entries(TEXTURES))
 			this.graphics.createTexture(texture_name, texture.src, texture.width, texture.height);
-		}
-		/*this.graphics.createTexture('ball-texture', ball_texture, 
-			Config.VIRT_SCALE*0.1, Config.VIRT_SCALE*0.1);*/
 	}
 
 	/** 
@@ -212,6 +205,7 @@ export default class Map extends CollisionListener {
 			})(obj.shape_type);
 
 			var object2d = this.createObject(obj.class_name, shape, obj.w, obj.h, obj.x, obj.y, obj.rot);
+			object2d.setKeyframes(obj.keyframes);
 
 			if(obj.class_name)
 				object2d.setClass(obj.class_name);
@@ -225,27 +219,31 @@ export default class Map extends CollisionListener {
 	}
 
 	addAsset(asset) {
-		//console.log(asset);
 		//let w, h, type;
+		if(asset instanceof Object2D) {
+			let obj = asset.clone(this.graphics, this.physics);
+			obj.setClass( obj.getClassName().split(' ')[0] );
+			obj.setPos(this.camera.x-this.camera.zoom-3, 0);
+			this.objects.push(obj);
+			return obj;
+		}
 
 		if(asset.shape === MapData.SHAPE_TYPE.CIRCLE) {
-			//var object2d = new Object2D(Type.CIRCLE, asset.radius||1, asset.radius||1, this.graphics, this.physics).set({'class': asset.theme});
-			var object2d = this.createObject(asset.class_name, Type.CIRCLE, asset.radius||1, asset.radius||1)
-				.setClass(asset.class_name);
+			var object2d = this.createObject(asset.class_name, Type.CIRCLE, 
+				asset.radius||1, asset.radius||1).setClass(asset.class_name);
 		}
 		else {
-			//var object2d = new Object2D(Type.RECT, asset.width||1, asset.height||1, this.graphics, this.physics).set({'class': asset.theme});
-			var object2d = this.createObject(asset.class_name, Type.RECT, asset.width||1, asset.height||1)
-				.setClass(asset.class_name);
+			var object2d = this.createObject(asset.class_name, Type.RECT, 
+				asset.width||1, asset.height||1).setClass(asset.class_name);
 		}
-
-		//console.log( asset.class_name );
 
 		if(asset.dynamic === false)
 			object2d.setStatic();
+		object2d.setKeyframes(asset.keyframes);
 
 		//change initial position to somewhere outside camera view
 		object2d.setPos(this.camera.x-this.camera.zoom-3, 0);
+		object2d.setKeyframes(asset.keyframes);
 
 		this.objects.push(object2d);
 		return object2d;
@@ -259,8 +257,10 @@ export default class Map extends CollisionListener {
 		let t = obj.getTransform();
 		let clone = this.createObject(obj.getClassName(), obj.type, t.w, t.h, t.x, t.y, t.rot);
 		clone.setClass(obj.getClassName());
+		if(obj.static)
+			clone.setStatic();
+		clone.setKeyframes( obj.keyframes );
 		this.objects.push( clone );
-		//this.objects.push( obj.clone(this.graphics, this.physics) );
 	}
 
 	/** @param {Object2D} obj */
@@ -326,14 +326,18 @@ export default class Map extends CollisionListener {
 		this.background.update(this.camera, this.graphics.getLayer(0));
 	}
 
+	get paused() {
+		return this.state !== STATE.RUNNING;
+	}
+
 	/** @param {number} dt */
 	update(dt) {
-		if(this.state === STATE.RUNNING)//if(!this.paused)
+		if(!this.paused)
 			this.physics.update();
 		
 		let to_remove;
 		for(let obj of this.objects) {
-			obj.update(dt);
+			obj.update(dt, this.paused);
 			if(obj.isOutOfRange() || obj.to_destroy) {
 				if(obj === this.player) {
 					this.player.kill();

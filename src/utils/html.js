@@ -118,7 +118,7 @@ const extender = {//extended methods of DOM HTMLElements
 		}
 		
 		this.appendChild(element);*/
-		for(let el of elements)
+		for(let el of elements.filter(el => el instanceof Node))
 			this.appendChild(el);
 		return this;
 	},

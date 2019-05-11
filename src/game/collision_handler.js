@@ -1,6 +1,7 @@
 //@ts-check
 import GameCore from './game_core';
 import {STATE} from './map';
+
 import Object2D, {Type} from './objects/object2d';
 import Portal from './objects/portal';
 import Cannon from './objects/cannon';
@@ -8,7 +9,12 @@ import Bullet from './objects/bullet';
 import Door from './objects/door';
 import Key from './objects/key';
 import Elevator from './objects/elevator';
+import Exit from './objects/exit';
+import Forcefield from './objects/forcefield';
+import Sawblade from './objects/sawblade';
+import SpikyCrate from './objects/spiky_crate';
 import Player from './objects/player';
+
 import {Body} from './simple_physics/body';
 import Filter from './simple_physics/filter';
 
@@ -18,37 +24,36 @@ import Filter from './simple_physics/filter';
  * @param  {Body} B
  */
 export default function handleCollision(game_core, A, B) {
-	if(A.getCustomData() === game_core.player) {
-		switch(B.getCustomData().getClassName()) {
-			case 'exit':
-				console.log('Level completed');
-				
-				game_core.state = STATE.FINISHED;
-				if(typeof game_core.listeners.onMapFinished === 'function') {
-					game_core.listeners.onMapFinished(game_core.map_data.name, 
-						game_core.elapsed_time, game_core.map_data.wasEdited);
-				}
-				break;
-			case 'sawblade':
-			case 'spiky_crate':
-			case 'cannon_bullet':
-				game_core.player.damage(1);
-				break;
-			case 'forcefield':
-				B.getCustomData().activate(game_core.player);
-				break;
+	let objA = A.getCustomData();
+	let objB = B.getCustomData();
+
+	if(objA instanceof Player) {
+		if(objB instanceof Elevator)
+			objB.onPlayerEnter(objA);
+		else if(objB instanceof Exit) {
+			console.log('Level completed');
+			
+			game_core.state = STATE.FINISHED;
+			if(typeof game_core.listeners.onMapFinished === 'function') {
+				game_core.listeners.onMapFinished(game_core.map_data.name, 
+					game_core.elapsed_time, game_core.map_data.wasEdited);
+			}
 		}
+		else if(objB instanceof Forcefield)
+			objB.activate(game_core.player);
+		else if((objB instanceof Sawblade) || (objB instanceof SpikyCrate) || (objB instanceof Bullet))
+			game_core.player.damage(1);
 	}
-	if(A.getCustomData() instanceof Portal) {//TODO - case when portal is body B
+	if(objA instanceof Portal) {
 		/** @type {Object2D} */
-		let target_obj = B.getCustomData();
+		let target_obj = objB;
 		//static object and other portals doesn't teleport
 		if(target_obj.static || target_obj instanceof Portal)
 			return;
 
 		//get another portal instance with same type
 		/** @type {Portal} collided portal handle */
-		let p = A.getCustomData();
+		let p = objA;
 
 		if(Filter.collide(target_obj.body, p.body))
 			return;
@@ -66,26 +71,18 @@ export default function handleCollision(game_core, A, B) {
 			p.teleport( other_portals[ (Math.random()*other_portals.length)|0 ], target_obj );
 	}
 
-	if(A.getCustomData() instanceof Bullet && !(B.getCustomData() instanceof Portal)
-		&& !(B.getCustomData() instanceof Cannon)) 
-	{
+	if(objA instanceof Bullet && !(objB instanceof Portal) && !(objB instanceof Cannon)) {
 		/** @type {Bullet} */
-		let bullet = A.getCustomData();
-
-		bullet.to_destroy = true;
+		objA.to_destroy = true;
 	}
 
-	if((B.getCustomData() instanceof Door) && (A.getCustomData() instanceof Key)) {
+	if((objB instanceof Door) && (objA instanceof Key)) {
 		/** @type {Door} */
-		let door = B.getCustomData();
+		let door = objB;
 		/** @type {Key} */
-		let key = A.getCustomData();
+		let key = objA;
 
 		if(door.door_type === key.key_type)//compatible key and door
 			door.open(key);
-	}
-
-	if((A.getCustomData() instanceof Player) && (B.getCustomData() instanceof Elevator)) {
-		B.getCustomData().onPlayerEnter(A.getCustomData());
 	}
 }

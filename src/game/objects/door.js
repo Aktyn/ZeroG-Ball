@@ -79,8 +79,11 @@ export default class Door extends Object2D {
 		this.setSize(0, 0);
 	}
 
-	/** @param {number} dt */
-	update(dt) {
+	/** 
+	 * @param  {number?} dt
+	 * @param  {boolean?} paused
+	 */
+	update(dt, paused = false) {
 		if(this.key !== null) {//opening door
 			let dx = this.getTransform().x - this.key.getTransform().x;
 			let dy = this.getTransform().y - this.key.getTransform().y;
@@ -113,6 +116,6 @@ export default class Door extends Object2D {
 				this.key.setSize(key_scale, key_scale);
 			}
 		}
-		super.update(dt);
+		super.update(dt, paused);
 	}
 }

@@ -34,8 +34,11 @@ export default class Bullet extends Object2D {
 		this.lifetime = MAX_LIFETIME;
 	}
 
-	/** @param {number} dt */
-	update(dt) {
+	/** 
+	 * @param  {number?} dt
+	 * @param  {boolean?} paused
+	 */
+	update(dt, paused = false) {
 		if( (this.lifetime -= dt) <= 0 )
 			this.to_destroy = true;
 		else if(this.lifetime < SHRINKING_TIME) {
@@ -43,6 +46,6 @@ export default class Bullet extends Object2D {
 			this.setSize(s, s);
 		}
 
-		super.update(dt);
+		super.update(dt, paused);
 	}
 }
