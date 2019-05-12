@@ -28,7 +28,9 @@ export default class Portal extends Object2D {
 			~CollisionCategories.sawblade & 
 			~CollisionCategories.exit_portal &
 			~CollisionCategories.bullet &
-			~CollisionCategories.key
+			~CollisionCategories.key &
+			~CollisionCategories.aid &
+			~CollisionCategories.enemy
 		);
 
 		/** @type {Object2D} teleporting object */

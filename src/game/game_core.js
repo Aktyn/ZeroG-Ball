@@ -38,6 +38,7 @@ function runLoop(self) {
 }
 
 const CAMERA_SMOOTHNESS = 0.003;
+const INITIAL_ZOOM = 2;
 const ZOOM_SMOTHNESS = 0.006;
 const ZOOM_STRENGTH = 0.2;
 
@@ -62,7 +63,7 @@ export default class GameCore extends Map {
 		this._running = false;
 		this.elapsed_time = 0;
 
-		this.target_zoom = 1;
+		this.target_zoom = INITIAL_ZOOM;
 
 		this.last_mouse_coords = null;
 		this.click_pos = {x: 0, y: 0};
@@ -108,7 +109,7 @@ export default class GameCore extends Map {
 	}
 
 	spawnPlayer() {
-		this.target_zoom = 1;
+		this.target_zoom = INITIAL_ZOOM;
 		this.player = new Player(this.graphics, this.physics, this.onPlayerHpChange.bind(this));
 		super.addObject( this.player );
 	}
@@ -268,8 +269,12 @@ export default class GameCore extends Map {
 	}
 
 	reload() {
-		if(this.state === STATE.FINISHED)
+		/*if(this.state === STATE.EDIT_MODE) {
+			this.player = null;
 			return;
+		}*/
+		if(this.state === STATE.FINISHED)
+			this.state = STATE.RUNNING;
 		super.load(this.map_data);
 		this.elapsed_time = 0;
 

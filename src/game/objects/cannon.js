@@ -20,9 +20,8 @@ export default class Cannon extends Object2D {
 	* @param {SimplePhysics} physics_engine
 	* @param {Object2D[]} objects handle for objects array that are part of map
 	*/
-	constructor(w, h, graphics_engine, physics_engine, objects, state) {
+	constructor(w, h, graphics_engine, physics_engine, objects) {
 		super(Type.CIRCLE, w, h, graphics_engine, physics_engine, 2);
-		this.state = state;//uggly way of preventing bullet from shooting in edit mode
 
 		this.time_to_shoot = SHOOTING_FREQUENCY;
 		this.r = OBJECTS.cannon.radius;
@@ -38,7 +37,7 @@ export default class Cannon extends Object2D {
 	 * @param  {boolean?} paused
 	 */
 	update(dt, paused = false) {
-		if(this.state === STATE.RUNNING && (this.time_to_shoot -= dt) <= 0 ) {//shoot
+		if(!paused && (this.time_to_shoot -= dt) <= 0 ) {//shoot
 			this.time_to_shoot += SHOOTING_FREQUENCY;
 
 			let bullet = new Bullet(BULLET_SIZE, this._graphics, this._physics, 

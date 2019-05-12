@@ -3,6 +3,7 @@ import MapData from './map_data';
 import SvgEngine from './svg_engine';
 import Object2D, {Type} from './objects/object2d';
 import Player from './objects/player';
+import Enemy from './objects/enemy';
 import Exit from './objects/exit';
 import SawBlade from './objects/sawblade';
 import SpikyCrate from './objects/spiky_crate';
@@ -12,6 +13,7 @@ import Cannon from './objects/cannon';
 import Key from './objects/key';
 import Door from './objects/door';
 import Elevator from './objects/elevator';
+import Aid from './objects/aid';
 
 import Background from './background';
 import Config from './config';
@@ -151,6 +153,9 @@ export default class Map extends CollisionListener {
 			case 'exit':
 				obj = new Exit(w||1, h||1, this.graphics, this.physics);
 				break;
+			case 'enemy':
+				obj = new Enemy(w||1, h||1, this.graphics, this.physics);
+				break;
 			case 'sawblade':
 				obj = new SawBlade(w||1, h||1, this.graphics, this.physics);
 				break;
@@ -161,7 +166,7 @@ export default class Map extends CollisionListener {
 				obj = new Forcefield(w||1, h||1, this.graphics, this.physics);
 				break;
 			case 'cannon':
-				obj = new Cannon(w||1, h||1, this.graphics, this.physics, this.objects, this.state);
+				obj = new Cannon(w||1, h||1, this.graphics, this.physics, this.objects);
 				break;
 			case 'key1': {//ADD MORE KEYS HERE
 				let type = ['key1'].indexOf(class_name);
@@ -177,9 +182,12 @@ export default class Map extends CollisionListener {
 				let type = ['portal1', 'portal2', 'portal3'].indexOf(class_name);
 				obj = new Portal(w||1, h||1, this.graphics, this.physics, type);
 			}	break;
-			case 'elevator': {
+			case 'elevator':
 				obj = new Elevator(w||1, h||1, this.graphics, this.physics, this.objects);
-			}	break;
+				break;
+			case 'aid':
+				obj = new Aid(w||1, h||1, this.graphics, this.physics);
+				break;
 			default:
 				obj = new Object2D(shape, w||1, h||1, this.graphics, this.physics);
 				break;

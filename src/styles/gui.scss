@@ -698,6 +698,11 @@ $header-size: 35px;
 			}
 		}
 
+		&.healed::before {
+			content: "➕";
+			color: #8BC34A;
+		}
+
 		&.killed {
 			background-color: #f558;
 			animation: blood-wash 2s cubic-bezier(.36,.07,.19,.97) forwards;

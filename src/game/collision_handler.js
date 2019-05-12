@@ -13,7 +13,10 @@ import Exit from './objects/exit';
 import Forcefield from './objects/forcefield';
 import Sawblade from './objects/sawblade';
 import SpikyCrate from './objects/spiky_crate';
+import Aid from './objects/aid';
 import Player from './objects/player';
+import Enemy from './objects/enemy';
+import EnemySensor from './objects/enemy_sensor';
 
 import {Body} from './simple_physics/body';
 import Filter from './simple_physics/filter';
@@ -24,7 +27,9 @@ import Filter from './simple_physics/filter';
  * @param  {Body} B
  */
 export default function handleCollision(game_core, A, B) {
+	/** @type {Object2D} */
 	let objA = A.getCustomData();
+	/** @type {Object2D} */
 	let objB = B.getCustomData();
 
 	if(objA instanceof Player) {
@@ -42,9 +47,20 @@ export default function handleCollision(game_core, A, B) {
 		else if(objB instanceof Forcefield)
 			objB.activate(game_core.player);
 		else if((objB instanceof Sawblade) || (objB instanceof SpikyCrate) || (objB instanceof Bullet))
-			game_core.player.damage(1);
+			objA.damage(1);
+		else if(objB instanceof Aid) {
+			objA.damage(-1);//heal player
+			objB.to_destroy = true;
+		}
+		else if(objB instanceof EnemySensor)
+			objB.owner.onPlayerInRange(objA);
+		else if(objB instanceof Enemy) {
+			//TODO - explosion effect (can be added as object via game_core handle)
+			objA.damage(1);
+			objB.to_destroy = true;
+		}
 	}
-	if(objA instanceof Portal) {
+	else if(objA instanceof Portal) {
 		/** @type {Object2D} */
 		let target_obj = objB;
 		//static object and other portals doesn't teleport
@@ -70,13 +86,11 @@ export default function handleCollision(game_core, A, B) {
 		if(other_portals.length > 0)
 			p.teleport( other_portals[ (Math.random()*other_portals.length)|0 ], target_obj );
 	}
-
-	if(objA instanceof Bullet && !(objB instanceof Portal) && !(objB instanceof Cannon)) {
-		/** @type {Bullet} */
-		objA.to_destroy = true;
+	else if(objA instanceof Bullet && !(objB instanceof Portal) && !(objB instanceof Cannon)) {
+		if(Filter.collide(objA.body, objB.body))
+			objA.to_destroy = true;
 	}
-
-	if((objB instanceof Door) && (objA instanceof Key)) {
+	else if((objB instanceof Door) && (objA instanceof Key)) {
 		/** @type {Door} */
 		let door = objB;
 		/** @type {Key} */

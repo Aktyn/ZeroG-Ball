@@ -5,5 +5,6 @@ export default {//64 available categories
 	exit_portal: 	1 << 3,
 	bullet: 		1 << 4,
 	key: 			1 << 5,
-	//door: 			1 << 6
+	aid: 			1 << 6,
+	enemy: 			1 << 7
 };

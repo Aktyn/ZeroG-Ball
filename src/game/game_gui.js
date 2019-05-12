@@ -59,7 +59,61 @@ export default class GameGUI {
 		/** @type {Object2D} */
 		this.selected_object = null;
 
-		this.container = $.create('div').setClass('game-gui-container mode-0').addChild(
+		this.player_health = Player.INITIAL_HEALTH;
+
+		this.container = $.create('div').setClass('game-gui-container mode-0');
+		this.initGUI();
+		
+		if(SPEECH_COMMANDS.isActive())
+			this.speech_indicator.addClass('active');
+
+		SPEECH_COMMANDS.onStart(() => this.speech_indicator.addClass('active'));
+		SPEECH_COMMANDS.onEnd(() => this.speech_indicator.removeClass('active'));
+
+		SPEECH_COMMANDS.onCommand('open_settings', () => {
+	        console.log('opening settings due to speech command');
+	        if(this.is_view_open)
+	        	this.closeView();
+	        else
+	        	this.showSettings();
+	    });
+
+		SPEECH_COMMANDS.onCommand('edit', () => {
+		    console.log('entering edit mode due to speech command');
+		    if(this.mode === 0)
+		        this.changeMode(1);
+		    else
+		        this.changeMode(0);
+		    this.modes_panel.getChildren().forEach( ex_btn => ex_btn.disabled = ex_btn.id == this.mode );
+        });
+
+        SPEECH_COMMANDS.onCommand('restart', () => {
+            console.log('restarting the game due to speech command');
+            listeners.onRestart();
+        });
+
+        SPEECH_COMMANDS.onCommand('import', () => {
+            console.log('opening import window due to speech command');
+            this.tryImport();
+        });
+
+        SPEECH_COMMANDS.onCommand('export', () => {
+            console.log('opening export window due to speech command');
+            this.tryExport(true);
+        });
+
+        SPEECH_COMMANDS.onCommand('menu', () => {
+            console.log('opening menu due to speech command');
+            this.tryReturnToMenu(true);
+        });
+
+		//this.showSettings();//temp test
+		//this.onMapFinished(1337 * 69);//temp test
+		//setTimeout(() => this.changeMode(1), 1);//temp test
+	}
+
+	initGUI() {
+		this.container.text('').addChild(
 			//HEADER
 			this.header = $.create('header')/*.addClass('hidden')*/.addChild(
 				$.create('button').addClass('menu-btn').on('click', () => {
@@ -150,7 +204,7 @@ export default class GameGUI {
 
 			//GAME INFO
 			this.game_info = $.create('div').addClass('game-info').addChild(
-				this.map_name = $.create('div').text(''),
+				this.map_name = $.create('div').text('zmieniona mapa'),
 				$.create('div').setClass('timer-container').addChild(
 					this.elapsed_time = $.create('span').text('00'),
 					createClockWidget()
@@ -204,53 +258,6 @@ export default class GameGUI {
 			else
 				SPEECH_COMMANDS.start();
 		});
-		
-		if(SPEECH_COMMANDS.isActive())
-			this.speech_indicator.addClass('active');
-
-		SPEECH_COMMANDS.onStart(() => this.speech_indicator.addClass('active'));
-		SPEECH_COMMANDS.onEnd(() => this.speech_indicator.removeClass('active'));
-
-		SPEECH_COMMANDS.onCommand('open_settings', () => {
-	        console.log('opening settings due to speech command');
-	        if(this.is_view_open)
-	        	this.closeView();
-	        else
-	        	this.showSettings();
-	    });
-
-		SPEECH_COMMANDS.onCommand('edit', () => {
-		    console.log('entering edit mode due to speech command');
-		    if(this.mode === 0)
-		        this.changeMode(1);
-		    else
-		        this.changeMode(0);
-		    this.modes_panel.getChildren().forEach( ex_btn => ex_btn.disabled = ex_btn.id == this.mode );
-        });
-
-        SPEECH_COMMANDS.onCommand('restart', () => {
-            console.log('restarting the game due to speech command');
-            listeners.onRestart();
-        });
-
-        SPEECH_COMMANDS.onCommand('import', () => {
-            console.log('opening import window due to speech command');
-            this.tryImport();
-        });
-
-        SPEECH_COMMANDS.onCommand('export', () => {
-            console.log('opening export window due to speech command');
-            this.tryExport(true);
-        });
-
-        SPEECH_COMMANDS.onCommand('menu', () => {
-            console.log('opening menu due to speech command');
-            this.tryReturnToMenu(true);
-        });
-
-		//this.showSettings();//temp test
-		//this.onMapFinished(1337 * 69);//temp test
-		//setTimeout(() => this.changeMode(1), 1);//temp test
 	}
 
 	/** @param {KeyboardEvent} e */
@@ -295,6 +302,7 @@ export default class GameGUI {
 	}
 
 	setHealth(health = Player.INITIAL_HEALTH) {
+		this.player_health = health;
 		this.player_hearts.text('');
 		for(let i=0; i<health; i++)
 			this.player_hearts.addChild($.create('span'));
@@ -313,17 +321,17 @@ export default class GameGUI {
 
 	/** @param {number} health */
 	onPlayerHpChange(health) {
+		let healed = this.player_health < health;
 		this.setHealth(health);
 		let damage_effect = $.create('div').setClass('damage-effect');
 		if(health <= 0)
 			damage_effect.addClass('killed');
+		else if(healed)
+			damage_effect.addClass('healed');
 		this.container.addChild(damage_effect);
 		setTimeout(() => {
 			damage_effect.delete();
 		}, 5000);
-		//if(health <= 0) {
-			//TODO - kill player notification
-		//}
 	}
 
 	/**
@@ -395,19 +403,24 @@ export default class GameGUI {
 					$.create('button').text('DYNAMICZNY').on('click', (e) => {
 						this.selectAsset(obj, obj_name, true);
 						e.stopPropagation();
-					}
-				));
+					})
+				);
 			}
 			else
 				asset_preview.addClass('single_option');
 
-			asset_preview.addChild(
-				$.create('button').text('STATYCZNY').on('click', (e) => {
-					this.selectAsset(obj, obj_name, false);
-					e.stopPropagation();
-				}),
-				$.create('label').addClass('name-label').text(obj.name)
-			);
+			if(obj.class_name.indexOf('enemy') === -1) {
+				asset_preview.addChild(
+					$.create('button').text('STATYCZNY').on('click', (e) => {
+						this.selectAsset(obj, obj_name, false);
+						e.stopPropagation();
+					})
+				);
+			}
+			else
+				asset_preview.addClass('single_option');
+
+			asset_preview.addChild( $.create('label').addClass('name-label').text(obj.name) );
 
 			container.addChild(asset_preview);
 		}
@@ -557,8 +570,7 @@ export default class GameGUI {
 	 */
 	onMapFinished(name, time, edited, map_data) {
 		this.closeView();
-		//console.log(name, time, edited, map_data);
 		
-		ResultView.open(this, this.container, name, time, edited, map_data);
+		ResultView.open(this, this.container, name, time, edited, map_data, this.closeView.bind(this));
 	}
 }

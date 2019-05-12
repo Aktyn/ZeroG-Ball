@@ -13,8 +13,9 @@ export default {
 	 * @param  	{number} time elapsed time in miliseconds
 	 * @param  	{boolean} edited
 	 * @param 	{any} map_data
+	 * @param	{Function} close_view
 	 */
-	open: (gui, target_element, name, time, edited, map_data) => {
+	open: (gui, target_element, name, time, edited, map_data, close_view) => {
 		if(edited) {
 			target_element.text('').addClass('finished').addChild(
 				$.create('article').addChild(
@@ -31,16 +32,19 @@ export default {
 					gui.map_export_btn = $.create('button').text('EXPORTUJ')
 						.on('click', gui.tryExport.bind(gui)),
 					$.create('br'),
-					/*gui.map_export_btn = $.create('button').text('POWTÓRZ').on('click', () => {
-						if(typeof gui.listeners.onMapStart === 'function')
-							gui.listeners.onMapStart( {
-								name: gui.map_name.innerText,
-								json: map_data
-							} );
+					gui.map_export_btn = $.create('button').text('POWTÓRZ').on('click', () => {
+						if(typeof gui.listeners.onRestart === 'function') {
+							target_element.text('').removeClass('finished');
+							gui.initGUI();
+							close_view();
+							gui.listeners.onRestart();
+						}
+						//@ts-ignore
+						document.activeElement.blur();
 					}).setStyle({
 						'margin-top': '10px'
 					}),
-					$.create('br'),*/
+					$.create('br'),
 					gui.menu_return_btn = $.create('button').addClass('exit-btn')
 						.text('POWRÓT DO MENU').on('click', gui.tryReturnToMenu.bind(gui)).setStyle({
 							'margin-top': '10px'

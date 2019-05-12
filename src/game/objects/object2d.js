@@ -135,7 +135,6 @@ export default class Object2D extends SvgObject {
 	* @param {number} y
 	*/
 	setPos(x, y) {
-		// this.body.setPos(x*SCALLER, y*SCALLER);
 		this.body.setPos(x*SCALLER, y*SCALLER);
 		return super.setPos(x, y);
 	}
