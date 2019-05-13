@@ -31,14 +31,15 @@ function checkResult(result) {
 	return false;
 }
 
+//@ts-ignore
 if(typeof webkitSpeechRecognition === 'undefined') {
-	var webkitSpeechRecognition = function Failback() {
+	var fallbackRecognition = function Failback() {
 		this.start = function(){};
 	};
 }
 
 //@ts-ignore
-var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition || fallbackRecognition;
 var recognition = new SpeechRecognition();
 recognition.lang = 'pl-PL';
 recognition.continuous = true;
