@@ -1,7 +1,10 @@
+<<<<<<< HEAD
 /*
 const webpack = require('webpack');
 */
 
+=======
+>>>>>>> stage3
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -15,8 +18,18 @@ const CONFIG = {
 		main: './src/main.js'
 	},
 	output: {
+<<<<<<< HEAD
 	  path:	path.resolve(__dirname, 'dist'),
 	  filename: 'main.js',
+=======
+	  	path:	path.resolve(__dirname, 'dist'),
+	  	filename: 'main.js',
+	},
+	watch: true,
+	watchOptions: {
+  		poll: true,
+  		ignored: /node_modules/
+>>>>>>> stage3
 	},
 	mode: isDevelopment ? 'development' : 'production',
 	devtool: isDevelopment && "source-map",
@@ -123,7 +136,11 @@ const CONFIG = {
 		new HtmlWebpackPlugin({
 			hash: isDevelopment,
 			favicon: isDevelopment ? './src/img/favicon.png' : undefined,
+<<<<<<< HEAD
 			title: 'Domino Sandbox',
+=======
+			title: 'ZeroG Ball',
+>>>>>>> stage3
 			minify: !isDevelopment,
 			template: './src/index.html',
 			filename: './index.html',

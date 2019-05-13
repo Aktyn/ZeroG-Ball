@@ -1,10 +1,15 @@
 // @ts-check
 import SvgObject from './svg';
 import Config from './config';
+<<<<<<< HEAD
+=======
+import Settings from './settings';
+>>>>>>> stage3
 import './../styles/svg.scss';
 
 export default class SvgEngine {
 	constructor() {
+<<<<<<< HEAD
 		this.width = Config.ASPECT*Config.VIRT_SCALE;
 		this.height = Config.VIRT_SCALE;//Math.round(1024/aspect);
 
@@ -14,6 +19,12 @@ export default class SvgEngine {
 			zoom: 1//works as scaling
 		}*/
 
+=======
+		this.width = Config.VIRT_SCALE * Number(Settings.getValue('aspect_ratio')); //*Config.ASPECT
+		this.height = Config.VIRT_SCALE;//Math.round(1024/aspect);
+
+		/** @type {SvgObject[]} */
+>>>>>>> stage3
 		this.objects = [];
 
 		this.svg = new SvgObject('svg', true).set({
@@ -24,12 +35,57 @@ export default class SvgEngine {
 		});
 
 		this.defs = new SvgObject('defs', true);
+<<<<<<< HEAD
 		this.background_layer = new SvgObject('g');
 		this.foreground_layer = new SvgObject('g');
 
 		this.svg.addChild(this.defs);
 		this.svg.addChild(this.background_layer);
 		this.svg.addChild(this.foreground_layer);
+=======
+		this.svg.addChild(this.defs);
+
+		//this.background_layer = new SvgObject('g');
+		//this.foreground_layer = new SvgObject('g');
+		
+		/** @type {SvgObject[]} */
+		this.layers = new Array(3).fill(0).map(() => new SvgObject('g'));
+		this.layers.forEach(layer => this.svg.addChild(layer));
+		
+		//this.svg.addChild(this.background_layer);
+		//this.svg.addChild(this.foreground_layer);
+	}
+
+	/** @param {number} index */
+	getLayer(index) {
+		return this.layers[index];
+	}
+
+	/**
+	 * @param  {number} _width  
+	 * @param  {number} _height 
+	 * @param  {number} aspect 
+	 */
+	onResize(_width, _height, aspect) {
+		this.width = Config.VIRT_SCALE * aspect;
+		this.svg.set({
+			'width': this.width.toString(),
+			'viewBox': `${-this.width/2}, ${-this.height/2}, ${this.width}, ${this.height}`
+		});
+
+		this.svg.node.style.transformOrigin = '0 0';
+		this.svg.node.style.transform = `scale(${_height/Config.VIRT_SCALE})`;
+	}
+
+	/**
+	 * @param {boolean} enabled
+	 */
+	enableTextures(enabled) {
+		if(enabled && this.svg.hasClass('no-textures'))
+			this.svg.removeClass('no-textures');
+		if(!enabled && !this.svg.hasClass('no-textures'))
+			this.svg.addClass('no-textures');
+>>>>>>> stage3
 	}
 
 	static createObject(name, prevent_centering = false) {
@@ -67,8 +123,31 @@ export default class SvgEngine {
 			'width': width, 'height': height
 		}).addChild(
 			new SvgObject('image', true).set({
+<<<<<<< HEAD
 				'x': 0, 'y': 0,
 				'width': width, 'height': height,
+=======
+				'x': (width/2)|0, 'y': (height/2)|0,
+				'width': width|0+1, 'height': height|0+1,
+				'href': source
+			})
+		).addChild(
+			new SvgObject('image', true).set({
+				'x': (-width/2)|0, 'y': (height/2)|0,
+				'width': width|0+1, 'height': height|0+1,
+				'href': source
+			})
+		).addChild(
+			new SvgObject('image', true).set({
+				'x': (-width/2)|0, 'y': (-height/2)|0,
+				'width': width|0+1, 'height': height|0+1,
+				'href': source
+			})
+		).addChild(
+			new SvgObject('image', true).set({
+				'x': (width/2)|0, 'y': (-height/2)|0,
+				'width': width|0+1, 'height': height|0+1,
+>>>>>>> stage3
 				'href': source
 			})
 		);
@@ -76,10 +155,18 @@ export default class SvgEngine {
 		this.defs.addChild(texture);
 	}
 
+<<<<<<< HEAD
 	update() {
 		for(let obj of this.objects)
 			obj.update();
 	}
+=======
+	/*** @param {number} dt */
+	/*update(dt) {
+		for(let obj of this.objects)
+			obj.update(dt);
+	}*/
+>>>>>>> stage3
 
 	/**
 	* @param {{x: number, y: number, zoom: number}} opts
@@ -87,6 +174,7 @@ export default class SvgEngine {
 	updateView(opts) {
 		this.svg.set({
 			'viewBox': `${
+<<<<<<< HEAD
 				(-this.width/2 + this.height * (opts.x/opts.zoom) / 2)*opts.zoom
 			}, ${
 				(this.height * (opts.y/opts.zoom-1) / 2)*opts.zoom
@@ -94,10 +182,20 @@ export default class SvgEngine {
 				this.width * opts.zoom
 			}, ${
 				this.height * opts.zoom
+=======
+				((-this.width/2 + this.height * (opts.x/opts.zoom) / 2)*opts.zoom).toFixed(2)
+			}, ${
+				((this.height * (opts.y/opts.zoom-1) / 2)*opts.zoom).toFixed(2)
+			}, ${
+				(this.width * opts.zoom).toFixed(2)
+			}, ${
+				(this.height * opts.zoom).toFixed(2)
+>>>>>>> stage3
 			}`
 		});
 	}
 
+<<<<<<< HEAD
 	onResize(width, height) {
 		this.svg.node.style.transformOrigin = '0 0';
 		this.svg.node.style.transform = `scale(${height/Config.VIRT_SCALE})`;
@@ -117,6 +215,41 @@ export default class SvgEngine {
 		}
 	}
 
+=======
+	addBackgroundObjects(...objs) {
+		for(let obj of objs)
+			this.layers[0].addChild(obj);
+	}
+
+	/** 
+	 * @param {number} layer_index
+	 * @param {...SvgObject} objs
+	 */
+	addObjects(layer_index, ...objs) {
+		for(let obj of objs) {
+			this.objects.push(obj);
+			this.layers[layer_index].addChild(obj);
+		}
+	}
+
+	/** 
+	 * @param {number} layer_index
+	 * @param {...SvgObject} objs
+	 */
+	addObjectsBelow(layer_index, ...objs) {
+		for(let obj of objs) {
+			this.objects.push(obj);
+			this.layers[layer_index].addChild(obj, true);
+		}
+	}
+
+	clearForeground() {//removes every child from foreground
+		for(let obj of this.objects)
+			obj.destroy();
+		this.objects = [];
+	}
+
+>>>>>>> stage3
 	addClass(name) {
 		//this.svg.node.setAttributeNS(null, 'class', name);
 		this.svg.node.classList.add(name);

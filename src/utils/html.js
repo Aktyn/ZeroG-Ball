@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 //export default (function() {
 
+=======
+>>>>>>> stage3
 function assert(condition, message) {
     if(!condition)
         throw new Error(message || "Assertion failed");
@@ -36,6 +39,7 @@ const static_methods = {//static methods
 			window.addEventListener('load', load_listener, false);
 		}
 	},
+<<<<<<< HEAD
 	/*loadFile: function(source, callback) {
 		try {
 	        let xmlhttp = new XMLHttpRequest();
@@ -102,6 +106,12 @@ const static_methods = {//static methods
 	/** 
 	*	@param {string} value 
 	*	@returns {Node & extender}
+=======
+
+	/** 
+	*	@param {string} value 
+	*	@returns {Node & typeof extender}
+>>>>>>> stage3
 	*/
 	create: function(value) {//creates DOM HTMLElement
 		var new_element = document.createElement( justLettersAndDigits(value) );
@@ -156,6 +166,15 @@ const extender = {//extended methods of DOM HTMLElements
 	},
 	/** 
 	*	@param {string} class_name 
+<<<<<<< HEAD
+=======
+	*/
+	hasClass: function(class_name) {
+		return this.classList.contains(class_name);
+	},
+	/** 
+	*	@param {string} class_name 
+>>>>>>> stage3
 	*	@returns {Node & extender}
 	*/
 	setClass: function(class_name) {
@@ -165,7 +184,11 @@ const extender = {//extended methods of DOM HTMLElements
 	/** 
 	*	@param {string} query 
 	*/
+<<<<<<< HEAD
 	getChildren: function(query) {
+=======
+	getChildren: function(query = '*') {
+>>>>>>> stage3
 		return fromQuery(query, this);
 	},
 	addChild: function(...elements) {
@@ -176,7 +199,11 @@ const extender = {//extended methods of DOM HTMLElements
 		}
 		
 		this.appendChild(element);*/
+<<<<<<< HEAD
 		for(let el of elements)
+=======
+		for(let el of elements.filter(el => el instanceof Node))
+>>>>>>> stage3
 			this.appendChild(el);
 		return this;
 	},
@@ -305,7 +332,11 @@ function smartArrayExtend(arr) {
 
 /**
  * Description
+<<<<<<< HEAD
  * @param {string|Node|HTMLElement} value
+=======
+ * @param {string|Node|HTMLElement|Window} value
+>>>>>>> stage3
  * @returns {Node & extender}
  */
 function _self(value) {

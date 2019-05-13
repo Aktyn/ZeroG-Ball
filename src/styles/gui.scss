@@ -9,19 +9,33 @@ $header-size: 35px;
 	align-items: center;
 	justify-content: space-between;
 	height: 100%;
+<<<<<<< HEAD
+=======
+	position: relative;
+>>>>>>> stage3
 
 	& > header {
 		pointer-events: auto;
 
 		min-height: $header-size;
 		padding: 0px 5px;
+<<<<<<< HEAD
 		background-color: #0004;
+=======
+		background-color: rgba(0, 0, 0, 0.25);
+>>>>>>> stage3
 		transition: background-color 0.3s linear;
 		//box-shadow: 0px 0px 5px #0008;
 
 		display: grid;
+<<<<<<< HEAD
 		grid-template-areas: 'switch_btn game_buttons modes actions';
 		grid-template-columns: fit-content(100%) auto fit-content(100%) fit-content(100%);
+=======
+		grid-template-areas: 'switch_btn game_buttons speech modes actions';
+		grid-template-columns: fit-content(100%) auto fit-content(100%) 
+			fit-content(100%) fit-content(100%);
+>>>>>>> stage3
 		grid-column-gap: 10px;
 		align-items: center;
 		justify-content: stretch;
@@ -37,7 +51,11 @@ $header-size: 35px;
 			text-align: right;
 		}
 
+<<<<<<< HEAD
 		.game-buttons, .actions, .modes {
+=======
+		.game-buttons, .actions, .modes, .speech-indicator {
+>>>>>>> stage3
 			transition: opacity 0.3s linear, transform 0.3s ease-in-out;
 		}
 
@@ -52,6 +70,27 @@ $header-size: 35px;
 			margin: 5px 5px;
 		}
 
+<<<<<<< HEAD
+=======
+		.speech-indicator {
+			grid-area: speech;
+			border: none;
+			box-shadow: none;
+			background: url('./../img/microphone.svg') center no-repeat;
+			background-size: contain;
+			height: 22px;
+			width: 22px;
+			padding: 0px;
+			margin: 0px;
+			opacity: 0.3;
+			//transition: opacity 0.5s ease-in-out;
+
+			&.active {
+				opacity: 1;
+			}
+		}
+
+>>>>>>> stage3
 		.modes {
 			grid-area: modes;
 			background-color: #004D4080;
@@ -71,9 +110,15 @@ $header-size: 35px;
 		}
 
 		&.hidden {
+<<<<<<< HEAD
 			background-color: #0000;
 			//box-shadow: 0px 0px 5px #0000;
 			.game-buttons, .actions, .modes {
+=======
+			background-color: rgba(0, 0, 0, 0);
+			//box-shadow: 0px 0px 5px #0000;
+			.game-buttons, .actions, .modes, .speech-indicator {
+>>>>>>> stage3
 				opacity: 0;
 				transform: translateY(-100%);
 				button {
@@ -115,24 +160,91 @@ $header-size: 35px;
 			border-radius: 5px;
 			box-shadow: 0px 1px 8px #0008;
 			overflow: hidden;
+<<<<<<< HEAD
 
 			header {
 				padding: 0px 10px;
+=======
+			font-size: 14px;
+			min-width: 350px;
+
+			&, & > * {
+				animation: show-in 0.7s ease-in-out forwards;
+			}
+
+			header {
+				padding: 0px;
+>>>>>>> stage3
 				height: 35px;
 				line-height: 35px;
 				color: #fff;
 				background-color: #455a64;
+<<<<<<< HEAD
 
 				.close-btn {
 					margin: 5px 0px;
 					margin-left: 10px;
 					float: right;
+=======
+				font-weight: bold;
+				display: grid;
+				width: 100%;
+				grid-template-columns: 30px auto 30px;
+				grid-column-gap: 10px;
+				align-items: center;
+
+				.close-btn {
+					// margin: 0px 10px;
+					// margin-right: 10px;
+					// float: right;
+>>>>>>> stage3
 				}
 			}
 
 			article {//main content
 				color: #455a64;
 				padding: 5px 5px;
+<<<<<<< HEAD
+=======
+				text-align: center;
+
+				& > * {
+					animation: show-in 0.3s cubic-bezier(.36,.07,.19,.97) forwards;
+
+					opacity: 0;
+					transform: translateY(-50px);
+
+					@for $i from 1 through 10 {//number of children of article selector
+						&:nth-child(#{$i}) {
+							animation-delay: #{$i * 50ms};
+						}
+					}
+				}
+
+				.settings {
+					font-size: inherit;
+					display: inline-grid;
+					margin: auto;
+					grid-template-columns: 1fr 1fr;
+					grid-template-rows: auto;
+					grid-row-gap: 5px;
+					align-items: center;
+
+					label {
+						font-weight: bold;
+						text-align: right;
+						padding-right: 10px;
+					}
+
+					div {
+						font-size: inherit;
+					}
+
+					.single-row {
+						grid-column: 1 / span 2;
+					}
+				}
+>>>>>>> stage3
 			}
 		}
 	}
@@ -142,12 +254,20 @@ $header-size: 35px;
 
 		background-color: #0004;
 
+<<<<<<< HEAD
 		display: grid;
 		grid-template-areas: 'assets tools';
+=======
+		max-height: 100px;
+		width: 100%;
+		display: grid;
+		grid-template-areas: 'main tools';
+>>>>>>> stage3
 		grid-template-columns: auto min-content;
 		align-items: center;
 		justify-content: stretch;
 
+<<<<<<< HEAD
 		.assets {
 			grid-area: assets;
 		}
@@ -161,6 +281,322 @@ $header-size: 35px;
 
 			& > * > button {
 				margin: 0px 2px;
+=======
+		.main {
+			grid-area: main;
+			height: 100%;
+			//width: 50%;
+			overflow-x: auto;
+			display: table-cell;
+			text-align: center;
+
+			.assets_container, .edit-options, .anim-options {
+				width: 100%;
+				height: 100%;
+			}
+
+			.assets_container {
+				overflow-x: auto;
+				overflow-y: hidden;
+
+				display: inline-flex;
+				width: auto;
+				margin: auto;
+				flex-direction: row;
+				align-items: center;
+				justify-content: stretch;
+
+				& > .asset_preview {
+					padding: 5px;
+					margin: 0px 5px;
+					box-sizing: content-box;
+					
+					border-radius: 5px;
+					background-color: #0008;
+					box-shadow: 0px 0px 5px #0008;
+
+					min-width: 70px;
+					display: grid;
+					align-items: center;
+					justify-content: center;
+
+					cursor: pointer;
+
+					position: relative;
+					overflow: hidden;
+
+					&:not(.selected):hover button, &:not(.selected):hover .name-label {
+						opacity: 0.5;
+
+						&:not(.name-label):hover {
+							opacity: 1;
+						}
+					}
+
+					&.single_option:not(.selected):hover button:hover {
+						opacity: 0.8 !important;
+					}
+
+					& > button, & > .name-label {
+						position: absolute;
+						left: 0px;
+						//top: 0px;
+						width: 100%;
+						height: 33.33333%;
+						box-shadow: none;
+						border: none;
+						border-radius: 0px;
+						font-weight: bold;
+						font-size: 11px;
+						padding: 0px;
+
+						transition: opacity 0.15s linear;
+
+						&.name-label {
+							top: 0px;
+							background: #fff;
+							color: #000;
+							text-shadow: 0px 0px 1px #fff;
+							font-weight: bold;
+							margin: 0px;
+							line-height: 26px;
+							vertical-align: middle;
+						}
+						&:nth-child(2) {
+							bottom: 33.33333%;
+						}
+						&:nth-child(3) {
+							bottom: 0px;
+						}
+
+						opacity: 0;
+					}
+
+					&.single_option > button {
+						bottom: 0px;
+						height: 66%;
+
+						// background-color: red;
+					}
+
+					&.selected {
+						background-color: #ef5350;
+
+						&:hover {
+							background-color: #e57373;
+						}
+					}
+					/*& > * {
+						cursor: pointer;
+					}*/
+				}
+			}
+
+			.edit-options {
+				display: grid;
+				grid-template-columns: fit-content(100%) auto auto;
+				align-items: center;
+				justify-content: stretch;
+
+				.transform-options {
+					background-color: #0008;
+					padding: 0px 5px;
+					height: 100%;
+
+					display: grid;
+					align-items: center;
+					grid-template-columns: auto auto auto;
+					grid-template-rows: fit-content(100%) auto fit-content(100%) auto;
+					grid-auto-flow: column;
+					grid-column-gap: 10px;
+
+					label {
+						font-size: 12px;
+						font-weight: bold;
+						text-align: left;
+					}
+
+					input {
+						width: 100px;
+					}
+				}
+
+				.object-options {
+					align-self: left;
+				}
+
+				.anim-options {
+					background-color: #0008;
+					border-left: 1px solid #fff2;
+					// padding: 10px;
+					display: inline-grid;
+					grid-template-columns: auto;
+					grid-template-rows: fit-content(100%) auto auto;
+					align-items: center;
+					justify-content: center;
+
+					.keyframes-list {
+						width: auto;
+						max-width: 100%;
+						overflow-x: auto;
+						height: 20px;
+						// background-color: yellow;
+						display: inline-grid;
+						grid-auto-flow: column;
+						grid-template-rows: auto;
+    					justify-content: center;
+
+						& > * {
+							background-color: #fff6;
+							border: 1px solid #fff4;
+
+							&:hover {
+								background-color: #fffa;
+							}
+
+							&.current {
+								background-color: #8BC34A;
+							}
+
+							width: 15px;
+							height: 15px;
+							margin: 0px 3px;
+							padding: 0px;
+							border-radius: 15px;
+							box-shadow: 0px 0px 3px #0008;
+						}
+					}
+
+					input[type="number"] {
+						display: inline-block;
+						margin: auto;
+						width: 90px;
+					}
+
+					label {
+						display: inline-block;
+						padding-right: 10px;
+					}
+				}
+			}
+		}
+
+		.tools {
+			// background-color: blue;
+			grid-area: tools;
+
+			height: 100%;
+
+			display: inline-grid;
+			grid-template-columns: auto auto auto;
+
+			.categories {
+				display: grid;
+				grid-template-rows: 1fr 1fr 1fr;// 1fr;
+				grid-auto-flow: column;
+				align-items: stretch;
+				padding-right: 10px;
+
+				& > * {
+					border-radius: 0px;
+					border: none;
+					box-shadow: none;
+
+					&:not(:last-child) {
+						border-bottom: 1px solid #555;
+					}
+
+					transition: background-color 0.5s linear;
+				}
+
+				& > .selected {
+					cursor: auto;
+					background-color: #5f5;
+					color: #fff;
+				}
+			}
+
+			.enviroment {
+				$w: 100px;
+				$h: 20px;
+				
+				position: relative;
+				width: $w;
+				.background-selector {
+					width: $w;
+					height: $h;
+					overflow: hidden;
+					border-radius: 3px;
+					box-shadow: 0px 1px 5px #0008;
+					// background-color: red;
+					position: absolute;
+					
+					bottom: calc(50% - 10px);
+					margin: auto;
+
+				    display: flex;
+				    flex-direction: column;
+				    align-items: center;
+				    justify-content: flex-end;
+
+				    & > * {
+				    	width: 100%;
+				    	border: none;
+				    	border-radius: 0px;
+				    	background-color: #fff;
+
+				    	height: $h !important;
+				    	margin: 0px;
+				    	padding: 0px;
+				    	&:not(button) {
+				    		line-height: $h;
+				    		color: #607D8B;
+
+				    		transition: background-color 0.2s ease-in-out;
+				    	}
+				    	white-space: nowrap;
+				    }
+
+				    & > button {
+				    	padding: 4px 0px;
+				    	line-height: auto;
+				    }
+
+				    & > div:not(.selected) {//item to select
+				    	cursor: pointer;
+				    	&:hover {
+				    		background-color: #AED581;
+				    	}
+				    	&:active {
+				    		background-color: #8BC34A;
+				    	}
+				    }
+
+				    & > div.selected {
+				    	background-color: #4DB6AC;
+				    	font-weight: bold;
+				    	color: #fff;
+				    }
+
+				    transition: height 0.3s cubic-bezier(.36,.07,.19,.97);
+				    &.open {
+				    	height: var(--open-height);
+				    	//height: $h * 6;
+				    }
+				}
+			}
+
+			.buttons {
+				padding: 5px 0px;
+				& > * {
+					white-space: nowrap;
+					margin: 5px;
+				}
+
+				& > * > button {
+					margin: 0px 2px;
+				}
+>>>>>>> stage3
 			}
 		}
 
@@ -175,6 +611,7 @@ $header-size: 35px;
 		display: none;
 	}
 
+<<<<<<< HEAD
 	//cienie switch
 
 	.switch-input {
@@ -234,5 +671,249 @@ $header-size: 35px;
 	}
 	.switch-input:checked + .switch-label .toggle--off {
 		display: none;
+=======
+	.game-info {
+		position: absolute;
+		right: 0px;
+		top: 0px;
+
+		padding: 0px 5px;
+		text-align: right;
+
+		transform: translateY($header-size);
+		transition: transform 0.4s 200ms ease-in-out;
+
+		& > * {
+			font-size: 14px;
+			height: 20px;
+			line-height: 20px;
+			margin: 0px;
+		}
+
+		.timer-container {
+			height: 20px;
+			display: grid;
+			grid-template-columns: auto fit-content(100%);
+		}
+
+		.clock-widget {
+			// background-color: red;
+			width: 20px;
+			height: 20px;
+			margin-left: 5px;
+
+			position: relative;
+			pointer-events: auto;
+
+			box-shadow: 0px 1px 2px #0006;
+			border-radius: 20px;
+			transition: box-shadow 0.5s cubic-bezier(.36,.07,.19,.97);
+			&.open {
+				box-shadow: 0px 1px 2px #0000;
+				svg {
+					transform: scale(10);
+				}
+			}
+
+			svg {
+				position: absolute;
+				top: 0px;
+				right: 0px;
+
+				transform-origin: 20px 0px;
+				transition: transform 0.5s cubic-bezier(.36,.07,.19,.97);
+				
+				circle {
+					&:first-child {
+						stroke: #009688;
+						stroke-width: 2px;
+					}
+					fill: #4DB6AC;
+				}
+				line {
+					stroke: #B2DFDB;
+					stroke-width: 2px;
+					stroke-linecap: round;
+					
+					transform-origin: 10px 10px;
+					
+					$speed: 10s;
+					
+					animation: ticktock $speed*12 $speed/2 cubic-bezier(.87,-.41,.19,1.44) infinite;
+					&:nth-child(4) {
+						animation: ticktock-delayed $speed cubic-bezier(.36,.07,.19,.97) infinite;
+						stroke-width: 1px;
+					}
+
+					@keyframes ticktock {
+						@for $i from 0 through 11 {
+							#{$i * 8.3%} {
+								transform: rotate(#{$i * 30deg});
+							}
+						}
+						100% { transform: rotate(360deg); }
+					}
+
+					@keyframes ticktock-delayed {
+						//0% { 	transform: rotate(0deg); 	}
+						//100% {	transform: rotate(360deg);	}
+						@for $i from 0 through 11 {
+							#{$i * 8.3%} {
+								transform: rotate(#{$i * 30deg});
+							}
+						}
+						100% { transform: rotate(360deg); }
+					}
+				}
+
+				text {
+					text-shadow: none;
+					fill: #28afa1;
+					font-size: 1.75px;
+					text-anchor: middle;
+				}
+			}
+		}
+
+		.hearts {
+			& > *::before {
+				display: inline-block;
+				font-size: 18px;
+				color: #ef9a9a;
+				content: "❤";
+			}
+		}
+	}
+
+	.damage-effect {
+		position: absolute;
+		margin: auto;
+		left: 0px;
+		right: 0px;
+		top: 0px;
+		bottom: 0px;
+
+		display: grid;
+		grid-template-rows: auto;
+		align-items: center;
+		justify-content: center;
+
+		&::before {
+			content: "❤";
+			display: inline-block;
+			font-size: 100px;
+			color: #ef9a9a;
+			
+			animation: pop 1s cubic-bezier(.36,.07,.19,.97) forwards;
+
+			@keyframes pop {
+				0% {
+					opacity: 0;
+					transform: scale(0);
+				}
+				80% {
+					opacity: 1;
+					transform: scale(4);
+				}
+				100% {
+					opacity: 0;
+					transform: scale(5);
+				}
+			}
+		}
+
+		&.healed::before {
+			content: "➕";
+			color: #8BC34A;
+		}
+
+		&.killed {
+			background-color: #f558;
+			animation: blood-wash 2s cubic-bezier(.36,.07,.19,.97) forwards;
+
+			@keyframes blood-wash {
+				0% {
+					background-color: #f550;
+				}
+				80% {
+					background-color: #f558;
+				}
+				100% {
+					background-color: #f550;
+				}
+			}
+
+			&::before {
+				content: "Koniec żyć 😵";
+				font-size: 25px;
+				color: #fff;
+
+				animation-duration: 2s;
+			}
+		}
+	}
+
+	header.hidden ~ .game-info {
+		transform: translateY(0px);
+	}
+}
+
+.game-gui-container.finished {
+	pointer-events: auto;
+	display: grid;
+	grid-template-columns: auto;
+	grid-template-rows: auto;
+	align-items: center;
+	justify-content: center;
+
+	& > article {
+		width: auto;
+		min-width: 400px;
+		padding: 10px;
+		border-radius: 5px;
+		box-shadow: 0px 1px 5px #0008;
+		background-color: #fff;
+		color: #455A64;
+		&, * {
+			font-size: 14px;
+		}
+
+		h1 {
+			font-size: 17px;
+		}
+
+		.record-info {
+			color: #ef5350;
+			font-weight: bold;
+			margin-top: 5px; 
+		}
+
+		opacity: 0;
+		animation: show-in 0.7s ease-in-out forwards;
+
+		& > * {
+			animation: show-in 0.3s cubic-bezier(.36,.07,.19,.97) forwards;
+
+			opacity: 0;
+			transform: translateY(-50px);
+
+			@for $i from 1 through 10 {//number of children of article selector
+				&:nth-child(#{$i}) {
+					animation-delay: #{$i * 50ms};
+				}
+			}
+		}
+	}
+
+	@keyframes show-in {
+		0% {
+			opacity: 0;
+			transform: translateY(-50px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0px);
+		}
+>>>>>>> stage3
 	}
 }

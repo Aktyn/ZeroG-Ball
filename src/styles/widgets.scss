@@ -1,0 +1,98 @@
+.widget {
+	&.switcher {
+		$sizeW: 30px;
+		$sizeH: 22px;
+		$barH: 13px;
+
+		width: $sizeW + $sizeH;
+		height: $sizeH;
+		cursor: pointer;
+
+		position: relative;
+
+		&::before, &::after {
+			display: inline-block;
+			content: " ";
+			position: absolute;
+		}
+
+		&::before {
+			left: 0px;
+			right: 0px;
+			top: ($sizeH - $barH) / 2;
+			margin: auto;
+			width: $sizeW;
+			height: $barH;
+			background-color: #bdbdbd;
+			border-radius: $barH;
+			transition: background-color 0.3s ease;
+		}
+
+		&::after {
+			background: #fff;
+			// border: solid 2px #ddd;
+			width: $sizeH;
+			height: $sizeH;
+			left: 0px;
+			border-radius: $sizeH;
+			transition: background-color 0.3s ease, transform 0.3s cubic-bezier(.36,.07,.19,.97);
+			box-shadow: 0 1px 4px #0008;
+		}
+
+		&.on::before {
+			background-color: #A5D6A7;
+		}
+
+		&.on::after {
+			transform: translateX($sizeW);
+			background-color: #4CAF50;
+		}
+	}
+
+	&.slider {
+		$sizeH: 22px;
+		//$sizeW_btn: 50px;
+		$innerH: 3px;
+		$color: #ef5350;
+		$colorLight: #e57373;
+
+		// background-color: red;
+		height: $sizeH;
+		//width: $sizeW;
+
+		position: relative;
+
+		&::before {
+			content: " ";
+			display: block;
+			position: absolute;
+			border-radius: $innerH;
+			height: $innerH;
+			width: 100%;
+			top: 0px;
+			bottom: 0px;
+			margin: auto;
+			background-color: $color;
+		}
+
+		button {
+			height: $sizeH;
+			user-select: none;
+			//min-width: $sizeW_btn;
+			background-color: $color;
+			border: none;
+			border-radius: $sizeH;
+			box-shadow: 0 1px 4px #0008;
+			color: #fff;
+			padding: 0px 5px;
+
+			position: absolute;
+			left: 0px;
+			//transform: translateX($sizeW - $sizeH);
+
+			&.hold, &:hover {
+				background-color: $colorLight;
+			}
+		}
+	}
+}

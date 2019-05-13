@@ -1,8 +1,116 @@
+<<<<<<< HEAD
 svg.game-svg {
 	.cartoon-style {
 		stroke: #000;
 		stroke-width: 2px;
 		stroke-opacity: 0.5;
+=======
+$solid_colors: (
+	(transparent, #fff1),//sensors preview
+	(red, #e57373),
+	(green, #8BC34A),
+	(cannon_bullet, #263238),
+	(door1, #8BC34A),//same color as key1
+	(orange, #D17400),
+	(orange_transparent, #D1740040)
+);
+
+$textures: (
+	crate: (
+		'crate_texture',
+		'./../img/textures/crate.jpg',
+		#292b3d
+	),
+	exit: (
+		'exit_texture',
+		'./../img/textures/exit.png',
+		#99ca61
+	),
+	enemy: (
+		'enemy_texture',
+		'./../img/textures/enemy.png',
+		#d7c9c4
+	),
+	aid: (
+		'aid_texture',
+		'./../img/textures/aid.png',
+		#7dd293
+	),
+	sawblade: (
+		'sawblade_texture',
+		'./../img/textures/sawblade.png',
+		#e46d53
+	),
+	forcefield: (
+		'forcefield_texture',
+		'./../img/textures/forcefield.png',
+		#80DEEA80
+	),
+	portal1: (
+		'portal1_texture',
+		'./../img/textures/portal1.png',
+		#f8c77a
+	),
+	portal2: (
+		'portal2_texture',
+		'./../img/textures/portal2.png',
+		#f07ae6
+	),
+	portal3: (
+		'portal3_texture',
+		'./../img/textures/portal3.png',
+		#87cd98
+	),
+	spiky_crate: (
+		'spiky_crate_texture',
+		'./../img/textures/spiky_crate.png',
+		#e46d53
+	),
+	cannon: (
+		'cannon_texture',
+		'./../img/textures/cannon.png',
+		#d67458
+	),
+	lava: (
+		'lava_texture',
+		'./../img/textures/lava.jpg',
+		#41281e
+	),
+	grass: (
+		'grass_texture',
+		'./../img/textures/grass.jpg',
+		#70992c
+	),
+	key1: (
+		'key1_texture',
+		'./../img/textures/key1.png',
+		#8BC34A
+	),
+	elevator: (
+		'elevator_texture',
+		'./../img/textures/elevator.png',
+		#D1740080
+	),
+	elevator_up: (
+		'elevator_texture_up',
+		'./../img/textures/elevatorUp.png',
+		#D1740080
+	),
+	elevator_down: (
+		'elevator_texture_down',
+		'./../img/textures/elevatorDown.png',
+		#D1740080
+	),
+);
+
+svg.game-svg {
+	shape-rendering: auto;
+
+	.cartoon-style {
+		stroke: #000;
+		stroke-width: 2px;
+		stroke-opacity: 0.61;
+>>>>>>> stage3
 	}
 
 	.flat-shadows {
@@ -12,4 +120,98 @@ svg.game-svg {
 	image.nearest {
 		image-rendering: pixelated;
 	}
+<<<<<<< HEAD
 }
+=======
+
+	& > * {
+		pointer-events: none;
+	}
+
+	/** predefined objects classes (correlated with themes object in predefined_assets.js) */
+
+	circle, rect, path {
+		//default values
+		fill: #fff;
+
+		@each $name, $color in $solid_colors {
+			&.#{$name} {
+				fill: $color;
+			}
+		}
+	}
+
+	&:not(.no-textures) circle, &:not(.no-textures) rect, &:not(.no-textures) path {
+		@each $name, $data in $textures {
+			&.#{$name} {
+				fill: url(##{ nth($data, 1) });
+			}
+		}
+
+		&.player {
+			fill: url('#player_texture');
+		}
+	}
+
+	&.no-textures circle, &.no-textures rect, &.no-textures path {
+		@each $name, $data in $textures {
+			&.#{$name} {
+				fill: nth($data, 3);
+			}
+		}
+
+		&.player {
+			fill: #749de2;
+		}
+	}
+
+	.selected {
+		stroke: #ef5350;
+		stroke-opacity: 1;
+		stroke-width: 4px;
+		stroke-linecap: round;
+		stroke-dasharray: 10;
+
+		animation: stroke-rotate 2s linear infinite both;
+
+		@keyframes stroke-rotate {
+			0% {
+				stroke-dashoffset: 0;
+			}
+			100% {
+				stroke-dashoffset: 100;
+			}
+		}
+	}
+
+	.elevator.up {
+		fill: url('#elevator_texture_up');
+	}
+
+	.elevator.down {
+		fill: url('#elevator_texture_down');
+	}
+
+}
+
+
+.asset_preview {
+	& > * {
+		box-sizing: border-box;
+		border: 1px solid #000a;
+	}
+
+	@each $name, $color in $solid_colors {
+		.#{$name} {
+			background-color: $color;
+		}
+	}
+
+	@each $name, $data in $textures {
+		.#{$name} {
+			background-image: url(#{ nth($data, 2) });
+			background-size: contain;
+		}
+	}
+}
+>>>>>>> stage3
