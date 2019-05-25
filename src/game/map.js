@@ -14,6 +14,7 @@ import Key from './objects/key';
 import Door from './objects/door';
 import Elevator from './objects/elevator';
 import Aid from './objects/aid';
+import Item from './objects/item';
 
 import Background from './background';
 import Config from './config';
@@ -135,17 +136,6 @@ export default class Map extends CollisionListener {
 			this.graphics.createTexture(texture_name, texture.src, texture.width, texture.height);
 	}
 
-	/** 
-	* Casts coordinates according to current camera zoom and position
-	* @param {{x: number, y: number}} coords 
-	*/
-	addTestCircle({x, y}) {
-		let rand_r = Math.random() * 0.1 + 0.05;
-		let object2d = new Object2D(Type.CIRCLE, rand_r, rand_r, this.graphics, this.physics)
-			.set({'fill': 'rgb(255, 128, 128)'}).setPos(x||0, y||0);
-		object2d.body.velocity.y = 0.3;
-	}
-
 	createObject(class_name, shape, w, h, x = 0, y = 0, rot = 0) {
 		/** @type {Object2D} */
 		let obj;
@@ -187,6 +177,9 @@ export default class Map extends CollisionListener {
 				break;
 			case 'aid':
 				obj = new Aid(w||1, h||1, this.graphics, this.physics);
+				break;
+			case 'speedboost':
+				obj = new Item(w||1, h||1, this.graphics, this.physics, class_name);
 				break;
 			default:
 				obj = new Object2D(shape, w||1, h||1, this.graphics, this.physics);

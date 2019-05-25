@@ -4,6 +4,7 @@ import CollisionCategories from './collision_categories';
 import Config from './../config';
 import SvgEngine from './../svg_engine';
 import SimplePhysics from './../simple_physics/engine';
+import PowerUpBase from './powerups/powerup_base';
 
 const SPEED_LIMIT = 0.8;
 const INITIAL_HEALTH = 3;
@@ -32,6 +33,13 @@ export default class Player extends Object2D {
 
 		this._acceleration = 0.0005;
 		this._breaks_strength = 0.003;
+		this.speed_limit = SPEED_LIMIT;
+
+		/**
+		 *
+		 * @type {PowerUpBase []}
+		 */
+		this.powerUpArray = [];
 	}
 
 	/**
@@ -43,7 +51,7 @@ export default class Player extends Object2D {
 
 		this.body.applyVelocity(
 			dir.x*this._acceleration*delta, dir.y*this._acceleration*delta, 
-			SPEED_LIMIT
+			this.speed_limit
 		);
 	}
 
@@ -52,6 +60,16 @@ export default class Player extends Object2D {
 	*/
 	slowDown(delta) {
 		this.body.velocity.scale(1.0 - delta*this._breaks_strength);
+	}
+
+	toogleSpeed(enable) {
+		if(!enable) {
+			this._acceleration = 0.0005;
+			this.speed_limit = SPEED_LIMIT;
+		} else {
+			this._acceleration = 0.0005 * 2;
+			this.speed_limit = SPEED_LIMIT * 2;
+		}
 	}
 
 	/** @param {number} strength */
@@ -68,13 +86,23 @@ export default class Player extends Object2D {
 		this.on_hp_change(this.health);
 	}
 
+	addPowerUp(powerUp) {
+		this.powerUpArray.push(powerUp);
+	}
+
 	/** 
 	 * @param  {number?} dt
 	 * @param  {boolean?} paused
 	 */
 	update(dt, paused = false) {
 		this.immunity = Math.max(0, this.immunity-dt/1000.0);
-			
+		this.powerUpArray.forEach((powerUp, index) => {
+			powerUp.applyEffect(this);
+			if((powerUp.duration_time -= dt) <= 0) {
+				powerUp.clearEffect(this);
+				this.powerUpArray.splice(index, 1);
+			}
+		});
 		super.update(dt, paused);
 	}
 }

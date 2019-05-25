@@ -144,6 +144,14 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 		width: 0.4,
 		height: 0.4,
 		categories: [CATEGORIES.all, CATEGORIES.logic]
+	},
+	//items
+	'speedboost': {
+		name: 'Przyspieszacz',
+		class_name: 'speedboost',
+		shape: MapData.SHAPE_TYPE.CIRCLE,
+		radius: 0.15,
+		categories: [CATEGORIES.all, CATEGORIES.logic]
 	}
 };
 
@@ -237,6 +245,11 @@ export const TEXTURES = {//names must much those in svg.scss
 		src: require('./../img/textures/elevatorDown.png'),
 		width: Config.VIRT_SCALE * OBJECTS['elevator'].width,
 		height: Config.VIRT_SCALE * OBJECTS['elevator'].height
+	},
+	'speedboost_texture': {
+		src: require('./../img/textures/speed.png'),
+		width: Config.VIRT_SCALE * OBJECTS['speedboost'].radius,
+		height: Config.VIRT_SCALE * OBJECTS['speedboost'].radius
 	}
 };
 

@@ -2,7 +2,6 @@
 import Object2D, {Type} from './object2d';
 import SvgEngine from './../svg_engine';
 import SimplePhysics from './../simple_physics/engine';
-import {OBJECTS} from "../predefined_assets";
 import Player from './player';
 
 let sign = i => i===0?1:-1;
@@ -45,6 +44,7 @@ export default class Elevator extends Object2D {
 		this.time_to_destination = ELEVATOR_RIDE_TIME;
 		/** @type {{x: number, y: number}} point from which the elevator start traveling */
 		this.starting_point = null;
+		this.isOpen = true;
 	}
 
 	/** @param {SimplePhysics} physics_engine */
@@ -103,24 +103,33 @@ export default class Elevator extends Object2D {
 		return super.setRot(rot);
 	}
 
-	/** 
+	toogleDoor() {
+		if(!this.isOpen) {
+			this.doors.forEach(d => d.setClass('orange_transparent').body.setMask(0));//open
+		} else {
+			this.doors.forEach(d => d.setClass('orange').body.setMask(~0));//close
+		}
+		this.isOpen = !this.isOpen;
+	}
+
+	/**
 	 * @param  {number?} dt
 	 * @param  {boolean?} paused
 	 */
 	update(dt, paused = false) {
 		if(this.player) {
-			const dst = Math.pow(this.player.getTransform().x - this.getTransform().x, 2) + 
+			const dst = Math.pow(this.player.getTransform().x - this.getTransform().x, 2) +
 			Math.pow(this.player.getTransform().y - this.getTransform().y, 2);
-			
+
 			if(this.activated) {
 				if((this.time_to_destination-=dt) <= 0) {
 					this.player = null;
 					this.activated = false;
 					this.removeClass(this.dir === 1 ? 'elevator_up' : 'elevator_down');
-					this.doors.forEach(d => d.setClass('orange_transparent').body.setMask(0));//open
+					//this.toogleDoor();
 				}
 				else {
-					let dst = ELEVATOR_RIDE_DISTANCE * 
+					let dst = ELEVATOR_RIDE_DISTANCE *
 						Math.pow(1 - this.time_to_destination/ELEVATOR_RIDE_TIME, 2);
 					let rot = this.getTransform().rot - Math.PI/2;
 					this.setPos(
@@ -146,9 +155,8 @@ export default class Elevator extends Object2D {
 				this.starting_point = {x: this.getTransform().x, y: this.getTransform().y};
 				this.time_to_destination = ELEVATOR_RIDE_TIME;
 				this.dir = -this.dir;//revert direction
-
+				this.toogleDoor();
 				this.addClass(this.dir === 1 ? 'elevator_up' : 'elevator_down');
-				this.doors.forEach(d => d.setClass('orange').body.setMask(~0));//close
 			}
 		}
 		else if(this.locked > 0)

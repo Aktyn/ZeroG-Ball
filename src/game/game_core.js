@@ -8,6 +8,7 @@ import Player from './objects/player';
 import Object2D from './objects/object2d';
 import {Body} from './simple_physics/body';
 import handleCollision from './collision_handler';
+import Elevator from "./objects/elevator";
 
 /**
 * 	@typedef {{
@@ -229,7 +230,7 @@ export default class GameCore extends Map {
 	* @param {boolean} enable
 	*/
 	updateSteering(code, enable) {
-		//console.log(code);
+		// console.log(code);
 		switch(code) {
 			case 37:
 			case 65:
@@ -252,6 +253,17 @@ export default class GameCore extends Map {
 				return;
 			case 17://ctrl
 				this.sticky_stamp = enable;
+				return;
+			case 79://o
+			case 13:// open and close doors
+				if(enable) {
+					for (let object of this.objects) {
+						if ((object instanceof Elevator) && !object.activated && (object.player !== null || !object.isOpen)) {
+							object.toogleDoor();
+						}
+					}
+				}
+
 				return;
 		}
 	}
