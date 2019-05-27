@@ -5,6 +5,7 @@ import SimplePhysics from './../simple_physics/engine';
 import CollisionCategories from './collision_categories';
 import Player from './player';
 import SpeedBoost from './powerups/speedboost';
+import Shrinker from './powerups/shrinker';
 
 export default class Item extends Object2D {
     /**
@@ -20,8 +21,12 @@ export default class Item extends Object2D {
             ~CollisionCategories.player
         );
         switch(type) {
+            default://any chosen powerup should be defaulted
             case 'speedboost':
                 this.powerUp = new SpeedBoost();
+                break;
+            case 'shrinker':
+                this.powerUp = new Shrinker();
                 break;
         }
     }
@@ -30,7 +35,6 @@ export default class Item extends Object2D {
      * @param {Player} player
      */
     use(player) {
-        console.log('jestem w use');
         player.addPowerUp(this.powerUp);
     }
 }

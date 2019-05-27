@@ -34,7 +34,12 @@ export default class Elevator extends Object2D {
 				.setClass('orange_transparent').setStatic());
 		objects.push(...this.doors);
 
-		this.doors.forEach(d => d.body.setMask(0));//init doors with no collisions
+		this.doors.forEach(d => {//init doors with no collisions
+			d.body.setMask(0);
+			d.editable = false;
+		});
+
+		this.walls.forEach(w => w.editable = false);
 
 		this.locked = 0;
 		/** @type {Player} player instance handle */

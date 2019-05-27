@@ -1,5 +1,5 @@
 $solid_colors: (
-	(transparent, #fff1),//sensors preview
+	(sensor, #fff1),//sensors preview
 	(red, #e57373),
 	(green, #8BC34A),
 	(cannon_bullet, #263238),
@@ -54,6 +54,11 @@ $textures: (
 		'./../img/textures/portal3.png',
 		#87cd98
 	),
+	revolving_door: (
+		'revolving_door_texture',
+		'./../img/textures/revolving_door.png',
+		#8bc34a
+	),
 	spiky_crate: (
 		'spiky_crate_texture',
 		'./../img/textures/spiky_crate.png',
@@ -97,7 +102,12 @@ $textures: (
 	speedboost: (
 		'speedboost_texture',
 		'./../img/textures/speed.png',
-		#3B8AAF
+		#4bb6f5
+	),
+	shrinker: (
+		'shrinker_texture',
+		'./../img/textures/shrink.png',
+		#ba68c8
 	)
 );
 

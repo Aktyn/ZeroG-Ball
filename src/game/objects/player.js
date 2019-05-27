@@ -63,12 +63,12 @@ export default class Player extends Object2D {
 	}
 
 	toogleSpeed(enable) {
-		if(!enable) {
-			this._acceleration = 0.0005;
-			this.speed_limit = SPEED_LIMIT;
-		} else {
+		if(enable) {
 			this._acceleration = 0.0005 * 2;
 			this.speed_limit = SPEED_LIMIT * 2;
+		} else {
+			this._acceleration = 0.0005;
+			this.speed_limit = SPEED_LIMIT;
 		}
 	}
 

@@ -13,6 +13,7 @@ import Cannon from './objects/cannon';
 import Key from './objects/key';
 import Door from './objects/door';
 import Elevator from './objects/elevator';
+import RevolvingDoor from './objects/revolving_door';
 import Aid from './objects/aid';
 import Item from './objects/item';
 
@@ -172,6 +173,9 @@ export default class Map extends CollisionListener {
 				let type = ['portal1', 'portal2', 'portal3'].indexOf(class_name);
 				obj = new Portal(w||1, h||1, this.graphics, this.physics, type);
 			}	break;
+			case 'revolving_door':
+				obj = new RevolvingDoor(w||1, h||1, this.graphics, this.physics, this.objects);
+				break;
 			case 'elevator':
 				obj = new Elevator(w||1, h||1, this.graphics, this.physics, this.objects);
 				break;
@@ -179,6 +183,7 @@ export default class Map extends CollisionListener {
 				obj = new Aid(w||1, h||1, this.graphics, this.physics);
 				break;
 			case 'speedboost':
+			case 'shrinker':
 				obj = new Item(w||1, h||1, this.graphics, this.physics, class_name);
 				break;
 			default:
@@ -283,6 +288,8 @@ export default class Map extends CollisionListener {
 	*/
 	getObjectAt(coords) {
 		for(let obj of this.objects) {
+			if(!obj.editable)
+				continue;
 			switch(obj.type) {
 				case Type.CIRCLE:
 					if(Math.pow(coords.x-obj.transform.x, 2) + Math.pow(coords.y-obj.transform.y, 2) < 

@@ -54,6 +54,7 @@ export default class Object2D extends SvgObject {
 		this.animation_time = 0;
 
 		this.to_destroy = false;
+		this.editable = true;
 
 		super.setSize(width, height);
 		//if(push_at_beginning)

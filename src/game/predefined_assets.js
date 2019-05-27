@@ -6,7 +6,8 @@ export const CATEGORIES = {
 	active: 			'INTERAKTYWNE',
 	dynamic: 			'DYNAMICZNE',
 	building_blocks: 	'BUDULCE',
-	logic: 				'LOGICZNE' 
+	logic: 				'LOGICZNE',
+	powerups: 			'POWERUPY'
 };
 
 export const OBJECTS = {//some of those name must not be changed due to correlation with other code
@@ -96,6 +97,14 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 		radius: 0.1,
 		categories: [CATEGORIES.all, CATEGORIES.dynamic, CATEGORIES.building_blocks]
 	},
+	'revolving_door': {
+		name: 'Drzwi obrotowe',
+		class_name: 'revolving_door',
+		shape: MapData.SHAPE_TYPE.RECT,
+		width: 0.1,
+		height: 0.1,
+		categories: [CATEGORIES.all, CATEGORIES.dynamic]
+	},
 	'crate': {
 		name: 'Skrzynia',
 		class_name: 'crate',
@@ -151,8 +160,15 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 		class_name: 'speedboost',
 		shape: MapData.SHAPE_TYPE.CIRCLE,
 		radius: 0.15,
-		categories: [CATEGORIES.all, CATEGORIES.logic]
-	}
+		categories: [CATEGORIES.all, CATEGORIES.logic, CATEGORIES.powerups]
+	},
+	'shrinker': {
+		name: 'Zmniejszacz',
+		class_name: 'shrinker',
+		shape: MapData.SHAPE_TYPE.CIRCLE,
+		radius: 0.15,
+		categories: [CATEGORIES.all, CATEGORIES.logic, CATEGORIES.powerups]
+	},
 };
 
 export const TEXTURES = {//names must much those in svg.scss
@@ -200,6 +216,11 @@ export const TEXTURES = {//names must much those in svg.scss
 		src: require('./../img/textures/portal3.png'),
 		width: Config.VIRT_SCALE * OBJECTS['portal3'].radius,
 		height: Config.VIRT_SCALE * OBJECTS['portal3'].radius
+	},
+	'revolving_door_texture': {//only for in-gui preview
+		src: require('./../img/textures/revolving_door.png'),
+		width: 0,//Config.VIRT_SCALE * OBJECTS['revolving_door'].radius,
+		height: 0,//Config.VIRT_SCALE * OBJECTS['revolving_door'].radius
 	},
 	'spiky_crate_texture': {
 		src: require('./../img/textures/spiky_crate.png'),
@@ -250,6 +271,11 @@ export const TEXTURES = {//names must much those in svg.scss
 		src: require('./../img/textures/speed.png'),
 		width: Config.VIRT_SCALE * OBJECTS['speedboost'].radius,
 		height: Config.VIRT_SCALE * OBJECTS['speedboost'].radius
+	},
+	'shrinker_texture': {
+		src: require('./../img/textures/shrink.png'),
+		width: Config.VIRT_SCALE * OBJECTS['shrinker'].radius,
+		height: Config.VIRT_SCALE * OBJECTS['shrinker'].radius
 	}
 };
 

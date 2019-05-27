@@ -42,7 +42,7 @@ const CONFIG = {
 				loader: "babel-loader"
 			},
 			{
-				test: /\.(scss|css)$/,
+				test: /\.(scss|sass|css)$/,
 				use: [
 					MiniCssExtractPlugin.loader,
 					{
@@ -65,9 +65,9 @@ const CONFIG = {
 						},
 					},
 					{
-						loader: "sass-loader",
+						loader: 'fast-sass-loader',
 						options: {
-							sourceMap: isDevelopment
+							
 						}
 					}
 				]
