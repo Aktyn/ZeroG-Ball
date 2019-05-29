@@ -24,11 +24,11 @@ export class Body extends Filter {
 		this.static = false;
 
 		this.density = _density;//used for mass calculations
-		this.mass = 1;
+		this.mass = 1;//private
 		this.velocity = new Vec2(0, 0);
 		this.next_velocity = null;
 
-		this.colliding = false;
+		//this.colliding = false;
 
 		this._custom_data_ = null;//designated for only single data assignment
 	}
@@ -108,10 +108,10 @@ export class Body extends Filter {
 			this.next_velocity = null;
 		}
 		this.pos.addVec( this.velocity );
-		if(this.colliding) {//deprecated - remove this variable
+		//if(this.colliding) {//deprecated - remove this variable
 			//this.pos.add(0, g);//stick to the ground
-			this.colliding = false;
-		}
+		//	this.colliding = false;
+		//}
 	}
 }
 

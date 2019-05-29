@@ -9,9 +9,16 @@ import PowerUpBase from './powerups/powerup_base';
 const SPEED_LIMIT = 0.8;
 const INITIAL_HEALTH = 3;
 const DAMAGE_IMMUNITY = 0.5;
+const ACCELERATION = 0.00075;
+const BREAKS = 0.003;
 /**
 * @callback on_hp_change_cb
  * @param {number} damage
+ */
+
+/**
+* @callback on_powerup_collected_cb
+ * @param {PowerUpBase} powerup
  */
 
 export default class Player extends Object2D {
@@ -19,26 +26,25 @@ export default class Player extends Object2D {
 	* @param {SvgEngine} graphics_engine
 	* @param {SimplePhysics} physics_engine
 	* @param {on_hp_change_cb} on_hp_change
+	* @param {on_powerup_collected_cb} on_powerup_collected
 	*/
-	constructor(graphics_engine, physics_engine, on_hp_change) {
+	constructor(graphics_engine, physics_engine, on_hp_change, on_powerup_collected) {
 		super(Type.CIRCLE, Config.player_size, Config.player_size, graphics_engine, physics_engine);
 		super.setClass('player');
 
 		this.body.setCategory( CollisionCategories.player );
 
 		this.on_hp_change = on_hp_change;
+		this.on_powerup_collected = on_powerup_collected;
 
 		this.health = INITIAL_HEALTH;//number of health segments
 		this.immunity = DAMAGE_IMMUNITY;
 
-		this._acceleration = 0.0005;
-		this._breaks_strength = 0.003;
+		this._acceleration = ACCELERATION;
+		this._breaks_strength = BREAKS;
 		this.speed_limit = SPEED_LIMIT;
 
-		/**
-		 *
-		 * @type {PowerUpBase []}
-		 */
+		/** @type {PowerUpBase []} */
 		this.powerUpArray = [];
 	}
 
@@ -64,10 +70,10 @@ export default class Player extends Object2D {
 
 	toogleSpeed(enable) {
 		if(enable) {
-			this._acceleration = 0.0005 * 2;
+			this._acceleration = ACCELERATION * 2;
 			this.speed_limit = SPEED_LIMIT * 2;
 		} else {
-			this._acceleration = 0.0005;
+			this._acceleration = ACCELERATION;
 			this.speed_limit = SPEED_LIMIT;
 		}
 	}
@@ -86,8 +92,15 @@ export default class Player extends Object2D {
 		this.on_hp_change(this.health);
 	}
 
+	/** @param {PowerUpBase} powerUp */
+	isPowerupActive(powerUp) {
+		return !!this.powerUpArray.find(p => powerUp instanceof p.constructor);
+	}
+
+	/** @param {PowerUpBase} powerUp */
 	addPowerUp(powerUp) {
 		this.powerUpArray.push(powerUp);
+		this.on_powerup_collected(powerUp);
 	}
 
 	/** 

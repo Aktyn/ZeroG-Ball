@@ -1,8 +1,9 @@
 // @ts-check
-import SvgEngine from './../svg_engine';
-import SvgObject from './../svg';
+import SvgEngine from '../svg_engine';
+import SvgObject from '../svg';
 
-import SimplePhysics from './../simple_physics/engine';
+import SimplePhysics from '../simple_physics/engine';
+import {ShapeType} from '../simple_physics/body';
 import animate from './keyframe_animation';
 
 /**
@@ -148,6 +149,24 @@ export default class Object2D extends SvgObject {
 		return super.setRot(rot);
 	}
 
+	/**
+	* @param {number} w
+	* @param {number} h
+	*/
+	setSize(w, h) {
+		if(this.body.shape_type === ShapeType.CIRCLE)
+			//@ts-ignore
+			this.body.radius = w*SCALLER;//instance of circle
+		else {
+			//@ts-ignore
+			this.body.width = w*SCALLER;
+			//@ts-ignore
+			this.body.height = h*SCALLER;
+		}
+		this.body.recalculateMass();
+		return super.setSize(w, h);
+	}
+
 	/** 
 	 * @param  {number?} dt
 	 * @param  {boolean?} paused
@@ -162,3 +181,4 @@ export default class Object2D extends SvgObject {
 	}
 }
 
+Object2D.SCALLER = SCALLER;

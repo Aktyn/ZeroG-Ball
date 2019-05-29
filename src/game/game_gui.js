@@ -10,6 +10,7 @@ import editObjectOptions from './gui/object_edit_code';
 
 import {OBJECTS, BACKGROUNDS, CATEGORIES} from './predefined_assets';
 import Object2D, {Type} from './objects/object2d';
+import PowerUpBase from './objects/powerups/powerup_base';
 import MapData from './map_data';
 
 import SPEECH_COMMANDS from './speech_recognition';
@@ -209,7 +210,8 @@ export default class GameGUI {
 					this.elapsed_time = $.create('span').text('00'),
 					createClockWidget()
 				),
-				this.player_hearts = $.create('div').setClass('hearts')
+				this.player_hearts = $.create('div').setClass('hearts'),
+				this.active_powerups = $.create('div').setClass('powerups')
 			)
 		);
 
@@ -332,6 +334,20 @@ export default class GameGUI {
 		setTimeout(() => {
 			damage_effect.delete();
 		}, 5000);
+	}
+
+	/** @param {PowerUpBase} powerup */
+	onPlayerCollectedPowerup(powerup) {
+		let powerup_info = $.create('div').addChild(
+			$.create('div').addClass(powerup.type),
+			$.create('div').text( OBJECTS[powerup.type].name ),
+			$.create('div').addClass('fade-timer').setStyle({
+				'animation-duration': `${powerup.duration_time}ms`
+			})
+		);
+		this.active_powerups.addChild( powerup_info );
+
+		setTimeout(() => powerup_info.delete(), powerup.duration_time);
 	}
 
 	/**

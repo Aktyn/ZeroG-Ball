@@ -7,8 +7,9 @@ const DURATION = 10000;
 const TRANSITION_TIME = 750;
 
 export default class SpeedBoost extends PowerUpBase {
-    constructor() {
-        super(DURATION);//miliseconds
+    /** @param {string} type */
+    constructor(type) {
+        super(type, DURATION);//miliseconds
     }
 
     /**

@@ -23,18 +23,22 @@ export default class Item extends Object2D {
         switch(type) {
             default://any chosen powerup should be defaulted
             case 'speedboost':
-                this.powerUp = new SpeedBoost();
+                this.powerUp = new SpeedBoost(type);
                 break;
             case 'shrinker':
-                this.powerUp = new Shrinker();
+                this.powerUp = new Shrinker(type);
                 break;
         }
     }
 
     /**
      * @param {Player} player
+     * @returns {boolean}
      */
     use(player) {
+        if(player.isPowerupActive(this.powerUp))
+            return false;
         player.addPowerUp(this.powerUp);
+        return true;
     }
 }

@@ -61,8 +61,8 @@ export default function handleCollision(game_core, A, B) {
 			objB.to_destroy = true;
 		}
 		else if(objB instanceof Item) {
-			objB.to_destroy = true;
-			objB.use(objA);
+			if( objB.use(objA) )
+				objB.to_destroy = true;
 		}
 
 	}

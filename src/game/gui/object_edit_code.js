@@ -21,7 +21,8 @@ import Object2D, {Type} from '../objects/object2d';
 export default function(selected_object, onDeleteOption, onCopyOption, onTransformUpdate, 
 	onKeyframesUpdate) 
 {
-	var x_input, y_input, w_input, h_input, rot_input, time_input, keyframes_container, action_btn;
+	var x_input, y_input, w_input, h_input, rot_input, time_input, keyframes_container, action_btn,
+		update_btn;
 
 	/** @type {{time: number, transform: Transform}[]} keyframes array sorted by time */
 	let keyframes = JSON.parse(JSON.stringify(selected_object.keyframes || []));
@@ -50,6 +51,7 @@ export default function(selected_object, onDeleteOption, onCopyOption, onTransfo
 		}
 
 		action_btn.text(frametime_exists !== -1 ? 'Usuń klatkę' : 'Ustaw klatkę kluczową');
+		update_btn.style.display = frametime_exists !== -1 ? 'inline-block' : 'none';
 
 		onKeyframesUpdate(keyframes);
 	}
@@ -90,8 +92,9 @@ export default function(selected_object, onDeleteOption, onCopyOption, onTransfo
 			onTransformUpdate( new_transform );
 	}
 
-	let exception_rot = selected_object.static || 
-		selected_object.getClassName().split(' ').includes('cannon');
+	let exception_rot = (selected_object.static || 
+		selected_object.getClassName().split(' ').includes('cannon')) &&
+		!selected_object.getClassName().split(' ').includes('revolving_door');
 	let container = $.create('div').addClass('edit-options').addChild(
 		$.create('div').addClass('transform-options').addChild(...[
 			$.create('label').text('pozycja x'),
@@ -145,24 +148,37 @@ export default function(selected_object, onDeleteOption, onCopyOption, onTransfo
 				time_input = $.create('input').setAttrib('type', 'number').setAttrib('value', 0)
 					.setAttrib('min', 0).on('input', updateKeyframesContainer),
 			),
-			action_btn = $.create('button').text('Ustaw klatkę kluczową').on('click', () => {
-				if(frametime_exists !== -1) {
-					keyframes.splice(frametime_exists, 1);
+			$.create('div').addChild(
+				action_btn = $.create('button').text('Ustaw klatkę kluczową').on('click', () => {
+					if(frametime_exists !== -1) {
+						keyframes.splice(frametime_exists, 1);
+						updateKeyframesContainer();
+						return;
+					}
+					let new_transform = getTransform();
+					if(new_transform === undefined)
+						return;
+					if(keyframes.find(k => k.time == time_input.value))
+						return;
+					keyframes.push({
+						time: parseFloat(time_input.value),
+						transform: new_transform
+					});
+					keyframes = keyframes.sort((a, b) => a.time - b.time);
 					updateKeyframesContainer();
-					return;
-				}
-				let new_transform = getTransform();
-				if(new_transform === undefined)
-					return;
-				if(keyframes.find(k => k.time == time_input.value))
-					return;
-				keyframes.push({
-					time: parseFloat(time_input.value),
-					transform: new_transform
-				});
-				keyframes = keyframes.sort((a, b) => a.time - b.time);
-				updateKeyframesContainer();
-			})
+				}),
+				update_btn = $.create('button').text('Aktualizuj').on('click', () => {
+					if(frametime_exists === -1)
+						return;
+					let new_transform = getTransform();
+					if(new_transform === undefined)
+						return;
+					keyframes[frametime_exists].transform = new_transform;
+					updateKeyframesContainer();
+				}).setStyle({
+					'margin-left': '10px'
+				})
+			)
 		) : undefined,
 
 		$.create('div').addClass('object-options').addChild(

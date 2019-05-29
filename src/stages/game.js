@@ -37,6 +37,10 @@ export default class GameStage extends Stage {
 				this.gui.onPlayerHpChange(health);
 			},
 
+			onPlayerCollectedPowerup: (powerup) => {
+				this.gui.onPlayerCollectedPowerup(powerup);
+			},
+
 			/**
 			 * @param  {string} name  
 			 * @param  {number} time  

@@ -3,9 +3,11 @@ import Player from '../player';
 export default class PowerUpBase {
 
     /**
+     * @param {string} type
      * @param {number} duration_time duration of powerup in miliseconds
      */
-    constructor(duration_time) {
+    constructor(type, duration_time) {
+        this.type = type;
         this.duration_time = duration_time;
     }
 

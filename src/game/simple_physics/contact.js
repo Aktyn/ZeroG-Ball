@@ -35,7 +35,7 @@ export default class Contact {
 				this.solveCircleToCircle(this.A, this.B);
 		}
 
-		this.A.colliding = true;
+		//this.A.colliding = true;
 
 		// resources used for velocity recalculation:
 		//https://en.wikipedia.org/wiki/Dot_product

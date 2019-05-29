@@ -156,17 +156,17 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 	},
 	//items
 	'speedboost': {
-		name: 'Przyspieszacz',
+		name: 'Przyspieszenie',
 		class_name: 'speedboost',
 		shape: MapData.SHAPE_TYPE.CIRCLE,
-		radius: 0.15,
+		radius: 0.1,
 		categories: [CATEGORIES.all, CATEGORIES.logic, CATEGORIES.powerups]
 	},
 	'shrinker': {
-		name: 'Zmniejszacz',
+		name: 'Pomniejszenie',
 		class_name: 'shrinker',
 		shape: MapData.SHAPE_TYPE.CIRCLE,
-		radius: 0.15,
+		radius: 0.1,
 		categories: [CATEGORIES.all, CATEGORIES.logic, CATEGORIES.powerups]
 	},
 };

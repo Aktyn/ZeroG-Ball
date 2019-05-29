@@ -659,6 +659,46 @@ $header-size: 35px;
 				content: "❤";
 			}
 		}
+
+		.powerups {
+			height: auto !important;
+
+			& > * {
+				animation: fade_from_bottom 0.5s ease-in-out;
+				@keyframes fade_from_bottom {
+					0% {
+						transform: translateY(50px);
+					}
+					100% {
+						transform: translateY(0px);
+					}
+				}
+
+				height: 22px;
+				border: none;
+				font-weight: bold;
+
+				display: grid;
+				grid-column-gap: 5px;
+				grid-template-columns: 20px auto;
+				grid-template-rows: 20px 2px;
+
+				margin: 3px 0px;
+
+				.fade-timer {
+					display: block;
+					height: 2px;
+					background-color: #8BC34A;
+					grid-column: 1 / span 2;
+
+					animation: shrink_hor 1s linear forwards;
+					@keyframes shrink_hor {
+						0% {transform: scaleX(1);}
+						100% {transform: scaleX(0);}
+					}
+				}
+			}
+		}
 	}
 
 	.damage-effect {

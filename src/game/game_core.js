@@ -111,7 +111,8 @@ export default class GameCore extends Map {
 
 	spawnPlayer() {
 		this.target_zoom = INITIAL_ZOOM;
-		this.player = new Player(this.graphics, this.physics, this.onPlayerHpChange.bind(this));
+		this.player = new Player(this.graphics, this.physics, this.onPlayerHpChange.bind(this),
+			this.listeners.onPlayerCollectedPowerup);
 		super.addObject( this.player );
 	}
 
@@ -258,7 +259,9 @@ export default class GameCore extends Map {
 			case 13:// open and close doors
 				if(enable) {
 					for (let object of this.objects) {
-						if ((object instanceof Elevator) && !object.activated && (object.player !== null || !object.isOpen)) {
+						if ((object instanceof Elevator) && !object.activated && 
+							(object.player !== null || !object.isOpen)) 
+						{
 							object.toogleDoor();
 						}
 					}
