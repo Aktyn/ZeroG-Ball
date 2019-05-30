@@ -38,7 +38,7 @@ function runLoop(self) {
 	step(last);
 }
 
-const CAMERA_SMOOTHNESS = 0.003;
+const CAMERA_SMOOTHNESS = 0.006;
 const INITIAL_ZOOM = 2;
 const ZOOM_SMOTHNESS = 0.006;
 const ZOOM_STRENGTH = 0.2;

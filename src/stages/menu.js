@@ -5,6 +5,7 @@ import Stage from './stage';
 import './../styles/menu.scss';
 import {AVAIBLE_MAPS} from './../game/map_data';
 import MapRecords from './../game/map_records';
+const tutorial_data = require('../maps/tutorial.json');
 
 class MapItem {
 	/**
@@ -70,7 +71,14 @@ export default class MenuStage extends Stage {
                     	"objects": []
 	                }
 				});
-			})
+			}),
+			$.create('br'),
+			$.create('button').text('WPROWADZENIE').on('click', () => {
+				this.listeners.onStart({
+					name: 'Wprowadzenie',
+					json: tutorial_data
+				})
+			}).setStyle({marginTop: '15px'})
 		);
 
 		if(MapRecords.getRecord(AVAIBLE_MAPS[0].name) !== null) {
@@ -88,7 +96,7 @@ export default class MenuStage extends Stage {
 		this.secret_code = '';
 
 		//disables menu
-		setTimeout(()=>this.listeners.onStart(AVAIBLE_MAPS[0]), 100);//TEMP
+		//setTimeout(()=>this.listeners.onStart(AVAIBLE_MAPS[0]), 100);//TEMP
 	}
 
 	loadAvaibleMaps() {

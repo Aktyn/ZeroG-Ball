@@ -172,6 +172,11 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 };
 
 export const TEXTURES = {//names must much those in svg.scss
+	'tutorial_texture': {
+		src: require('./../img/tutorial.png'),
+		width: Config.VIRT_SCALE*1,
+		height: Config.VIRT_SCALE*1
+	},
 	'player_texture': {
 		src: require('./../img/textures/player.png'),
 		width: Config.VIRT_SCALE*0.1,
@@ -306,5 +311,10 @@ export const BACKGROUNDS = [//default value for linear attribute is: true
 		name: 'Gradient',
 		src: require('./../img/backgrounds/bg6.jpg'),
 		color: '#a7a1be',
+	},
+	{
+		name: 'Mozaika',
+		src: require('./../img/backgrounds/bg7.jpg'),
+		color: '#ac7874',
 	},
 ];

@@ -9,6 +9,11 @@ $solid_colors: (
 );
 
 $textures: (
+	tutorial: (
+		'tutorial_texture',
+		'./../img/tutorial.png',
+		'#fff'
+	),
 	crate: (
 		'crate_texture',
 		'./../img/textures/crate.jpg',
