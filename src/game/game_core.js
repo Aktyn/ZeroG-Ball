@@ -1,7 +1,7 @@
 // @ts-check
 // import $ from './../utils/html';
 import Map, {STATE} from './map';
-import MapData from './map_data';
+import MapData, {AVAILABLE_MAPS} from './map_data';
 import Config from './config';
 //import Settings from './settings';
 import Player from './objects/player';
@@ -59,11 +59,10 @@ export default class GameCore extends Map {
 			down:	false,
 			slow: 	false
 		};
-		this.sticky_stamp = false;
+		this.sticky_stamp = true;
 
 		this._running = false;
 		this.elapsed_time = 0;
-
 		this.target_zoom = INITIAL_ZOOM;
 
 		this.last_mouse_coords = null;
@@ -110,7 +109,8 @@ export default class GameCore extends Map {
 	}
 
 	spawnPlayer() {
-		this.target_zoom = INITIAL_ZOOM;
+		this.target_zoom = this.map_data.name === AVAILABLE_MAPS[0].name ? 
+			INITIAL_ZOOM*0.61 : INITIAL_ZOOM;
 		this.player = new Player(this.graphics, this.physics, this.onPlayerHpChange.bind(this),
 			this.listeners.onPlayerCollectedPowerup);
 		super.addObject( this.player );
@@ -151,12 +151,16 @@ export default class GameCore extends Map {
 		};
 	}
 
-	onMouseWheel(e) {
-		let dt = Math.max(-1, Math.min(1, e.wheelDelta || -e.detail));
-
-		let next_zoom = Math.min(6, this.camera.zoom*(1-ZOOM_STRENGTH*dt));
+	/** @param {number} delta */
+	_changeZoom(delta) {
+		let next_zoom = Math.min(6, this.camera.zoom*(1-ZOOM_STRENGTH*delta));
 		this.target_zoom = Math.max(0.2, 
 			Math.min(next_zoom, this.background.getMaxZoom(this.aspect)));
+	}
+
+	onMouseWheel(e) {
+		let dt = Math.max(-1, Math.min(1, e.wheelDelta || -e.detail));
+		this._changeZoom(dt);
 	}
 
 	onMouseDown(e) {
@@ -231,7 +235,6 @@ export default class GameCore extends Map {
 	* @param {boolean} enable
 	*/
 	updateSteering(code, enable) {
-		// console.log(code);
 		switch(code) {
 			case 37:
 			case 65:
@@ -253,10 +256,20 @@ export default class GameCore extends Map {
 				this.steering.slow = enable;
 				return;
 			case 17://ctrl
-				this.sticky_stamp = enable;
+				this.sticky_stamp = !enable;
 				return;
+			case 189:
+			case 109://minus
+				this._changeZoom(-1);
+				break;
+			case 187:
+			case 107://plus
+				this._changeZoom(1);
+				break;
+			//open and close doors
 			case 79://o
-			case 13:// open and close doors
+			case 69://e
+			case 13://enter
 				if(enable) {
 					for (let object of this.objects) {
 						if ((object instanceof Elevator) && !object.activated && 
@@ -407,8 +420,8 @@ export default class GameCore extends Map {
 
 	/** @param {number} dt */
 	update(dt) {
-		if(dt > 1000)
-			dt = 1000;
+		if(dt > 1000/60*5)//maximum 5 frames lag
+			dt = 1000/60*5;
 
 		if(this.state === STATE.RUNNING) {
 			this.elapsed_time += dt;

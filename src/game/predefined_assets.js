@@ -7,7 +7,16 @@ export const CATEGORIES = {
 	dynamic: 			'DYNAMICZNE',
 	building_blocks: 	'BUDULCE',
 	logic: 				'LOGICZNE',
-	powerups: 			'POWERUPY'
+	powerups: 			'POWERUPY',
+	tutorial: 			'WPROWADZENIE'
+};
+
+export const TUTORIAL_TEXTURES = {
+	'tutorial_introduction': {
+		src: require('./../img/textures/tutorial/introduction.png'),
+		width: Config.VIRT_SCALE*1.000,
+		height: Config.VIRT_SCALE*0.576
+	}
 };
 
 export const OBJECTS = {//some of those name must not be changed due to correlation with other code
@@ -169,14 +178,25 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 		radius: 0.1,
 		categories: [CATEGORIES.all, CATEGORIES.logic, CATEGORIES.powerups]
 	},
+
+	//(TEMP) make available objects from tutorial textures
+	...(function() {
+		let parts_objects = {};
+		for(let texture_name in TUTORIAL_TEXTURES) {
+			parts_objects[texture_name] = {
+				name: texture_name.replace(/^tutorial_/, ''),
+				class_name: texture_name,
+				shape: MapData.SHAPE_TYPE.RECT,
+				width: 1,
+				height: 1,
+				categories: [CATEGORIES.tutorial]
+			}
+		}
+		return parts_objects;
+	})()
 };
 
 export const TEXTURES = {//names must much those in svg.scss
-	'tutorial_texture': {
-		src: require('./../img/tutorial.png'),
-		width: Config.VIRT_SCALE*1,
-		height: Config.VIRT_SCALE*1
-	},
 	'player_texture': {
 		src: require('./../img/textures/player.png'),
 		width: Config.VIRT_SCALE*0.1,
@@ -281,7 +301,8 @@ export const TEXTURES = {//names must much those in svg.scss
 		src: require('./../img/textures/shrink.png'),
 		width: Config.VIRT_SCALE * OBJECTS['shrinker'].radius,
 		height: Config.VIRT_SCALE * OBJECTS['shrinker'].radius
-	}
+	},
+	...TUTORIAL_TEXTURES
 };
 
 /** @type {{name: string, src: string, color: string, linear?: boolean}[]} */

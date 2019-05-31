@@ -3,9 +3,11 @@ import $ from './../utils/html';
 import Common from './../utils/common';
 import Stage from './stage';
 import './../styles/menu.scss';
-import {AVAIBLE_MAPS} from './../game/map_data';
+import {AVAILABLE_MAPS} from './../game/map_data';
 import MapRecords from './../game/map_records';
-const tutorial_data = require('../maps/tutorial.json');
+
+const ALL_UNLOCKED_TEXT = 'Gratulacje! Wszystkie poziomy zostały odblokowane!';
+const UNLOCK_LEVELS_TEXT = 'Ukończ wszystkie dostępne poziomy aby odblokować kolejne';
 
 class MapItem {
 	/**
@@ -49,14 +51,16 @@ export default class MenuStage extends Stage {
 		this.map_items = [];
 
 		this.avaible_maps = $.create('section').setClass('avaible_maps_list');
-		this.loadAvaibleMaps();
+		let all_maps_unlocked = this.loadAvaibleMaps();
 
 		this.clear_progress_confirm = null;
 
 		this.container.addChild(
 			$.create('h1').text('Dostępne poziomy'),
 			this.avaible_maps,
-			$.create('div').text('Ukończ wszystkie dostępne poziomy aby odblokować kolejne').setStyle({
+			this.unlocked_info = $.create('div').text(
+				all_maps_unlocked ? ALL_UNLOCKED_TEXT : UNLOCK_LEVELS_TEXT
+			).setStyle({
 				'color': '#90A4AE'
 			})
 		);
@@ -71,17 +75,10 @@ export default class MenuStage extends Stage {
                     	"objects": []
 	                }
 				});
-			}),
-			$.create('br'),
-			$.create('button').text('WPROWADZENIE').on('click', () => {
-				this.listeners.onStart({
-					name: 'Wprowadzenie',
-					json: tutorial_data
-				})
-			}).setStyle({marginTop: '15px'})
+			})
 		);
 
-		if(MapRecords.getRecord(AVAIBLE_MAPS[0].name) !== null) {
+		if(MapRecords.getRecord(AVAILABLE_MAPS[0].name) !== null) {
 			this.container.addChild(
 				$.create('hr').setStyle({'background-color': '#546E7A'}),
 				this.clear_progress_btn = $.create('button').text('WYCZYŚĆ POSTĘP').on('click', () => {
@@ -96,18 +93,19 @@ export default class MenuStage extends Stage {
 		this.secret_code = '';
 
 		//disables menu
-		//setTimeout(()=>this.listeners.onStart(AVAIBLE_MAPS[0]), 100);//TEMP
+		setTimeout(()=>this.listeners.onStart(AVAILABLE_MAPS[0]), 100);//TEMP
 	}
 
-	loadAvaibleMaps() {
+	loadAvaibleMaps() {//returns true when every map is unlocked
 		this.avaible_maps.text('');
-		for(let map of AVAIBLE_MAPS) {
+		for(let map of AVAILABLE_MAPS) {
 			if(!MapRecords.isUnlocked(map.name))
-				break;
+				return false;
 			let item = new MapItem(map, this.listeners.onStart);
 			this.map_items.push(item);
 			this.avaible_maps.addChild( item.widget );
 		}
+		return true;
 	}
 
 	/** @param {KeyboardEvent} e */
@@ -143,6 +141,7 @@ export default class MenuStage extends Stage {
 			});
 			this.clear_progress_btn = null;
 			this.loadAvaibleMaps();
+			this.unlocked_info.text(UNLOCK_LEVELS_TEXT);
 		}
 	}
 

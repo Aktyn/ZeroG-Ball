@@ -70,14 +70,14 @@ const empty_map = {"background":0,"objects":[]};
 
 
 /** @type {{name: string, json: State}[]} */
-export const AVAIBLE_MAPS = [//NOTE - names should be unique
+export const AVAILABLE_MAPS = [//NOTE - names should be unique
 	{
-		name: 'Rozgrzewka',
+		name: 'Wprowadzenie',
 		//@ts-ignore
 		json: require('./../maps/1.json') 
 	},
 	{
-		name: 'level 2',
+		name: 'Pierwsze starcie',
 		//@ts-ignore
 		json: require('./../maps/2.json') 
 	}

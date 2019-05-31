@@ -14,11 +14,11 @@ const CONFIG = {
 	  	path:	path.resolve(__dirname, 'dist'),
 	  	filename: 'main.js',
 	},
-	watch: true,
-	watchOptions: {
+	watch: isDevelopment,
+	watchOptions: isDevelopment ? {
   		poll: true,
   		ignored: /node_modules/
-	},
+	} : undefined,
 	mode: isDevelopment ? 'development' : 'production',
 	devtool: isDevelopment && "source-map",
 	devServer: {

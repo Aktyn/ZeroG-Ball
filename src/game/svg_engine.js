@@ -126,6 +126,11 @@ export default class SvgEngine {
 		this.defs.addChild(texture);
 	}
 
+	/** @param {string} id */
+	hasTexture(id) {
+		return this.defs.node.querySelector('#' + id) !== null;
+	}
+
 	/*** @param {number} dt */
 	/*update(dt) {
 		for(let obj of this.objects)

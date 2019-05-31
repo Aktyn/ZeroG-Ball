@@ -1,5 +1,5 @@
 $solid_colors: (
-	(sensor, #fff1),//sensors preview
+	(sensor, #fff0),//sensors preview
 	(red, #e57373),
 	(green, #8BC34A),
 	(cannon_bullet, #263238),
@@ -9,10 +9,10 @@ $solid_colors: (
 );
 
 $textures: (
-	tutorial: (
-		'tutorial_texture',
-		'./../img/tutorial.png',
-		'#fff'
+	player: (
+		'player_texture',
+		'./../img/textures/player.png',
+		#749de2
 	),
 	crate: (
 		'crate_texture',
@@ -116,6 +116,10 @@ $textures: (
 	)
 );
 
+:export {
+	textures: first($textures);//hack for exporting list of lists
+}
+
 svg.game-svg {
 	shape-rendering: auto;
 
@@ -131,6 +135,11 @@ svg.game-svg {
 
 	image.nearest {
 		image-rendering: pixelated;
+		shape-rendering: optimizeSpeed;
+	}
+	image:not(.nearest) {
+		image-rendering: optimizeSpeed;
+		shape-rendering: optimizeSpeed;
 	}
 
 	& > * {
@@ -157,9 +166,9 @@ svg.game-svg {
 			}
 		}
 
-		&.player {
+		/*&.player {
 			fill: url('#player_texture');
-		}
+		}*/
 	}
 
 	&.no-textures circle, &.no-textures rect, &.no-textures path {
@@ -169,19 +178,20 @@ svg.game-svg {
 			}
 		}
 
-		&.player {
+		/*&.player {
 			fill: #749de2;
-		}
+		}*/
 	}
 
 	.selected {
 		stroke: #ef5350;
 		stroke-opacity: 1;
-		stroke-width: 4px;
+		stroke-width: 3px;
 		stroke-linecap: round;
 		stroke-dasharray: 10;
+		vector-effect: non-scaling-stroke;
 
-		animation: stroke-rotate 2s linear infinite both;
+		animation: stroke-rotate 2s linear infinite;
 
 		@keyframes stroke-rotate {
 			0% {

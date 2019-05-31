@@ -27,6 +27,7 @@ export class Body extends Filter {
 		this.mass = 1;//private
 		this.velocity = new Vec2(0, 0);
 		this.next_velocity = null;
+		this.max_size = 0;
 
 		//this.colliding = false;
 
@@ -127,6 +128,7 @@ export class Circle extends Body {
 
 	recalculateMass() {
 		this.mass = Math.PI * this.radius * this.radius * this.density;
+		this.max_size = this.radius;
 	}
 }
 
@@ -145,5 +147,6 @@ export class Rect extends Body {
 
 	recalculateMass() {
 		this.mass = this.width*this.height*4 * this.density;
+		this.max_size = Math.max(this.width, this.height);
 	}
 }

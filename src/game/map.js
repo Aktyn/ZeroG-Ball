@@ -1,7 +1,8 @@
 //@ts-check
-import MapData from './map_data';
+import MapData, {AVAILABLE_MAPS} from './map_data';
 import SvgEngine from './svg_engine';
 import Object2D, {Type} from './objects/object2d';
+import Tutorial from './objects/tutorial';
 import Player from './objects/player';
 import Enemy from './objects/enemy';
 import Exit from './objects/exit';
@@ -24,7 +25,32 @@ import Settings from './settings';
 import SimplePhysics from './simple_physics/engine';
 import CollisionListener from './simple_physics/collision_listener';
 
-import {TEXTURES} from './predefined_assets';
+import {TEXTURES, TUTORIAL_TEXTURES} from './predefined_assets';
+
+//@ts-ignore
+import vars from './../styles/svg.scss';
+
+let raw_vars = vars.textures.replace(/(^first\(\()/, '').replace(/\)\)$/, '').replace(/(:|,)\s+/gi, '$1')
+	.split(/([^:,"'\(\)\?]+):/).filter(line => line.length > 0);
+/** @type {{[index: string]: {name: string, path: string, color: string}}} */
+let SASS_TEXTURES = {};
+for(let i=0; i<raw_vars.length-1; i+=2) {
+	let data_array = raw_vars[i+1].split(',')
+		.map(l => l.replace(/^"/, '').replace(/"$/, '')).filter(l => l.length > 0);
+	SASS_TEXTURES[ raw_vars[i] ] = {
+		name: data_array[0],
+		path: data_array[1],
+		color: data_array[2]
+	};
+}
+for(let tutorial_texture_name in TUTORIAL_TEXTURES) {
+	SASS_TEXTURES[ tutorial_texture_name ] = {
+		name: tutorial_texture_name,
+		path: TUTORIAL_TEXTURES[tutorial_texture_name].src,
+		color: '#fff'
+	};
+}
+//console.log(SASS_TEXTURES);
 
 export const STATE = {
 	RUNNING: 0,
@@ -56,7 +82,9 @@ export default class Map extends CollisionListener {
 		this.player = null;
 
 		this.loadFilters();
-		this.loadTextures();
+		//this.loadTextures( Object.entries(TEXTURES) );
+		this.loadTexture('player');//always needed
+		//this.tutorial_textures_loaded = false;
 
 		this.background = new Background(MAP_SIZE_X, MAP_SIZE_Y, BG_SMOOTHING, BG_SCALE, this.graphics);
 		
@@ -121,10 +149,12 @@ export default class Map extends CollisionListener {
 	loadFilters() {
 		this.graphics.createFilter('flat-shadow', {
 				name: 'feOffset',
-				attribs: {'result': 'offOut1', 'in': 'SourceGraphic', 'dx': Config.VIRT_SCALE*0.01, 'dy': Config.VIRT_SCALE*0.01}
+				attribs: {'result': 'offOut1', 'in': 'SourceGraphic', 
+					'dx': Config.VIRT_SCALE*0.01, 'dy': Config.VIRT_SCALE*0.01}
 			}, {
 				name: 'feColorMatrix',
-				attribs: {'result': "matrixOut", 'in': "offOut", 'type': "matrix", 'values': "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"}
+				attribs: {'result': "matrixOut", 'in': "offOut", 'type': "matrix", 
+					'values': "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"}
 			}, {
 				name: 'feBlend',
 				attribs: {'result': 'out1', 'in': "SourceGraphic", 'in2': "matrixOut", 'mode': "normal"}
@@ -132,11 +162,27 @@ export default class Map extends CollisionListener {
 		);
 	}
 
-	loadTextures() {
-		for(let [texture_name, texture] of Object.entries(TEXTURES))
-			this.graphics.createTexture(texture_name, texture.src, texture.width, texture.height);
+	/** @param {string} class_name */
+	loadTexture(class_name) {
+		let sass_texture = SASS_TEXTURES[class_name];
+		if(!sass_texture || this.graphics.hasTexture(sass_texture.name))
+			return;
+		console.log('Loading texture:', sass_texture.name);
+		let texture = TEXTURES[sass_texture.name];
+		this.graphics.createTexture(sass_texture.name, 
+			texture.src, texture.width, texture.height);
 	}
 
+	/**
+	 * @param  {string} class_name
+	 * @param  {number} shape      
+	 * @param  {number} w          
+	 * @param  {number} h          
+	 * @param  {Number} x          
+	 * @param  {Number} y          
+	 * @param  {Number} rot        
+	 * @return {Object2D}            
+	 */
 	createObject(class_name, shape, w, h, x = 0, y = 0, rot = 0) {
 		/** @type {Object2D} */
 		let obj;
@@ -187,9 +233,13 @@ export default class Map extends CollisionListener {
 				obj = new Item(w||1, h||1, this.graphics, this.physics, class_name);
 				break;
 			default:
-				obj = new Object2D(shape, w||1, h||1, this.graphics, this.physics);
+				if(class_name.startsWith('tutorial'))
+					obj = new Tutorial(class_name, w||1, h||1, this.graphics, this.physics);
+				else
+					obj = new Object2D(shape, w||1, h||1, this.graphics, this.physics);
 				break;
 		}
+		this.loadTexture(class_name);
 		obj.setPos(x||0, y||0).setRot(rot||0);
 		return obj;
 	}
@@ -222,6 +272,12 @@ export default class Map extends CollisionListener {
 		}
 
 		this.background.selectBackground( data.getBackgroundID() );
+
+		/*if(data.name === AVAILABLE_MAPS[0].name && !this.tutorial_textures_loaded) {
+			console.log('loading tutorial textures');
+			//this.loadTextures( Object.entries(TUTORIAL_TEXTURES) );
+			//this.tutorial_textures_loaded = true;
+		}*/
 	}
 
 	addAsset(asset) {
@@ -308,7 +364,8 @@ export default class Map extends CollisionListener {
 					let x2 = x1 * c - y1 * s;
 					let y2 = y1 * c + x1 * s;
 
-					if(x2 < obj.transform.w && x2 > -obj.transform.w && y2 < obj.transform.h && y2 > -obj.transform.h)
+					if(x2 < obj.transform.w && x2 > -obj.transform.w && y2 < obj.transform.h && 
+						y2 > -obj.transform.h)
 					{
 						return obj;
 					}

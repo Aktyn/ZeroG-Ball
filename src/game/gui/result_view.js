@@ -3,7 +3,7 @@ import $ from '../../utils/html';
 import Common from '../../utils/common';
 import GameGUI from '../game_gui';
 import MapRecords from '../../game/map_records';
-import {AVAIBLE_MAPS} from '../map_data';
+import {AVAILABLE_MAPS} from '../map_data';
 
 export default {
 	/**
@@ -57,8 +57,8 @@ export default {
 		let current_record = MapRecords.getRecord(name);
 		let new_record = current_record === null ? true : (current_record > time);
 
-		let current_map_index = AVAIBLE_MAPS.findIndex(map => map.name === name);
-		let next_map = AVAIBLE_MAPS[current_map_index+1] || null;
+		let current_map_index = AVAILABLE_MAPS.findIndex(map => map.name === name);
+		let next_map = AVAILABLE_MAPS[current_map_index+1] || null;
 
 		let next_map_info = $.create('div');
 
@@ -111,7 +111,7 @@ export default {
 				$.create('hr'),
 				$.create('button').text('POWTÓRZ POZIOM').on('click', () => {
 					if(typeof gui.listeners.onMapStart === 'function')
-						gui.listeners.onMapStart( AVAIBLE_MAPS.find(map => map.name === name) );
+						gui.listeners.onMapStart( AVAILABLE_MAPS.find(map => map.name === name) );
 				}),
 				$.create('br'),
 				gui.menu_return_btn = $.create('button').addClass('exit-btn')

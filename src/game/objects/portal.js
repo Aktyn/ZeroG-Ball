@@ -19,7 +19,7 @@ export default class Portal extends Object2D {
 	* @param {number} _type
 	*/
 	constructor(w, h, graphics_engine, physics_engine, _type) {
-		super(Type.CIRCLE, w, h, graphics_engine, physics_engine);
+		super(Type.CIRCLE, w, h, graphics_engine, physics_engine, 2);
 
 		this.portal_type = _type;
 		//everything except ...
@@ -85,7 +85,7 @@ export default class Portal extends Object2D {
 		else if(this.locked > 0)
 			this.locked--;
 
-		super.setRot(this.transform.rot + Math.PI * dt * -0.0003);
+		super.setRot(this.transform.rot + Math.PI * dt * -0.0004);
 		super.update(dt, paused);
 	}
 }
