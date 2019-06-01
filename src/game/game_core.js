@@ -59,6 +59,7 @@ export default class GameCore extends Map {
 			down:	false,
 			slow: 	false
 		};
+		this.steering_freezed = false;
 		this.sticky_stamp = true;
 
 		this._running = false;
@@ -110,7 +111,7 @@ export default class GameCore extends Map {
 
 	spawnPlayer() {
 		this.target_zoom = this.map_data.name === AVAILABLE_MAPS[0].name ? 
-			INITIAL_ZOOM*0.61 : INITIAL_ZOOM;
+			INITIAL_ZOOM*0.8 : INITIAL_ZOOM;
 		this.player = new Player(this.graphics, this.physics, this.onPlayerHpChange.bind(this),
 			this.listeners.onPlayerCollectedPowerup);
 		super.addObject( this.player );
@@ -235,6 +236,8 @@ export default class GameCore extends Map {
 	* @param {boolean} enable
 	*/
 	updateSteering(code, enable) {
+		if(this.steering_freezed)
+			return;
 		switch(code) {
 			case 37:
 			case 65:

@@ -70,6 +70,8 @@ export default class GameStage extends Stage {
 
 			onMapStart: listeners.onMapStart,
 
+			freezeControls: (freeze) => this.game.steering_freezed = freeze,
+
 			onAssetSelected: this.game.onAssetSelected.bind(this.game),
 			onRestart: () => this.game.reload(),
 			onClearMap: () => this.game.clearMap(),

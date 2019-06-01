@@ -5,6 +5,7 @@ import Stage from './stage';
 import './../styles/menu.scss';
 import {AVAILABLE_MAPS} from './../game/map_data';
 import MapRecords from './../game/map_records';
+import ServerApi from '../utils/server_api';
 
 const ALL_UNLOCKED_TEXT = 'Gratulacje! Wszystkie poziomy zostały odblokowane!';
 const UNLOCK_LEVELS_TEXT = 'Ukończ wszystkie dostępne poziomy aby odblokować kolejne';
@@ -21,7 +22,7 @@ class MapItem {
 
 		this.widget = $.create('div').on('click', this.onClick.bind(this)).addChild(
 			$.create('div').text(data.name).setStyle({'font-weight': 'bold'}),
-			$.create('div').setStyle({'color': '#90A4AE'}).text(
+			$.create('div').setStyle({'color': '#B0BEC5'}).text(
 				record === null ? '---' :
 				`Rekord: ${Common.milisToTime(record, ' ', {
 					hours: ' godzin', 
@@ -45,6 +46,8 @@ class MapItem {
 export default class MenuStage extends Stage {
 	constructor(target, listeners) {
 		super(target, 'menu-container', listeners);
+
+		let maps_section = $.create('section').addClass('maps-section');
 		
 		// this.start_btn = $.create('button').text('START').on('click', listeners.onStart);
 		/** @type {MapItem[]} */
@@ -55,18 +58,18 @@ export default class MenuStage extends Stage {
 
 		this.clear_progress_confirm = null;
 
-		this.container.addChild(
+		maps_section.addChild(
 			$.create('h1').text('Dostępne poziomy'),
 			this.avaible_maps,
 			this.unlocked_info = $.create('div').text(
 				all_maps_unlocked ? ALL_UNLOCKED_TEXT : UNLOCK_LEVELS_TEXT
 			).setStyle({
-				'color': '#90A4AE'
+				'color': '#B0BEC5'
 			})
 		);
 
-		this.container.addChild(
-			$.create('hr').setStyle({'background-color': '#546E7A'}),
+		maps_section.addChild(
+			$.create('hr'),//.setStyle({'background-color': '#546E7A'}),
 			$.create('button').text('PUSTA MAPA').on('click', () => {
 				this.listeners.onStart({
 					name: 'Pusta mapa', 
@@ -79,13 +82,17 @@ export default class MenuStage extends Stage {
 		);
 
 		if(MapRecords.getRecord(AVAILABLE_MAPS[0].name) !== null) {
-			this.container.addChild(
-				$.create('hr').setStyle({'background-color': '#546E7A'}),
+			maps_section.addChild(
+				$.create('hr'),//.setStyle({'background-color': '#546E7A'}),
 				this.clear_progress_btn = $.create('button').text('WYCZYŚĆ POSTĘP').on('click', () => {
 					this._tryClearProgress();
 				})
 			);
 		}
+
+		this.container.addChild(maps_section);
+
+		this.loadRanking();
 
 
 		//secrets
@@ -93,7 +100,7 @@ export default class MenuStage extends Stage {
 		this.secret_code = '';
 
 		//disables menu
-		setTimeout(()=>this.listeners.onStart(AVAILABLE_MAPS[0]), 100);//TEMP
+		//setTimeout(()=>this.listeners.onStart(AVAILABLE_MAPS[0]), 100);//TEMP
 	}
 
 	loadAvaibleMaps() {//returns true when every map is unlocked
@@ -106,6 +113,79 @@ export default class MenuStage extends Stage {
 			this.avaible_maps.addChild( item.widget );
 		}
 		return true;
+	}
+
+	async loadRanking() {
+		if( !(await ServerApi.pingServer()) )
+			return;
+
+		//load ranking data
+		let data = await ServerApi.getRanking();
+		let empty = !data.some(d => d.records.length > 0);
+		if(empty) {
+			console.log('Stopping ranking from display due to empty records');
+			return;
+		}
+
+		this.container.addClass('two-column');
+
+		let map_selector = $.create('select');
+		
+		for(let a_map of AVAILABLE_MAPS) {
+			let opt = $.create('option').setAttrib('value', a_map.name);
+			opt.innerText = a_map.name;
+			map_selector.addChild( opt );
+		}
+
+		let tbody = $.create('tbody');
+
+		this.container.addChild(
+			$.create('div').addClass('ranking-container').addChild(
+				$.create('h1').text('Najlepsze wyniki'),
+				$.create('nav').addChild(
+					$.create('label').text('Mapa:'),
+					map_selector
+				),
+				$.create('div').addClass('table-container').addChild(
+					$.create('table').addChild(
+						$.create('thead').addChild(
+							$.create('tr').addChild(
+								$.create('th').text('Nick'),
+								$.create('th').text('Czas'),
+							)
+						),
+						tbody
+					)
+				)
+			)
+		);
+
+		/** @param {string} name */
+		function showMapRecords(name) {
+			tbody.text('');
+
+			try {
+				let map_records = data.find(d => d.map_name === name).records;
+				for(let record of map_records) {
+					tbody.addChild(
+						$.create('tr').addChild(
+							$.create('td').text(record.nickname),
+							$.create('td').text( Common.milisToTime(record.time, ' ', {
+								seconds: ' sek',
+								minutes: ' min',
+								hours: ' godz'
+							}) )
+						)
+					);
+				}
+			}
+			catch(e) {
+				tbody.text('Brak wyników');
+			}
+		}
+
+		map_selector.on('change', () => showMapRecords(map_selector.value));
+		showMapRecords(map_selector.value);
 	}
 
 	/** @param {KeyboardEvent} e */

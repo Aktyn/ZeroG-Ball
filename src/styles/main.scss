@@ -28,7 +28,7 @@ body, html {
     text-align: center;
 }
 
-textarea, input {
+textarea, input, select {
     border: 1px solid rgb(169, 169, 169);
     background: #fff;
     outline: none;
@@ -44,7 +44,7 @@ textarea, input {
 hr {
 	border: none;
 	height: 1px;
-	background: #90A4AE;
+	background: #78909C;
 	margin: 15px 0px;
 }
 
@@ -144,6 +144,7 @@ button {
 /* Track */
 ::-webkit-scrollbar-track {
     background: #37474F; 
+    border-radius: 8px;
 }
 
 /* Handle */

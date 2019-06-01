@@ -4,6 +4,7 @@ import Common from '../../utils/common';
 import GameGUI from '../game_gui';
 import MapRecords from '../../game/map_records';
 import {AVAILABLE_MAPS} from '../map_data';
+import ServerApi from '../../utils/server_api';
 
 export default {
 	/**
@@ -15,7 +16,7 @@ export default {
 	 * @param 	{any} map_data
 	 * @param	{Function} close_view
 	 */
-	open: (gui, target_element, name, time, edited, map_data, close_view) => {
+	open: async (gui, target_element, name, time, edited, map_data, close_view) => {
 		if(edited) {
 			target_element.text('').addClass('finished').addChild(
 				$.create('article').addChild(
@@ -93,15 +94,44 @@ export default {
 						seconds: ' sekund'
 					}))
 				),
-				$.create('div').setClass(new_record ? 'record-info' : '')
-					.text(
-						new_record ? 'Nowy rekord!' : `Rekord: ${Common.milisToTime(current_record, ' ', 
-						{
-							hours: ' godzin', 
-							minutes: ' minut',
-							seconds: ' sekund'
-						})}`
-					),
+				$.create('div').setClass(new_record ? 'record-info' : '').text(
+					new_record ? 'Nowy rekord!' : `Rekord: ${Common.milisToTime(current_record, ' ', 
+					{
+						hours: ' godzin', 
+						minutes: ' minut',
+						seconds: ' sekund'
+					})}`
+				),
+				...await (async () => {
+					let server_online = await ServerApi.pingServer();
+					if(!new_record || !server_online)
+						return [];
+					let save_options = $.create('div').addChild(
+						$.create('button').text('Wyślij na serwer').on('click', async () => {
+							if(!server_online) {
+								save_options.setStyle({color: '#ef5350'}).text('Serwer niedostępny');
+								return;
+							}
+							let nick_input = $.create('input').setAttrib('type', 'text')
+								.setAttrib('placeholder', 'Wpisz swój nick');
+							save_options.text('').addChild(
+								nick_input,
+								$.create('br'),
+								$.create('button').text('POTWIERDŹ').on('click', async () => {
+									let nick = nick_input.value.trim();
+									if(nick.length < 1)
+										return;
+									let res = await ServerApi.sendRecord(name, time, nick);
+									if(res)
+										save_options.setStyle({color: '#8BC34A'}).text('Rekord wysłany');
+									else
+										save_options.setStyle({color: '#ef5350'}).text('Błąd');
+								})
+							)
+						})
+					);
+					return [save_options];
+				})(),
 				$.create('hr'),
 
 				$.create('div').setClass('nextlvl-info').addChild(

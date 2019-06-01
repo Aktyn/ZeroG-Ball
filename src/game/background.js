@@ -100,7 +100,15 @@ export default class Background {
 	*/
 	update(camera, bg_layer) {
 		let scale = Math.pow(camera.zoom, this.smoothing);
-		bg_layer.setPos(camera.x*this.smoothing, camera.y*this.smoothing)
+		let dx = camera.x*this.smoothing;
+		let dy = camera.y*this.smoothing;
+
+		let pos_x = dx + (1-scale)*(camera.x-dx);
+		let pos_y = dy + (1-scale)*(camera.y-dy);
+
+		//if((camera.x+camera.zoom) / (pos_x + (this.tiles_x*this.scale)*scale) > 1)
+
+		bg_layer.setPos(pos_x, pos_y)
 			.setSize(scale, scale).update(0, true);
 	}
 }

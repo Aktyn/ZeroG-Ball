@@ -1,7 +1,26 @@
 .menu-container {
 	padding: 10px 0px;
 
-	.avaible_maps_list {
+	display: inline-grid;
+	grid-template-columns: auto;
+	align-items: start;
+	justify-content: center;
+
+	&.two-column {
+		grid-template-columns: auto auto;
+		grid-column-gap: 20px;
+	}
+
+	//common for containers
+	.maps-section, .ranking-container {
+		background: #607D8B;
+		border-radius: 5px;
+		box-shadow: 0px 3px 5px #0008;
+		padding: 0px 10px;
+		padding-bottom: 15px;
+	}
+
+	.maps-section .avaible_maps_list {
 		margin: 5px 0px;
 		// width: min-content;
 		display: inline-grid;
@@ -51,6 +70,60 @@
 				// left: 0px;
 				// width: 100%;
 				z-index: 5;
+			}
+		}
+	}
+
+	.ranking-container {
+		text-align: center;
+		nav {
+			/*display: inline-grid;
+			grid-template-columns: 1fr 1fr 1fr;
+
+			button {
+				border-radius: 0px;
+				box-shadow: none;
+				background-color: #fff3;
+				color: #fff;
+			}*/
+			label {
+				margin-right: 10px;
+			}
+			select {
+				//background-color: red;
+			}
+		}
+
+		.table-container {//scrolling
+			max-height: 50vh;
+			overflow: auto;
+
+			/* Track */
+			&::-webkit-scrollbar-track {
+			    background: #B0BEC5; 
+			    border-radius: 8px;
+			}
+
+			/* Handle */
+			&::-webkit-scrollbar-thumb {
+			    background: #90A4AE; 
+			    border-radius: 8px;
+			}
+
+			/* Handle on hover */
+			&::-webkit-scrollbar-thumb:hover {
+			    background: #78909C; 
+			}
+		}
+
+		table {
+			display: inline-table;
+			margin: auto;
+			width: 100%;
+			text-align: left;
+
+			tr td {
+				padding: 5px 0px;
 			}
 		}
 	}

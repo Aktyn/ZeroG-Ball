@@ -566,6 +566,9 @@ export default class GameGUI {
 
 		this.is_view_open = false;
 		this.container.removeClass('view-open');
+
+		if(typeof this.listeners.freezeControls === 'function')
+			this.listeners.freezeControls(false);
 	}
 
 	showSettings() {
@@ -576,6 +579,9 @@ export default class GameGUI {
 
 		this.is_view_open = true;
 		this.container.addClass('view-open');
+
+		if(typeof this.listeners.freezeControls === 'function')
+			this.listeners.freezeControls(true);
 	}
 
 	/**

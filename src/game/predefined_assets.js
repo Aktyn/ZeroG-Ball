@@ -16,6 +16,21 @@ export const TUTORIAL_TEXTURES = {
 		src: require('./../img/textures/tutorial/introduction.png'),
 		width: Config.VIRT_SCALE*1.000,
 		height: Config.VIRT_SCALE*0.576
+	},
+	'tutorial_damage_info': {
+		src: require('./../img/textures/tutorial/damage_info.png'),
+		width: Config.VIRT_SCALE*0.794,
+		height: Config.VIRT_SCALE*0.328
+	},
+	'tutorial_doors': {
+		src: require('./../img/textures/tutorial/doors.png'),
+		width: Config.VIRT_SCALE*0.754,
+		height: Config.VIRT_SCALE*0.134
+	},
+	'tutorial_portals_info': {
+		src: require('./../img/textures/tutorial/portals_info.png'),
+		width: Config.VIRT_SCALE*0.754,
+		height: Config.VIRT_SCALE*0.194
 	}
 };
 
@@ -118,24 +133,32 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 		name: 'Skrzynia',
 		class_name: 'crate',
 		shape: MapData.SHAPE_TYPE.RECT,
-		width: 0.1,
-		height: 0.1,
+		width: 0.15,
+		height: 0.15,
 		categories: [CATEGORIES.all, CATEGORIES.building_blocks]
 	},
 	'lava': {
 		name: 'Lawa',
 		class_name: 'lava',
 		shape: MapData.SHAPE_TYPE.RECT,
-		width: 0.1,
-		height: 0.1,
+		width: 0.15,
+		height: 0.15,
 		categories: [CATEGORIES.all, CATEGORIES.building_blocks]
 	},
 	'grass': {
 		name: 'Trawa',
 		class_name: 'grass',
 		shape: MapData.SHAPE_TYPE.RECT,
-		width: 0.1,
-		height: 0.1,
+		width: 0.15,
+		height: 0.15,
+		categories: [CATEGORIES.all, CATEGORIES.building_blocks]
+	},
+	'bricks': {
+		name: 'Cegły',
+		class_name: 'bricks',
+		shape: MapData.SHAPE_TYPE.RECT,
+		width: 0.15,
+		height: 0.15,
 		categories: [CATEGORIES.all, CATEGORIES.building_blocks]
 	},
 
@@ -271,6 +294,11 @@ export const TEXTURES = {//names must much those in svg.scss
 		src: require('./../img/textures/grass.jpg'),
 		width: Config.VIRT_SCALE * OBJECTS['grass'].width,
 		height: Config.VIRT_SCALE * OBJECTS['grass'].height
+	},
+	'bricks_texture': {
+		src: require('./../img/textures/bricks.jpg'),
+		width: Config.VIRT_SCALE * OBJECTS['bricks'].width,
+		height: Config.VIRT_SCALE * OBJECTS['bricks'].height
 	},
 	'key1_texture': {
 		src: require('./../img/textures/key1.png'),

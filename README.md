@@ -7,8 +7,7 @@ Game has been created for university project.
 	<li>Make sure to have nodejs, npm and git installed on your system</li>
 	<li>
 		Clone repository:
-		<pre>git clone https://github.com/Aktyn/ZeroG-Ball</pre>
-		<pre>cd ZeroG-Ball</pre>
+		<pre>git clone https://github.com/Aktyn/ZeroG-Ball<br />cd ZeroG-Ball</pre>
 	</li>
 	<li>
 		Install necessary dependencies
