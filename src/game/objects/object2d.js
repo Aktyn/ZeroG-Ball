@@ -115,6 +115,7 @@ export default class Object2D extends SvgObject {
 		);
 	}
 
+	/** @return {string} */
 	getClassName() {
 		return this.node.getAttributeNS(null, 'class') || undefined;
 	}

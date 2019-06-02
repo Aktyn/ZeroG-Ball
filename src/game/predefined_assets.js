@@ -31,6 +31,11 @@ export const TUTORIAL_TEXTURES = {
 		src: require('./../img/textures/tutorial/portals_info.png'),
 		width: Config.VIRT_SCALE*0.754,
 		height: Config.VIRT_SCALE*0.194
+	},
+	'tutorial_info_xyz': {
+		src: require('./../img/textures/tutorial/info_xyz.png'),
+		width: Config.VIRT_SCALE*0.674,
+		height: Config.VIRT_SCALE*0.168
 	}
 };
 
@@ -148,6 +153,14 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 	'grass': {
 		name: 'Trawa',
 		class_name: 'grass',
+		shape: MapData.SHAPE_TYPE.RECT,
+		width: 0.15,
+		height: 0.15,
+		categories: [CATEGORIES.all, CATEGORIES.building_blocks]
+	},
+	'ice': {
+		name: 'Lód',
+		class_name: 'ice',
 		shape: MapData.SHAPE_TYPE.RECT,
 		width: 0.15,
 		height: 0.15,
@@ -289,6 +302,11 @@ export const TEXTURES = {//names must much those in svg.scss
 		src: require('./../img/textures/lava.jpg'),
 		width: Config.VIRT_SCALE * OBJECTS['lava'].width,
 		height: Config.VIRT_SCALE * OBJECTS['lava'].height
+	},
+	'ice_texture': {
+		src: require('./../img/textures/ice.jpg'),
+		width: Config.VIRT_SCALE * OBJECTS['ice'].width,
+		height: Config.VIRT_SCALE * OBJECTS['ice'].height
 	},
 	'grass_texture': {
 		src: require('./../img/textures/grass.jpg'),

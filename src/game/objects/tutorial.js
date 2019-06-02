@@ -25,13 +25,4 @@ export default class tutorial extends Object2D {
 		//fill attribute cannot be set directly since css rules have higher priority
 		super.set({'style': `fill: url(#${class_name});`});//note - class_name and texture name must match
 	}
-
-	/** 
-	 * @param  {number?} dt
-	 * @param  {boolean?} paused
-	 */
-	update(dt, paused = false) {
-
-		super.update(dt, paused);
-	}
 }

@@ -459,9 +459,9 @@ export default class GameGUI {
 		}, (new_transform) => {
 			if(typeof this.listeners.updateObjectTransform === 'function' && this.mode === 1)
 				this.listeners.updateObjectTransform(this.selected_object, new_transform);
-		}, (keyframes) => {
+		}, (keyframes, key_object) => {
 			if(typeof this.listeners.updateObjectKeyframes === 'function' && this.mode === 1)
-				this.listeners.updateObjectKeyframes(this.selected_object, keyframes);
+				this.listeners.updateObjectKeyframes(key_object, keyframes);
 		});
 
 		this.main_edit.text('').addChild( container );

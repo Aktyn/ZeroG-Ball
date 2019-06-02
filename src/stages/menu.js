@@ -10,6 +10,57 @@ import ServerApi from '../utils/server_api';
 const ALL_UNLOCKED_TEXT = 'Gratulacje! Wszystkie poziomy zostały odblokowane!';
 const UNLOCK_LEVELS_TEXT = 'Ukończ wszystkie dostępne poziomy aby odblokować kolejne';
 
+const BACKGROUND_CHANGE_FREQUENCY = 30000;//miliseconds
+
+let bg_textures = [
+	require('../img/wallpapers/introduction.jpg'),
+	require('../img/wallpapers/vulcano.jpg'),
+	require('../img/wallpapers/first_encounter.jpg'),
+	require('../img/wallpapers/iceage.jpg'),
+];
+
+function getEloRanking(data) {
+	/** @type {Map<string, number>} */
+	let elo_players = new Map();
+	for(let map_results of data) {
+		if( !AVAILABLE_MAPS.find(m => m.name === map_results.map_name) ) {
+			console.log('Skipping non existing map:', map_results.map_name);
+			continue;
+		}
+		//make sure it is sorted by sorting it
+		/** @type {{nickname: string, time: number}[]} */
+		let records = map_results.records.sort((a, b) => a.time - b.time);
+		for(let pi=0; pi < records.length; pi++) {
+			let nick = records[pi].nickname;
+			//1000 is initial elo rank
+			let p_rank = elo_players.get(nick) || elo_players.set(nick, 1000).get(nick);
+			let total_reward = 0;
+
+			for(let ei=0; ei<records.length; ei++) {//enemy index
+				if(pi === ei)
+					continue;
+				let e_nick = records[ei].nickname;
+				//enemy rank
+				let e_rank = elo_players.get(e_nick) || 
+					elo_players.set(e_nick, 1000).get(e_nick);
+
+				total_reward += Common.eloRating(p_rank, e_rank, pi < ei);
+			}
+
+
+			elo_players.set(nick, p_rank+total_reward);
+		}
+	}
+
+	let result_array = [];
+	for(let [nick, rank] of elo_players.entries()) 
+		result_array.push({nick, rank});
+	result_array.sort((a, b) => b.rank - a.rank);
+	result_array.length = Math.min(20 * AVAILABLE_MAPS.length, result_array.length);
+	//console.log(result_array);
+	return result_array;
+}
+
 class MapItem {
 	/**
 	 * @param {{name: string, json: any}} data
@@ -90,17 +141,33 @@ export default class MenuStage extends Stage {
 			);
 		}
 
-		this.container.addChild(maps_section);
+		let random_bg = (Math.random() * bg_textures.length)|0;
+
+		this.background_container = $.create('div').addClass('background-container').addChild(
+			$.create('div'),
+			$.create('div').setStyle({'background-image': `url(${bg_textures[random_bg]})`})
+		);
+		this.bg_index = random_bg;
+		this.bg_timeout = setTimeout(this.nextBackground.bind(this), BACKGROUND_CHANGE_FREQUENCY);
+
+		this.container.addChild(this.background_container, maps_section);//note order of children
 
 		this.loadRanking();
-
 
 		//secrets
 		$(window).on('keydown', this.onKey.bind(this));
 		this.secret_code = '';
 
 		//disables menu
-		//setTimeout(()=>this.listeners.onStart(AVAILABLE_MAPS[0]), 100);//TEMP
+		//setTimeout(()=>this.listeners.onStart(AVAILABLE_MAPS[3]), 100);//TEMP
+	}
+
+	close() {
+		if(this.bg_timeout)
+			clearTimeout(this.bg_timeout);
+		for(let item of this.map_items)
+			item.destroy();
+		super.close();
 	}
 
 	loadAvaibleMaps() {//returns true when every map is unlocked
@@ -115,12 +182,26 @@ export default class MenuStage extends Stage {
 		return true;
 	}
 
+	nextBackground() {
+		let layers = this.background_container.getChildren();
+		
+		layers[1].setStyle({'background-image': `url(${bg_textures[this.bg_index]})`});
+		this.bg_index = (this.bg_index+1) % bg_textures.length;
+		layers[0].setStyle({'background-image': `url(${bg_textures[this.bg_index]})`});
+		layers[1].removeClass('fader');
+		void layers[1].offsetWidth;//trick to restart fading animation
+		layers[1].setClass('fader');
+		
+		this.bg_timeout = setTimeout(this.nextBackground.bind(this), BACKGROUND_CHANGE_FREQUENCY);
+	}
+
 	async loadRanking() {
 		if( !(await ServerApi.pingServer()) )
 			return;
 
 		//load ranking data
 		let data = await ServerApi.getRanking();
+		let elo_ranking = getEloRanking(data);
 		let empty = !data.some(d => d.records.length > 0);
 		if(empty) {
 			console.log('Stopping ranking from display due to empty records');
@@ -137,46 +218,77 @@ export default class MenuStage extends Stage {
 			map_selector.addChild( opt );
 		}
 
+		let map_selector_container = $.create('nav').addChild(
+			$.create('label').text('Mapa:'),
+			map_selector,
+		).setStyle({'margin-bottom': '10px'});
+
+		let rankingTypeSwitcher = $.create('button').text('Pokaż ogólny ranking')
+			.on('click', switchRankingType);
+
+		let thead = $.create('thead');
 		let tbody = $.create('tbody');
 
 		this.container.addChild(
 			$.create('div').addClass('ranking-container').addChild(
 				$.create('h1').text('Najlepsze wyniki'),
-				$.create('nav').addChild(
-					$.create('label').text('Mapa:'),
-					map_selector
-				),
+				map_selector_container,
+				rankingTypeSwitcher,
+				$.create('hr'),
 				$.create('div').addClass('table-container').addChild(
-					$.create('table').addChild(
-						$.create('thead').addChild(
-							$.create('tr').addChild(
-								$.create('th').text('Nick'),
-								$.create('th').text('Czas'),
-							)
-						),
-						tbody
-					)
+					$.create('table').addChild( thead, tbody )
 				)
 			)
 		);
 
-		/** @param {string} name */
-		function showMapRecords(name) {
+		let detailed_type = false;
+		function switchRankingType() {
+			detailed_type = !detailed_type;
+			
+			map_selector_container.setStyle({'display': detailed_type ? 'block' : 'none'});
+			rankingTypeSwitcher.text(detailed_type ? 
+				'Pokaż ogólny ranking' : 'Pokaż ranking względem map');
+
+			
+			if(detailed_type) {
+				thead.text('').addChild($.create('tr').addChild(
+					$.create('th').text('Nick'),
+					$.create('th').text('Czas')
+				));
+				showMapRecords();
+			}
+			else {
+				thead.text('').addChild($.create('tr').addChild(
+					$.create('th').text('Nick'),
+					$.create('th').text('Rank')//elo rank
+				));
+				tbody.text('');
+
+				for(let player of elo_ranking) {
+					tbody.addChild( $.create('tr').addChild(
+						$.create('td').text(player.nick),
+						$.create('td').text( Math.round(player.rank) )
+					) );
+				}
+			}
+		}
+
+		function showMapRecords() {
 			tbody.text('');
 
 			try {
-				let map_records = data.find(d => d.map_name === name).records;
+				let map_records = data.find(d => d.map_name === map_selector.value).records;
+				if(map_records.length < 1)
+					tbody.text('Brak wyników');
 				for(let record of map_records) {
-					tbody.addChild(
-						$.create('tr').addChild(
-							$.create('td').text(record.nickname),
-							$.create('td').text( Common.milisToTime(record.time, ' ', {
-								seconds: ' sek',
-								minutes: ' min',
-								hours: ' godz'
-							}) )
-						)
-					);
+					tbody.addChild( $.create('tr').addChild(
+						$.create('td').text(record.nickname),
+						$.create('td').text( Common.milisToTime(record.time, ' ', {
+							seconds: ' sek',
+							minutes: ' min',
+							hours: ' godz'
+						}) )
+					) );
 				}
 			}
 			catch(e) {
@@ -184,8 +296,22 @@ export default class MenuStage extends Stage {
 			}
 		}
 
-		map_selector.on('change', () => showMapRecords(map_selector.value));
-		showMapRecords(map_selector.value);
+		map_selector.on('change', () => showMapRecords());
+		map_selector.on('wheel', (e) => {
+			let dt = Math.max(-1, Math.min(1, e.wheelDelta || -e.detail));
+			let map_i = AVAILABLE_MAPS.findIndex(m => m.name === map_selector.value);
+			if(dt > 0)
+				map_i--;
+			else
+				map_i++;
+			if(map_i < 0)
+				map_i = AVAILABLE_MAPS.length-1;
+			else
+				map_i %= AVAILABLE_MAPS.length;
+			map_selector.value = AVAILABLE_MAPS[map_i].name;
+			showMapRecords();
+		});
+		switchRankingType();
 	}
 
 	/** @param {KeyboardEvent} e */
@@ -223,14 +349,5 @@ export default class MenuStage extends Stage {
 			this.loadAvaibleMaps();
 			this.unlocked_info.text(UNLOCK_LEVELS_TEXT);
 		}
-	}
-
-	close() {
-		//if(this.start_btn)
-		//	this.start_btn.off('click', this.listeners.onStart);
-		for(let item of this.map_items)
-			item.destroy();
-
-		super.close();
 	}
 }

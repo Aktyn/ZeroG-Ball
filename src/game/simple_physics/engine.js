@@ -150,7 +150,7 @@ export default class Engine {
 
 							for(let n_body of this.chunks[xxx][yyy]) {
 								//check for same, static or ghost body to optimize
-								if(body === n_body || n_body.static || n_body.mask === 0)
+								if(body === n_body /*|| n_body.static*/ || n_body.mask === 0)
 									continue;
 								let c = checkCollision(n_body, body);
 								if(c !== null)

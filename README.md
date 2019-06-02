@@ -28,4 +28,10 @@ Game has been created for university project.
 		To display list of all custom project options run <pre>npm run</pre>
 		Or take a look into package.json, section: "scripts" 
 	</li>
+	<li>
+		There is also a server-side code that you can run with:<pre>npm run server</pre>
+		Server is used for storing user's best results.<br/>
+		By default, client is connecting to server on same hostname.<br />
+		In order to use custom host address you should change the HOST variable at the beginning of server_api.js file.
+	</li>
 </ul>

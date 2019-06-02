@@ -41,7 +41,7 @@ export default class RevolvingDoor extends Object2D {
 	_destroy_(physics_engine) {
 		this.blocks.forEach(b => b.to_destroy = true);
 		this.center.to_destroy = true;
-		super.destroy();
+		super._destroy_(physics_engine);
 	}
 
 	/**

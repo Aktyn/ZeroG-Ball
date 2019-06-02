@@ -59,7 +59,7 @@ module.exports = {
 		//console.log(map_name, time, nickname);
 		
 		//get records of given map_name
-		let records = ranking.get(map_name) || [];
+		let records = ranking.get(map_name) || ranking.set(map_name, []).get(map_name);
 		let user_best = records.find(r => r.nickname === nickname);
 		if(user_best) {//new record
 			if(user_best.time > time) {

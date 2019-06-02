@@ -35,6 +35,7 @@ export default class Enemy extends Object2D {
 
 		this.sensor = new EnemySensor(SENSOR_RADIUS, 
 			graphics_engine, physics_engine, this);
+		this.sensor.editable = false;
 
 		this.turn_angle = 0;//turn towards player
 	}
@@ -42,7 +43,7 @@ export default class Enemy extends Object2D {
 	/** @param {SimplePhysics} physics_engine */
 	_destroy_(physics_engine) {
 		this.sensor._destroy_(this._physics);
-		super.destroy();
+		super._destroy_(physics_engine);
 	}
 
 	/** @param {Player} player */

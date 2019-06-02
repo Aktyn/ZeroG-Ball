@@ -5,7 +5,7 @@ import Player from '../player';
 export default class SpeedBoost extends PowerUpBase {
     /** @param {string} type */
     constructor(type) {
-        super(type, 5000);//miliseconds
+        super(type, 12000);//miliseconds
     }
 
     /**

@@ -6,6 +6,16 @@ function zeroPad(num) {
 	return num < 10 ? `0${num}` : num.toString();
 }
 
+const eloK = 10;
+/**
+ * @param  {number} r1
+ * @param  {number} r2
+ * @return {number}
+ */
+function probability(r1, r2) {
+    return 1.0 * 1.0 / (1 + 1.0 * Math.pow(10, 1.0 * (r1 - r2) / 400));
+}
+
 const DEFAULT_LABELS = {
 	hours: '',
 	minutes: '',
@@ -31,6 +41,26 @@ export default {
 			return `${zeroPad(min)}${labels.minutes}${delimeter}${zeroPad(sec)}${labels.seconds}`;
 		else
 			return `${zeroPad(sec)}${labels.seconds}`;
+	},
+
+	/**
+	 * explanation: https://en.wikipedia.org/wiki/Elo_rating_system
+	 * @param {number} Ra
+	 * @param {number} Rb
+	 * @param {boolean} d
+	 * @return {number}
+	 */
+	eloRating: (Ra, Rb, d) => {
+	    //winning probability of player a
+    	let Pa = probability(Rb, Ra);
+	 
+	    //player a wins
+	    if(d === true)
+	        return eloK * (1 - Pa);
+	    else//player b wins
+	        return eloK * (0 - Pa);
+	 
+	 	throw new Error('Impossible error');
 	},
 
 	MD5: d => M(V(Y(X(d),8*d.length))).toLowerCase()

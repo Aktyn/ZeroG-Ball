@@ -73,14 +73,20 @@ const empty_map = {"background":0,"objects":[]};
 export const AVAILABLE_MAPS = [//NOTE - names should be unique
 	{
 		name: 'Wprowadzenie',
-		//@ts-ignore
-		json: require('./../maps/1.json') 
+		json: require('./../maps/introduction.json') 
 	},
 	{
 		name: 'Pierwsze starcie',
-		//@ts-ignore
-		json: require('./../maps/2.json') 
-	}
+		json: require('./../maps/first_encounter.json') 
+	},
+	{
+		name: 'Wulkaniczna planeta',
+		json: require('./../maps/vulcano_planet.json') 
+	},
+	{
+		name: 'Epoka lodowcowa',
+		json: require('./../maps/iceage.json') 
+	},
 ];
 
 class MapData {

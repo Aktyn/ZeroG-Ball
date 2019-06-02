@@ -53,7 +53,7 @@ export default function(selected_object, onDeleteOption, onCopyOption, onTransfo
 		action_btn.text(frametime_exists !== -1 ? 'Usuń klatkę' : 'Ustaw klatkę kluczową');
 		update_btn.style.display = frametime_exists !== -1 ? 'inline-block' : 'none';
 
-		onKeyframesUpdate(keyframes);
+		onKeyframesUpdate(keyframes, selected_object);
 	}
 
 	function getTransform() {
@@ -82,8 +82,9 @@ export default function(selected_object, onDeleteOption, onCopyOption, onTransfo
 		w_input.value = transform.w;
 		if(h_input)
 			h_input.value = transform.h;
-		if(rot_input)
-			rot_input.value = (transform.rot * 180.0/Math.PI).toPrecision(2);
+		if(rot_input) {
+			rot_input.value = Math.round( (transform.rot*180.0/Math.PI) * 100 ) / 100;
+		}
 	}
 
 	function updateObjectTransform() {
@@ -92,8 +93,10 @@ export default function(selected_object, onDeleteOption, onCopyOption, onTransfo
 			onTransformUpdate( new_transform );
 	}
 
-	let exception_rot = (selected_object.static || 
-		selected_object.getClassName().split(' ').includes('cannon')) &&
+	let classes = selected_object.getClassName().split(' ');
+
+	let exception_rot = (selected_object.static || classes.includes('enemy') ||
+		classes.includes('cannon')) &&
 		!selected_object.getClassName().split(' ').includes('revolving_door');
 	let container = $.create('div').addClass('edit-options').addChild(
 		$.create('div').addClass('transform-options').addChild(...[

@@ -56,7 +56,7 @@ export default class Elevator extends Object2D {
 	_destroy_(physics_engine) {
 		for(let obj of [...this.walls, ...this.doors])
 			obj.to_destroy = true;
-		super.destroy();
+		super._destroy_(physics_engine);
 	}
 
 	onPlayerEnter(player) {
@@ -130,8 +130,8 @@ export default class Elevator extends Object2D {
 				if((this.time_to_destination-=dt) <= 0) {
 					this.player = null;
 					this.activated = false;
-					this.removeClass(this.dir === 1 ? 'elevator_up' : 'elevator_down');
-					//this.toogleDoor();
+					//this.removeClass(this.dir === 1 ? 'elevator_up' : 'elevator_down');
+					this.toogleDoor();
 				}
 				else {
 					let dst = ELEVATOR_RIDE_DISTANCE *
@@ -161,7 +161,7 @@ export default class Elevator extends Object2D {
 				this.time_to_destination = ELEVATOR_RIDE_TIME;
 				this.dir = -this.dir;//revert direction
 				this.toogleDoor();
-				this.addClass(this.dir === 1 ? 'elevator_up' : 'elevator_down');
+				//this.addClass(this.dir === 1 ? 'elevator_up' : 'elevator_down');
 			}
 		}
 		else if(this.locked > 0)

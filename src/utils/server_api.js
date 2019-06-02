@@ -1,4 +1,8 @@
 //@ts-check
+//CHANGE HOST TO CUSTOM SERVER ADDRESS IF YOU DONT WANT CLIENT TO CONNECT WITH LOCALHOST
+//eg.: https://yourdomain.com
+//TODO - set from command line
+const HOST = 'http://localhost';//(location.protocol + '//' + location.hostname);
 const PORT = 7331;
 
 function postRequest(to, data) {
@@ -7,7 +11,7 @@ function postRequest(to, data) {
 	if(typeof data !== 'string')
 		data = JSON.stringify(data);
 
-	return fetch(location.protocol + '//' + location.hostname + ':' + PORT + to, {
+	return fetch(HOST + ':' + PORT + to, {
 		method: "POST",
 		mode: /*process.env.NODE_ENV === 'development'*/true ? 'cors' : 'same-origin',
 		headers: {"Content-Type": "application/json; charset=utf-8"},

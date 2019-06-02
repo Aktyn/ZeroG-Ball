@@ -1,5 +1,5 @@
 $solid_colors: (
-	(sensor, #fff0),//sensors preview
+	(sensor, #fff1),//sensors preview
 	(red, #e57373),
 	(green, #8BC34A),
 	(cannon_bullet, #263238),
@@ -78,6 +78,11 @@ $textures: (
 		'lava_texture',
 		'./../img/textures/lava.jpg',
 		#41281e
+	),
+	ice: (
+		'ice_texture',
+		'./../img/textures/ice.jpg',
+		#86b2e2
 	),
 	grass: (
 		'grass_texture',
