@@ -87,6 +87,10 @@ export const AVAILABLE_MAPS = [//NOTE - names should be unique
 		name: 'Epoka lodowcowa',
 		json: require('./../maps/iceage.json') 
 	},
+	{
+		name: 'Lasu szum',
+		json: require('./../maps/sound_of_forest.json') 
+	},
 ];
 
 class MapData {

@@ -17,6 +17,7 @@ let bg_textures = [
 	require('../img/wallpapers/vulcano.jpg'),
 	require('../img/wallpapers/first_encounter.jpg'),
 	require('../img/wallpapers/iceage.jpg'),
+	require('../img/wallpapers/forest.jpg'),
 ];
 
 function getEloRanking(data) {
@@ -155,11 +156,12 @@ export default class MenuStage extends Stage {
 		this.loadRanking();
 
 		//secrets
-		$(window).on('keydown', this.onKey.bind(this));
+		this.key_down_event = this.onKey.bind(this);
+		window.addEventListener('keydown', this.key_down_event);
 		this.secret_code = '';
 
 		//disables menu
-		//setTimeout(()=>this.listeners.onStart(AVAILABLE_MAPS[3]), 100);//TEMP
+		//setTimeout(()=>this.listeners.onStart(AVAILABLE_MAPS[4]), 100);//TEMP
 	}
 
 	close() {
@@ -167,13 +169,14 @@ export default class MenuStage extends Stage {
 			clearTimeout(this.bg_timeout);
 		for(let item of this.map_items)
 			item.destroy();
+		window.removeEventListener('keydown', this.key_down_event);
 		super.close();
 	}
 
-	loadAvaibleMaps() {//returns true when every map is unlocked
+	loadAvaibleMaps(force = false) {//returns true when every map is unlocked
 		this.avaible_maps.text('');
 		for(let map of AVAILABLE_MAPS) {
-			if(!MapRecords.isUnlocked(map.name))
+			if(!force && !MapRecords.isUnlocked(map.name))
 				return false;
 			let item = new MapItem(map, this.listeners.onStart);
 			this.map_items.push(item);
@@ -319,8 +322,10 @@ export default class MenuStage extends Stage {
 		this.secret_code += e.key;
 		if( !'odblokuj'.startsWith(this.secret_code) )
 			this.secret_code = '';
-		else if(this.secret_code === 'odblokuj')
-			console.log('TODO');
+		else if(this.secret_code === 'odblokuj') {
+			console.log('test');
+			this.loadAvaibleMaps(true);
+		}
 	}
 
 	_tryClearProgress() {

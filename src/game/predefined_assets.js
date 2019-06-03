@@ -8,7 +8,7 @@ export const CATEGORIES = {
 	building_blocks: 	'BUDULCE',
 	logic: 				'LOGICZNE',
 	powerups: 			'POWERUPY',
-	tutorial: 			'WPROWADZENIE'
+	//tutorial: 			'WPROWADZENIE'
 };
 
 export const TUTORIAL_TEXTURES = {
@@ -216,7 +216,7 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 	},
 
 	//(TEMP) make available objects from tutorial textures
-	...(function() {
+	/*...(function() {
 		let parts_objects = {};
 		for(let texture_name in TUTORIAL_TEXTURES) {
 			parts_objects[texture_name] = {
@@ -229,7 +229,7 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 			}
 		}
 		return parts_objects;
-	})()
+	})()*/
 };
 
 export const TEXTURES = {//names must much those in svg.scss
@@ -280,8 +280,8 @@ export const TEXTURES = {//names must much those in svg.scss
 	},
 	'revolving_door_texture': {//only for in-gui preview
 		src: require('./../img/textures/revolving_door.png'),
-		width: 0,//Config.VIRT_SCALE * OBJECTS['revolving_door'].radius,
-		height: 0,//Config.VIRT_SCALE * OBJECTS['revolving_door'].radius
+		width: 0,
+		height: 0,
 	},
 	'spiky_crate_texture': {
 		src: require('./../img/textures/spiky_crate.png'),
@@ -348,7 +348,7 @@ export const TEXTURES = {//names must much those in svg.scss
 		width: Config.VIRT_SCALE * OBJECTS['shrinker'].radius,
 		height: Config.VIRT_SCALE * OBJECTS['shrinker'].radius
 	},
-	...TUTORIAL_TEXTURES
+	//...TUTORIAL_TEXTURES
 };
 
 /** @type {{name: string, src: string, color: string, linear?: boolean}[]} */

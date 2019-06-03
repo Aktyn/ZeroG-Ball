@@ -287,7 +287,7 @@ export default class GameGUI {
 		if(this.mode === parseInt(id))
 			return;
 		this.selected_asset = null;
-		// console.log('TODO', id);
+		
 		this.mode = parseInt(id);
 		this.container.setClass(`game-gui-container mode-${id} ${this.is_view_open ? 'view-open' : ''}`);
 

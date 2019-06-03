@@ -32,6 +32,13 @@ Game has been created for university project.
 		There is also a server-side code that you can run with:<pre>npm run server</pre>
 		Server is used for storing user's best results.<br/>
 		By default, client is connecting to server on same hostname.<br />
-		In order to use custom host address you should change the HOST variable at the beginning of server_api.js file.
+		In order to use custom host address you must change the window.SERVER_HOST value in index.html.
 	</li>
 </ul>
+
+<h2>Some screenshots</h2>
+<img src='src/img/wallpapers/introduction.jpg' />
+<img src='src/img/wallpapers/first_encounter.jpg' />
+<img src='src/img/wallpapers/vulcano.jpg' />
+<img src='src/img/wallpapers/iceage.jpg' />
+<img src='src/img/wallpapers/forest.jpg' />
