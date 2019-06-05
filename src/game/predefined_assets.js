@@ -348,7 +348,7 @@ export const TEXTURES = {//names must much those in svg.scss
 		width: Config.VIRT_SCALE * OBJECTS['shrinker'].radius,
 		height: Config.VIRT_SCALE * OBJECTS['shrinker'].radius
 	},
-	//...TUTORIAL_TEXTURES
+	...TUTORIAL_TEXTURES
 };
 
 /** @type {{name: string, src: string, color: string, linear?: boolean}[]} */
