@@ -14,6 +14,8 @@ import PowerUpBase from './objects/powerups/powerup_base';
 import MapData from './map_data';
 
 import SPEECH_COMMANDS from './speech_recognition';
+import MapRecords from "./map_records";
+import ServerApi from "../utils/server_api";
 
 function createClockWidget() {
 	let widget = $.create('span').setClass('clock-widget');
@@ -125,7 +127,7 @@ export default class GameGUI {
 					else
 						this.header.classList.add('hidden');
 				}),
-			
+
 				$.create('div').addClass('game-buttons').addChild(
 					$.create('button').text('IMPORT').on('click', () => {
 						this.tryImport();
@@ -151,9 +153,9 @@ export default class GameGUI {
 				//$.create('div').addChild(
 					this.speech_indicator = $.create('button').addClass('speech-indicator'),
 				//),
-			
+
 				this.modes_panel = $.create('div').addClass('modes'),
-			
+
 				$.create('div').addClass('actions').addChild(
 					$.create('button').text('USTAWIENIA')
 						.on('click', () => {
@@ -206,6 +208,8 @@ export default class GameGUI {
 			//GAME INFO
 			this.game_info = $.create('div').addClass('game-info').addChild(
 				this.map_name = $.create('div').text('zmieniona mapa'),
+				this.local_best_time = $.create('div').text('').setStyle({display: 'none'}),
+				this.server_best_time = $.create('div').text('').setStyle({display: 'none'}),
 				$.create('div').setClass('timer-container').addChild(
 					this.elapsed_time = $.create('span').text('00'),
 					createClockWidget()
@@ -240,7 +244,7 @@ export default class GameGUI {
 				})
 			);
 		}
-		
+
 		this.bg_selector.style.setProperty('--open-height', `${(BACKGROUNDS.length+1)*20}px`);
 
 		['GRA', 'EDYCJA'].forEach((mode, i) => {
@@ -353,9 +357,29 @@ export default class GameGUI {
 	/**
 	 * @param {string} name
 	 */
-	setMapName(name) {
+	async setMapName(name) {
 		//this.map_name_holder = name;
 		this.map_name.text(name);
+		if(MapRecords.getRecord(name) !== null) {
+			this.local_best_time.text("Najlepszy czas lokalnie: " + (Common.milisToTime(MapRecords.getRecord(name), ' ', {
+				seconds: ' sek',
+				minutes: ' min',
+				hours: ' godz'
+			})));
+			this.local_best_time.setStyle({display: 'block'});
+		}
+
+		if(!(await ServerApi.pingServer())) return;
+		let data = await ServerApi.getRanking();
+		let map_records = data.find(d => d.map_name === name).records;
+		if(map_records !== null) {
+			this.server_best_time.text("Najlepszy czas globalnie: " + (Common.milisToTime(map_records[0].time, ' ', {
+				seconds: ' sek',
+				minutes: ' min',
+				hours: ' godz'
+			})));
+			this.server_best_time.setStyle({display: 'block'});
+		}
 	}
 
 	/** 

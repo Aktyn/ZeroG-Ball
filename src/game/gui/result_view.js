@@ -112,13 +112,18 @@ export default {
 								save_options.setStyle({color: '#ef5350'}).text('Serwer niedostępny');
 								return;
 							}
-							let nick_input = $.create('input').setAttrib('type', 'text')
-								.setAttrib('placeholder', 'Wpisz swój nick');
+							let nick_input = $.create('input').setAttrib('type', 'text');
+							if(localStorage.getItem('nickname') != null) {
+								nick_input.setAttrib('value', localStorage.getItem('nickname'));
+							} else {
+								nick_input.setAttrib('placeholder', 'Wpisz swój nick');
+							}
 							save_options.text('').addChild(
 								nick_input,
 								$.create('br'),
 								$.create('button').text('POTWIERDŹ').on('click', async () => {
 									let nick = nick_input.value.trim();
+									localStorage.setItem('nickname', nick);
 									if(nick.length < 1)
 										return;
 									let res = await ServerApi.sendRecord(name, time, nick);

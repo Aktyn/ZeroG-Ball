@@ -19,9 +19,12 @@ var allowCrossDomain = function(req, res, next) {
 
 app.use(allowCrossDomain);
 
-app.post('/ping', async (req, res) => {
+app.get('/test', (req, res) => {
+	res.text('Server is running');
+});
+
+app.post('/ping', (req, res) => {
 	try {
-		//req.body.token
 		res.json({result: 'SUCCESS'});
 	}
 	catch(e) {
@@ -30,7 +33,7 @@ app.post('/ping', async (req, res) => {
 	}
 });
 
-app.post('/save_result', async (req, res) => {
+app.post('/save_result', (req, res) => {
 	try {
 		RecordsHandler.reportRecord(req.body);
 		res.json({result: 'SUCCESS'});
@@ -41,7 +44,7 @@ app.post('/save_result', async (req, res) => {
 	}
 });
 
-app.post('/get_ranking', async (req, res) => {
+app.post('/get_ranking', (req, res) => {
 	try {
 		let ranking = RecordsHandler.getRanking();
 		let data = [];
