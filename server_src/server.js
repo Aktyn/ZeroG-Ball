@@ -20,7 +20,7 @@ var allowCrossDomain = function(req, res, next) {
 app.use(allowCrossDomain);
 
 app.get('/test', (req, res) => {
-	res.text('Server is running');
+	res.send('Server is running');
 });
 
 app.post('/ping', (req, res) => {
