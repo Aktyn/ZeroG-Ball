@@ -370,15 +370,19 @@ export default class GameGUI {
 		}
 
 		if(!(await ServerApi.pingServer())) return;
-		let data = await ServerApi.getRanking();
-		let map_records = data.find(d => d.map_name === name).records;
-		if(map_records !== null) {
-			this.server_best_time.text("Najlepszy czas globalnie: " + (Common.milisToTime(map_records[0].time, ' ', {
-				seconds: ' sek',
-				minutes: ' min',
-				hours: ' godz'
-			})));
-			this.server_best_time.setStyle({display: 'block'});
+		try {
+			let data = await ServerApi.getRanking();
+			let map_records = data.find(d => d.map_name === name).records;
+			if(map_records !== null) {
+				this.server_best_time.text("Najlepszy czas globalnie: " + (Common.milisToTime(map_records[0].time, ' ', {
+					seconds: ' sek',
+					minutes: ' min',
+					hours: ' godz'
+				})));
+				this.server_best_time.setStyle({display: 'block'});
+			}
+		} catch (e) {
+			console.error(e);
 		}
 	}
 
