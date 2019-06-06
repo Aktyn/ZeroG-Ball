@@ -151,7 +151,17 @@ export default class MenuStage extends Stage {
 		this.bg_index = random_bg;
 		this.bg_timeout = setTimeout(this.nextBackground.bind(this), BACKGROUND_CHANGE_FREQUENCY);
 
-		this.container.addChild(this.background_container, maps_section);//note order of children
+		//note order of children
+		this.container.addChild(this.background_container, maps_section,
+			$.create('footer').addChild(
+				$.create('div').addClass('links').addChild(
+					$.create('label').text('Autorzy:'),
+					$.create('a').setAttrib('href', 'https://github.com/Aktyn')
+						.setAttrib('target', '_blank').html('https://github.com/Aktyn'),
+					$.create('a').setAttrib('href', 'https://github.com/xDroni')
+						.setAttrib('target', '_blank').html('https://github.com/xDroni')
+				)
+			));
 
 		this.loadRanking();
 
