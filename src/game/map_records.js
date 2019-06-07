@@ -1,9 +1,5 @@
 //@ts-check
-<<<<<<< HEAD
-import {AVAIBLE_MAPS} from './map_data';
-=======
 import {AVAILABLE_MAPS} from './map_data';
->>>>>>> origin/stage3
 
 /** @param  {string} map_name */
 function build_key(map_name) {
@@ -37,11 +33,7 @@ const MapRecords = {
 	},
 
 	clear: () => {
-<<<<<<< HEAD
-		for(let map of AVAIBLE_MAPS) localStorage.removeItem(build_key(map.name));
-=======
 		for(let map of AVAILABLE_MAPS) localStorage.removeItem(build_key(map.name));
->>>>>>> origin/stage3
 	},
 
 	/** 
@@ -52,19 +44,11 @@ const MapRecords = {
 		if( MapRecords.getRecord(map_name) !== null )
 			return true;
 
-<<<<<<< HEAD
-		let curr_index = AVAIBLE_MAPS.findIndex(map => map.name === map_name);
-		if(curr_index === 0)//first map is always avaible for player
-			return true;
-		else if(curr_index > 0)
-			return MapRecords.getRecord( AVAIBLE_MAPS[curr_index-1].name ) !== null;
-=======
 		let curr_index = AVAILABLE_MAPS.findIndex(map => map.name === map_name);
 		if(curr_index === 0)//first map is always avaible for player
 			return true;
 		else if(curr_index > 0)
 			return MapRecords.getRecord( AVAILABLE_MAPS[curr_index-1].name ) !== null;
->>>>>>> origin/stage3
 		else
 			return false;
 	}

@@ -23,11 +23,8 @@ export default class Cannon extends Object2D {
 	constructor(w, h, graphics_engine, physics_engine, objects) {
 		super(Type.CIRCLE, w, h, graphics_engine, physics_engine, 2);
 
-<<<<<<< HEAD
-=======
 		this.body.setMask( ~CollisionCategories.bullet );
 
->>>>>>> origin/stage3
 		this.time_to_shoot = SHOOTING_FREQUENCY;
 		this.r = OBJECTS.cannon.radius;
 		

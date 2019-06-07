@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-# DominoSandbox
-Logic game with domino blocks that uses simple physics engine.
-Project created for learning purpouses.
-=======
 <h2>ZeroG-Ball</h2>
 Logic game with simple, custom physics engine based on elastic collisions.
 Game has been created for university project.
@@ -47,4 +42,3 @@ Game has been created for university project.
 <img src='src/img/wallpapers/vulcano.jpg' />
 <img src='src/img/wallpapers/iceage.jpg' />
 <img src='src/img/wallpapers/forest.jpg' />
->>>>>>> origin/stage3

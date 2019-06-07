@@ -14,9 +14,6 @@ export default class Aid extends Object2D {
 	constructor(w, h, graphics_engine, physics_engine) {
 		super(Type.CIRCLE, w, h, graphics_engine, physics_engine);
 		this.body.setCategory( CollisionCategories.aid );
-<<<<<<< HEAD
-=======
 		this.body.setMask( ~CollisionCategories.player );
->>>>>>> origin/stage3
 	}
 }

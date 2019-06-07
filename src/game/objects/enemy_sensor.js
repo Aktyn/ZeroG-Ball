@@ -17,11 +17,7 @@ export default class EnemySensor extends Object2D {
 
 		this.owner = owner;
 
-<<<<<<< HEAD
-		this.setClass('transparent');
-=======
 		this.setClass('sensor');
->>>>>>> origin/stage3
 		this.body.setMask( 0 );//sensor object
 		this.setStatic();
 	}

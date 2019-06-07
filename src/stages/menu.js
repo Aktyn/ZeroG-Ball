@@ -1,41 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-import $ from './../utils/html';
-import Stage from './stage';
-import './../styles/menu.scss';
-
-const _void_func = ()=>{};
-
-export default class MenuStage extends Stage {
-	constructor(target, listeners) {
-		super(target, 'menu-container', listeners)
-		
-
-		this.start_btn = $.create('button').text('START').on('click', listeners.onStart);
-
-		this.avaible_levels = $.create('p').text('TODO - lista dostępnych map');
-
-		this.container.addChild(
-			this.start_btn, this.avaible_levels
-		);
-	}
-
-	close() {
-		if(this.start_btn)
-			this.start_btn.off('click', this.listeners.onStart);
-
-		super.close();
-	}
-}
-=======
-//@ts-check
-import $ from './../utils/html';
-import Common from './../utils/common';
-import Stage from './stage';
-import './../styles/menu.scss';
-import {AVAIBLE_MAPS} from './../game/map_data';
-import MapRecords from './../game/map_records';
-=======
 //@ts-check
 import $ from './../utils/html';
 import Common from './../utils/common';
@@ -99,7 +61,6 @@ function getEloRanking(data) {
 	//console.log(result_array);
 	return result_array;
 }
->>>>>>> origin/stage3
 
 class MapItem {
 	/**
@@ -113,11 +74,7 @@ class MapItem {
 
 		this.widget = $.create('div').on('click', this.onClick.bind(this)).addChild(
 			$.create('div').text(data.name).setStyle({'font-weight': 'bold'}),
-<<<<<<< HEAD
-			$.create('div').setStyle({'color': '#90A4AE'}).text(
-=======
 			$.create('div').setStyle({'color': '#B0BEC5'}).text(
->>>>>>> origin/stage3
 				record === null ? '---' :
 				`Rekord: ${Common.milisToTime(record, ' ', {
 					hours: ' godzin', 
@@ -141,33 +98,14 @@ class MapItem {
 export default class MenuStage extends Stage {
 	constructor(target, listeners) {
 		super(target, 'menu-container', listeners);
-<<<<<<< HEAD
-=======
 
 		let maps_section = $.create('section').addClass('maps-section');
->>>>>>> origin/stage3
 		
 		// this.start_btn = $.create('button').text('START').on('click', listeners.onStart);
 		/** @type {MapItem[]} */
 		this.map_items = [];
 
 		this.avaible_maps = $.create('section').setClass('avaible_maps_list');
-<<<<<<< HEAD
-		this.loadAvaibleMaps();
-
-		this.clear_progress_confirm = null;
-
-		this.container.addChild(
-			$.create('h1').text('Dostępne poziomy'),
-			this.avaible_maps,
-			$.create('div').text('Ukończ wszystkie dostępne poziomy aby odblokować kolejne').setStyle({
-				'color': '#90A4AE'
-			})
-		);
-
-		this.container.addChild(
-			$.create('hr').setStyle({'background-color': '#546E7A'}),
-=======
 		let all_maps_unlocked = this.loadAvaibleMaps();
 
 		this.clear_progress_confirm = null;
@@ -184,7 +122,6 @@ export default class MenuStage extends Stage {
 
 		maps_section.addChild(
 			$.create('hr'),//.setStyle({'background-color': '#546E7A'}),
->>>>>>> origin/stage3
 			$.create('button').text('PUSTA MAPA').on('click', () => {
 				this.listeners.onStart({
 					name: 'Pusta mapa', 
@@ -196,37 +133,15 @@ export default class MenuStage extends Stage {
 			})
 		);
 
-<<<<<<< HEAD
-		if(MapRecords.getRecord(AVAIBLE_MAPS[0].name) !== null) {
-			this.container.addChild(
-				$.create('hr').setStyle({'background-color': '#546E7A'}),
-=======
 		if(MapRecords.getRecord(AVAILABLE_MAPS[0].name) !== null) {
 			maps_section.addChild(
 				$.create('hr'),//.setStyle({'background-color': '#546E7A'}),
->>>>>>> origin/stage3
 				this.clear_progress_btn = $.create('button').text('WYCZYŚĆ POSTĘP').on('click', () => {
 					this._tryClearProgress();
 				})
 			);
 		}
 
-<<<<<<< HEAD
-
-		//secrets
-		$(window).on('keydown', this.onKey.bind(this));
-		this.secret_code = '';
-
-		//disables menu
-		setTimeout(()=>this.listeners.onStart(AVAIBLE_MAPS[0]), 100);//TEMP
-	}
-
-	loadAvaibleMaps() {
-		this.avaible_maps.text('');
-		for(let map of AVAIBLE_MAPS) {
-			if(!MapRecords.isUnlocked(map.name))
-				break;
-=======
 		let random_bg = (Math.random() * bg_textures.length)|0;
 
 		this.background_container = $.create('div').addClass('background-container').addChild(
@@ -273,13 +188,10 @@ export default class MenuStage extends Stage {
 		for(let map of AVAILABLE_MAPS) {
 			if(!force && !MapRecords.isUnlocked(map.name))
 				return false;
->>>>>>> origin/stage3
 			let item = new MapItem(map, this.listeners.onStart);
 			this.map_items.push(item);
 			this.avaible_maps.addChild( item.widget );
 		}
-<<<<<<< HEAD
-=======
 		return true;
 	}
 
@@ -413,7 +325,6 @@ export default class MenuStage extends Stage {
 			showMapRecords();
 		});
 		switchRankingType();
->>>>>>> origin/stage3
 	}
 
 	/** @param {KeyboardEvent} e */
@@ -421,15 +332,10 @@ export default class MenuStage extends Stage {
 		this.secret_code += e.key;
 		if( !'odblokuj'.startsWith(this.secret_code) )
 			this.secret_code = '';
-<<<<<<< HEAD
-		else if(this.secret_code === 'odblokuj')
-			console.log('TODO');
-=======
 		else if(this.secret_code === 'odblokuj') {
 			console.log('test');
 			this.loadAvaibleMaps(true);
 		}
->>>>>>> origin/stage3
 	}
 
 	_tryClearProgress() {
@@ -456,23 +362,7 @@ export default class MenuStage extends Stage {
 			});
 			this.clear_progress_btn = null;
 			this.loadAvaibleMaps();
-<<<<<<< HEAD
-		}
-	}
-
-	close() {
-		//if(this.start_btn)
-		//	this.start_btn.off('click', this.listeners.onStart);
-		for(let item of this.map_items)
-			item.destroy();
-
-		super.close();
-	}
-}
->>>>>>> stage3
-=======
 			this.unlocked_info.text(UNLOCK_LEVELS_TEXT);
 		}
 	}
 }
->>>>>>> origin/stage3

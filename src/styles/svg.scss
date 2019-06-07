@@ -1,17 +1,5 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-svg.game-svg {
-	.cartoon-style {
-		stroke: #000;
-		stroke-width: 2px;
-		stroke-opacity: 0.5;
-=======
-$solid_colors: (
-	(transparent, #fff1),//sensors preview
-=======
 $solid_colors: (
 	(sensor, #fff1),//sensors preview
->>>>>>> origin/stage3
 	(red, #e57373),
 	(green, #8BC34A),
 	(cannon_bullet, #263238),
@@ -21,14 +9,11 @@ $solid_colors: (
 );
 
 $textures: (
-<<<<<<< HEAD
-=======
 	player: (
 		'player_texture',
 		'./../img/textures/player.png',
 		#749de2
 	),
->>>>>>> origin/stage3
 	crate: (
 		'crate_texture',
 		'./../img/textures/crate.jpg',
@@ -74,14 +59,11 @@ $textures: (
 		'./../img/textures/portal3.png',
 		#87cd98
 	),
-<<<<<<< HEAD
-=======
 	revolving_door: (
 		'revolving_door_texture',
 		'./../img/textures/revolving_door.png',
 		#8bc34a
 	),
->>>>>>> origin/stage3
 	spiky_crate: (
 		'spiky_crate_texture',
 		'./../img/textures/spiky_crate.png',
@@ -97,27 +79,21 @@ $textures: (
 		'./../img/textures/lava.jpg',
 		#41281e
 	),
-<<<<<<< HEAD
-=======
 	ice: (
 		'ice_texture',
 		'./../img/textures/ice.jpg',
 		#86b2e2
 	),
->>>>>>> origin/stage3
 	grass: (
 		'grass_texture',
 		'./../img/textures/grass.jpg',
 		#70992c
 	),
-<<<<<<< HEAD
-=======
 	bricks: (
 		'bricks_texture',
 		'./../img/textures/bricks.jpg',
 		#af4b2a
 	),
->>>>>>> origin/stage3
 	key1: (
 		'key1_texture',
 		'./../img/textures/key1.png',
@@ -138,10 +114,6 @@ $textures: (
 		'./../img/textures/elevatorDown.png',
 		#D1740080
 	),
-<<<<<<< HEAD
-);
-
-=======
 	speedboost: (
 		'speedboost_texture',
 		'./../img/textures/speed.png',
@@ -158,7 +130,6 @@ $textures: (
 	textures: first($textures);//hack for exporting list of lists
 }
 
->>>>>>> origin/stage3
 svg.game-svg {
 	shape-rendering: auto;
 
@@ -166,10 +137,6 @@ svg.game-svg {
 		stroke: #000;
 		stroke-width: 2px;
 		stroke-opacity: 0.61;
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 	}
 
 	.flat-shadows {
@@ -178,19 +145,12 @@ svg.game-svg {
 
 	image.nearest {
 		image-rendering: pixelated;
-<<<<<<< HEAD
-	}
-<<<<<<< HEAD
-}
-=======
-=======
 		shape-rendering: optimizeSpeed;
 	}
 	image:not(.nearest) {
 		image-rendering: optimizeSpeed;
 		shape-rendering: optimizeSpeed;
 	}
->>>>>>> origin/stage3
 
 	& > * {
 		pointer-events: none;
@@ -216,15 +176,9 @@ svg.game-svg {
 			}
 		}
 
-<<<<<<< HEAD
-		&.player {
-			fill: url('#player_texture');
-		}
-=======
 		/*&.player {
 			fill: url('#player_texture');
 		}*/
->>>>>>> origin/stage3
 	}
 
 	&.no-textures circle, &.no-textures rect, &.no-textures path {
@@ -234,34 +188,20 @@ svg.game-svg {
 			}
 		}
 
-<<<<<<< HEAD
-		&.player {
-			fill: #749de2;
-		}
-=======
 		/*&.player {
 			fill: #749de2;
 		}*/
->>>>>>> origin/stage3
 	}
 
 	.selected {
 		stroke: #ef5350;
 		stroke-opacity: 1;
-<<<<<<< HEAD
-		stroke-width: 4px;
-		stroke-linecap: round;
-		stroke-dasharray: 10;
-
-		animation: stroke-rotate 2s linear infinite both;
-=======
 		stroke-width: 3px;
 		stroke-linecap: round;
 		stroke-dasharray: 10;
 		vector-effect: non-scaling-stroke;
 
 		animation: stroke-rotate 2s linear infinite;
->>>>>>> origin/stage3
 
 		@keyframes stroke-rotate {
 			0% {
@@ -284,11 +224,7 @@ svg.game-svg {
 }
 
 
-<<<<<<< HEAD
-.asset_preview {
-=======
 .asset_preview, .powerups {
->>>>>>> origin/stage3
 	& > * {
 		box-sizing: border-box;
 		border: 1px solid #000a;
@@ -307,7 +243,3 @@ svg.game-svg {
 		}
 	}
 }
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3

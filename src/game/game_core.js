@@ -1,29 +1,14 @@
 // @ts-check
-<<<<<<< HEAD
-<<<<<<< HEAD
-import $ from './../utils/html';
-import Map from './map';
-import MapData from './map_data';
-import Config from './config';
-=======
-// import $ from './../utils/html';
-import Map, {STATE} from './map';
-import MapData from './map_data';
-=======
 // import $ from './../utils/html';
 import Map, {STATE} from './map';
 import MapData, {AVAILABLE_MAPS} from './map_data';
->>>>>>> origin/stage3
 import Config from './config';
 //import Settings from './settings';
 import Player from './objects/player';
 import Object2D from './objects/object2d';
 import {Body} from './simple_physics/body';
 import handleCollision from './collision_handler';
-<<<<<<< HEAD
-=======
 import Elevator from "./objects/elevator";
->>>>>>> origin/stage3
 
 /**
 * 	@typedef {{
@@ -33,92 +18,19 @@ import Elevator from "./objects/elevator";
 	}} 
 	Transform
 */
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 
 /**
 * Starts an update loop
 * @param {GameCore} self
 */
 function runLoop(self) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-	let last = 0, dt;
-
-	//time measurments
-	let timer, time_samples = [];
-	let timer_log = $.create('SPAN').text('0ms')
-		.setStyle({fontSize: '13px', fontFamily: 'Arial'});
-	
-	$(document.body).addChild($.create('DIV').setStyle({
-		'position': 'fixed',
-		'left': '0px',
-		'bottom': '0px',
-		'zIndex': '99',
-		'background': '#0008',
-		'color': '#fff',
-		'fontSize': '13px',
-		'fontFamily': 'Arial'
-	}).text('updating + rendering: ').addChild(timer_log));
-=======
 	let last = performance.now(), dt = 0;
->>>>>>> stage3
-=======
-	let last = performance.now(), dt = 0;
->>>>>>> origin/stage3
 
 	var step = function(time) {
 		dt = time - last;
 		last = time;
 
 		if(self._running) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-			timer = performance.now();
-			self.update(dt);
-			
-			time_samples.push(performance.now() - timer);
-			if(time_samples.length >= 120) {
-				timer_log.text((time_samples.reduce( (a, b) => a+b ) / time_samples.length)
-					.toFixed(2) + 'ms');
-				time_samples = [];
-			}
-
-			window.requestAnimationFrame(step);
-		}
-	};
-	step(0);
-}
-
-//let t = 0;//tmp
-const ZOOM_STRENGTH = 0.1;
-
-export default class GameCore extends Map {
-	constructor() {
-		super();//map
-
-		this.map_data = new MapData();
-		super.loadObjects(this.map_data);
-
-		this._running = false;
-
-		//this.mouse_pressed = false;
-		this.last_mouse_coords = null;
-		/** @type {DOMRect} */
-		this.svg_rect = null;//{x: 0, y: 0, width: 100, height: 100};
-
-		let node = super.getNode();
-
-		node.addEventListener('wheel', this.onMouseWheel.bind(this), false);
-		node.addEventListener('mousedown', this.onMouseDown.bind(this), false);
-		window.addEventListener('mouseup', this.onMouseUp.bind(this), false);
-		//window.addEventListener('mouseleave', this.onMouseLeave.bind(this), false);
-		window.addEventListener('mousemove', this.onMouseMove.bind(this), false);
-=======
-=======
->>>>>>> origin/stage3
 			self.update(dt);
 			window.requestAnimationFrame(step);
 		}
@@ -126,11 +38,7 @@ export default class GameCore extends Map {
 	step(last);
 }
 
-<<<<<<< HEAD
-const CAMERA_SMOOTHNESS = 0.003;
-=======
 const CAMERA_SMOOTHNESS = 0.006;
->>>>>>> origin/stage3
 const INITIAL_ZOOM = 2;
 const ZOOM_SMOTHNESS = 0.006;
 const ZOOM_STRENGTH = 0.2;
@@ -151,19 +59,11 @@ export default class GameCore extends Map {
 			down:	false,
 			slow: 	false
 		};
-<<<<<<< HEAD
-		this.sticky_stamp = false;
-
-		this._running = false;
-		this.elapsed_time = 0;
-
-=======
 		this.steering_freezed = false;
 		this.sticky_stamp = true;
 
 		this._running = false;
 		this.elapsed_time = 0;
->>>>>>> origin/stage3
 		this.target_zoom = INITIAL_ZOOM;
 
 		this.last_mouse_coords = null;
@@ -184,35 +84,10 @@ export default class GameCore extends Map {
 		//steering
 		window.addEventListener('keydown', this.onKeyDown.bind(this), true);
 		window.addEventListener('keyup', this.onKeyUp.bind(this), true);
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 	}
 
 	run() {
 		this._running = true;
-<<<<<<< HEAD
-<<<<<<< HEAD
-		runLoop(this);
-	}
-
-	destroy() {
-		this._running = false;
-	}
-
-	/**
-	* @param {number} w
-	* @param {number} h
-	*/
-	onResize(w, h) {
-		super.onResize(w, h);
-
-		//@ts-ignore
-		this.svg_rect = super.getNode().getBoundingClientRect();//must goes after super.onResize
-=======
-=======
->>>>>>> origin/stage3
 		this.elapsed_time = 0;
 		runLoop(this);
 
@@ -235,15 +110,10 @@ export default class GameCore extends Map {
 	}
 
 	spawnPlayer() {
-<<<<<<< HEAD
-		this.target_zoom = INITIAL_ZOOM;
-		this.player = new Player(this.graphics, this.physics, this.onPlayerHpChange.bind(this));
-=======
 		this.target_zoom = this.map_data.name === AVAILABLE_MAPS[0].name ? 
 			INITIAL_ZOOM*0.8 : INITIAL_ZOOM;
 		this.player = new Player(this.graphics, this.physics, this.onPlayerHpChange.bind(this),
 			this.listeners.onPlayerCollectedPowerup);
->>>>>>> origin/stage3
 		super.addObject( this.player );
 	}
 
@@ -273,10 +143,6 @@ export default class GameCore extends Map {
 		this.aspect = aspect;
 		super.onResize(w, h, aspect);
 		this.svg_rect = super.getNode().getBoundingClientRect();//must go after super.onResize
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 	}
 
 	convertCoords(e) {
@@ -286,23 +152,6 @@ export default class GameCore extends Map {
 		};
 	}
 
-<<<<<<< HEAD
-	onMouseWheel(e) {
-<<<<<<< HEAD
-		let dt = e.wheelDelta/120;
-
-		let new_zoom = this.camera.zoom*(1-ZOOM_STRENGTH*dt);
-		new_zoom = Math.max(0.2, Math.min(new_zoom, this.background.getMaxZoom()));
-		
-		super.updateCamera(this.camera.x, this.camera.y, new_zoom);
-=======
-		let dt = Math.max(-1, Math.min(1, e.wheelDelta || -e.detail));
-
-		let next_zoom = Math.min(6, this.camera.zoom*(1-ZOOM_STRENGTH*dt));
-		this.target_zoom = Math.max(0.2, 
-			Math.min(next_zoom, this.background.getMaxZoom(this.aspect)));
->>>>>>> stage3
-=======
 	/** @param {number} delta */
 	_changeZoom(delta) {
 		let next_zoom = Math.min(6, this.camera.zoom*(1-ZOOM_STRENGTH*delta));
@@ -313,7 +162,6 @@ export default class GameCore extends Map {
 	onMouseWheel(e) {
 		let dt = Math.max(-1, Math.min(1, e.wheelDelta || -e.detail));
 		this._changeZoom(dt);
->>>>>>> origin/stage3
 	}
 
 	onMouseDown(e) {
@@ -321,42 +169,13 @@ export default class GameCore extends Map {
 			return;
 		//save position
 		this.last_mouse_coords = this.convertCoords(e);
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 		this.click_pos.x = this.last_mouse_coords.x;
 		this.click_pos.y = this.last_mouse_coords.y;
->>>>>>> stage3
-=======
-		this.click_pos.x = this.last_mouse_coords.x;
-		this.click_pos.y = this.last_mouse_coords.y;
->>>>>>> origin/stage3
 	}
 
 	onMouseUp(e) {
 		if(e.button !== 0)
 			return;
-<<<<<<< HEAD
-<<<<<<< HEAD
-		this.last_mouse_coords = null;
-	}
-
-	/*onMouseLeave() {
-		console.log('x');
-		this.mouse_pressed = false;
-	}*/
-
-	onMouseMove(e) {
-		if(this.last_mouse_coords === null)
-			return;
-		//console.log(e.clientX, e.clientY);
-
-		let coords = this.convertCoords(e);
-		//console.log(coords);
-		let dx = (this.last_mouse_coords.x - coords.x)*2*Config.ASPECT * this.camera.zoom;
-=======
-=======
->>>>>>> origin/stage3
 
 		let c = this.convertCoords(e);
 
@@ -397,31 +216,11 @@ export default class GameCore extends Map {
 
 		let coords = this.convertCoords(e);
 		let dx = (this.last_mouse_coords.x - coords.x)*2*this.aspect * this.camera.zoom;
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 		let dy = (this.last_mouse_coords.y - coords.y)*2 * this.camera.zoom;
 		super.updateCamera(this.camera.x+dx, this.camera.y+dy, this.camera.zoom);
 		this.last_mouse_coords = coords;
 	}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-	update(dt) {
-		/*let xx = Math.cos(t)*0.5;
-		let yy = Math.sin(-t*0.6)*0.28;
-		let zoom = 1.25;
-		super.updateCamera(xx, yy, zoom);
-
-		t += Math.PI * dt/1000 * 0.25;*/
-
-		super.update();
-	}
-}
-=======
-=======
->>>>>>> origin/stage3
 	/** @param {KeyboardEvent} e */
 	onKeyDown(e) {
 		this.updateSteering(e.keyCode, true);
@@ -437,12 +236,8 @@ export default class GameCore extends Map {
 	* @param {boolean} enable
 	*/
 	updateSteering(code, enable) {
-<<<<<<< HEAD
-		//console.log(code);
-=======
 		if(this.steering_freezed)
 			return;
->>>>>>> origin/stage3
 		switch(code) {
 			case 37:
 			case 65:
@@ -464,9 +259,6 @@ export default class GameCore extends Map {
 				this.steering.slow = enable;
 				return;
 			case 17://ctrl
-<<<<<<< HEAD
-				this.sticky_stamp = enable;
-=======
 				this.sticky_stamp = !enable;
 				return;
 			case 189:
@@ -491,7 +283,6 @@ export default class GameCore extends Map {
 					}
 				}
 
->>>>>>> origin/stage3
 				return;
 		}
 	}
@@ -632,13 +423,8 @@ export default class GameCore extends Map {
 
 	/** @param {number} dt */
 	update(dt) {
-<<<<<<< HEAD
-		if(dt > 1000)
-			dt = 1000;
-=======
 		if(dt > 1000/60*5)//maximum 5 frames lag
 			dt = 1000/60*5;
->>>>>>> origin/stage3
 
 		if(this.state === STATE.RUNNING) {
 			this.elapsed_time += dt;
@@ -662,7 +448,3 @@ export default class GameCore extends Map {
 		super.update(dt);
 	}
 }
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3

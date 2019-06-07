@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-import $ from './../utils/html';
-import Stage from './stage';
-
-import GameCore from './../game/game_core';
-import GameGUI from './../game/game_gui';
-
-import Config from './../game/config';
-=======
-=======
->>>>>>> origin/stage3
 // @ts-check
 import $ from './../utils/html';
 import Common from './../utils/common';
@@ -22,23 +10,11 @@ import MapRecords from './../game/map_records';
 
 // import Config from './../game/config';
 import Settings from './../game/settings';
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 
 import './../styles/game.scss';
 import './../styles/gui.scss';
 
 export default class GameStage extends Stage {
-<<<<<<< HEAD
-<<<<<<< HEAD
-	constructor(target, listeners) {
-		super(target, 'game-container', listeners);
-
-=======
-=======
->>>>>>> origin/stage3
 	constructor(target, listeners = {}, map_data = undefined) {
 		super(target, 'game-container', listeners);
 
@@ -61,13 +37,10 @@ export default class GameStage extends Stage {
 				this.gui.onPlayerHpChange(health);
 			},
 
-<<<<<<< HEAD
-=======
 			onPlayerCollectedPowerup: (powerup) => {
 				this.gui.onPlayerCollectedPowerup(powerup);
 			},
 
->>>>>>> origin/stage3
 			/**
 			 * @param  {string} name  
 			 * @param  {number} time  
@@ -81,10 +54,6 @@ export default class GameStage extends Stage {
 					MapRecords.saveRecord(name, time);
 			}
 		}, map_data);
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 		this.gui = new GameGUI({
 			onReturnToMenu: () => {
 				if(this.game) {
@@ -92,14 +61,6 @@ export default class GameStage extends Stage {
 					this.game = null;
 				}
 				this.listeners.onExit();
-<<<<<<< HEAD
-<<<<<<< HEAD
-			}
-		});
-		this.game = new GameCore();
-=======
-=======
->>>>>>> origin/stage3
 			},
 			onModeChange: (mode) => {
 				this.game.changeState(mode === 0 ? STATE.RUNNING : STATE.EDIT_MODE);
@@ -109,11 +70,8 @@ export default class GameStage extends Stage {
 
 			onMapStart: listeners.onMapStart,
 
-<<<<<<< HEAD
-=======
 			freezeControls: (freeze) => this.game.steering_freezed = freeze,
 
->>>>>>> origin/stage3
 			onAssetSelected: this.game.onAssetSelected.bind(this.game),
 			onRestart: () => this.game.reload(),
 			onClearMap: () => this.game.clearMap(),
@@ -133,23 +91,11 @@ export default class GameStage extends Stage {
 
 		this.gui.reloadMapData(this.game.map_data);
 		this.gui.setMapName(map_data.name);
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 
 		this.container.addChild(
 			this.game.getNode(), this.gui.getNode()
 		);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-		window.addEventListener('resize', this.onResize.bind(this), false);
-		
-		setTimeout(() => this.onResize(), 1);
-=======
-=======
->>>>>>> origin/stage3
 		window.addEventListener('resize', () => {
 			this.onResize( Number(Settings.getValue('aspect_ratio')) );
 		}, false);
@@ -157,10 +103,6 @@ export default class GameStage extends Stage {
 		Settings.watch( 'aspect_ratio', val => this.onResize(Number(val)) );
 		
 		setTimeout(() => this.onResize( Number(Settings.getValue('aspect_ratio')) ), 1);
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 
 		//this.running = false;
 		//this.run();
@@ -172,25 +114,6 @@ export default class GameStage extends Stage {
 	close() {
 		window.removeEventListener('resize', this.onResize.bind(this), false);
 		super.close();
-<<<<<<< HEAD
-<<<<<<< HEAD
-	}
-
-	onResize() {//window resize event
-		let res = $.getScreenSize();
-
-		if(res.width / res.height > Config.ASPECT)
-			res.width = res.height*Config.ASPECT;
-		else
-			res.height = res.width/Config.ASPECT;
-
-		Object.assign(this.container.style, {width: `${res.width}px`, height: `${res.height}px`});
-		this.game.onResize(res.width, res.height);
-	}
-}
-=======
-=======
->>>>>>> origin/stage3
 		if(this.game)
 			this.game.destroy();
 		if(this.gui)
@@ -218,7 +141,3 @@ export default class GameStage extends Stage {
 			this.game.onResize(res.width, res.height, aspect);
 	}
 }
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3

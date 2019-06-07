@@ -5,15 +5,6 @@ import Contact from './contact';
 import CollisionListener from './collision_listener';
 import Config from './../config';
 
-<<<<<<< HEAD
-export default class Engine {
-	constructor() {
-		/** @type {Body[]} */
-		this.bodies = [];
-
-		/** @type {CollisionListener | null} */
-		this.listener = null;
-=======
 const RANGE_LEN = Config.MAX_RANGE*2;
 
 let CHUNK_SIZE = 2;
@@ -33,7 +24,6 @@ export default class Engine {
 		this.chunks = [];//new Array(this.chunks_size).fill(0).map(row => new Array(this.chunks_size));
 
 		console.log(`Map is divided for collision chunks of size: ${CHUNK_SIZE}x${CHUNK_SIZE}`);
->>>>>>> origin/stage3
 	}
 
 	/** @param {CollisionListener} listener */
@@ -42,21 +32,12 @@ export default class Engine {
 	}
 
 	removeObjects() {
-<<<<<<< HEAD
-		this.bodies = [];
-=======
 		this._bodies = [];
 		this.chunks = [];
->>>>>>> origin/stage3
 	}
 
 	/** @param {Body} body */
 	removeObject(body) {
-<<<<<<< HEAD
-		let i = this.bodies.indexOf(body);
-		if(i !== -1)
-			this.bodies.splice(i, 1);
-=======
 		let i = this._bodies.indexOf(body);
 		if(i !== -1) {
 			this._bodies.splice(i, 1);
@@ -106,7 +87,6 @@ export default class Engine {
 	_push_body(body) {
 		this._bodies.push(body);
 		this._push_to_chunks(body, this.chunks);
->>>>>>> origin/stage3
 	}
 
 	/** 
@@ -114,11 +94,7 @@ export default class Engine {
 	*/
 	createCircle(radius) {
 		let body = new Circle(radius);
-<<<<<<< HEAD
-		this.bodies.push(body);
-=======
 		this._push_body(body);
->>>>>>> origin/stage3
 		return body;
 	}
 
@@ -128,11 +104,7 @@ export default class Engine {
 	*/
 	createRect(width, height) {
 		let body = new Rect(width, height);
-<<<<<<< HEAD
-		this.bodies.push(body);
-=======
 		this._push_body(body);
->>>>>>> origin/stage3
 		return body;
 	}
 
@@ -140,18 +112,6 @@ export default class Engine {
 		//check for collisions
 		/** @type {Contact[]} */
 		let contacts = [];
-<<<<<<< HEAD
-		for(var i=0; i<this.bodies.length; i++) {
-			for(var j=0; j<this.bodies.length; j++) {
-				if(i == j || this.bodies[i].static)//check for static body to optimize
-					continue;//ignore same objects
-				let c = checkCollision(this.bodies[i], this.bodies[j]);
-				if(c !== null)
-					contacts.push(c);
-			}
-		}
-
-=======
 		/*for(var i=0; i<this._bodies.length; i++) {
 			if(this._bodies[i].mask === 0)//ghost object
 				continue;
@@ -205,7 +165,6 @@ export default class Engine {
 		this.chunks = next_chunks;
 		//console.timeEnd('checking_collisions');
 
->>>>>>> origin/stage3
 		//solving contacts
 		for(let contact of contacts) {
 			if(this.listener)
@@ -214,11 +173,7 @@ export default class Engine {
 		}
 
 		//update each body
-<<<<<<< HEAD
-		for(let body of this.bodies)
-=======
 		for(let body of this._bodies)
->>>>>>> origin/stage3
 			body.update();
 
 		//resolve collisions

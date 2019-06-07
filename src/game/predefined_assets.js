@@ -6,9 +6,6 @@ export const CATEGORIES = {
 	active: 			'INTERAKTYWNE',
 	dynamic: 			'DYNAMICZNE',
 	building_blocks: 	'BUDULCE',
-<<<<<<< HEAD
-	logic: 				'LOGICZNE' 
-=======
 	logic: 				'LOGICZNE',
 	powerups: 			'POWERUPY',
 	//tutorial: 			'WPROWADZENIE'
@@ -40,7 +37,6 @@ export const TUTORIAL_TEXTURES = {
 		width: Config.VIRT_SCALE*0.674,
 		height: Config.VIRT_SCALE*0.168
 	}
->>>>>>> origin/stage3
 };
 
 export const OBJECTS = {//some of those name must not be changed due to correlation with other code
@@ -130,8 +126,6 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 		radius: 0.1,
 		categories: [CATEGORIES.all, CATEGORIES.dynamic, CATEGORIES.building_blocks]
 	},
-<<<<<<< HEAD
-=======
 	'revolving_door': {
 		name: 'Drzwi obrotowe',
 		class_name: 'revolving_door',
@@ -140,41 +134,26 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 		height: 0.1,
 		categories: [CATEGORIES.all, CATEGORIES.dynamic]
 	},
->>>>>>> origin/stage3
 	'crate': {
 		name: 'Skrzynia',
 		class_name: 'crate',
 		shape: MapData.SHAPE_TYPE.RECT,
-<<<<<<< HEAD
-		width: 0.1,
-		height: 0.1,
-=======
 		width: 0.15,
 		height: 0.15,
->>>>>>> origin/stage3
 		categories: [CATEGORIES.all, CATEGORIES.building_blocks]
 	},
 	'lava': {
 		name: 'Lawa',
 		class_name: 'lava',
 		shape: MapData.SHAPE_TYPE.RECT,
-<<<<<<< HEAD
-		width: 0.1,
-		height: 0.1,
-=======
 		width: 0.15,
 		height: 0.15,
->>>>>>> origin/stage3
 		categories: [CATEGORIES.all, CATEGORIES.building_blocks]
 	},
 	'grass': {
 		name: 'Trawa',
 		class_name: 'grass',
 		shape: MapData.SHAPE_TYPE.RECT,
-<<<<<<< HEAD
-		width: 0.1,
-		height: 0.1,
-=======
 		width: 0.15,
 		height: 0.15,
 		categories: [CATEGORIES.all, CATEGORIES.building_blocks]
@@ -193,7 +172,6 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 		shape: MapData.SHAPE_TYPE.RECT,
 		width: 0.15,
 		height: 0.15,
->>>>>>> origin/stage3
 		categories: [CATEGORIES.all, CATEGORIES.building_blocks]
 	},
 
@@ -220,9 +198,6 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 		width: 0.4,
 		height: 0.4,
 		categories: [CATEGORIES.all, CATEGORIES.logic]
-<<<<<<< HEAD
-	}
-=======
 	},
 	//items
 	'speedboost': {
@@ -255,7 +230,6 @@ export const OBJECTS = {//some of those name must not be changed due to correlat
 		}
 		return parts_objects;
 	})()*/
->>>>>>> origin/stage3
 };
 
 export const TEXTURES = {//names must much those in svg.scss
@@ -304,14 +278,11 @@ export const TEXTURES = {//names must much those in svg.scss
 		width: Config.VIRT_SCALE * OBJECTS['portal3'].radius,
 		height: Config.VIRT_SCALE * OBJECTS['portal3'].radius
 	},
-<<<<<<< HEAD
-=======
 	'revolving_door_texture': {//only for in-gui preview
 		src: require('./../img/textures/revolving_door.png'),
 		width: 0,
 		height: 0,
 	},
->>>>>>> origin/stage3
 	'spiky_crate_texture': {
 		src: require('./../img/textures/spiky_crate.png'),
 		width: Config.VIRT_SCALE * OBJECTS['spiky_crate'].width,
@@ -332,27 +303,21 @@ export const TEXTURES = {//names must much those in svg.scss
 		width: Config.VIRT_SCALE * OBJECTS['lava'].width,
 		height: Config.VIRT_SCALE * OBJECTS['lava'].height
 	},
-<<<<<<< HEAD
-=======
 	'ice_texture': {
 		src: require('./../img/textures/ice.jpg'),
 		width: Config.VIRT_SCALE * OBJECTS['ice'].width,
 		height: Config.VIRT_SCALE * OBJECTS['ice'].height
 	},
->>>>>>> origin/stage3
 	'grass_texture': {
 		src: require('./../img/textures/grass.jpg'),
 		width: Config.VIRT_SCALE * OBJECTS['grass'].width,
 		height: Config.VIRT_SCALE * OBJECTS['grass'].height
 	},
-<<<<<<< HEAD
-=======
 	'bricks_texture': {
 		src: require('./../img/textures/bricks.jpg'),
 		width: Config.VIRT_SCALE * OBJECTS['bricks'].width,
 		height: Config.VIRT_SCALE * OBJECTS['bricks'].height
 	},
->>>>>>> origin/stage3
 	'key1_texture': {
 		src: require('./../img/textures/key1.png'),
 		width: Config.VIRT_SCALE * OBJECTS['key1'].radius,
@@ -372,9 +337,6 @@ export const TEXTURES = {//names must much those in svg.scss
 		src: require('./../img/textures/elevatorDown.png'),
 		width: Config.VIRT_SCALE * OBJECTS['elevator'].width,
 		height: Config.VIRT_SCALE * OBJECTS['elevator'].height
-<<<<<<< HEAD
-	}
-=======
 	},
 	'speedboost_texture': {
 		src: require('./../img/textures/speed.png'),
@@ -387,7 +349,6 @@ export const TEXTURES = {//names must much those in svg.scss
 		height: Config.VIRT_SCALE * OBJECTS['shrinker'].radius
 	},
 	...TUTORIAL_TEXTURES
->>>>>>> origin/stage3
 };
 
 /** @type {{name: string, src: string, color: string, linear?: boolean}[]} */
@@ -418,12 +379,9 @@ export const BACKGROUNDS = [//default value for linear attribute is: true
 		src: require('./../img/backgrounds/bg6.jpg'),
 		color: '#a7a1be',
 	},
-<<<<<<< HEAD
-=======
 	{
 		name: 'Mozaika',
 		src: require('./../img/backgrounds/bg7.jpg'),
 		color: '#ac7874',
 	},
->>>>>>> origin/stage3
 ];

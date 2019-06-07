@@ -2,10 +2,6 @@
 import Object2D, {Type} from './object2d';
 import SvgEngine from './../svg_engine';
 import SimplePhysics from './../simple_physics/engine';
-<<<<<<< HEAD
-import {OBJECTS} from "../predefined_assets";
-=======
->>>>>>> origin/stage3
 import Player from './player';
 
 let sign = i => i===0?1:-1;
@@ -38,16 +34,12 @@ export default class Elevator extends Object2D {
 				.setClass('orange_transparent').setStatic());
 		objects.push(...this.doors);
 
-<<<<<<< HEAD
-		this.doors.forEach(d => d.body.setMask(0));//init doors with no collisions
-=======
 		this.doors.forEach(d => {//init doors with no collisions
 			d.body.setMask(0);
 			d.editable = false;
 		});
 
 		this.walls.forEach(w => w.editable = false);
->>>>>>> origin/stage3
 
 		this.locked = 0;
 		/** @type {Player} player instance handle */
@@ -57,21 +49,14 @@ export default class Elevator extends Object2D {
 		this.time_to_destination = ELEVATOR_RIDE_TIME;
 		/** @type {{x: number, y: number}} point from which the elevator start traveling */
 		this.starting_point = null;
-<<<<<<< HEAD
-=======
 		this.isOpen = true;
->>>>>>> origin/stage3
 	}
 
 	/** @param {SimplePhysics} physics_engine */
 	_destroy_(physics_engine) {
 		for(let obj of [...this.walls, ...this.doors])
 			obj.to_destroy = true;
-<<<<<<< HEAD
-		super.destroy();
-=======
 		super._destroy_(physics_engine);
->>>>>>> origin/stage3
 	}
 
 	onPlayerEnter(player) {
@@ -123,9 +108,6 @@ export default class Elevator extends Object2D {
 		return super.setRot(rot);
 	}
 
-<<<<<<< HEAD
-	/** 
-=======
 	toogleDoor() {
 		if(!this.isOpen) {
 			this.doors.forEach(d => d.setClass('orange_transparent').body.setMask(0));//open
@@ -136,38 +118,23 @@ export default class Elevator extends Object2D {
 	}
 
 	/**
->>>>>>> origin/stage3
 	 * @param  {number?} dt
 	 * @param  {boolean?} paused
 	 */
 	update(dt, paused = false) {
 		if(this.player) {
-<<<<<<< HEAD
-			const dst = Math.pow(this.player.getTransform().x - this.getTransform().x, 2) + 
-			Math.pow(this.player.getTransform().y - this.getTransform().y, 2);
-			
-=======
 			const dst = Math.pow(this.player.getTransform().x - this.getTransform().x, 2) +
 			Math.pow(this.player.getTransform().y - this.getTransform().y, 2);
 
->>>>>>> origin/stage3
 			if(this.activated) {
 				if((this.time_to_destination-=dt) <= 0) {
 					this.player = null;
 					this.activated = false;
-<<<<<<< HEAD
-					this.removeClass(this.dir === 1 ? 'elevator_up' : 'elevator_down');
-					this.doors.forEach(d => d.setClass('orange_transparent').body.setMask(0));//open
-				}
-				else {
-					let dst = ELEVATOR_RIDE_DISTANCE * 
-=======
 					//this.removeClass(this.dir === 1 ? 'elevator_up' : 'elevator_down');
 					this.toogleDoor();
 				}
 				else {
 					let dst = ELEVATOR_RIDE_DISTANCE *
->>>>>>> origin/stage3
 						Math.pow(1 - this.time_to_destination/ELEVATOR_RIDE_TIME, 2);
 					let rot = this.getTransform().rot - Math.PI/2;
 					this.setPos(
@@ -193,14 +160,8 @@ export default class Elevator extends Object2D {
 				this.starting_point = {x: this.getTransform().x, y: this.getTransform().y};
 				this.time_to_destination = ELEVATOR_RIDE_TIME;
 				this.dir = -this.dir;//revert direction
-<<<<<<< HEAD
-
-				this.addClass(this.dir === 1 ? 'elevator_up' : 'elevator_down');
-				this.doors.forEach(d => d.setClass('orange').body.setMask(~0));//close
-=======
 				this.toogleDoor();
 				//this.addClass(this.dir === 1 ? 'elevator_up' : 'elevator_down');
->>>>>>> origin/stage3
 			}
 		}
 		else if(this.locked > 0)

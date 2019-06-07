@@ -6,8 +6,6 @@ function zeroPad(num) {
 	return num < 10 ? `0${num}` : num.toString();
 }
 
-<<<<<<< HEAD
-=======
 const eloK = 10;
 /**
  * @param  {number} r1
@@ -18,7 +16,6 @@ function probability(r1, r2) {
     return 1.0 * 1.0 / (1 + 1.0 * Math.pow(10, 1.0 * (r1 - r2) / 400));
 }
 
->>>>>>> origin/stage3
 const DEFAULT_LABELS = {
 	hours: '',
 	minutes: '',
@@ -46,8 +43,6 @@ export default {
 			return `${zeroPad(sec)}${labels.seconds}`;
 	},
 
-<<<<<<< HEAD
-=======
 	/**
 	 * explanation: https://en.wikipedia.org/wiki/Elo_rating_system
 	 * @param {number} Ra
@@ -68,7 +63,6 @@ export default {
 	 	throw new Error('Impossible error');
 	},
 
->>>>>>> origin/stage3
 	MD5: d => M(V(Y(X(d),8*d.length))).toLowerCase()
 };
 

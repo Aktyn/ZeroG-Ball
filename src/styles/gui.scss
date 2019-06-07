@@ -9,47 +9,21 @@ $header-size: 35px;
 	align-items: center;
 	justify-content: space-between;
 	height: 100%;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 	position: relative;
->>>>>>> stage3
-=======
-	position: relative;
->>>>>>> origin/stage3
 
 	& > header {
 		pointer-events: auto;
 
 		min-height: $header-size;
 		padding: 0px 5px;
-<<<<<<< HEAD
-<<<<<<< HEAD
-		background-color: #0004;
-=======
 		background-color: rgba(0, 0, 0, 0.25);
->>>>>>> stage3
-=======
-		background-color: rgba(0, 0, 0, 0.25);
->>>>>>> origin/stage3
 		transition: background-color 0.3s linear;
 		//box-shadow: 0px 0px 5px #0008;
 
 		display: grid;
-<<<<<<< HEAD
-<<<<<<< HEAD
-		grid-template-areas: 'switch_btn game_buttons modes actions';
-		grid-template-columns: fit-content(100%) auto fit-content(100%) fit-content(100%);
-=======
 		grid-template-areas: 'switch_btn game_buttons speech modes actions';
 		grid-template-columns: fit-content(100%) auto fit-content(100%) 
 			fit-content(100%) fit-content(100%);
->>>>>>> stage3
-=======
-		grid-template-areas: 'switch_btn game_buttons speech modes actions';
-		grid-template-columns: fit-content(100%) auto fit-content(100%) 
-			fit-content(100%) fit-content(100%);
->>>>>>> origin/stage3
 		grid-column-gap: 10px;
 		align-items: center;
 		justify-content: stretch;
@@ -65,15 +39,7 @@ $header-size: 35px;
 			text-align: right;
 		}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-		.game-buttons, .actions, .modes {
-=======
 		.game-buttons, .actions, .modes, .speech-indicator {
->>>>>>> stage3
-=======
-		.game-buttons, .actions, .modes, .speech-indicator {
->>>>>>> origin/stage3
 			transition: opacity 0.3s linear, transform 0.3s ease-in-out;
 		}
 
@@ -88,11 +54,6 @@ $header-size: 35px;
 			margin: 5px 5px;
 		}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> origin/stage3
 		.speech-indicator {
 			grid-area: speech;
 			border: none;
@@ -111,10 +72,6 @@ $header-size: 35px;
 			}
 		}
 
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 		.modes {
 			grid-area: modes;
 			background-color: #004D4080;
@@ -134,21 +91,9 @@ $header-size: 35px;
 		}
 
 		&.hidden {
-<<<<<<< HEAD
-<<<<<<< HEAD
-			background-color: #0000;
-			//box-shadow: 0px 0px 5px #0000;
-			.game-buttons, .actions, .modes {
-=======
 			background-color: rgba(0, 0, 0, 0);
 			//box-shadow: 0px 0px 5px #0000;
 			.game-buttons, .actions, .modes, .speech-indicator {
->>>>>>> stage3
-=======
-			background-color: rgba(0, 0, 0, 0);
-			//box-shadow: 0px 0px 5px #0000;
-			.game-buttons, .actions, .modes, .speech-indicator {
->>>>>>> origin/stage3
 				opacity: 0;
 				transform: translateY(-100%);
 				button {
@@ -190,14 +135,6 @@ $header-size: 35px;
 			border-radius: 5px;
 			box-shadow: 0px 1px 8px #0008;
 			overflow: hidden;
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-			header {
-				padding: 0px 10px;
-=======
-=======
->>>>>>> origin/stage3
 			font-size: 14px;
 			min-width: 350px;
 
@@ -207,24 +144,10 @@ $header-size: 35px;
 
 			header {
 				padding: 0px;
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 				height: 35px;
 				line-height: 35px;
 				color: #fff;
 				background-color: #455a64;
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-				.close-btn {
-					margin: 5px 0px;
-					margin-left: 10px;
-					float: right;
-=======
-=======
->>>>>>> origin/stage3
 				font-weight: bold;
 				display: grid;
 				width: 100%;
@@ -236,21 +159,12 @@ $header-size: 35px;
 					// margin: 0px 10px;
 					// margin-right: 10px;
 					// float: right;
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 				}
 			}
 
 			article {//main content
 				color: #455a64;
 				padding: 5px 5px;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> origin/stage3
 				text-align: center;
 
 				& > * {
@@ -289,10 +203,6 @@ $header-size: 35px;
 						grid-column: 1 / span 2;
 					}
 				}
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 			}
 		}
 	}
@@ -302,43 +212,14 @@ $header-size: 35px;
 
 		background-color: #0004;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-		display: grid;
-		grid-template-areas: 'assets tools';
-=======
-=======
->>>>>>> origin/stage3
 		max-height: 100px;
 		width: 100%;
 		display: grid;
 		grid-template-areas: 'main tools';
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 		grid-template-columns: auto min-content;
 		align-items: center;
 		justify-content: stretch;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-		.assets {
-			grid-area: assets;
-		}
-
-		.tools {
-			padding: 5px 0px;
-			& > * {
-				white-space: nowrap;
-				margin: 5px;
-			}
-
-			& > * > button {
-				margin: 0px 2px;
-=======
-=======
->>>>>>> origin/stage3
 		.main {
 			grid-area: main;
 			height: 100%;
@@ -653,10 +534,6 @@ $header-size: 35px;
 				& > * > button {
 					margin: 0px 2px;
 				}
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 			}
 		}
 
@@ -671,70 +548,6 @@ $header-size: 35px;
 		display: none;
 	}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-	//cienie switch
-
-	.switch-input {
-		display: none;
-	}
-	.switch-label {
-		position: relative;
-		display: inline-block;
-		min-width: 112px;
-		cursor: pointer;
-		font-weight: 500;
-		text-align: left;
-		margin: 16px;
-		padding: 16px 0 16px 44px;
-	}
-	.switch-label:before,
-	.switch-label:after {
-		content: "";
-		position: absolute;
-		margin: 0;
-		outline: 0;
-		top: 50%;
-		transform: translate(0, -50%);
-		transition: all 0.3s ease;
-	}
-	.switch-label:before {
-		left: 1px;
-		width: 34px;
-		height: 14px;
-		background-color: #9e9e9e;
-		border-radius: 8px;
-	}
-	.switch-label:after {
-		left: 0;
-		width: 20px;
-		height: 20px;
-		background-color: #fafafa;
-		border-radius: 50%;
-		box-shadow: 0 5px 3px -2px rgba(0, 0, 0, 0.14),
-		0 4px 4px 0 rgba(0, 0, 0, 0.098), 0 3px 7px 0 rgba(0, 0, 0, 0.084);
-	}
-	.switch-label .toggle--on {
-		display: none;
-	}
-	.switch-label .toggle--off {
-		display: inline-block;
-	}
-	.switch-input:checked + .switch-label:before {
-		background-color: #a5d6a7;
-	}
-	.switch-input:checked + .switch-label:after {
-		background-color: #4caf50;
-		transform: translate(80%, -50%);
-	}
-	.switch-input:checked + .switch-label .toggle--on {
-		display: inline-block;
-	}
-	.switch-input:checked + .switch-label .toggle--off {
-		display: none;
-=======
-=======
->>>>>>> origin/stage3
 	.game-info {
 		position: absolute;
 		right: 0px;
@@ -846,8 +659,6 @@ $header-size: 35px;
 				content: "❤";
 			}
 		}
-<<<<<<< HEAD
-=======
 
 		.powerups {
 			height: auto !important;
@@ -889,7 +700,6 @@ $header-size: 35px;
 				}
 			}
 		}
->>>>>>> origin/stage3
 	}
 
 	.damage-effect {
@@ -1021,9 +831,5 @@ $header-size: 35px;
 			opacity: 1;
 			transform: translateY(0px);
 		}
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 	}
 }

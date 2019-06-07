@@ -1,14 +1,5 @@
 .jshintrc
 node_modules/
-<<<<<<< HEAD
-<<<<<<< HEAD
-dist/
-=======
-dist/
-.idea/
->>>>>>> stage3
-=======
 dist/
 .idea/
 ranking/
->>>>>>> origin/stage3

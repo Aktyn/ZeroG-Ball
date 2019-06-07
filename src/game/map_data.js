@@ -1,14 +1,6 @@
 // @ts-check
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 import Object2D, {Type} from './objects/object2d';
 
->>>>>>> stage3
-=======
-import Object2D, {Type} from './objects/object2d';
-
->>>>>>> origin/stage3
 var _enum_ = obj => Object.keys(obj).forEach((k, i) => obj[k] = i);
 
 const SHAPE_TYPE = {//enumerator
@@ -24,11 +16,6 @@ const PHYSIC_TYPE = {
 };
 _enum_(PHYSIC_TYPE);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> origin/stage3
 const HISTORY_CAPACITY = 32;
 
 /**
@@ -59,58 +46,19 @@ function fixRot(rot) {
 	Transform
 */
 
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 /**
 * 	@typedef {{
 		shape_type: number,
 		physic_type?: number,
 		x?: number, y?: number, 
 		w?: number, h?: number, 
-<<<<<<< HEAD
-<<<<<<< HEAD
-		rot?: number
-=======
 		rot?: number,
 		keyframes: {time: number, transform: Transform}[],
 		class_name?: string
->>>>>>> stage3
-=======
-		rot?: number,
-		keyframes: {time: number, transform: Transform}[],
-		class_name?: string
->>>>>>> origin/stage3
 	}} 
 	ObjectSchema
 */
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-class MapData {
-	constructor() {
-		/** @type {ObjectSchema[]} */
-		this._objects = [];
-
-		//temp
-		this.addObject({shape_type: SHAPE_TYPE.CIRCLE, physic_type: PHYSIC_TYPE.DYNAMIC, 
-			x: 0, y: -0.9, w: 0.1, h: 0.1});
-		this.addObject({shape_type: SHAPE_TYPE.RECT, x: 0, y: 0.5, w: 0.8, h: 0.1, rot: Math.PI*0.02});
-		this.addObject({shape_type: SHAPE_TYPE.RECT, x: 0.99, y: -0.1, w: 0.8, h: 0.1, rot: Math.PI*0.5});
-	}
-
-
-	/** @param {ObjectSchema} schema */
-	addObject(schema) {
-		this._objects.push(schema);
-	}
-
-	getObjects() {
-		return this._objects;
-=======
-=======
->>>>>>> origin/stage3
 /**
 *	@typedef {{
 		background: number,
@@ -122,19 +70,6 @@ const empty_map = {"background":0,"objects":[]};
 
 
 /** @type {{name: string, json: State}[]} */
-<<<<<<< HEAD
-export const AVAIBLE_MAPS = [//NOTE - names should be unique
-	{
-		name: 'Rozgrzewka',
-		//@ts-ignore
-		json: require('./../maps/1.json') 
-	},
-	{
-		name: 'level 2',
-		//@ts-ignore
-		json: require('./../maps/2.json') 
-	}
-=======
 export const AVAILABLE_MAPS = [//NOTE - names should be unique
 	{
 		name: 'Wprowadzenie',
@@ -156,7 +91,6 @@ export const AVAILABLE_MAPS = [//NOTE - names should be unique
 		name: 'Lasu szum',
 		json: require('./../maps/sound_of_forest.json') 
 	},
->>>>>>> origin/stage3
 ];
 
 class MapData {
@@ -318,10 +252,6 @@ class MapData {
 			this.state = JSON.parse(data);
 		else
 			this.state = data;
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 	}
 }
 

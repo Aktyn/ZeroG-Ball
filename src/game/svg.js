@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-// @ts-check
-import Config from './config';
-
-=======
-=======
->>>>>>> origin/stage3
 //@ts-check
 import Config from './config';
 
@@ -18,10 +10,6 @@ function transformEquals(t1, t2) {
 	return t1.x === t2.x && t1.y === t2.y && t1.w === t2.w && t1.h === t2.h && t1.rot === t2.rot;
 }
 
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 export default class SvgObject {
 	constructor(name, prevent_centering = false) {
 		this.name = name;
@@ -34,14 +22,7 @@ export default class SvgObject {
 			h: 1,
 			rot: 0
 		};
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 		this.prev_transform = JSON.parse(JSON.stringify(this.transform));
->>>>>>> stage3
-=======
-		this.prev_transform = JSON.parse(JSON.stringify(this.transform));
->>>>>>> origin/stage3
 		this.scale_changed = false;
 
 		if(!prevent_centering) {
@@ -62,31 +43,6 @@ export default class SvgObject {
 		}
 	}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-	update(scale_in_transform = false) {//updates object transform
-		if(!scale_in_transform && this.scale_changed === true) {
-			if(this.name === 'circle') {
-				//@ts-ignore
-				this.node.setAttributeNS(null, 'r', Config.VIRT_SCALE/2 * this.transform.w);
-				//this.node.setAttributeNS(null, 'cx', this.transform.x*Config.VIRT_SCALE/2);
-				//this.node.setAttributeNS(null, 'cy', this.transform.y*Config.VIRT_SCALE/2);
-			}
-			else {
-				//@ts-ignore
-				this.node.setAttributeNS(null, 'width', Config.VIRT_SCALE * this.transform.w);
-				//@ts-ignore
-				this.node.setAttributeNS(null, 'height', Config.VIRT_SCALE * this.transform.h);
-				//this.node.setAttributeNS(null, 'x', -Config.VIRT_SCALE/2 * this.transform.w +
-				//	this.transform.x*Config.VIRT_SCALE/2);
-				//this.node.setAttributeNS(null, 'y', -Config.VIRT_SCALE/2 * this.transform.h +
-				//	this.transform.y*Config.VIRT_SCALE/2);
-				//@ts-ignore
-				this.node.setAttributeNS(null, 'x', -Config.VIRT_SCALE/2 * this.transform.w);
-				//@ts-ignore
-=======
-=======
->>>>>>> origin/stage3
 	destroy() {
 		this.node.remove();
 	}
@@ -114,42 +70,12 @@ export default class SvgObject {
 				this.node.setAttributeNS(null, 'height', Config.VIRT_SCALE * this.transform.h);
 				
 				this.node.setAttributeNS(null, 'x', -Config.VIRT_SCALE/2 * this.transform.w);
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 				this.node.setAttributeNS(null, 'y', -Config.VIRT_SCALE/2 * this.transform.h);
 			}
 
 			this.scale_changed = false;
 		}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-		//if(this.transform.rot !== 0) {
-			//this.node.setAttributeNS(null, 'transform-origin', `${
-			//	this.transform.x*Config.VIRT_SCALE/2} ${this.transform.y*Config.VIRT_SCALE/2}`);
-			this.node.setAttributeNS(null, 'transform', `translate(${
-				this.transform.x*Config.VIRT_SCALE/2} ${
-				this.transform.y*Config.VIRT_SCALE/2}) rotate(${this.transform.rot/Math.PI*180}) ${
-					scale_in_transform ? `scale(${this.transform.w}, ${this.transform.h})` : ''
-				}`);
-		//}
-	}
-
-	addChild(child) {
-		if(child instanceof SvgObject)
-			this.node.appendChild(child.node);
-		else if(child instanceof Node)
-			this.node.appendChild(child);
-		else
-			throw new Error('Incorrect child');
-		return this;
-	}
-
-=======
-=======
->>>>>>> origin/stage3
 		this.node.setAttributeNS(null, 'transform', `translate(${
 			this.transform.x*Config.VIRT_SCALE/2} ${
 			this.transform.y*Config.VIRT_SCALE/2}) rotate(${this.transform.rot/Math.PI*180}) ${
@@ -173,47 +99,19 @@ export default class SvgObject {
 	/**
 	* @param {string} name
 	*/
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 	setClass(name) {
 		this.node.setAttributeNS(null, 'class', name);
 		return this;
 	}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 	/**
 	* @param {string} name
 	*/
->>>>>>> stage3
-=======
-	/**
-	* @param {string} name
-	*/
->>>>>>> origin/stage3
 	addClass(name) {
 		this.node.classList.add(name);
 		return this;
 	}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-	setPos(x, y) {
-		this.transform.x = x;
-		this.transform.y = y;
-
-		return this;
-	}
-
-	setSize(width, height) {
-		this.transform.w = width;
-		this.transform.h = typeof height === 'number' ? height : width;
-=======
-=======
->>>>>>> origin/stage3
 	/** 
 	*	@param {string} name 
 	*	@returns {boolean}
@@ -251,22 +149,11 @@ export default class SvgObject {
 	setSize(width, height) {
 		this.transform.w = width;
 		this.transform.h = height;//typeof height === 'number' ? height : width;
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 		this.scale_changed = true;
 
 		return this;
 	}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-	setRot(rot) {
-		this.transform.rot = rot;
-=======
-=======
->>>>>>> origin/stage3
 	/**
 	* @param {number} rot
 	*/
@@ -274,10 +161,6 @@ export default class SvgObject {
 		this.transform.rot = rot;
 		while(this.transform.rot >= Math.PI*2) this.transform.rot -= Math.PI*2;
 		while(this.transform.rot < 0) this.transform.rot += Math.PI*2;
-<<<<<<< HEAD
->>>>>>> stage3
-=======
->>>>>>> origin/stage3
 
 		return this;
 	}
