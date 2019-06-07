@@ -24,11 +24,20 @@ export class Body extends Filter {
 		this.static = false;
 
 		this.density = _density;//used for mass calculations
+<<<<<<< HEAD
 		this.mass = 1;
 		this.velocity = new Vec2(0, 0);
 		this.next_velocity = null;
 
 		this.colliding = false;
+=======
+		this.mass = 1;//private
+		this.velocity = new Vec2(0, 0);
+		this.next_velocity = null;
+		this.max_size = 0;
+
+		//this.colliding = false;
+>>>>>>> origin/stage3
 
 		this._custom_data_ = null;//designated for only single data assignment
 	}
@@ -108,10 +117,17 @@ export class Body extends Filter {
 			this.next_velocity = null;
 		}
 		this.pos.addVec( this.velocity );
+<<<<<<< HEAD
 		if(this.colliding) {//deprecated - remove this variable
 			//this.pos.add(0, g);//stick to the ground
 			this.colliding = false;
 		}
+=======
+		//if(this.colliding) {//deprecated - remove this variable
+			//this.pos.add(0, g);//stick to the ground
+		//	this.colliding = false;
+		//}
+>>>>>>> origin/stage3
 	}
 }
 
@@ -127,6 +143,10 @@ export class Circle extends Body {
 
 	recalculateMass() {
 		this.mass = Math.PI * this.radius * this.radius * this.density;
+<<<<<<< HEAD
+=======
+		this.max_size = this.radius;
+>>>>>>> origin/stage3
 	}
 }
 
@@ -145,5 +165,9 @@ export class Rect extends Body {
 
 	recalculateMass() {
 		this.mass = this.width*this.height*4 * this.density;
+<<<<<<< HEAD
+=======
+		this.max_size = Math.max(this.width, this.height);
+>>>>>>> origin/stage3
 	}
 }

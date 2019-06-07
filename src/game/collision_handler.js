@@ -17,6 +17,10 @@ import Aid from './objects/aid';
 import Player from './objects/player';
 import Enemy from './objects/enemy';
 import EnemySensor from './objects/enemy_sensor';
+<<<<<<< HEAD
+=======
+import Item from './objects/item';
+>>>>>>> origin/stage3
 
 import {Body} from './simple_physics/body';
 import Filter from './simple_physics/filter';
@@ -59,6 +63,14 @@ export default function handleCollision(game_core, A, B) {
 			objA.damage(1);
 			objB.to_destroy = true;
 		}
+<<<<<<< HEAD
+=======
+		else if(objB instanceof Item) {
+			if( objB.use(objA) )
+				objB.to_destroy = true;
+		}
+
+>>>>>>> origin/stage3
 	}
 	else if(objA instanceof Portal) {
 		/** @type {Object2D} */

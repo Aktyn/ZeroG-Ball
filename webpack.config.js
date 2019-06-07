@@ -1,10 +1,13 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /*
 const webpack = require('webpack');
 */
 
 =======
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -19,6 +22,7 @@ const CONFIG = {
 	},
 	output: {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	  path:	path.resolve(__dirname, 'dist'),
 	  filename: 'main.js',
 =======
@@ -31,6 +35,16 @@ const CONFIG = {
   		ignored: /node_modules/
 >>>>>>> stage3
 	},
+=======
+	  	path:	path.resolve(__dirname, 'dist'),
+	  	filename: 'main.js',
+	},
+	watch: isDevelopment,
+	watchOptions: isDevelopment ? {
+  		poll: true,
+  		ignored: /node_modules/
+	} : undefined,
+>>>>>>> origin/stage3
 	mode: isDevelopment ? 'development' : 'production',
 	devtool: isDevelopment && "source-map",
 	devServer: {
@@ -54,7 +68,11 @@ const CONFIG = {
 				loader: "babel-loader"
 			},
 			{
+<<<<<<< HEAD
 				test: /\.(scss|css)$/,
+=======
+				test: /\.(scss|sass|css)$/,
+>>>>>>> origin/stage3
 				use: [
 					MiniCssExtractPlugin.loader,
 					{
@@ -77,9 +95,15 @@ const CONFIG = {
 						},
 					},
 					{
+<<<<<<< HEAD
 						loader: "sass-loader",
 						options: {
 							sourceMap: isDevelopment
+=======
+						loader: 'fast-sass-loader',
+						options: {
+							
+>>>>>>> origin/stage3
 						}
 					}
 				]
@@ -137,10 +161,14 @@ const CONFIG = {
 			hash: isDevelopment,
 			favicon: isDevelopment ? './src/img/favicon.png' : undefined,
 <<<<<<< HEAD
+<<<<<<< HEAD
 			title: 'Domino Sandbox',
 =======
 			title: 'ZeroG Ball',
 >>>>>>> stage3
+=======
+			title: 'ZeroG Ball',
+>>>>>>> origin/stage3
 			minify: !isDevelopment,
 			template: './src/index.html',
 			filename: './index.html',

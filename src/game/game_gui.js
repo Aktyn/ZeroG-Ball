@@ -1,9 +1,12 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import $ from './../utils/html';
 
 export default class GameGUI {
 	constructor(listeners = {}) {
 =======
+=======
+>>>>>>> origin/stage3
 //@ts-check
 import $ from './../utils/html';
 import Player from './../game/objects/player';
@@ -16,9 +19,18 @@ import editObjectOptions from './gui/object_edit_code';
 
 import {OBJECTS, BACKGROUNDS, CATEGORIES} from './predefined_assets';
 import Object2D, {Type} from './objects/object2d';
+<<<<<<< HEAD
 import MapData from './map_data';
 
 import SPEECH_COMMANDS from './speech_recognition';
+=======
+import PowerUpBase from './objects/powerups/powerup_base';
+import MapData from './map_data';
+
+import SPEECH_COMMANDS from './speech_recognition';
+import MapRecords from "./map_records";
+import ServerApi from "../utils/server_api";
+>>>>>>> origin/stage3
 
 function createClockWidget() {
 	let widget = $.create('span').setClass('clock-widget');
@@ -52,16 +64,22 @@ function createClockWidget() {
 export default class GameGUI {
 	constructor(listeners = {}) {
 		window.addEventListener('keydown', this.onKeyDown.bind(this), true);
+<<<<<<< HEAD
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 		this.listeners = listeners;
 		this.menu_return_confirm = null;
 
 		this.is_view_open = false;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 		this.container = $.create('div').setClass('game-gui-container mode-0').addChild(
 			this.header = $.create('header').addClass('hidden').addChild(
 =======
+=======
+>>>>>>> origin/stage3
 		this.mode = 0;//0
 		this.download_export_confirm = null;
 		this.map_data = null;
@@ -128,7 +146,10 @@ export default class GameGUI {
 		this.container.text('').addChild(
 			//HEADER
 			this.header = $.create('header')/*.addClass('hidden')*/.addChild(
+<<<<<<< HEAD
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 				$.create('button').addClass('menu-btn').on('click', () => {
 					if(!this.header)
 						return;
@@ -136,6 +157,7 @@ export default class GameGUI {
 						this.header.classList.remove('hidden');
 					else
 						this.header.classList.add('hidden');
+<<<<<<< HEAD
 <<<<<<< HEAD
 				})
 			).addChild(
@@ -190,6 +212,10 @@ export default class GameGUI {
 =======
 				}),
 			
+=======
+				}),
+
+>>>>>>> origin/stage3
 				$.create('div').addClass('game-buttons').addChild(
 					$.create('button').text('IMPORT').on('click', () => {
 						this.tryImport();
@@ -215,9 +241,15 @@ export default class GameGUI {
 				//$.create('div').addChild(
 					this.speech_indicator = $.create('button').addClass('speech-indicator'),
 				//),
+<<<<<<< HEAD
 			
 				this.modes_panel = $.create('div').addClass('modes'),
 			
+=======
+
+				this.modes_panel = $.create('div').addClass('modes'),
+
+>>>>>>> origin/stage3
 				$.create('div').addClass('actions').addChild(
 					$.create('button').text('USTAWIENIA')
 						.on('click', () => {
@@ -270,11 +302,21 @@ export default class GameGUI {
 			//GAME INFO
 			this.game_info = $.create('div').addClass('game-info').addChild(
 				this.map_name = $.create('div').text('zmieniona mapa'),
+<<<<<<< HEAD
+=======
+				this.local_best_time = $.create('div').text('').setStyle({display: 'none'}),
+				this.server_best_time = $.create('div').text('').setStyle({display: 'none'}),
+>>>>>>> origin/stage3
 				$.create('div').setClass('timer-container').addChild(
 					this.elapsed_time = $.create('span').text('00'),
 					createClockWidget()
 				),
+<<<<<<< HEAD
 				this.player_hearts = $.create('div').setClass('hearts')
+=======
+				this.player_hearts = $.create('div').setClass('hearts'),
+				this.active_powerups = $.create('div').setClass('powerups')
+>>>>>>> origin/stage3
 			)
 		);
 
@@ -303,7 +345,11 @@ export default class GameGUI {
 				})
 			);
 		}
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> origin/stage3
 		this.bg_selector.style.setProperty('--open-height', `${(BACKGROUNDS.length+1)*20}px`);
 
 		['GRA', 'EDYCJA'].forEach((mode, i) => {
@@ -313,14 +359,20 @@ export default class GameGUI {
 				this.changeMode(i);
 			});
 			if(i === this.mode)//first element
+<<<<<<< HEAD
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 				btn.disabled = true;//btn.setAttrib('disabled', undefined);
 			this.modes_panel.addChild(btn);
 		});
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 		//this.showSettings();//temp test
 =======
+=======
+>>>>>>> origin/stage3
 		this.speech_indicator.on('click', () => {
 			if(this.speech_indicator.hasClass('active'))
 				SPEECH_COMMANDS.stop()
@@ -344,7 +396,10 @@ export default class GameGUI {
 
 	destroy() {
 		window.removeEventListener('keydown', this.onKeyDown.bind(this), true);
+<<<<<<< HEAD
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 	}
 
 	getNode() {
@@ -352,6 +407,7 @@ export default class GameGUI {
 	}
 
 	changeMode(id) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 		// console.log('TODO', id);
 		this.container.setClass(`game-gui-container mode-${id}`);
@@ -366,6 +422,12 @@ export default class GameGUI {
 			return;
 		this.selected_asset = null;
 		// console.log('TODO', id);
+=======
+		if(this.mode === parseInt(id))
+			return;
+		this.selected_asset = null;
+		
+>>>>>>> origin/stage3
 		this.mode = parseInt(id);
 		this.container.setClass(`game-gui-container mode-${id} ${this.is_view_open ? 'view-open' : ''}`);
 
@@ -414,12 +476,59 @@ export default class GameGUI {
 		}, 5000);
 	}
 
+<<<<<<< HEAD
 	/**
 	 * @param {string} name
 	 */
 	setMapName(name) {
 		//this.map_name_holder = name;
 		this.map_name.text(name);
+=======
+	/** @param {PowerUpBase} powerup */
+	onPlayerCollectedPowerup(powerup) {
+		let powerup_info = $.create('div').addChild(
+			$.create('div').addClass(powerup.type),
+			$.create('div').text( OBJECTS[powerup.type].name ),
+			$.create('div').addClass('fade-timer').setStyle({
+				'animation-duration': `${powerup.duration_time}ms`
+			})
+		);
+		this.active_powerups.addChild( powerup_info );
+
+		setTimeout(() => powerup_info.delete(), powerup.duration_time);
+	}
+
+	/**
+	 * @param {string} name
+	 */
+	async setMapName(name) {
+		//this.map_name_holder = name;
+		this.map_name.text(name);
+		if(MapRecords.getRecord(name) !== null) {
+			this.local_best_time.text("Najlepszy czas lokalnie: " + (Common.milisToTime(MapRecords.getRecord(name), ' ', {
+				seconds: ' sek',
+				minutes: ' min',
+				hours: ' godz'
+			})));
+			this.local_best_time.setStyle({display: 'block'});
+		}
+
+		if(!(await ServerApi.pingServer())) return;
+		try {
+			let data = await ServerApi.getRanking();
+			let map_records = data.find(d => d.map_name === name).records;
+			if(map_records !== null) {
+				this.server_best_time.text("Najlepszy czas globalnie: " + (Common.milisToTime(map_records[0].time, ' ', {
+					seconds: ' sek',
+					minutes: ' min',
+					hours: ' godz'
+				})));
+				this.server_best_time.setStyle({display: 'block'});
+			}
+		} catch (e) {
+			console.error(e);
+		}
+>>>>>>> origin/stage3
 	}
 
 	/** 
@@ -523,9 +632,15 @@ export default class GameGUI {
 		}, (new_transform) => {
 			if(typeof this.listeners.updateObjectTransform === 'function' && this.mode === 1)
 				this.listeners.updateObjectTransform(this.selected_object, new_transform);
+<<<<<<< HEAD
 		}, (keyframes) => {
 			if(typeof this.listeners.updateObjectKeyframes === 'function' && this.mode === 1)
 				this.listeners.updateObjectKeyframes(this.selected_object, keyframes);
+=======
+		}, (keyframes, key_object) => {
+			if(typeof this.listeners.updateObjectKeyframes === 'function' && this.mode === 1)
+				this.listeners.updateObjectKeyframes(key_object, keyframes);
+>>>>>>> origin/stage3
 		});
 
 		this.main_edit.text('').addChild( container );
@@ -608,7 +723,10 @@ export default class GameGUI {
 
 	tryReturnToMenu(force = false) {
 		if(this.menu_return_confirm === null && !force) {
+<<<<<<< HEAD
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 			this.menu_return_btn.text('NA PEWNO?');
 			this.menu_return_confirm = setTimeout(() => {
 				this.menu_return_btn.text('POWRÓT DO MENU');
@@ -627,6 +745,7 @@ export default class GameGUI {
 		if(this.gui_center)
 			this.gui_center.text('');
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 		else
 			throw new Error('no gui center found');
@@ -634,11 +753,22 @@ export default class GameGUI {
 
 		this.is_view_open = false;
 		this.container.removeClass('view-open');
+=======
+		else
+			throw new Error('no gui center found');
+
+		this.is_view_open = false;
+		this.container.removeClass('view-open');
+
+		if(typeof this.listeners.freezeControls === 'function')
+			this.listeners.freezeControls(false);
+>>>>>>> origin/stage3
 	}
 
 	showSettings() {
 		if(!this.gui_center)
 			return;
+<<<<<<< HEAD
 <<<<<<< HEAD
 		this.gui_center.text('').addChild(
 			$.create('div').addClass('view-container').addChild(
@@ -665,6 +795,17 @@ export default class GameGUI {
 <<<<<<< HEAD
 }
 =======
+=======
+
+		SettingsView.open(this.gui_center, this.closeView.bind(this));
+
+		this.is_view_open = true;
+		this.container.addClass('view-open');
+
+		if(typeof this.listeners.freezeControls === 'function')
+			this.listeners.freezeControls(true);
+	}
+>>>>>>> origin/stage3
 
 	/**
 	 * @param  	{string} name name of completed map
@@ -678,4 +819,7 @@ export default class GameGUI {
 		ResultView.open(this, this.container, name, time, edited, map_data, this.closeView.bind(this));
 	}
 }
+<<<<<<< HEAD
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3

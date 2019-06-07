@@ -16,6 +16,10 @@ export default class Key extends Object2D {
 		super(Type.CIRCLE, w, h, graphics_engine, physics_engine);
 
 		this.body.setCategory( CollisionCategories.key );
+<<<<<<< HEAD
 		this.key_type = type;//TODO - make use of it when more bullet will be created
+=======
+		this.key_type = type;
+>>>>>>> origin/stage3
 	}
 }

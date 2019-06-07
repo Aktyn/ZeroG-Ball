@@ -21,7 +21,12 @@ import Object2D, {Type} from '../objects/object2d';
 export default function(selected_object, onDeleteOption, onCopyOption, onTransformUpdate, 
 	onKeyframesUpdate) 
 {
+<<<<<<< HEAD
 	var x_input, y_input, w_input, h_input, rot_input, time_input, keyframes_container, action_btn;
+=======
+	var x_input, y_input, w_input, h_input, rot_input, time_input, keyframes_container, action_btn,
+		update_btn;
+>>>>>>> origin/stage3
 
 	/** @type {{time: number, transform: Transform}[]} keyframes array sorted by time */
 	let keyframes = JSON.parse(JSON.stringify(selected_object.keyframes || []));
@@ -50,8 +55,14 @@ export default function(selected_object, onDeleteOption, onCopyOption, onTransfo
 		}
 
 		action_btn.text(frametime_exists !== -1 ? 'Usuń klatkę' : 'Ustaw klatkę kluczową');
+<<<<<<< HEAD
 
 		onKeyframesUpdate(keyframes);
+=======
+		update_btn.style.display = frametime_exists !== -1 ? 'inline-block' : 'none';
+
+		onKeyframesUpdate(keyframes, selected_object);
+>>>>>>> origin/stage3
 	}
 
 	function getTransform() {
@@ -80,8 +91,14 @@ export default function(selected_object, onDeleteOption, onCopyOption, onTransfo
 		w_input.value = transform.w;
 		if(h_input)
 			h_input.value = transform.h;
+<<<<<<< HEAD
 		if(rot_input)
 			rot_input.value = (transform.rot * 180.0/Math.PI).toPrecision(2);
+=======
+		if(rot_input) {
+			rot_input.value = Math.round( (transform.rot*180.0/Math.PI) * 100 ) / 100;
+		}
+>>>>>>> origin/stage3
 	}
 
 	function updateObjectTransform() {
@@ -90,8 +107,16 @@ export default function(selected_object, onDeleteOption, onCopyOption, onTransfo
 			onTransformUpdate( new_transform );
 	}
 
+<<<<<<< HEAD
 	let exception_rot = selected_object.static || 
 		selected_object.getClassName().split(' ').includes('cannon');
+=======
+	let classes = selected_object.getClassName().split(' ');
+
+	let exception_rot = (selected_object.static || classes.includes('enemy') ||
+		classes.includes('cannon')) &&
+		!selected_object.getClassName().split(' ').includes('revolving_door');
+>>>>>>> origin/stage3
 	let container = $.create('div').addClass('edit-options').addChild(
 		$.create('div').addClass('transform-options').addChild(...[
 			$.create('label').text('pozycja x'),
@@ -145,6 +170,7 @@ export default function(selected_object, onDeleteOption, onCopyOption, onTransfo
 				time_input = $.create('input').setAttrib('type', 'number').setAttrib('value', 0)
 					.setAttrib('min', 0).on('input', updateKeyframesContainer),
 			),
+<<<<<<< HEAD
 			action_btn = $.create('button').text('Ustaw klatkę kluczową').on('click', () => {
 				if(frametime_exists !== -1) {
 					keyframes.splice(frametime_exists, 1);
@@ -163,6 +189,39 @@ export default function(selected_object, onDeleteOption, onCopyOption, onTransfo
 				keyframes = keyframes.sort((a, b) => a.time - b.time);
 				updateKeyframesContainer();
 			})
+=======
+			$.create('div').addChild(
+				action_btn = $.create('button').text('Ustaw klatkę kluczową').on('click', () => {
+					if(frametime_exists !== -1) {
+						keyframes.splice(frametime_exists, 1);
+						updateKeyframesContainer();
+						return;
+					}
+					let new_transform = getTransform();
+					if(new_transform === undefined)
+						return;
+					if(keyframes.find(k => k.time == time_input.value))
+						return;
+					keyframes.push({
+						time: parseFloat(time_input.value),
+						transform: new_transform
+					});
+					keyframes = keyframes.sort((a, b) => a.time - b.time);
+					updateKeyframesContainer();
+				}),
+				update_btn = $.create('button').text('Aktualizuj').on('click', () => {
+					if(frametime_exists === -1)
+						return;
+					let new_transform = getTransform();
+					if(new_transform === undefined)
+						return;
+					keyframes[frametime_exists].transform = new_transform;
+					updateKeyframesContainer();
+				}).setStyle({
+					'margin-left': '10px'
+				})
+			)
+>>>>>>> origin/stage3
 		) : undefined,
 
 		$.create('div').addClass('object-options').addChild(

@@ -96,4 +96,8 @@ const Self = {
 	}
 }
 
+<<<<<<< HEAD
 export default Self;
+=======
+export default Self;
+>>>>>>> origin/stage3

@@ -39,7 +39,11 @@ if(typeof webkitSpeechRecognition === 'undefined') {
 }
 
 //@ts-ignore
+<<<<<<< HEAD
 var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition || fallbackRecognition;
+=======
+var SpeechRecognition = SpeechRecognition || fallbackRecognition || webkitSpeechRecognition;
+>>>>>>> origin/stage3
 var recognition = new SpeechRecognition();
 recognition.lang = 'pl-PL';
 recognition.continuous = true;

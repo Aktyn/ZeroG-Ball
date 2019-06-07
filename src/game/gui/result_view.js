@@ -3,7 +3,12 @@ import $ from '../../utils/html';
 import Common from '../../utils/common';
 import GameGUI from '../game_gui';
 import MapRecords from '../../game/map_records';
+<<<<<<< HEAD
 import {AVAIBLE_MAPS} from '../map_data';
+=======
+import {AVAILABLE_MAPS} from '../map_data';
+import ServerApi from '../../utils/server_api';
+>>>>>>> origin/stage3
 
 export default {
 	/**
@@ -15,7 +20,11 @@ export default {
 	 * @param 	{any} map_data
 	 * @param	{Function} close_view
 	 */
+<<<<<<< HEAD
 	open: (gui, target_element, name, time, edited, map_data, close_view) => {
+=======
+	open: async (gui, target_element, name, time, edited, map_data, close_view) => {
+>>>>>>> origin/stage3
 		if(edited) {
 			target_element.text('').addClass('finished').addChild(
 				$.create('article').addChild(
@@ -57,8 +66,13 @@ export default {
 		let current_record = MapRecords.getRecord(name);
 		let new_record = current_record === null ? true : (current_record > time);
 
+<<<<<<< HEAD
 		let current_map_index = AVAIBLE_MAPS.findIndex(map => map.name === name);
 		let next_map = AVAIBLE_MAPS[current_map_index+1] || null;
+=======
+		let current_map_index = AVAILABLE_MAPS.findIndex(map => map.name === name);
+		let next_map = AVAILABLE_MAPS[current_map_index+1] || null;
+>>>>>>> origin/stage3
 
 		let next_map_info = $.create('div');
 
@@ -93,6 +107,7 @@ export default {
 						seconds: ' sekund'
 					}))
 				),
+<<<<<<< HEAD
 				$.create('div').setClass(new_record ? 'record-info' : '')
 					.text(
 						new_record ? 'Nowy rekord!' : `Rekord: ${Common.milisToTime(current_record, ' ', 
@@ -102,6 +117,51 @@ export default {
 							seconds: ' sekund'
 						})}`
 					),
+=======
+				$.create('div').setClass(new_record ? 'record-info' : '').text(
+					new_record ? 'Nowy rekord!' : `Rekord: ${Common.milisToTime(current_record, ' ', 
+					{
+						hours: ' godzin', 
+						minutes: ' minut',
+						seconds: ' sekund'
+					})}`
+				),
+				...await (async () => {
+					let server_online = await ServerApi.pingServer();
+					if(!new_record || !server_online)
+						return [];
+					let save_options = $.create('div').addChild(
+						$.create('button').text('Wyślij na serwer').on('click', async () => {
+							if(!server_online) {
+								save_options.setStyle({color: '#ef5350'}).text('Serwer niedostępny');
+								return;
+							}
+							let nick_input = $.create('input').setAttrib('type', 'text');
+							if(localStorage.getItem('nickname') != null) {
+								nick_input.setAttrib('value', localStorage.getItem('nickname'));
+							} else {
+								nick_input.setAttrib('placeholder', 'Wpisz swój nick');
+							}
+							save_options.text('').addChild(
+								nick_input,
+								$.create('br'),
+								$.create('button').text('POTWIERDŹ').on('click', async () => {
+									let nick = nick_input.value.trim();
+									localStorage.setItem('nickname', nick);
+									if(nick.length < 1)
+										return;
+									let res = await ServerApi.sendRecord(name, time, nick);
+									if(res)
+										save_options.setStyle({color: '#8BC34A'}).text('Rekord wysłany');
+									else
+										save_options.setStyle({color: '#ef5350'}).text('Błąd');
+								})
+							)
+						})
+					);
+					return [save_options];
+				})(),
+>>>>>>> origin/stage3
 				$.create('hr'),
 
 				$.create('div').setClass('nextlvl-info').addChild(
@@ -111,7 +171,11 @@ export default {
 				$.create('hr'),
 				$.create('button').text('POWTÓRZ POZIOM').on('click', () => {
 					if(typeof gui.listeners.onMapStart === 'function')
+<<<<<<< HEAD
 						gui.listeners.onMapStart( AVAIBLE_MAPS.find(map => map.name === name) );
+=======
+						gui.listeners.onMapStart( AVAILABLE_MAPS.find(map => map.name === name) );
+>>>>>>> origin/stage3
 				}),
 				$.create('br'),
 				gui.menu_return_btn = $.create('button').addClass('exit-btn')
@@ -121,4 +185,8 @@ export default {
 			)
 		);
 	}
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/stage3

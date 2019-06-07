@@ -1,8 +1,11 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 //export default (function() {
 
 =======
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 function assert(condition, message) {
     if(!condition)
         throw new Error(message || "Assertion failed");
@@ -39,6 +42,7 @@ const static_methods = {//static methods
 			window.addEventListener('load', load_listener, false);
 		}
 	},
+<<<<<<< HEAD
 <<<<<<< HEAD
 	/*loadFile: function(source, callback) {
 		try {
@@ -107,11 +111,16 @@ const static_methods = {//static methods
 	*	@param {string} value 
 	*	@returns {Node & extender}
 =======
+=======
+>>>>>>> origin/stage3
 
 	/** 
 	*	@param {string} value 
 	*	@returns {Node & typeof extender}
+<<<<<<< HEAD
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 	*/
 	create: function(value) {//creates DOM HTMLElement
 		var new_element = document.createElement( justLettersAndDigits(value) );
@@ -167,14 +176,20 @@ const extender = {//extended methods of DOM HTMLElements
 	/** 
 	*	@param {string} class_name 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> origin/stage3
 	*/
 	hasClass: function(class_name) {
 		return this.classList.contains(class_name);
 	},
 	/** 
 	*	@param {string} class_name 
+<<<<<<< HEAD
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 	*	@returns {Node & extender}
 	*/
 	setClass: function(class_name) {
@@ -185,10 +200,14 @@ const extender = {//extended methods of DOM HTMLElements
 	*	@param {string} query 
 	*/
 <<<<<<< HEAD
+<<<<<<< HEAD
 	getChildren: function(query) {
 =======
 	getChildren: function(query = '*') {
 >>>>>>> stage3
+=======
+	getChildren: function(query = '*') {
+>>>>>>> origin/stage3
 		return fromQuery(query, this);
 	},
 	addChild: function(...elements) {
@@ -200,10 +219,14 @@ const extender = {//extended methods of DOM HTMLElements
 		
 		this.appendChild(element);*/
 <<<<<<< HEAD
+<<<<<<< HEAD
 		for(let el of elements)
 =======
 		for(let el of elements.filter(el => el instanceof Node))
 >>>>>>> stage3
+=======
+		for(let el of elements.filter(el => el instanceof Node))
+>>>>>>> origin/stage3
 			this.appendChild(el);
 		return this;
 	},
@@ -333,10 +356,14 @@ function smartArrayExtend(arr) {
 /**
  * Description
 <<<<<<< HEAD
+<<<<<<< HEAD
  * @param {string|Node|HTMLElement} value
 =======
  * @param {string|Node|HTMLElement|Window} value
 >>>>>>> stage3
+=======
+ * @param {string|Node|HTMLElement|Window} value
+>>>>>>> origin/stage3
  * @returns {Node & extender}
  */
 function _self(value) {

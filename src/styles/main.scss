@@ -11,9 +11,13 @@ body, html, textarea, input, button, div {
 	padding: 0px;
     margin: 0px;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     font-size: 12px;
 >>>>>>> stage3
+=======
+    font-size: 12px;
+>>>>>>> origin/stage3
 
     font-family: RobotoRegular, Arial;
     -webkit-font-smoothing: antialiased;
@@ -31,12 +35,18 @@ body, html {
     text-align: center;
 }
 
+<<<<<<< HEAD
 textarea, input {
     border: 1px solid rgb(169, 169, 169);
 <<<<<<< HEAD
 =======
     background: #fff;
 >>>>>>> stage3
+=======
+textarea, input, select {
+    border: 1px solid rgb(169, 169, 169);
+    background: #fff;
+>>>>>>> origin/stage3
     outline: none;
     padding: 2px 5px;
     color: #455a64;
@@ -48,6 +58,7 @@ textarea, input {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 button {
 	outline: none;
 	cursor: pointer;
@@ -58,6 +69,12 @@ hr {
 	border: none;
 	height: 1px;
 	background: #90A4AE;
+=======
+hr {
+	border: none;
+	height: 1px;
+	background: #78909C;
+>>>>>>> origin/stage3
 	margin: 15px 0px;
 }
 
@@ -69,12 +86,16 @@ button {
     line-height: 100%;
 	font-weight: bold;
 	background: #fff;
+<<<<<<< HEAD
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 	border-radius: 4px;
 	padding: 5px 10px;
 	color: #455a64;
 	box-shadow: 0px 1px 3px #0008;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	&:hover {
 		color: #607D8B;
@@ -85,6 +106,8 @@ button {
 		color: #f44336;
 		box-shadow: 0px 0px 3px #0008;
 =======
+=======
+>>>>>>> origin/stage3
 	&:not(:disabled) {
 		cursor: pointer;
 
@@ -103,7 +126,10 @@ button {
 		background-color: #B0BEC5;
 		box-shadow: none;
 		// font-weight: normal;
+<<<<<<< HEAD
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 	}
 }
 
@@ -139,9 +165,12 @@ button {
 /*main div*/
 #main {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	background-color: yellow;
 =======
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 	display: block;
 	position: relative;
 	max-height: 100vh;
@@ -162,7 +191,10 @@ button {
 		//background-color: #B0BEC5;
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> origin/stage3
 }
 
 /* SCROLLBARS */
@@ -175,6 +207,10 @@ button {
 /* Track */
 ::-webkit-scrollbar-track {
     background: #37474F; 
+<<<<<<< HEAD
+=======
+    border-radius: 8px;
+>>>>>>> origin/stage3
 }
 
 /* Handle */
@@ -186,5 +222,8 @@ button {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: #00ACC1; 
+<<<<<<< HEAD
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 }

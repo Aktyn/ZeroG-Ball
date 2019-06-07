@@ -10,9 +10,13 @@ $header-size: 35px;
 	justify-content: space-between;
 	height: 100%;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	position: relative;
 >>>>>>> stage3
+=======
+	position: relative;
+>>>>>>> origin/stage3
 
 	& > header {
 		pointer-events: auto;
@@ -20,14 +24,19 @@ $header-size: 35px;
 		min-height: $header-size;
 		padding: 0px 5px;
 <<<<<<< HEAD
+<<<<<<< HEAD
 		background-color: #0004;
 =======
 		background-color: rgba(0, 0, 0, 0.25);
 >>>>>>> stage3
+=======
+		background-color: rgba(0, 0, 0, 0.25);
+>>>>>>> origin/stage3
 		transition: background-color 0.3s linear;
 		//box-shadow: 0px 0px 5px #0008;
 
 		display: grid;
+<<<<<<< HEAD
 <<<<<<< HEAD
 		grid-template-areas: 'switch_btn game_buttons modes actions';
 		grid-template-columns: fit-content(100%) auto fit-content(100%) fit-content(100%);
@@ -36,6 +45,11 @@ $header-size: 35px;
 		grid-template-columns: fit-content(100%) auto fit-content(100%) 
 			fit-content(100%) fit-content(100%);
 >>>>>>> stage3
+=======
+		grid-template-areas: 'switch_btn game_buttons speech modes actions';
+		grid-template-columns: fit-content(100%) auto fit-content(100%) 
+			fit-content(100%) fit-content(100%);
+>>>>>>> origin/stage3
 		grid-column-gap: 10px;
 		align-items: center;
 		justify-content: stretch;
@@ -52,10 +66,14 @@ $header-size: 35px;
 		}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 		.game-buttons, .actions, .modes {
 =======
 		.game-buttons, .actions, .modes, .speech-indicator {
 >>>>>>> stage3
+=======
+		.game-buttons, .actions, .modes, .speech-indicator {
+>>>>>>> origin/stage3
 			transition: opacity 0.3s linear, transform 0.3s ease-in-out;
 		}
 
@@ -71,7 +89,10 @@ $header-size: 35px;
 		}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> origin/stage3
 		.speech-indicator {
 			grid-area: speech;
 			border: none;
@@ -90,7 +111,10 @@ $header-size: 35px;
 			}
 		}
 
+<<<<<<< HEAD
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 		.modes {
 			grid-area: modes;
 			background-color: #004D4080;
@@ -111,6 +135,7 @@ $header-size: 35px;
 
 		&.hidden {
 <<<<<<< HEAD
+<<<<<<< HEAD
 			background-color: #0000;
 			//box-shadow: 0px 0px 5px #0000;
 			.game-buttons, .actions, .modes {
@@ -119,6 +144,11 @@ $header-size: 35px;
 			//box-shadow: 0px 0px 5px #0000;
 			.game-buttons, .actions, .modes, .speech-indicator {
 >>>>>>> stage3
+=======
+			background-color: rgba(0, 0, 0, 0);
+			//box-shadow: 0px 0px 5px #0000;
+			.game-buttons, .actions, .modes, .speech-indicator {
+>>>>>>> origin/stage3
 				opacity: 0;
 				transform: translateY(-100%);
 				button {
@@ -161,10 +191,13 @@ $header-size: 35px;
 			box-shadow: 0px 1px 8px #0008;
 			overflow: hidden;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 			header {
 				padding: 0px 10px;
 =======
+=======
+>>>>>>> origin/stage3
 			font-size: 14px;
 			min-width: 350px;
 
@@ -174,11 +207,15 @@ $header-size: 35px;
 
 			header {
 				padding: 0px;
+<<<<<<< HEAD
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 				height: 35px;
 				line-height: 35px;
 				color: #fff;
 				background-color: #455a64;
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 				.close-btn {
@@ -186,6 +223,8 @@ $header-size: 35px;
 					margin-left: 10px;
 					float: right;
 =======
+=======
+>>>>>>> origin/stage3
 				font-weight: bold;
 				display: grid;
 				width: 100%;
@@ -197,7 +236,10 @@ $header-size: 35px;
 					// margin: 0px 10px;
 					// margin-right: 10px;
 					// float: right;
+<<<<<<< HEAD
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 				}
 			}
 
@@ -205,7 +247,10 @@ $header-size: 35px;
 				color: #455a64;
 				padding: 5px 5px;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> origin/stage3
 				text-align: center;
 
 				& > * {
@@ -244,7 +289,10 @@ $header-size: 35px;
 						grid-column: 1 / span 2;
 					}
 				}
+<<<<<<< HEAD
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 			}
 		}
 	}
@@ -255,18 +303,25 @@ $header-size: 35px;
 		background-color: #0004;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 		display: grid;
 		grid-template-areas: 'assets tools';
 =======
+=======
+>>>>>>> origin/stage3
 		max-height: 100px;
 		width: 100%;
 		display: grid;
 		grid-template-areas: 'main tools';
+<<<<<<< HEAD
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 		grid-template-columns: auto min-content;
 		align-items: center;
 		justify-content: stretch;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 		.assets {
 			grid-area: assets;
@@ -282,6 +337,8 @@ $header-size: 35px;
 			& > * > button {
 				margin: 0px 2px;
 =======
+=======
+>>>>>>> origin/stage3
 		.main {
 			grid-area: main;
 			height: 100%;
@@ -596,7 +653,10 @@ $header-size: 35px;
 				& > * > button {
 					margin: 0px 2px;
 				}
+<<<<<<< HEAD
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 			}
 		}
 
@@ -611,6 +671,7 @@ $header-size: 35px;
 		display: none;
 	}
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	//cienie switch
 
@@ -672,6 +733,8 @@ $header-size: 35px;
 	.switch-input:checked + .switch-label .toggle--off {
 		display: none;
 =======
+=======
+>>>>>>> origin/stage3
 	.game-info {
 		position: absolute;
 		right: 0px;
@@ -783,6 +846,50 @@ $header-size: 35px;
 				content: "❤";
 			}
 		}
+<<<<<<< HEAD
+=======
+
+		.powerups {
+			height: auto !important;
+			text-align: right;
+
+			& > * {
+				animation: fade_from_bottom 0.5s ease-in-out;
+				@keyframes fade_from_bottom {
+					0% {
+						transform: translateY(50px);
+					}
+					100% {
+						transform: translateY(0px);
+					}
+				}
+				max-width: 150px;
+				height: 22px;
+				border: none;
+				font-weight: bold;
+
+				display: inline-grid;
+				grid-column-gap: 5px;
+				grid-template-columns: 20px auto;
+				grid-template-rows: 20px 2px;
+
+				margin: 3px 0px;
+
+				.fade-timer {
+					display: block;
+					height: 2px;
+					background-color: #8BC34A;
+					grid-column: 1 / span 2;
+
+					animation: shrink_hor 1s linear forwards;
+					@keyframes shrink_hor {
+						0% {transform: scaleX(1);}
+						100% {transform: scaleX(0);}
+					}
+				}
+			}
+		}
+>>>>>>> origin/stage3
 	}
 
 	.damage-effect {
@@ -914,6 +1021,9 @@ $header-size: 35px;
 			opacity: 1;
 			transform: translateY(0px);
 		}
+<<<<<<< HEAD
 >>>>>>> stage3
+=======
+>>>>>>> origin/stage3
 	}
 }
