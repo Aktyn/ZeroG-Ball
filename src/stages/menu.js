@@ -106,7 +106,7 @@ export default class MenuStage extends Stage {
 		this.map_items = [];
 
 		this.avaible_maps = $.create('section').setClass('avaible_maps_list');
-		let all_maps_unlocked = this.loadAvaibleMaps();
+		let all_maps_unlocked = this.loadAvaibleMaps(true);
 
 		this.clear_progress_confirm = null;
 
