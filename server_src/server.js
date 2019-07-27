@@ -9,7 +9,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var allowCrossDomain = function(req, res, next) {
+const allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
@@ -19,7 +19,7 @@ var allowCrossDomain = function(req, res, next) {
 
 app.use(allowCrossDomain);
 
-app.get('/test', (req, res) => {
+app.get('/status', (req, res) => {
 	res.send('Server is running');
 });
 
@@ -57,5 +57,7 @@ app.post('/get_ranking', (req, res) => {
 		res.json({result: 'ERROR'});
 	}
 });
+
+app.use( express.static('./dist') );
 
 app.listen(PORT, () => console.log(`Server listens on: ${PORT}!`));
