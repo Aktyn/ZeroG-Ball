@@ -57,7 +57,7 @@
 		"babel-preset-env": "^1.7.0",
 		"babel-register": "^6.26.0",
 		"css-loader": "^2.1.0",
-		"electron": "^4.1.4",
+		"electron": "^13.6.6",
 		"electron-builder": "^20.42.0",
 		"electron-rebuild": "^1.8.4",
 		"fast-sass-loader": "^1.4.7",
