@@ -1,7 +1,7 @@
 //@ts-check
 const express = require('express');
 const bodyParser = require('body-parser');
-const RecordsHandler = require('./records_handler');
+const RecordsHandler = require('./records_handler.cjs');
 
 const PORT = 7331;
 

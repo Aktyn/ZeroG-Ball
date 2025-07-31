@@ -323,6 +323,7 @@ export default class Map extends CollisionListener {
     this.physics.removeObjects()
     this.objects = []
 
+    console.log('@@@@', data)
     for (const obj of data.getObjects()) {
       const shape = ((type) => {
         switch (type) {

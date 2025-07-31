@@ -200,7 +200,7 @@ const extender = {
       } else {
         throw new Error("no addEventListener support")
       }
-    } catch (e) {
+    } catch {
       console.trace("Cannot add event listener")
     }
     return this
@@ -217,7 +217,7 @@ const extender = {
       } else {
         throw new Error("no removeEventListener support")
       }
-    } catch (_error) {
+    } catch {
       console.trace("Cannot remove event listener")
     }
     return this

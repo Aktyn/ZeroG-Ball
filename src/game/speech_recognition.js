@@ -43,7 +43,7 @@ const fallbackRecognition =
 
 //@ts-ignore
 const SpeechRecognition =
-  SpeechRecognition || window.webkitSpeechRecognition || fallbackRecognition
+  window['SpeechRecognition'] || window.webkitSpeechRecognition || fallbackRecognition
 const recognition = new SpeechRecognition()
 recognition.lang = "pl-PL"
 recognition.continuous = true

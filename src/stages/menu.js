@@ -2,10 +2,16 @@
 import $ from "./../utils/html"
 import Common from "./../utils/common"
 import Stage from "./stage"
-import "./../styles/menu.scss"
-import { AVAILABLE_MAPS } from "./../game/map_data"
+import {AVAILABLE_MAPS} from "./../game/map_data"
 import MapRecords from "./../game/map_records"
 import ServerApi from "../utils/server_api"
+import introdutionTexture from "../img/wallpapers/introduction.jpg?raw"
+import vulcanoTexture from "../img/wallpapers/vulcano.jpg?raw"
+import firstEncounterTexture from "../img/wallpapers/first_encounter.jpg?raw"
+import iceageTexture from "../img/wallpapers/iceage.jpg?raw"
+import forestTexture from "../img/wallpapers/forest.jpg?raw"
+
+import "./../styles/menu.scss"
 
 const ALL_UNLOCKED_TEXT = "Gratulacje! Wszystkie poziomy zostały odblokowane!"
 const UNLOCK_LEVELS_TEXT =
@@ -13,12 +19,13 @@ const UNLOCK_LEVELS_TEXT =
 
 const BACKGROUND_CHANGE_FREQUENCY = 30000 //miliseconds
 
+
 const bg_textures = [
-  require("../img/wallpapers/introduction.jpg"),
-  require("../img/wallpapers/vulcano.jpg"),
-  require("../img/wallpapers/first_encounter.jpg"),
-  require("../img/wallpapers/iceage.jpg"),
-  require("../img/wallpapers/forest.jpg"),
+  introdutionTexture,
+  vulcanoTexture,
+  firstEncounterTexture,
+  iceageTexture,
+  forestTexture,
 ]
 
 function getEloRanking(data) {
@@ -58,7 +65,7 @@ function getEloRanking(data) {
 
   const result_array = []
   for (const [nick, rank] of elo_players.entries()) {
-    result_array.push({ nick, rank })
+    result_array.push({nick, rank})
   }
   result_array.sort((a, b) => b.rank - a.rank)
   result_array.length = Math.min(
@@ -82,17 +89,17 @@ class MapItem {
     this.widget = $.create("div")
       .on("click", this.onClick.bind(this))
       .addChild(
-        $.create("div").text(data.name).setStyle({ "font-weight": "bold" }),
+        $.create("div").text(data.name).setStyle({"font-weight": "bold"}),
         $.create("div")
-          .setStyle({ color: "#B0BEC5" })
+          .setStyle({color: "#B0BEC5"})
           .text(
             record === null
               ? "---"
               : `Rekord: ${Common.milisToTime(record, " ", {
-                  hours: " godzin",
-                  minutes: " minut",
-                  seconds: " sekund",
-                })}`,
+                hours: " godzin",
+                minutes: " minut",
+                seconds: " sekund",
+              })}`,
           ),
       )
   }
@@ -280,7 +287,7 @@ export default class MenuStage extends Stage {
 
     const map_selector_container = $.create("nav")
       .addChild($.create("label").text("Mapa:"), map_selector)
-      .setStyle({ "margin-bottom": "10px" })
+      .setStyle({"margin-bottom": "10px"})
 
     const rankingTypeSwitcher = $.create("button")
       .text("Pokaż ogólny ranking")
@@ -394,7 +401,7 @@ export default class MenuStage extends Stage {
     switchRankingType()
   }
 
-  onKey(_e) {
+  onKey(e) {
     this.secret_code += e.key
     if (!"odblokuj".startsWith(this.secret_code)) {
       this.secret_code = ""

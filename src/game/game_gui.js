@@ -325,7 +325,6 @@ export default class GameGUI {
       "--open-height",
       `${(BACKGROUNDS.length + 1) * 20}px`,
     )
-
     ;["GRA", "EDYCJA"].forEach((mode, i) => {
       const btn = $.create("button")
         .text(mode)

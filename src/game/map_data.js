@@ -1,5 +1,10 @@
 // @ts-check
 import Object2D, { Type } from "./objects/object2d"
+import introductionData from "../maps/first_encounter.json?raw"
+import firstEncounterData from "../maps/first_encounter.json?raw"
+import vulcanoPlanetData from "../maps/vulcano_planet.json?raw"
+import iceageData from "../maps/iceage.json?raw"
+import soundOfForestData from "../maps/sound_of_forest.json?raw"
 
 const _enum_ = (obj) => Object.keys(obj).forEach((k, i) => (obj[k] = i))
 
@@ -20,8 +25,8 @@ _enum_(PHYSIC_TYPE)
 const HISTORY_CAPACITY = 32
 
 /**
- * @param  {number}
- * @param  {number}
+ * @param a {number}
+ * @param b {number}
  * @return {Boolean}
  */
 function isEqual(a, b) {
@@ -29,7 +34,7 @@ function isEqual(a, b) {
 }
 
 /**
- * @param  {number}
+ * @param rot {number}
  * @return {number}
  */
 function fixRot(rot) {
@@ -73,28 +78,30 @@ function fixRot(rot) {
 
 const empty_map = { background: 0, objects: [] }
 
+
+
 /** @type {{name: string, json: State}[]} */
 export const AVAILABLE_MAPS = [
   //NOTE - names should be unique
   {
     name: "Wprowadzenie",
-    json: require("./../maps/introduction.json"),
+    json: introductionData,
   },
   {
     name: "Pierwsze starcie",
-    json: require("./../maps/first_encounter.json"),
+    json: firstEncounterData,
   },
   {
     name: "Wulkaniczna planeta",
-    json: require("./../maps/vulcano_planet.json"),
+    json: vulcanoPlanetData,
   },
   {
     name: "Epoka lodowcowa",
-    json: require("./../maps/iceage.json"),
+    json: iceageData,
   },
   {
     name: "Lasu szum",
-    json: require("./../maps/sound_of_forest.json"),
+    json: soundOfForestData,
   },
 ]
 

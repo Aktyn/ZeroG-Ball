@@ -40,11 +40,6 @@ export default [
       'prefer-const': 'error',
       'no-var': 'error',
       'eqeqeq': ['error', 'always'],
-      'curly': ['error', 'all'],
-      'brace-style': ['error', '1tbs'],
-      'indent': ['error', 'tab'],
-      'quotes': ['error', 'single'],
-      'semi': ['error', 'always']
     },
     ignores: [
       'dist/**',

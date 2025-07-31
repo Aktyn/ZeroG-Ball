@@ -4,7 +4,7 @@ const path = require('path');
 
 const MAX_RECORDS = 20;
 
-//prepare folder for top X records for each map
+//prepare a folder for top X records for each map
 const data_folder = path.join(__dirname, '..', 'ranking');
 if(!fs.existsSync(data_folder)) {
 	console.log('creating folder:', data_folder);

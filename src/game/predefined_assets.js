@@ -1,6 +1,38 @@
 import MapData from "./map_data"
 import Config from "./config"
 
+// Tutorial textures
+import introductionTexture from "./../img/textures/tutorial/introduction.png"
+import damageInfoTexture from "./../img/textures/tutorial/damage_info.png"
+import doorsTexture from "./../img/textures/tutorial/doors.png"
+import portalsInfoTexture from "./../img/textures/tutorial/portals_info.png"
+import infoXYZTexture from "./../img/textures/tutorial/info_xyz.png"
+
+// Game object textures
+import playerTexture from "../img/textures/player.png"
+import enemyTexture from "../img/textures/enemy.png"
+import exitTexture from "../img/textures/exit.png"
+import aidTexture from "../img/textures/aid.png"
+import sawbladeTexture from "../img/textures/sawblade.png"
+import forcefieldTexture from "../img/textures/forcefield.png"
+import portal1Texture from "../img/textures/portal1.png"
+import portal2Texture from "../img/textures/portal2.png"
+import portal3Texture from "../img/textures/portal3.png"
+import revolving_doorTexture from "../img/textures/revolving_door.png"
+import spiky_crateTexture from "../img/textures/spiky_crate.png"
+import cannonTexture from "../img/textures/cannon.png"
+import crateTexture from "./../img/textures/crate.jpg"
+import lavaTexture from "./../img/textures/lava.jpg"
+import iceTexture from "./../img/textures/ice.jpg"
+import grassTexture from "./../img/textures/grass.jpg"
+import bricksTexture from "./../img/textures/bricks.jpg"
+import key1Texture from "./../img/textures/key1.png"
+import elevatorTexture from "./../img/textures/elevator.png"
+import elevatorUpTexture from "./../img/textures/elevatorUp.png"
+import elevatorDownTexture from "./../img/textures/elevatorDown.png"
+import speedboostTexture from "./../img/textures/speed.png"
+import shrinkerTexture from "./../img/textures/shrink.png"
+
 export const CATEGORIES = {
   all: "WSZYSTKIE",
   active: "INTERAKTYWNE",
@@ -11,29 +43,30 @@ export const CATEGORIES = {
   //tutorial: 			'WPROWADZENIE'
 }
 
+
 export const TUTORIAL_TEXTURES = {
   tutorial_introduction: {
-    src: require("./../img/textures/tutorial/introduction.png"),
-    width: Config.VIRT_SCALE * 1.0,
+    src: introductionTexture,
+    width: Config.VIRT_SCALE,
     height: Config.VIRT_SCALE * 0.576,
   },
   tutorial_damage_info: {
-    src: require("./../img/textures/tutorial/damage_info.png"),
+    src: damageInfoTexture,
     width: Config.VIRT_SCALE * 0.794,
     height: Config.VIRT_SCALE * 0.328,
   },
   tutorial_doors: {
-    src: require("./../img/textures/tutorial/doors.png"),
+    src: doorsTexture,
     width: Config.VIRT_SCALE * 0.754,
     height: Config.VIRT_SCALE * 0.134,
   },
   tutorial_portals_info: {
-    src: require("./../img/textures/tutorial/portals_info.png"),
+    src: portalsInfoTexture,
     width: Config.VIRT_SCALE * 0.754,
     height: Config.VIRT_SCALE * 0.194,
   },
   tutorial_info_xyz: {
-    src: require("./../img/textures/tutorial/info_xyz.png"),
+    src: infoXYZTexture,
     width: Config.VIRT_SCALE * 0.674,
     height: Config.VIRT_SCALE * 0.168,
   },
@@ -237,121 +270,122 @@ export const OBJECTS = {
 	})()*/
 }
 
+
 export const TEXTURES = {
   //names must much those in svg.scss
   player_texture: {
-    src: require("./../img/textures/player.png"),
+    src: playerTexture,
     width: Config.VIRT_SCALE * 0.1,
     height: Config.VIRT_SCALE * 0.1,
   },
   enemy_texture: {
-    src: require("./../img/textures/enemy.png"),
+    src: enemyTexture,
     width: Config.VIRT_SCALE * OBJECTS["enemy"].radius,
     height: Config.VIRT_SCALE * OBJECTS["enemy"].radius,
   },
   exit_texture: {
-    src: require("./../img/textures/exit.png"),
+    src: exitTexture,
     width: Config.VIRT_SCALE * OBJECTS["exit"].radius,
     height: Config.VIRT_SCALE * OBJECTS["exit"].radius,
   },
   aid_texture: {
-    src: require("./../img/textures/aid.png"),
+    src: aidTexture,
     width: Config.VIRT_SCALE * OBJECTS["aid"].radius,
     height: Config.VIRT_SCALE * OBJECTS["aid"].radius,
   },
   sawblade_texture: {
-    src: require("./../img/textures/sawblade.png"),
+    src: sawbladeTexture,
     width: Config.VIRT_SCALE * OBJECTS["sawblade"].radius,
     height: Config.VIRT_SCALE * OBJECTS["sawblade"].radius,
   },
   forcefield_texture: {
-    src: require("./../img/textures/forcefield.png"),
+    src: forcefieldTexture,
     width: Config.VIRT_SCALE * OBJECTS["forcefield"].radius,
     height: Config.VIRT_SCALE * OBJECTS["forcefield"].radius,
   },
   portal1_texture: {
-    src: require("./../img/textures/portal1.png"),
+    src: portal1Texture,
     width: Config.VIRT_SCALE * OBJECTS["portal1"].radius,
     height: Config.VIRT_SCALE * OBJECTS["portal1"].radius,
   },
   portal2_texture: {
-    src: require("./../img/textures/portal2.png"),
+    src: portal2Texture,
     width: Config.VIRT_SCALE * OBJECTS["portal2"].radius,
     height: Config.VIRT_SCALE * OBJECTS["portal2"].radius,
   },
   portal3_texture: {
-    src: require("./../img/textures/portal3.png"),
+    src: portal3Texture,
     width: Config.VIRT_SCALE * OBJECTS["portal3"].radius,
     height: Config.VIRT_SCALE * OBJECTS["portal3"].radius,
   },
   revolving_door_texture: {
     //only for in-gui preview
-    src: require("./../img/textures/revolving_door.png"),
+    src: revolving_doorTexture,
     width: 0,
     height: 0,
   },
   spiky_crate_texture: {
-    src: require("./../img/textures/spiky_crate.png"),
+    src: spiky_crateTexture,
     width: Config.VIRT_SCALE * OBJECTS["spiky_crate"].width,
     height: Config.VIRT_SCALE * OBJECTS["spiky_crate"].height,
   },
   cannon_texture: {
-    src: require("./../img/textures/cannon.png"),
+    src: cannonTexture,
     width: Config.VIRT_SCALE * OBJECTS["cannon"].radius,
     height: Config.VIRT_SCALE * OBJECTS["cannon"].radius,
   },
   crate_texture: {
-    src: require("./../img/textures/crate.jpg"),
+    src: crateTexture,
     width: Config.VIRT_SCALE * OBJECTS["crate"].width,
     height: Config.VIRT_SCALE * OBJECTS["crate"].height,
   },
   lava_texture: {
-    src: require("./../img/textures/lava.jpg"),
+    src: lavaTexture,
     width: Config.VIRT_SCALE * OBJECTS["lava"].width,
     height: Config.VIRT_SCALE * OBJECTS["lava"].height,
   },
   ice_texture: {
-    src: require("./../img/textures/ice.jpg"),
+    src: iceTexture,
     width: Config.VIRT_SCALE * OBJECTS["ice"].width,
     height: Config.VIRT_SCALE * OBJECTS["ice"].height,
   },
   grass_texture: {
-    src: require("./../img/textures/grass.jpg"),
+    src: grassTexture,
     width: Config.VIRT_SCALE * OBJECTS["grass"].width,
     height: Config.VIRT_SCALE * OBJECTS["grass"].height,
   },
   bricks_texture: {
-    src: require("./../img/textures/bricks.jpg"),
+    src: bricksTexture,
     width: Config.VIRT_SCALE * OBJECTS["bricks"].width,
     height: Config.VIRT_SCALE * OBJECTS["bricks"].height,
   },
   key1_texture: {
-    src: require("./../img/textures/key1.png"),
+    src: key1Texture,
     width: Config.VIRT_SCALE * OBJECTS["key1"].radius,
     height: Config.VIRT_SCALE * OBJECTS["key1"].radius,
   },
   elevator_texture: {
-    src: require("./../img/textures/elevator.png"),
+    src: elevatorTexture,
     width: Config.VIRT_SCALE * OBJECTS["elevator"].width,
     height: Config.VIRT_SCALE * OBJECTS["elevator"].height,
   },
   elevator_texture_up: {
-    src: require("./../img/textures/elevatorUp.png"),
+    src: elevatorUpTexture,
     width: Config.VIRT_SCALE * OBJECTS["elevator"].width,
     height: Config.VIRT_SCALE * OBJECTS["elevator"].height,
   },
   elevator_texture_down: {
-    src: require("./../img/textures/elevatorDown.png"),
+    src: elevatorDownTexture,
     width: Config.VIRT_SCALE * OBJECTS["elevator"].width,
     height: Config.VIRT_SCALE * OBJECTS["elevator"].height,
   },
   speedboost_texture: {
-    src: require("./../img/textures/speed.png"),
+    src: speedboostTexture,
     width: Config.VIRT_SCALE * OBJECTS["speedboost"].radius,
     height: Config.VIRT_SCALE * OBJECTS["speedboost"].radius,
   },
   shrinker_texture: {
-    src: require("./../img/textures/shrink.png"),
+    src: shrinkerTexture,
     width: Config.VIRT_SCALE * OBJECTS["shrinker"].radius,
     height: Config.VIRT_SCALE * OBJECTS["shrinker"].radius,
   },
@@ -359,38 +393,46 @@ export const TEXTURES = {
 }
 
 /** @type {{name: string, src: string, color: string, linear?: boolean}[]} */
+// Background imports
+import bg1Texture from "./../img/backgrounds/bg1.png"
+import bg2Texture from "./../img/backgrounds/bg2.jpg"
+import bg3Texture from "./../img/backgrounds/bg3.jpg"
+import bg4Texture from "./../img/backgrounds/bg4.jpg"
+import bg6Texture from "./../img/backgrounds/bg6.jpg"
+import bg7Texture from "./../img/backgrounds/bg7.jpg"
+
 export const BACKGROUNDS = [
   //default value for linear attribute is: true
   {
-    //first one is default for empty map
+    //the first one is default for an empty map
     name: "Labirynt",
-    src: require("./../img/backgrounds/bg1.png"),
+    src: bg1Texture,
     color: "#2b8177",
     linear: false,
   },
   {
     name: "Chmury",
-    src: require("./../img/backgrounds/bg2.jpg"),
+    src: bg2Texture,
     color: "#8ab0c4",
   },
   {
     name: "Lato",
-    src: require("./../img/backgrounds/bg3.jpg"),
+    src: bg3Texture,
     color: "#dbb78b",
   },
   {
     name: "Zima",
-    src: require("./../img/backgrounds/bg4.jpg"),
+    src: bg4Texture,
     color: "#1a619f",
   },
   {
     name: "Gradient",
-    src: require("./../img/backgrounds/bg6.jpg"),
+    src: bg6Texture,
     color: "#a7a1be",
   },
   {
     name: "Mozaika",
-    src: require("./../img/backgrounds/bg7.jpg"),
+    src: bg7Texture,
     color: "#ac7874",
   },
 ]

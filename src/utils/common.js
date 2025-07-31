@@ -62,8 +62,6 @@ export default {
     else {
       return eloK * (0 - Pa)
     }
-
-    throw new Error("Impossible error")
   },
 
   MD5: (d) => M(V(Y(X(d), 8 * d.length))).toLowerCase(),
@@ -71,8 +69,8 @@ export default {
 
 //MD5 generation algorithm
 function M(d) {
-  const f = 0
-  for (let _, m = "0123456789ABCDEF", f = "", r = 0; r < d.length; r++) {
+  let f = ""
+  for (let _, m = "0123456789ABCDEF", r = 0; r < d.length; r++) {
     ;((_ = d.charCodeAt(r)), (f += m.charAt((_ >>> 4) & 15) + m.charAt(15 & _)))
   }
   return f
