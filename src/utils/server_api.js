@@ -1,67 +1,65 @@
 //@ts-check
 
 //@ts-ignore
-const HOST = window.SERVER_HOST || 'http://localhost:7331';
-console.log('Server host:', HOST);
+const HOST = window.SERVER_HOST || "http://localhost:7331"
+console.log("Server host:", HOST)
 
 function postRequest(to, data) {
-	if (!to.startsWith('/')) {
-		to = '/' + to;
-	}
+  if (!to.startsWith("/")) {
+    to = "/" + to
+  }
 
-	if (typeof data !== 'string') {
-		data = JSON.stringify(data);
-	}
+  if (typeof data !== "string") {
+    data = JSON.stringify(data)
+  }
 
-	return fetch(HOST + to, {
-		method: 'POST',
-		mode: /*process.env.NODE_ENV === 'development'*/ true
-			? 'cors'
-			: 'same-origin',
-		headers: { 'Content-Type': 'application/json; charset=utf-8' },
-		body: data,
-	}).then(res => res.json());
+  return fetch(HOST + to, {
+    method: "POST",
+    mode: process.env.NODE_ENV === "development" ? "cors" : "same-origin",
+    headers: { "Content-Type": "application/json; charset=utf-8" },
+    body: data,
+  }).then((res) => res.json())
 }
 
 export default {
-	async pingServer() {
-		try {
-			const res = await postRequest('/ping', {});
-			return res.result === 'SUCCESS';
-		} catch (e) {
-			console.error(e);
-			return false;
-		}
-	},
+  async pingServer() {
+    try {
+      const res = await postRequest("/ping", {})
+      return res.result === "SUCCESS"
+    } catch (e) {
+      console.error(e)
+      return false
+    }
+  },
 
-	/**
-	 * @param {string} map_name name of completed map
-	 * @param {number} time elapsed time in miliseconds
-	 * @param {string} nickname
-	 */
-	async sendRecord(map_name, time, nickname) {
-		try {
-			const res = await postRequest('/save_result', {
-				map_name,
-				time,
-				nickname,
-			});
-			return res.result === 'SUCCESS';
-		} catch (e) {
-			console.error(e);
-			return false;
-		}
-	},
+  /**
+   * @param {string} map_name name of completed map
+   * @param {number} time elapsed time in miliseconds
+   * @param {string} nickname
+   */
+  async sendRecord(map_name, time, nickname) {
+    try {
+      const res = await postRequest("/save_result", {
+        map_name,
+        time,
+        nickname,
+      })
+      return res.result === "SUCCESS"
+    } catch (e) {
+      console.error(e)
+      return false
+    }
+  },
 
-	async getRanking() {
-		try {
-			const res = await postRequest('/get_ranking', {});
-			if (res.result === 'SUCCESS') {
-				return res.data;
-			}
-		} catch (e) {
-			console.error(e);
-			return [];
-		}
-	},
-};
+  async getRanking() {
+    try {
+      const res = await postRequest("/get_ranking", {})
+      if (res.result === "SUCCESS") {
+        return res.data
+      }
+    } catch (e) {
+      console.error(e)
+      return []
+    }
+  },
+}

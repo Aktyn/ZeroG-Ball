@@ -1,15 +1,14 @@
 //@ts-check
-import { Body } from './body';
 
 //abstract class
 export default class CollisionListener {
-	constructor() {}
+  constructor() {}
 
-	/**
-	 *	@param {Body} A
-	 *	@param {Body} B
-	 */
-	onCollision(A, B) {
-		throw new Error('Method must be implemented in child class');
-	}
+  /**
+   *	@param {import('./body').Body} _A
+   *	@param {import('./body').Body} _B
+   */
+  onCollision(_A, _B) {
+    throw new Error("Method must be implemented in child class")
+  }
 }

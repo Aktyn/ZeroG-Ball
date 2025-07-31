@@ -1,15 +1,18 @@
 // @ts-check
-import Config from './../config';
-import _Manifold from './manifold';
-import _Body from './body';
-import { Vec2, Mat2 as _Mat2, Dot, DistSqr, BiasGreaterThan } from './math';
+import Config from "./../config"
+import _Manifold from "./manifold"
+import _Body from "./body"
+import { Vec2, Mat2 as _Mat2, Dot, DistSqr, BiasGreaterThan } from "./math"
 
-import _Shape, { Circle as _Circle, PolygonShape as _PolygonShape } from './shape';
+import _Shape, {
+  Circle as _Circle,
+  PolygonShape as _PolygonShape,
+} from "./shape"
 
 export const Dispatch = [
-	[circletoCircle, circletoPolygon],
-	[polygontoCircle, polygontoPolygon],
-];
+  [circletoCircle, circletoPolygon],
+  [polygontoCircle, polygontoPolygon],
+]
 
 /**
  *	@param {Manifold} m
@@ -17,42 +20,42 @@ export const Dispatch = [
  *	@param {Body} b
  */
 function circletoCircle(m, a, b) {
-	/** @type {Circle&Shape} */
-	const A = a.shape;
-	/** @type {Circle&Shape} */
-	const B = b.shape;
+  /** @type {Circle&Shape} */
+  const A = a.shape
+  /** @type {Circle&Shape} */
+  const B = b.shape
 
-	// Calculate translational vector, which is normal
-	const normal = new Vec2(
-		b.position.x - a.position.x,
-		b.position.y - a.position.y
-	);
+  // Calculate translational vector, which is normal
+  const normal = new Vec2(
+    b.position.x - a.position.x,
+    b.position.y - a.position.y,
+  )
 
-	const dist_sqr = normal.LenSqr();
-	/** @type {number} */
-	const radius = A.radius + B.radius;
+  const dist_sqr = normal.LenSqr()
+  /** @type {number} */
+  const radius = A.radius + B.radius
 
-	// Not in contact
-	if (dist_sqr >= radius * radius) {
-		m.contact_count = 0;
-		return;
-	}
+  // Not in contact
+  if (dist_sqr >= radius * radius) {
+    m.contact_count = 0
+    return
+  }
 
-	const distance = Math.sqrt(dist_sqr);
+  const distance = Math.sqrt(dist_sqr)
 
-	m.contact_count = 1;
+  m.contact_count = 1
 
-	if (distance === 0) {
-		m.penetration = A.radius;
-		m.normal = new Vec2(1, 0);
-		m.contacts[0] = a.position;
-	} else {
-		m.penetration = radius - distance;
-		//m.normal = normal / distance;//faster calculations
-		m.normal = new Vec2(normal.x / distance, normal.y / distance);
-		//m.contacts[0] = m.normal * A.radius + a.position;
-		m.contacts[0] = m.normal.clone().scale(A.radius).addVec(a.position);
-	}
+  if (distance === 0) {
+    m.penetration = A.radius
+    m.normal = new Vec2(1, 0)
+    m.contacts[0] = a.position
+  } else {
+    m.penetration = radius - distance
+    //m.normal = normal / distance;//faster calculations
+    m.normal = new Vec2(normal.x / distance, normal.y / distance)
+    //m.contacts[0] = m.normal * A.radius + a.position;
+    m.contacts[0] = m.normal.clone().scale(A.radius).addVec(a.position)
+  }
 }
 
 /**
@@ -61,105 +64,105 @@ function circletoCircle(m, a, b) {
  *	@param {Body} b
  */
 function circletoPolygon(m, a, b) {
-	/** @type {Circle&Shape} */
-	const A = a.shape;
-	/** @type {PolygonShape&Shape} */
-	const B = b.shape;
+  /** @type {Circle&Shape} */
+  const A = a.shape
+  /** @type {PolygonShape&Shape} */
+  const B = b.shape
 
-	m.contact_count = 0;
+  m.contact_count = 0
 
-	// Transform circle center to Polygon model space
-	let center = a.position.clone();
-	//center = B.u.Transpose() * (center - b.position);
-	center = B.u
-		.Transpose()
-		.multiplyByVec(new Vec2(center.x - b.position.x, center.y - b.position.y));
+  // Transform circle center to Polygon model space
+  let center = a.position.clone()
+  //center = B.u.Transpose() * (center - b.position);
+  center = B.u
+    .Transpose()
+    .multiplyByVec(new Vec2(center.x - b.position.x, center.y - b.position.y))
 
-	// Find edge with minimum penetration
-	// Exact concept as using support points in Polygon vs Polygon
-	let separation = Number.MIN_SAFE_INTEGER; //-FLT_MAX;
-	let faceNormal = 0; //TODO - optimize by using var
-	for (let i = 0; i < B.m_vertices.length; i++) {
-		// let s = Dot( B.m_normals[i], center - B.m_vertices[i] );
-		const s = Dot(B.m_normals[i], center.clone().substractVec(B.m_vertices[i]));
-		// console.log(s);
-		if (s > A.radius) {
-			return;
-		}
+  // Find edge with minimum penetration
+  // Exact concept as using support points in Polygon vs Polygon
+  let separation = Number.MIN_SAFE_INTEGER //-FLT_MAX;
+  let faceNormal = 0 //TODO - optimize by using var
+  for (let i = 0; i < B.m_vertices.length; i++) {
+    // let s = Dot( B.m_normals[i], center - B.m_vertices[i] );
+    const s = Dot(B.m_normals[i], center.clone().substractVec(B.m_vertices[i]))
+    // console.log(s);
+    if (s > A.radius) {
+      return
+    }
 
-		if (s > separation) {
-			separation = s;
-			faceNormal = i;
-		}
-	}
+    if (s > separation) {
+      separation = s
+      faceNormal = i
+    }
+  }
 
-	// Grab face's vertices
-	let v1 = B.m_vertices[faceNormal].clone();
-	const i2 = faceNormal + 1 < B.m_vertices.length ? faceNormal + 1 : 0;
-	let v2 = B.m_vertices[i2].clone();
+  // Grab face's vertices
+  let v1 = B.m_vertices[faceNormal].clone()
+  const i2 = faceNormal + 1 < B.m_vertices.length ? faceNormal + 1 : 0
+  let v2 = B.m_vertices[i2].clone()
 
-	// Check to see if center is within polygon
-	if (separation < Config.EPSILON) {
-		m.contact_count = 1;
-		//m.normal = -(B.u * B.m_normals[faceNormal]);
-		m.normal = B.u.multiplyByVec(B.m_normals[faceNormal]).minus();
-		// m.contacts[0] = m.normal * A.radius + a.position;
-		m.contacts[0] = m.normal.clone().scale(A.radius).addVec(a.position);
-		m.penetration = A.radius;
-		return;
-	}
+  // Check to see if center is within polygon
+  if (separation < Config.EPSILON) {
+    m.contact_count = 1
+    //m.normal = -(B.u * B.m_normals[faceNormal]);
+    m.normal = B.u.multiplyByVec(B.m_normals[faceNormal]).minus()
+    // m.contacts[0] = m.normal * A.radius + a.position;
+    m.contacts[0] = m.normal.clone().scale(A.radius).addVec(a.position)
+    m.penetration = A.radius
+    return
+  }
 
-	// Determine which voronoi region of the edge center of circle lies within
-	//let dot1 = Dot( center - v1, v2 - v1 );
-	const dot1 = Dot(
-		new Vec2(center.x - v1.x, center.y - v1.y),
-		new Vec2(v2.x - v1.x, v2.y - v1.y)
-	);
-	//let dot2 = Dot( center - v2, v1 - v2 );
-	const dot2 = Dot(
-		new Vec2(center.x - v2.x, center.y - v2.y),
-		new Vec2(v1.x - v2.x, v1.y - v2.y)
-	);
-	m.penetration = A.radius - separation;
+  // Determine which voronoi region of the edge center of circle lies within
+  //let dot1 = Dot( center - v1, v2 - v1 );
+  const dot1 = Dot(
+    new Vec2(center.x - v1.x, center.y - v1.y),
+    new Vec2(v2.x - v1.x, v2.y - v1.y),
+  )
+  //let dot2 = Dot( center - v2, v1 - v2 );
+  const dot2 = Dot(
+    new Vec2(center.x - v2.x, center.y - v2.y),
+    new Vec2(v1.x - v2.x, v1.y - v2.y),
+  )
+  m.penetration = A.radius - separation
 
-	// Closest to v1
-	if (dot1 <= 0) {
-		if (DistSqr(center, v1) > A.radius * A.radius) {
-			return;
-		}
+  // Closest to v1
+  if (dot1 <= 0) {
+    if (DistSqr(center, v1) > A.radius * A.radius) {
+      return
+    }
 
-		m.contact_count = 1;
-		//Vec2 n = v1 - center;
-		let n = v1.clone().substractVec(center);
-		n = B.u.multiplyByVec(n).Normalize(); //B.u * n;
-		m.normal = n;
-		v1 = B.u.multiplyByVec(v1).addVec(b.position); //B.u * v1 + b.position;
-		m.contacts[0] = v1;
-	} else if (dot2 <= 0) {
-		// Closest to v2
-		if (DistSqr(center, v2) > A.radius * A.radius) {
-			return;
-		}
+    m.contact_count = 1
+    //Vec2 n = v1 - center;
+    let n = v1.clone().substractVec(center)
+    n = B.u.multiplyByVec(n).Normalize() //B.u * n;
+    m.normal = n
+    v1 = B.u.multiplyByVec(v1).addVec(b.position) //B.u * v1 + b.position;
+    m.contacts[0] = v1
+  } else if (dot2 <= 0) {
+    // Closest to v2
+    if (DistSqr(center, v2) > A.radius * A.radius) {
+      return
+    }
 
-		m.contact_count = 1;
-		let n = v2.clone().substractVec(center);
-		v2 = B.u.multiplyByVec(v2).addVec(b.position); //B.u * v2 + b.position;
-		m.contacts[0] = v2;
-		n = B.u.multiplyByVec(n).Normalize(); //B.u * n;
-		m.normal = n;
-	} else {
-		//closest to face
-		let n = B.m_normals[faceNormal];
-		if (Dot(center.clone().substractVec(v1), n) > A.radius) {
-			return;
-		}
+    m.contact_count = 1
+    let n = v2.clone().substractVec(center)
+    v2 = B.u.multiplyByVec(v2).addVec(b.position) //B.u * v2 + b.position;
+    m.contacts[0] = v2
+    n = B.u.multiplyByVec(n).Normalize() //B.u * n;
+    m.normal = n
+  } else {
+    //closest to face
+    let n = B.m_normals[faceNormal]
+    if (Dot(center.clone().substractVec(v1), n) > A.radius) {
+      return
+    }
 
-		n = B.u.multiplyByVec(n); //B.u * n;
-		m.normal = n.clone().minus();
-		//m.contacts[0] = m.normal * A.radius + a.position;
-		m.contacts[0] = m.normal.clone().scale(A.radius).addVec(a.position);
-		m.contact_count = 1;
-	}
+    n = B.u.multiplyByVec(n) //B.u * n;
+    m.normal = n.clone().minus()
+    //m.contacts[0] = m.normal * A.radius + a.position;
+    m.contacts[0] = m.normal.clone().scale(A.radius).addVec(a.position)
+    m.contact_count = 1
+  }
 }
 
 /**
@@ -168,9 +171,9 @@ function circletoPolygon(m, a, b) {
  *	@param {Body} b
  */
 function polygontoCircle(m, a, b) {
-	circletoPolygon(m, b, a);
-	//m.normal = -m.normal;
-	m.normal.minus();
+  circletoPolygon(m, b, a)
+  //m.normal = -m.normal;
+  m.normal.minus()
 }
 
 /**
@@ -178,45 +181,45 @@ function polygontoCircle(m, a, b) {
  *	@param {PolygonShape} B
  */
 function findAxisLeastPenetration(A, B) {
-	let bestDistance = Number.MIN_SAFE_INTEGER;
-	/** @type {number} */
-	let bestIndex;
+  let bestDistance = Number.MIN_SAFE_INTEGER
+  /** @type {number} */
+  let bestIndex
 
-	for (let i = 0; i < A.m_vertices.length; i++) {
-		// Retrieve a face normal from A
-		let n = A.m_normals[i];
-		const nw = A.u.multiplyByVec(n);
+  for (let i = 0; i < A.m_vertices.length; i++) {
+    // Retrieve a face normal from A
+    let n = A.m_normals[i]
+    const nw = A.u.multiplyByVec(n)
 
-		// Transform face normal into B's model space
-		const buT = B.u.Transpose();
-		n = buT.multiplyByVec(nw);
+    // Transform face normal into B's model space
+    const buT = B.u.Transpose()
+    n = buT.multiplyByVec(nw)
 
-		// Retrieve support point from B along -n
-		const s = B.getSupport(n.clone().minus());
+    // Retrieve support point from B along -n
+    const s = B.getSupport(n.clone().minus())
 
-		// Retrieve vertex on face from A, transform into
-		// B's model space
-		let v = A.m_vertices[i];
-		v = A.u.multiplyByVec(v).addVec(A.body.position); //A.u * v + A.body.position;
-		//v -= B.body.position;
-		v.substractVec(B.body.position);
-		v = buT.multiplyByVec(v); //buT * v;
+    // Retrieve vertex on face from A, transform into
+    // B's model space
+    let v = A.m_vertices[i]
+    v = A.u.multiplyByVec(v).addVec(A.body.position) //A.u * v + A.body.position;
+    //v -= B.body.position;
+    v.substractVec(B.body.position)
+    v = buT.multiplyByVec(v) //buT * v;
 
-		// Compute penetration distance (in B's model space)
-		const d = Dot(n, s.clone().substractVec(v)); //TODO - try without cloning
+    // Compute penetration distance (in B's model space)
+    const d = Dot(n, s.clone().substractVec(v)) //TODO - try without cloning
 
-		// Store greatest distance
-		if (d > bestDistance) {
-			bestDistance = d;
-			bestIndex = i;
-		}
-	}
+    // Store greatest distance
+    if (d > bestDistance) {
+      bestDistance = d
+      bestIndex = i
+    }
+  }
 
-	//*faceIndex = bestIndex;
-	return {
-		best_distance: bestDistance,
-		faceIndex: bestIndex,
-	};
+  //*faceIndex = bestIndex;
+  return {
+    best_distance: bestDistance,
+    faceIndex: bestIndex,
+  }
 }
 
 /**
@@ -226,36 +229,36 @@ function findAxisLeastPenetration(A, B) {
  * @param {number} referenceIndex
  */
 function findIncidentFace(v, RefPoly, IncPoly, referenceIndex) {
-	let referenceNormal = RefPoly.m_normals[referenceIndex];
+  let referenceNormal = RefPoly.m_normals[referenceIndex]
 
-	// Calculate normal in incident's frame of reference
-	//referenceNormal = RefPoly.u * referenceNormal; // To world space
-	referenceNormal = RefPoly.u.multiplyByVec(referenceNormal);
-	//referenceNormal = IncPoly.u.Transpose( ) * referenceNormal; // To incident's model space
-	referenceNormal = IncPoly.u.Transpose().multiplyByVec(referenceNormal);
+  // Calculate normal in incident's frame of reference
+  //referenceNormal = RefPoly.u * referenceNormal; // To world space
+  referenceNormal = RefPoly.u.multiplyByVec(referenceNormal)
+  //referenceNormal = IncPoly.u.Transpose( ) * referenceNormal; // To incident's model space
+  referenceNormal = IncPoly.u.Transpose().multiplyByVec(referenceNormal)
 
-	// Find most anti-normal face on incident polygon
-	let incidentFace = 0;
-	let minDot = Number.MAX_SAFE_INTEGER;
-	for (let i = 0; i < IncPoly.m_vertices.length; i++) {
-		const dot = Dot(referenceNormal, IncPoly.m_normals[i]);
-		if (dot < minDot) {
-			minDot = dot;
-			incidentFace = i;
-		}
-	}
+  // Find most anti-normal face on incident polygon
+  let incidentFace = 0
+  let minDot = Number.MAX_SAFE_INTEGER
+  for (let i = 0; i < IncPoly.m_vertices.length; i++) {
+    const dot = Dot(referenceNormal, IncPoly.m_normals[i])
+    if (dot < minDot) {
+      minDot = dot
+      incidentFace = i
+    }
+  }
 
-	// Assign face vertices for incidentFace
-	//v[0] = IncPoly.u * IncPoly.m_vertices[incidentFace] + IncPoly.body.position;
-	v[0] = IncPoly.u
-		.multiplyByVec(IncPoly.m_vertices[incidentFace])
-		.addVec(IncPoly.body.position);
-	incidentFace =
-		incidentFace + 1 >= IncPoly.m_vertices.length ? 0 : incidentFace + 1;
-	//v[1] = IncPoly.u * IncPoly.m_vertices[incidentFace] + IncPoly.body.position;
-	v[1] = IncPoly.u
-		.multiplyByVec(IncPoly.m_vertices[incidentFace])
-		.addVec(IncPoly.body.position);
+  // Assign face vertices for incidentFace
+  //v[0] = IncPoly.u * IncPoly.m_vertices[incidentFace] + IncPoly.body.position;
+  v[0] = IncPoly.u
+    .multiplyByVec(IncPoly.m_vertices[incidentFace])
+    .addVec(IncPoly.body.position)
+  incidentFace =
+    incidentFace + 1 >= IncPoly.m_vertices.length ? 0 : incidentFace + 1
+  //v[1] = IncPoly.u * IncPoly.m_vertices[incidentFace] + IncPoly.body.position;
+  v[1] = IncPoly.u
+    .multiplyByVec(IncPoly.m_vertices[incidentFace])
+    .addVec(IncPoly.body.position)
 }
 
 /**
@@ -265,46 +268,46 @@ function findIncidentFace(v, RefPoly, IncPoly, referenceIndex) {
  * @returns {number}
  */
 function clip(n, c, face) {
-	// Vec2 n, let c, Vec2 *face
-	let sp = 0;
-	const out = [face[0].clone(), face[1].clone()];
+  // Vec2 n, let c, Vec2 *face
+  let sp = 0
+  const out = [face[0].clone(), face[1].clone()]
 
-	// Retrieve distances from each endpoint to the line
-	// d = ax + by - c
-	const d1 = Dot(n, face[0]) - c;
-	const d2 = Dot(n, face[1]) - c;
+  // Retrieve distances from each endpoint to the line
+  // d = ax + by - c
+  const d1 = Dot(n, face[0]) - c
+  const d2 = Dot(n, face[1]) - c
 
-	// If negative (behind plane) clip
-	if (d1 <= 0) {
-		out[sp++] = face[0];
-	}
-	if (d2 <= 0) {
-		out[sp++] = face[1];
-	}
+  // If negative (behind plane) clip
+  if (d1 <= 0) {
+    out[sp++] = face[0]
+  }
+  if (d2 <= 0) {
+    out[sp++] = face[1]
+  }
 
-	// If the points are on different sides of the plane
-	if (d1 * d2 < 0) {
-		// less than to ignore -0.0f
-		// Push interesection point
-		const alpha = d1 / (d1 - d2);
-		//out[sp] = face[0] + alpha * (face[1] - face[0]);
-		out[sp] = face[0]
-			.clone()
-			.addVec(
-				new Vec2(face[1].x - face[0].x, face[1].y - face[0].y).scale(alpha)
-			);
-		++sp;
-	}
+  // If the points are on different sides of the plane
+  if (d1 * d2 < 0) {
+    // less than to ignore -0.0f
+    // Push interesection point
+    const alpha = d1 / (d1 - d2)
+    //out[sp] = face[0] + alpha * (face[1] - face[0]);
+    out[sp] = face[0]
+      .clone()
+      .addVec(
+        new Vec2(face[1].x - face[0].x, face[1].y - face[0].y).scale(alpha),
+      )
+    ++sp
+  }
 
-	// Assign our new converted values
-	face[0] = out[0];
-	face[1] = out[1];
+  // Assign our new converted values
+  face[0] = out[0]
+  face[1] = out[1]
 
-	if (sp === 3) {
-		throw new Error('sp cannot be equal to 3');
-	}
+  if (sp === 3) {
+    throw new Error("sp cannot be equal to 3")
+  }
 
-	return sp;
+  return sp
 }
 
 /**
@@ -313,111 +316,111 @@ function clip(n, c, face) {
  *	@param {Body} b
  */
 function polygontoPolygon(m, a, b) {
-	/** @type {PolygonShape&Shape} */
-	const A = a.shape;
-	/** @type {PolygonShape&Shape} */
-	const B = b.shape;
+  /** @type {PolygonShape&Shape} */
+  const A = a.shape
+  /** @type {PolygonShape&Shape} */
+  const B = b.shape
 
-	m.contact_count = 0;
+  m.contact_count = 0
 
-	// Check for a separating axis with A's face planes
-	//let faceA;
-	const penetrationA = findAxisLeastPenetration(A, B);
-	if (penetrationA.best_distance >= 0) {
-		return;
-	}
+  // Check for a separating axis with A's face planes
+  //let faceA;
+  const penetrationA = findAxisLeastPenetration(A, B)
+  if (penetrationA.best_distance >= 0) {
+    return
+  }
 
-	// Check for a separating axis with B's face planes
-	const penetrationB = findAxisLeastPenetration(B, A);
-	if (penetrationB.best_distance >= 0) {
-		return;
-	}
+  // Check for a separating axis with B's face planes
+  const penetrationB = findAxisLeastPenetration(B, A)
+  if (penetrationB.best_distance >= 0) {
+    return
+  }
 
-	/** @type {number} */
-	let referenceIndex;
-	/** @type {boolean} */
-	let flip; // Always point from a to b
+  /** @type {number} */
+  let referenceIndex
+  /** @type {boolean} */
+  let flip // Always point from a to b
 
-	/** @type {PolygonShape} */
-	let RefPoly; // Reference
-	/** @type {PolygonShape} */
-	let IncPoly; // Incident
+  /** @type {PolygonShape} */
+  let RefPoly // Reference
+  /** @type {PolygonShape} */
+  let IncPoly // Incident
 
-	// Determine which shape contains reference face
-	if (BiasGreaterThan(penetrationA.best_distance, penetrationB.best_distance)) {
-		RefPoly = A;
-		IncPoly = B;
-		referenceIndex = penetrationA.faceIndex;
-		flip = false;
-	} else {
-		RefPoly = B;
-		IncPoly = A;
-		referenceIndex = penetrationB.faceIndex;
-		flip = true;
-	}
+  // Determine which shape contains reference face
+  if (BiasGreaterThan(penetrationA.best_distance, penetrationB.best_distance)) {
+    RefPoly = A
+    IncPoly = B
+    referenceIndex = penetrationA.faceIndex
+    flip = false
+  } else {
+    RefPoly = B
+    IncPoly = A
+    referenceIndex = penetrationB.faceIndex
+    flip = true
+  }
 
-	// World space incident face
-	const incidentFace = [new Vec2(), new Vec2()];
-	findIncidentFace(incidentFace, RefPoly, IncPoly, referenceIndex);
+  // World space incident face
+  const incidentFace = [new Vec2(), new Vec2()]
+  findIncidentFace(incidentFace, RefPoly, IncPoly, referenceIndex)
 
-	// Setup reference face vertices
-	let v1 = RefPoly.m_vertices[referenceIndex];
-	referenceIndex =
-		referenceIndex + 1 == RefPoly.m_vertices.length ? 0 : referenceIndex + 1;
-	let v2 = RefPoly.m_vertices[referenceIndex];
+  // Setup reference face vertices
+  let v1 = RefPoly.m_vertices[referenceIndex]
+  referenceIndex =
+    referenceIndex + 1 === RefPoly.m_vertices.length ? 0 : referenceIndex + 1
+  let v2 = RefPoly.m_vertices[referenceIndex]
 
-	// Transform vertices to world space
-	//v1 = RefPoly.u * v1 + RefPoly.body.position;
-	v1 = RefPoly.u.multiplyByVec(v1).addVec(RefPoly.body.position);
-	//v2 = RefPoly.u * v2 + RefPoly.body.position;
-	v2 = RefPoly.u.multiplyByVec(v2).addVec(RefPoly.body.position);
+  // Transform vertices to world space
+  //v1 = RefPoly.u * v1 + RefPoly.body.position;
+  v1 = RefPoly.u.multiplyByVec(v1).addVec(RefPoly.body.position)
+  //v2 = RefPoly.u * v2 + RefPoly.body.position;
+  v2 = RefPoly.u.multiplyByVec(v2).addVec(RefPoly.body.position)
 
-	// Calculate reference face side normal in world space
-	const sidePlaneNormal = v2.clone().substractVec(v1).Normalize(); //(v2 - v1);
+  // Calculate reference face side normal in world space
+  const sidePlaneNormal = v2.clone().substractVec(v1).Normalize() //(v2 - v1);
 
-	// Orthogonalize
-	//Vec2 refFaceNormal( sidePlaneNormal.y, -sidePlaneNormal.x );
-	const refFaceNormal = new Vec2(sidePlaneNormal.y, -sidePlaneNormal.x);
+  // Orthogonalize
+  //Vec2 refFaceNormal( sidePlaneNormal.y, -sidePlaneNormal.x );
+  const refFaceNormal = new Vec2(sidePlaneNormal.y, -sidePlaneNormal.x)
 
-	// ax + by = c
-	// c is distance from origin
-	const refC = Dot(refFaceNormal, v1);
-	const negSide = -Dot(sidePlaneNormal, v1);
-	const posSide = Dot(sidePlaneNormal, v2);
+  // ax + by = c
+  // c is distance from origin
+  const refC = Dot(refFaceNormal, v1)
+  const negSide = -Dot(sidePlaneNormal, v1)
+  const posSide = Dot(sidePlaneNormal, v2)
 
-	// Clip incident face to reference face side planes
-	if (clip(sidePlaneNormal.clone().minus(), negSide, incidentFace) < 2) {
-		return;
-	} // Due to floating point error, possible to not have required points
+  // Clip incident face to reference face side planes
+  if (clip(sidePlaneNormal.clone().minus(), negSide, incidentFace) < 2) {
+    return
+  } // Due to floating point error, possible to not have required points
 
-	if (clip(sidePlaneNormal, posSide, incidentFace) < 2) {
-		return;
-	} // Due to floating point error, possible to not have required points
+  if (clip(sidePlaneNormal, posSide, incidentFace) < 2) {
+    return
+  } // Due to floating point error, possible to not have required points
 
-	//flip
-	m.normal = flip ? refFaceNormal.clone().minus() : refFaceNormal.clone();
+  //flip
+  m.normal = flip ? refFaceNormal.clone().minus() : refFaceNormal.clone()
 
-	// Keep points behind reference face
-	let cp = 0; // clipped points behind reference face
-	let separation = Dot(refFaceNormal, incidentFace[0]) - refC;
-	if (separation <= 0) {
-		m.contacts[cp] = incidentFace[0].clone();
-		m.penetration = -separation;
-		++cp;
-	} else {
-		m.penetration = 0;
-	}
+  // Keep points behind reference face
+  let cp = 0 // clipped points behind reference face
+  let separation = Dot(refFaceNormal, incidentFace[0]) - refC
+  if (separation <= 0) {
+    m.contacts[cp] = incidentFace[0].clone()
+    m.penetration = -separation
+    ++cp
+  } else {
+    m.penetration = 0
+  }
 
-	separation = Dot(refFaceNormal, incidentFace[1]) - refC;
-	if (separation <= 0) {
-		m.contacts[cp] = incidentFace[1];
+  separation = Dot(refFaceNormal, incidentFace[1]) - refC
+  if (separation <= 0) {
+    m.contacts[cp] = incidentFace[1]
 
-		m.penetration += -separation;
-		++cp;
+    m.penetration += -separation
+    ++cp
 
-		// Average penetration
-		m.penetration /= cp;
-	}
+    // Average penetration
+    m.penetration /= cp
+  }
 
-	m.contact_count = cp;
+  m.contact_count = cp
 }

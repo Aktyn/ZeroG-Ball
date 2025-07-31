@@ -1,4 +1,4 @@
-import _Object2D from './object2d';
+import _Object2D from "./object2d"
 
 /**
  * @param {number} a first mixing value
@@ -6,7 +6,7 @@ import _Object2D from './object2d';
  * @param {number} factor value between 0 and 1
  */
 function mix(a, b, factor) {
-	return a * (1.0 - factor) + b * factor;
+  return a * (1.0 - factor) + b * factor
 }
 
 /**
@@ -14,43 +14,43 @@ function mix(a, b, factor) {
  * @param  {number} dt delta time
  */
 export default function (obj, dt) {
-	const next_frame_id = obj.keyframe_id + 1;
+  const next_frame_id = obj.keyframe_id + 1
 
-	const current_frame = obj.keyframes[obj.keyframe_id];
-	const next_frame = obj.keyframes[next_frame_id];
-	const last_frame = obj.keyframes[obj.keyframes.length - 1];
+  const current_frame = obj.keyframes[obj.keyframe_id]
+  const next_frame = obj.keyframes[next_frame_id]
+  const last_frame = obj.keyframes[obj.keyframes.length - 1]
 
-	let factor =
-		(obj.animation_time - current_frame.time) /
-		(next_frame.time - current_frame.time);
-	factor = Math.max(0, Math.min(1, factor));
+  let factor =
+    (obj.animation_time - current_frame.time) /
+    (next_frame.time - current_frame.time)
+  factor = Math.max(0, Math.min(1, factor))
 
-	const mixed = {
-		x: mix(current_frame.transform.x, next_frame.transform.x, factor),
-		y: mix(current_frame.transform.y, next_frame.transform.y, factor),
-		w: mix(current_frame.transform.w, next_frame.transform.w, factor),
-		h: mix(current_frame.transform.h, next_frame.transform.h, factor),
-		rot: mix(current_frame.transform.rot, next_frame.transform.rot, factor),
-	};
+  const mixed = {
+    x: mix(current_frame.transform.x, next_frame.transform.x, factor),
+    y: mix(current_frame.transform.y, next_frame.transform.y, factor),
+    w: mix(current_frame.transform.w, next_frame.transform.w, factor),
+    h: mix(current_frame.transform.h, next_frame.transform.h, factor),
+    rot: mix(current_frame.transform.rot, next_frame.transform.rot, factor),
+  }
 
-	const t = obj.getTransform(); //helper variable
-	if (t.x !== mixed.x || t.y !== mixed.y) {
-		obj.setPos(mixed.x, mixed.y);
-	}
-	if (t.w !== mixed.w || t.h !== mixed.h) {
-		obj.setSize(mixed.w, mixed.h);
-	}
-	if (t.rot !== mixed.rot) {
-		obj.setRot(mixed.rot);
-	}
+  const t = obj.getTransform() //helper variable
+  if (t.x !== mixed.x || t.y !== mixed.y) {
+    obj.setPos(mixed.x, mixed.y)
+  }
+  if (t.w !== mixed.w || t.h !== mixed.h) {
+    obj.setSize(mixed.w, mixed.h)
+  }
+  if (t.rot !== mixed.rot) {
+    obj.setRot(mixed.rot)
+  }
 
-	obj.animation_time += dt / 1000.0;
+  obj.animation_time += dt / 1000.0
 
-	if (obj.animation_time >= last_frame.time) {
-		//loop to beginning
-		obj.animation_time -= last_frame.time;
-		obj.keyframe_id = 0;
-	} else if (obj.animation_time >= next_frame.time) {
-		obj.keyframe_id = (obj.keyframe_id + 1) % (obj.keyframes.length - 1); //go to next keyframe
-	}
+  if (obj.animation_time >= last_frame.time) {
+    //loop to beginning
+    obj.animation_time -= last_frame.time
+    obj.keyframe_id = 0
+  } else if (obj.animation_time >= next_frame.time) {
+    obj.keyframe_id = (obj.keyframe_id + 1) % (obj.keyframes.length - 1) //go to next keyframe
+  }
 }
