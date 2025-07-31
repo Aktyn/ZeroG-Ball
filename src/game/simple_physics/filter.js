@@ -18,6 +18,8 @@ export default class Filter {
 	 * @param  {Filter} filterB
 	 */
 	static collide(filterA, filterB) {
-		return !!((filterA.mask & filterB.category) && (filterA.category & filterB.mask));
+		return !!(
+			filterA.mask & filterB.category && filterA.category & filterB.mask
+		);
 	}
 }

@@ -10,9 +10,10 @@
 
 		position: relative;
 
-		&::before, &::after {
+		&::before,
+		&::after {
 			display: inline-block;
-			content: " ";
+			content: ' ';
 			position: absolute;
 		}
 
@@ -35,17 +36,19 @@
 			height: $sizeH;
 			left: 0px;
 			border-radius: $sizeH;
-			transition: background-color 0.3s ease, transform 0.3s cubic-bezier(.36,.07,.19,.97);
+			transition:
+				background-color 0.3s ease,
+				transform 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97);
 			box-shadow: 0 1px 4px #0008;
 		}
 
 		&.on::before {
-			background-color: #A5D6A7;
+			background-color: #a5d6a7;
 		}
 
 		&.on::after {
 			transform: translateX($sizeW);
-			background-color: #4CAF50;
+			background-color: #4caf50;
 		}
 	}
 
@@ -63,7 +66,7 @@
 		position: relative;
 
 		&::before {
-			content: " ";
+			content: ' ';
 			display: block;
 			position: absolute;
 			border-radius: $innerH;
@@ -90,7 +93,8 @@
 			left: 0px;
 			//transform: translateX($sizeW - $sizeH);
 
-			&.hold, &:hover {
+			&.hold,
+			&:hover {
 				background-color: $colorLight;
 			}
 		}

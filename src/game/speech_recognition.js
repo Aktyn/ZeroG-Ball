@@ -1,29 +1,31 @@
 //@ts-check
-import Settings, {SPEECH_RECOGNITION_DEFAULTS} from './settings';
+import Settings, { SPEECH_RECOGNITION_DEFAULTS } from './settings';
 
 /** @type {{[index: string]: string[]}} list of avaible commands with their corresponding keywords */
-export var COMMANDS = {};//loads from Settings
+export var COMMANDS = {}; //loads from Settings
 
 /** @type {{[index: string]: Function}} */
-var listeners = {};
+const listeners = {};
 
 /** @type {Function} */
-var start_listener = null;
+let start_listener = null;
 /** @type {Function} */
-var end_listener = null;
+let end_listener = null;
 
-/** 
+/**
  * @param  {string} result
  * @return {boolean}
  */
 function checkResult(result) {
-	for(let command_name in COMMANDS) {
-		if(command_name in listeners === false)//no listener assigned for this command
+	for (const command_name in COMMANDS) {
+		if (command_name in listeners === false) {
+			//no listener assigned for this command
 			continue;
-		for(let keyword of COMMANDS[command_name]) {
+		}
+		for (const keyword of COMMANDS[command_name]) {
 			//look for keyword inside result string
-			if( result.toLowerCase().indexOf( keyword.toLowerCase() ) !== -1 ) {
-				listeners[command_name]();//callback
+			if (result.toLowerCase().indexOf(keyword.toLowerCase()) !== -1) {
+				listeners[command_name](); //callback
 				return true;
 			}
 		}
@@ -32,73 +34,81 @@ function checkResult(result) {
 }
 
 //@ts-ignore
-if(typeof webkitSpeechRecognition === 'undefined') {
+if (typeof webkitSpeechRecognition === 'undefined') {
 	var fallbackRecognition = function Failback() {
-		this.start = function(){};
+		this.start = function () {};
 	};
 }
 
 //@ts-ignore
-var SpeechRecognition = SpeechRecognition || fallbackRecognition || webkitSpeechRecognition;
-var recognition = new SpeechRecognition();
+var SpeechRecognition =
+	SpeechRecognition || fallbackRecognition || webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
 recognition.lang = 'pl-PL';
 recognition.continuous = true;
 recognition.interimResults = true;
 recognition.maxAlternatives = 5;
 
-var recognition_active = false;
-var recognition_start_timestamp = 0;
-var ignore_index = -1;
+let recognition_active = false;
+let recognition_start_timestamp = 0;
+let ignore_index = -1;
 
 recognition.onstart = () => {
 	ignore_index = -1;
 	recognition_active = true;
 	recognition_start_timestamp = Date.now();
 	console.log('recognition started');
-	if(typeof start_listener === 'function')
+	if (typeof start_listener === 'function') {
 		start_listener();
+	}
 };
 recognition.onend = () => {
-	if(recognition_active) {
-		if(Date.now() - recognition_start_timestamp > 1000) {//at least 1 second difference
+	if (recognition_active) {
+		if (Date.now() - recognition_start_timestamp > 1000) {
+			//at least 1 second difference
 			console.log('recognition restarted');
 			recognition_active = false;
 			recognition_start_timestamp = Date.now();
-			recognition.start();//restart recognition
+			recognition.start(); //restart recognition
 			return;
 		}
-	}
-	else
+	} else {
 		console.log('recognition ended');
+	}
 
-	if(typeof end_listener === 'function')
+	if (typeof end_listener === 'function') {
 		end_listener();
+	}
 };
 
 /** @param {SpeechRecognitionEvent} event */
-recognition.onresult = (event) => {
-	let result = event.results[event.results.length-1];
+recognition.onresult = event => {
+	const result = event.results[event.results.length - 1];
 	let index;
 
-	if(ignore_index === event.resultIndex) {//recognition already succeeded
+	if (ignore_index === event.resultIndex) {
+		//recognition already succeeded
 		console.log('further results ignored');
 		return;
 	}
 
-	if(!result.isFinal) {
+	if (!result.isFinal) {
 		console.log('\tinterim:', result[0].transcript);
-		if( checkResult(result[0].transcript) )
+		if (checkResult(result[0].transcript)) {
 			ignore_index = event.resultIndex;
+		}
 		return;
-
 	}
 
-	for(let j=0; j<result.length; j++) {
-		console.log(`${j>0?'\talternative: ':'final: '}${result[j].transcript} (${result[j].confidence})`);
-		if( checkResult(result[j].transcript) )
+	for (let j = 0; j < result.length; j++) {
+		console.log(
+			`${j > 0 ? '\talternative: ' : 'final: '}${result[j].transcript} (${result[j].confidence})`
+		);
+		if (checkResult(result[j].transcript)) {
 			return;
+		}
 	}
-}
+};
 
 const SPEECH_COMMANDS = {
 	start: () => {
@@ -110,20 +120,23 @@ const SPEECH_COMMANDS = {
 		 * @param  {string} command_name
 		 * @param  {string} keywords_str
 		 */
-		let applyKeywords = (command_name, keywords_str) => 
-			COMMANDS[command_name] = keywords_str.split(',').map(c => c.trim()).filter(c => c.length > 0);
+		const applyKeywords = (command_name, keywords_str) =>
+			(COMMANDS[command_name] = keywords_str
+				.split(',')
+				.map(c => c.trim())
+				.filter(c => c.length > 0));
 
 		//load keyword from settings
-		for(let command in SPEECH_RECOGNITION_DEFAULTS) {
+		for (const command in SPEECH_RECOGNITION_DEFAULTS) {
 			//@ts-ignore
 			applyKeywords(command, Settings.getValue(command));
 
-			Settings.watch(command, (_keywords) => {
+			Settings.watch(command, _keywords => {
 				//@ts-ignore
 				applyKeywords(command, _keywords);
 			});
 		}
-		
+
 		//console.log(COMMANDS);
 	},
 	stop: () => {
@@ -131,11 +144,11 @@ const SPEECH_COMMANDS = {
 		recognition.stop();
 	},
 
-	onStart: (callback) => {
+	onStart: callback => {
 		start_listener = callback;
 	},
 
-	onEnd: (callback) => {
+	onEnd: callback => {
 		end_listener = callback;
 	},
 
@@ -148,10 +161,11 @@ const SPEECH_COMMANDS = {
 	 * @param  {Function} callback
 	 */
 	onCommand: (command_name, callback) => {
-		if(command_name in COMMANDS === false)
+		if (command_name in COMMANDS === false) {
 			throw new Error('Unsuported speech command: ' + command_name);
+		}
 		listeners[command_name] = callback;
-	}
+	},
 };
 
 export default SPEECH_COMMANDS;

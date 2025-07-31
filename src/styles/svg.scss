@@ -1,133 +1,135 @@
 $solid_colors: (
-	(sensor, #fff1),//sensors preview
+	(sensor, #fff1),
+	//sensors preview
 	(red, #e57373),
-	(green, #8BC34A),
+	(green, #8bc34a),
 	(cannon_bullet, #263238),
-	(door1, #8BC34A),//same color as key1
-	(orange, #D17400),
-	(orange_transparent, #D1740040)
+	(door1, #8bc34a),
+	//same color as key1
+	(orange, #d17400),
+	(orange_transparent, #d1740040)
 );
 
 $textures: (
 	player: (
 		'player_texture',
 		'./../img/textures/player.png',
-		#749de2
+		#749de2,
 	),
 	crate: (
 		'crate_texture',
 		'./../img/textures/crate.jpg',
-		#292b3d
+		#292b3d,
 	),
 	exit: (
 		'exit_texture',
 		'./../img/textures/exit.png',
-		#99ca61
+		#99ca61,
 	),
 	enemy: (
 		'enemy_texture',
 		'./../img/textures/enemy.png',
-		#d7c9c4
+		#d7c9c4,
 	),
 	aid: (
 		'aid_texture',
 		'./../img/textures/aid.png',
-		#7dd293
+		#7dd293,
 	),
 	sawblade: (
 		'sawblade_texture',
 		'./../img/textures/sawblade.png',
-		#e46d53
+		#e46d53,
 	),
 	forcefield: (
 		'forcefield_texture',
 		'./../img/textures/forcefield.png',
-		#80DEEA80
+		#80deea80,
 	),
 	portal1: (
 		'portal1_texture',
 		'./../img/textures/portal1.png',
-		#f8c77a
+		#f8c77a,
 	),
 	portal2: (
 		'portal2_texture',
 		'./../img/textures/portal2.png',
-		#f07ae6
+		#f07ae6,
 	),
 	portal3: (
 		'portal3_texture',
 		'./../img/textures/portal3.png',
-		#87cd98
+		#87cd98,
 	),
 	revolving_door: (
 		'revolving_door_texture',
 		'./../img/textures/revolving_door.png',
-		#8bc34a
+		#8bc34a,
 	),
 	spiky_crate: (
 		'spiky_crate_texture',
 		'./../img/textures/spiky_crate.png',
-		#e46d53
+		#e46d53,
 	),
 	cannon: (
 		'cannon_texture',
 		'./../img/textures/cannon.png',
-		#d67458
+		#d67458,
 	),
 	lava: (
 		'lava_texture',
 		'./../img/textures/lava.jpg',
-		#41281e
+		#41281e,
 	),
 	ice: (
 		'ice_texture',
 		'./../img/textures/ice.jpg',
-		#86b2e2
+		#86b2e2,
 	),
 	grass: (
 		'grass_texture',
 		'./../img/textures/grass.jpg',
-		#70992c
+		#70992c,
 	),
 	bricks: (
 		'bricks_texture',
 		'./../img/textures/bricks.jpg',
-		#af4b2a
+		#af4b2a,
 	),
 	key1: (
 		'key1_texture',
 		'./../img/textures/key1.png',
-		#8BC34A
+		#8bc34a,
 	),
 	elevator: (
 		'elevator_texture',
 		'./../img/textures/elevator.png',
-		#D1740080
+		#d1740080,
 	),
 	elevator_up: (
 		'elevator_texture_up',
 		'./../img/textures/elevatorUp.png',
-		#D1740080
+		#d1740080,
 	),
 	elevator_down: (
 		'elevator_texture_down',
 		'./../img/textures/elevatorDown.png',
-		#D1740080
+		#d1740080,
 	),
 	speedboost: (
 		'speedboost_texture',
 		'./../img/textures/speed.png',
-		#4bb6f5
+		#4bb6f5,
 	),
 	shrinker: (
 		'shrinker_texture',
 		'./../img/textures/shrink.png',
-		#ba68c8
-	)
+		#ba68c8,
+	),
 );
 
 :export {
-	textures: first($textures);//hack for exporting list of lists
+	textures: nth($textures, 1); //hack for exporting list of lists
 }
 
 svg.game-svg {
@@ -158,7 +160,9 @@ svg.game-svg {
 
 	/** predefined objects classes (correlated with themes object in predefined_assets.js) */
 
-	circle, rect, path {
+	circle,
+	rect,
+	path {
 		//default values
 		fill: #fff;
 
@@ -169,10 +173,12 @@ svg.game-svg {
 		}
 	}
 
-	&:not(.no-textures) circle, &:not(.no-textures) rect, &:not(.no-textures) path {
+	&:not(.no-textures) circle,
+	&:not(.no-textures) rect,
+	&:not(.no-textures) path {
 		@each $name, $data in $textures {
 			&.#{$name} {
-				fill: url(##{ nth($data, 1) });
+				fill: url(#{nth($data, 1)});
 			}
 		}
 
@@ -181,7 +187,9 @@ svg.game-svg {
 		}*/
 	}
 
-	&.no-textures circle, &.no-textures rect, &.no-textures path {
+	&.no-textures circle,
+	&.no-textures rect,
+	&.no-textures path {
 		@each $name, $data in $textures {
 			&.#{$name} {
 				fill: nth($data, 3);
@@ -220,11 +228,10 @@ svg.game-svg {
 	.elevator.down {
 		fill: url('#elevator_texture_down');
 	}
-
 }
 
-
-.asset_preview, .powerups {
+.asset_preview,
+.powerups {
 	& > * {
 		box-sizing: border-box;
 		border: 1px solid #000a;
@@ -238,7 +245,7 @@ svg.game-svg {
 
 	@each $name, $data in $textures {
 		.#{$name} {
-			background-image: url(#{ nth($data, 2) });
+			background-image: url(#{nth($data, 2)});
 			background-size: contain;
 		}
 	}

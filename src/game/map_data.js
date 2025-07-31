@@ -1,18 +1,19 @@
 // @ts-check
-import Object2D, {Type} from './objects/object2d';
+import Object2D, { Type } from './objects/object2d';
 
-var _enum_ = obj => Object.keys(obj).forEach((k, i) => obj[k] = i);
+const _enum_ = obj => Object.keys(obj).forEach((k, i) => (obj[k] = i));
 
-const SHAPE_TYPE = {//enumerator
+const SHAPE_TYPE = {
+	//enumerator
 	RECT: 0,
-	CIRCLE: 0
+	CIRCLE: 0,
 };
 _enum_(SHAPE_TYPE);
 // console.log(SHAPE_TYPE);
 
 const PHYSIC_TYPE = {
 	STATIC: 0,
-	DYNAMIC: 0
+	DYNAMIC: 0,
 };
 _enum_(PHYSIC_TYPE);
 
@@ -24,7 +25,7 @@ const HISTORY_CAPACITY = 32;
  * @return {Boolean}
  */
 function isEqual(a, b) {
-	return Math.abs(a - b) < 1 / 2048;//equal numbers with some precision
+	return Math.abs(a - b) < 1 / 2048; //equal numbers with some precision
 }
 
 /**
@@ -32,8 +33,12 @@ function isEqual(a, b) {
  * @return {number}
  */
 function fixRot(rot) {
-	while(rot >= Math.PI*2) rot -= Math.PI*2;
-	while(rot < 0) rot += Math.PI*2;
+	while (rot >= Math.PI * 2) {
+		rot -= Math.PI * 2;
+	}
+	while (rot < 0) {
+		rot += Math.PI * 2;
+	}
 	return rot;
 }
 
@@ -66,30 +71,30 @@ function fixRot(rot) {
 	}} State
 */
 
-const empty_map = {"background":0,"objects":[]};
-
+const empty_map = { background: 0, objects: [] };
 
 /** @type {{name: string, json: State}[]} */
-export const AVAILABLE_MAPS = [//NOTE - names should be unique
+export const AVAILABLE_MAPS = [
+	//NOTE - names should be unique
 	{
 		name: 'Wprowadzenie',
-		json: require('./../maps/introduction.json') 
+		json: require('./../maps/introduction.json'),
 	},
 	{
 		name: 'Pierwsze starcie',
-		json: require('./../maps/first_encounter.json') 
+		json: require('./../maps/first_encounter.json'),
 	},
 	{
 		name: 'Wulkaniczna planeta',
-		json: require('./../maps/vulcano_planet.json') 
+		json: require('./../maps/vulcano_planet.json'),
 	},
 	{
 		name: 'Epoka lodowcowa',
-		json: require('./../maps/iceage.json') 
+		json: require('./../maps/iceage.json'),
 	},
 	{
 		name: 'Lasu szum',
-		json: require('./../maps/sound_of_forest.json') 
+		json: require('./../maps/sound_of_forest.json'),
 	},
 ];
 
@@ -101,21 +106,25 @@ class MapData {
 		/** @type {State} */
 		this.state = {
 			background: 0,
-			objects: []
-		}
+			objects: [],
+		};
 
 		this.name = (map_data && map_data.name) || 'Unknown map name';
 
 		/** @type {State[]} */
 		this.history = [];
 
-		this.import(JSON.parse(JSON.stringify( (map_data && map_data.json) || empty_map )), true);
+		this.import(
+			JSON.parse(JSON.stringify((map_data && map_data.json) || empty_map)),
+			true
+		);
 	}
 
 	pushHistory() {
-		this.history.push(JSON.parse(JSON.stringify(this.state)));//stores copy
-		if(this.history.length > HISTORY_CAPACITY)
+		this.history.push(JSON.parse(JSON.stringify(this.state))); //stores copy
+		if (this.history.length > HISTORY_CAPACITY) {
 			this.history.shift();
+		}
 	}
 
 	get wasEdited() {
@@ -126,19 +135,22 @@ class MapData {
 	addObject(schema) {
 		this.pushHistory();
 
-		if(schema instanceof Object2D) {
+		if (schema instanceof Object2D) {
 			this.state.objects.push({
-				'shape_type': schema.type === Type.CIRCLE ? SHAPE_TYPE.CIRCLE : SHAPE_TYPE.RECT,
-				'physic_type': schema.static ? PHYSIC_TYPE.STATIC : PHYSIC_TYPE.DYNAMIC,
-				'x': schema.transform.x, y: schema.transform.y, 
-				'w': schema.transform.w, h: schema.transform.h, 
-				'rot': schema.transform.rot,
-				'keyframes': schema.keyframes,
-				'class_name': schema.getClassName()
+				shape_type:
+					schema.type === Type.CIRCLE ? SHAPE_TYPE.CIRCLE : SHAPE_TYPE.RECT,
+				physic_type: schema.static ? PHYSIC_TYPE.STATIC : PHYSIC_TYPE.DYNAMIC,
+				x: schema.transform.x,
+				y: schema.transform.y,
+				w: schema.transform.w,
+				h: schema.transform.h,
+				rot: schema.transform.rot,
+				keyframes: schema.keyframes,
+				class_name: schema.getClassName(),
 			});
-		}
-		else
+		} else {
 			this.state.objects.push(schema);
+		}
 	}
 
 	removeAll() {
@@ -147,13 +159,13 @@ class MapData {
 	}
 
 	/**
-	* @param {Object2D} obj
-	* @param {Transform} transform
-	*/
+	 * @param {Object2D} obj
+	 * @param {Transform} transform
+	 */
 	updateObjectTransform(obj, transform) {
-		let schema = this.findSchema(obj);
+		const schema = this.findSchema(obj);
 
-		if(schema) {
+		if (schema) {
 			this.pushHistory();
 			Object.assign(schema, transform);
 			return true;
@@ -162,13 +174,13 @@ class MapData {
 	}
 
 	/**
-	* @param {Object2D} obj
-	* @param {{time: number, transform: Transform}[]} keyframes
-	*/
+	 * @param {Object2D} obj
+	 * @param {{time: number, transform: Transform}[]} keyframes
+	 */
 	updateObjectKeyframes(obj, keyframes) {
-		let schema = this.findSchema(obj);
+		const schema = this.findSchema(obj);
 
-		if(schema) {
+		if (schema) {
 			this.pushHistory();
 			schema.keyframes = JSON.parse(JSON.stringify(keyframes));
 			return true;
@@ -177,15 +189,16 @@ class MapData {
 	}
 
 	/**
-	* @param {Object2D} obj
-	*/
+	 * @param {Object2D} obj
+	 */
 	deleteObject(obj) {
-		let schema = this.findSchema(obj);
+		const schema = this.findSchema(obj);
 
-		if(schema) {
-			let schema_i = this.state.objects.indexOf(schema);
-			if(schema_i === -1)
+		if (schema) {
+			const schema_i = this.state.objects.indexOf(schema);
+			if (schema_i === -1) {
 				return false;
+			}
 			this.pushHistory();
 			this.state.objects.splice(schema_i, 1);
 
@@ -201,18 +214,22 @@ class MapData {
 	}
 
 	/**
-	* @param {Object2D} obj
-	*/
+	 * @param {Object2D} obj
+	 */
 	findSchema(obj) {
-		for(let schema of this.state.objects) {
-			if( isEqual(schema.x||0, obj.transform.x||0) &&
-				isEqual(schema.y||0, obj.transform.y||0) &&
-				( isEqual(fixRot(schema.rot||0), fixRot(obj.transform.rot||0)) || 
-					schema.shape_type===SHAPE_TYPE.CIRCLE) &&
-				isEqual(schema.w||0, obj.transform.w||0) &&
-				isEqual(schema.h||0, obj.transform.h||0) &&
-				(schema.class_name === undefined || obj.getClassName().includes(schema.class_name))
-			) return schema;
+		for (const schema of this.state.objects) {
+			if (
+				isEqual(schema.x || 0, obj.transform.x || 0) &&
+				isEqual(schema.y || 0, obj.transform.y || 0) &&
+				(isEqual(fixRot(schema.rot || 0), fixRot(obj.transform.rot || 0)) ||
+					schema.shape_type === SHAPE_TYPE.CIRCLE) &&
+				isEqual(schema.w || 0, obj.transform.w || 0) &&
+				isEqual(schema.h || 0, obj.transform.h || 0) &&
+				(schema.class_name === undefined ||
+					obj.getClassName().includes(schema.class_name))
+			) {
+				return schema;
+			}
 		}
 		return null;
 	}
@@ -229,8 +246,9 @@ class MapData {
 	 * @return {boolean}
 	 */
 	undo() {
-		if(this.history.length === 0)
+		if (this.history.length === 0) {
 			return false;
+		}
 
 		this.state = this.history.pop();
 
@@ -246,12 +264,14 @@ class MapData {
 
 	/** @param {string|State} data */
 	import(data, ignore_history = false) {
-		if(!ignore_history)
+		if (!ignore_history) {
 			this.pushHistory();
-		if(typeof data === 'string')
+		}
+		if (typeof data === 'string') {
 			this.state = JSON.parse(data);
-		else
+		} else {
 			this.state = data;
+		}
 	}
 }
 

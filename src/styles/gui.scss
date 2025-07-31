@@ -22,7 +22,8 @@ $header-size: 35px;
 
 		display: grid;
 		grid-template-areas: 'switch_btn game_buttons speech modes actions';
-		grid-template-columns: fit-content(100%) auto fit-content(100%) 
+		grid-template-columns:
+			fit-content(100%) auto fit-content(100%)
 			fit-content(100%) fit-content(100%);
 		grid-column-gap: 10px;
 		align-items: center;
@@ -39,18 +40,24 @@ $header-size: 35px;
 			text-align: right;
 		}
 
-		.game-buttons, .actions, .modes, .speech-indicator {
-			transition: opacity 0.3s linear, transform 0.3s ease-in-out;
+		.game-buttons,
+		.actions,
+		.modes,
+		.speech-indicator {
+			transition:
+				opacity 0.3s linear,
+				transform 0.3s ease-in-out;
 		}
 
 		@for $i from 1 through 4 {
 			& > *:nth-child(#{$i}) {
 				//transition: opacity 0.3s linear, transform 0.3s 10s ease-in-out !important;
-				transition-delay: #{($i - 2)*100}ms !important;
+				transition-delay: #{($i - 2) * 100}ms !important;
 			}
 		}
 
-		.game-buttons > *, .actions > * {
+		.game-buttons > *,
+		.actions > * {
 			margin: 5px 5px;
 		}
 
@@ -74,16 +81,16 @@ $header-size: 35px;
 
 		.modes {
 			grid-area: modes;
-			background-color: #004D4080;
+			background-color: #004d4080;
 			border-radius: 5px;
 			justify-self: center;
 
 			& > * {
 				margin: 5px;
 			}
-			
+
 			& > button:disabled {
-				background-color: #8BC34A;
+				background-color: #8bc34a;
 				font-weight: bold;
 				color: #fff;
 				cursor: auto;
@@ -93,7 +100,10 @@ $header-size: 35px;
 		&.hidden {
 			background-color: rgba(0, 0, 0, 0);
 			//box-shadow: 0px 0px 5px #0000;
-			.game-buttons, .actions, .modes, .speech-indicator {
+			.game-buttons,
+			.actions,
+			.modes,
+			.speech-indicator {
 				opacity: 0;
 				transform: translateY(-100%);
 				button {
@@ -138,7 +148,8 @@ $header-size: 35px;
 			font-size: 14px;
 			min-width: 350px;
 
-			&, & > * {
+			&,
+			& > * {
 				animation: show-in 0.7s ease-in-out forwards;
 			}
 
@@ -162,18 +173,20 @@ $header-size: 35px;
 				}
 			}
 
-			article {//main content
+			article {
+				//main content
 				color: #455a64;
 				padding: 5px 5px;
 				text-align: center;
 
 				& > * {
-					animation: show-in 0.3s cubic-bezier(.36,.07,.19,.97) forwards;
+					animation: show-in 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards;
 
 					opacity: 0;
 					transform: translateY(-50px);
 
-					@for $i from 1 through 10 {//number of children of article selector
+					@for $i from 1 through 10 {
+						//number of children of article selector
 						&:nth-child(#{$i}) {
 							animation-delay: #{$i * 50ms};
 						}
@@ -228,7 +241,9 @@ $header-size: 35px;
 			display: table-cell;
 			text-align: center;
 
-			.assets_container, .edit-options, .anim-options {
+			.assets_container,
+			.edit-options,
+			.anim-options {
 				width: 100%;
 				height: 100%;
 			}
@@ -248,7 +263,7 @@ $header-size: 35px;
 					padding: 5px;
 					margin: 0px 5px;
 					box-sizing: content-box;
-					
+
 					border-radius: 5px;
 					background-color: #0008;
 					box-shadow: 0px 0px 5px #0008;
@@ -263,7 +278,8 @@ $header-size: 35px;
 					position: relative;
 					overflow: hidden;
 
-					&:not(.selected):hover button, &:not(.selected):hover .name-label {
+					&:not(.selected):hover button,
+					&:not(.selected):hover .name-label {
 						opacity: 0.5;
 
 						&:not(.name-label):hover {
@@ -275,7 +291,8 @@ $header-size: 35px;
 						opacity: 0.8 !important;
 					}
 
-					& > button, & > .name-label {
+					& > button,
+					& > .name-label {
 						position: absolute;
 						left: 0px;
 						//top: 0px;
@@ -382,7 +399,7 @@ $header-size: 35px;
 						display: inline-grid;
 						grid-auto-flow: column;
 						grid-template-rows: auto;
-    					justify-content: center;
+						justify-content: center;
 
 						& > * {
 							background-color: #fff6;
@@ -393,7 +410,7 @@ $header-size: 35px;
 							}
 
 							&.current {
-								background-color: #8BC34A;
+								background-color: #8bc34a;
 							}
 
 							width: 15px;
@@ -405,7 +422,7 @@ $header-size: 35px;
 						}
 					}
 
-					input[type="number"] {
+					input[type='number'] {
 						display: inline-block;
 						margin: auto;
 						width: 90px;
@@ -430,7 +447,7 @@ $header-size: 35px;
 
 			.categories {
 				display: grid;
-				grid-template-rows: 1fr 1fr 1fr;// 1fr;
+				grid-template-rows: 1fr 1fr 1fr; // 1fr;
 				grid-auto-flow: column;
 				align-items: stretch;
 				padding-right: 10px;
@@ -457,7 +474,7 @@ $header-size: 35px;
 			.enviroment {
 				$w: 100px;
 				$h: 20px;
-				
+
 				position: relative;
 				width: $w;
 				.background-selector {
@@ -468,59 +485,60 @@ $header-size: 35px;
 					box-shadow: 0px 1px 5px #0008;
 					// background-color: red;
 					position: absolute;
-					
+
 					bottom: calc(50% - 10px);
 					margin: auto;
 
-				    display: flex;
-				    flex-direction: column;
-				    align-items: center;
-				    justify-content: flex-end;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: flex-end;
 
-				    & > * {
-				    	width: 100%;
-				    	border: none;
-				    	border-radius: 0px;
-				    	background-color: #fff;
+					& > * {
+						width: 100%;
+						border: none;
+						border-radius: 0px;
+						background-color: #fff;
 
-				    	height: $h !important;
-				    	margin: 0px;
-				    	padding: 0px;
-				    	&:not(button) {
-				    		line-height: $h;
-				    		color: #607D8B;
+						height: $h !important;
+						margin: 0px;
+						padding: 0px;
+						&:not(button) {
+							line-height: $h;
+							color: #607d8b;
 
-				    		transition: background-color 0.2s ease-in-out;
-				    	}
-				    	white-space: nowrap;
-				    }
+							transition: background-color 0.2s ease-in-out;
+						}
+						white-space: nowrap;
+					}
 
-				    & > button {
-				    	padding: 4px 0px;
-				    	line-height: auto;
-				    }
+					& > button {
+						padding: 4px 0px;
+						line-height: auto;
+					}
 
-				    & > div:not(.selected) {//item to select
-				    	cursor: pointer;
-				    	&:hover {
-				    		background-color: #AED581;
-				    	}
-				    	&:active {
-				    		background-color: #8BC34A;
-				    	}
-				    }
+					& > div:not(.selected) {
+						//item to select
+						cursor: pointer;
+						&:hover {
+							background-color: #aed581;
+						}
+						&:active {
+							background-color: #8bc34a;
+						}
+					}
 
-				    & > div.selected {
-				    	background-color: #4DB6AC;
-				    	font-weight: bold;
-				    	color: #fff;
-				    }
+					& > div.selected {
+						background-color: #4db6ac;
+						font-weight: bold;
+						color: #fff;
+					}
 
-				    transition: height 0.3s cubic-bezier(.36,.07,.19,.97);
-				    &.open {
-				    	height: var(--open-height);
-				    	//height: $h * 6;
-				    }
+					transition: height 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+					&.open {
+						height: var(--open-height);
+						//height: $h * 6;
+					}
 				}
 			}
 
@@ -537,10 +555,11 @@ $header-size: 35px;
 			}
 		}
 
-		transition: transform 0.5s cubic-bezier(.36,.07,.19,.97);
+		transition: transform 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
 	}
 
-	&:not(.mode-1) .edit-tools {//only in edit mode
+	&:not(.mode-1) .edit-tools {
+		//only in edit mode
 		transform: translateY(100%);
 	}
 
@@ -583,7 +602,7 @@ $header-size: 35px;
 
 			box-shadow: 0px 1px 2px #0006;
 			border-radius: 20px;
-			transition: box-shadow 0.5s cubic-bezier(.36,.07,.19,.97);
+			transition: box-shadow 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
 			&.open {
 				box-shadow: 0px 1px 2px #0000;
 				svg {
@@ -597,27 +616,29 @@ $header-size: 35px;
 				right: 0px;
 
 				transform-origin: 20px 0px;
-				transition: transform 0.5s cubic-bezier(.36,.07,.19,.97);
-				
+				transition: transform 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+
 				circle {
 					&:first-child {
 						stroke: #009688;
 						stroke-width: 2px;
 					}
-					fill: #4DB6AC;
+					fill: #4db6ac;
 				}
 				line {
-					stroke: #B2DFDB;
+					stroke: #b2dfdb;
 					stroke-width: 2px;
 					stroke-linecap: round;
-					
+
 					transform-origin: 10px 10px;
-					
+
 					$speed: 10s;
-					
-					animation: ticktock $speed*12 $speed/2 cubic-bezier(.87,-.41,.19,1.44) infinite;
+
+					animation: ticktock $speed * 12 $speed/2
+						cubic-bezier(0.87, -0.41, 0.19, 1.44) infinite;
 					&:nth-child(4) {
-						animation: ticktock-delayed $speed cubic-bezier(.36,.07,.19,.97) infinite;
+						animation: ticktock-delayed $speed
+							cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
 						stroke-width: 1px;
 					}
 
@@ -627,7 +648,9 @@ $header-size: 35px;
 								transform: rotate(#{$i * 30deg});
 							}
 						}
-						100% { transform: rotate(360deg); }
+						100% {
+							transform: rotate(360deg);
+						}
 					}
 
 					@keyframes ticktock-delayed {
@@ -638,7 +661,9 @@ $header-size: 35px;
 								transform: rotate(#{$i * 30deg});
 							}
 						}
-						100% { transform: rotate(360deg); }
+						100% {
+							transform: rotate(360deg);
+						}
 					}
 				}
 
@@ -656,7 +681,7 @@ $header-size: 35px;
 				display: inline-block;
 				font-size: 18px;
 				color: #ef9a9a;
-				content: "❤";
+				content: '❤';
 			}
 		}
 
@@ -689,13 +714,17 @@ $header-size: 35px;
 				.fade-timer {
 					display: block;
 					height: 2px;
-					background-color: #8BC34A;
+					background-color: #8bc34a;
 					grid-column: 1 / span 2;
 
 					animation: shrink_hor 1s linear forwards;
 					@keyframes shrink_hor {
-						0% {transform: scaleX(1);}
-						100% {transform: scaleX(0);}
+						0% {
+							transform: scaleX(1);
+						}
+						100% {
+							transform: scaleX(0);
+						}
 					}
 				}
 			}
@@ -716,12 +745,12 @@ $header-size: 35px;
 		justify-content: center;
 
 		&::before {
-			content: "❤";
+			content: '❤';
 			display: inline-block;
 			font-size: 100px;
 			color: #ef9a9a;
-			
-			animation: pop 1s cubic-bezier(.36,.07,.19,.97) forwards;
+
+			animation: pop 1s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards;
 
 			@keyframes pop {
 				0% {
@@ -740,13 +769,13 @@ $header-size: 35px;
 		}
 
 		&.healed::before {
-			content: "➕";
-			color: #8BC34A;
+			content: '➕';
+			color: #8bc34a;
 		}
 
 		&.killed {
 			background-color: #f558;
-			animation: blood-wash 2s cubic-bezier(.36,.07,.19,.97) forwards;
+			animation: blood-wash 2s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards;
 
 			@keyframes blood-wash {
 				0% {
@@ -761,7 +790,7 @@ $header-size: 35px;
 			}
 
 			&::before {
-				content: "Koniec żyć 😵";
+				content: 'Koniec żyć 😵';
 				font-size: 25px;
 				color: #fff;
 
@@ -790,8 +819,9 @@ $header-size: 35px;
 		border-radius: 5px;
 		box-shadow: 0px 1px 5px #0008;
 		background-color: #fff;
-		color: #455A64;
-		&, * {
+		color: #455a64;
+		&,
+		* {
 			font-size: 14px;
 		}
 
@@ -802,19 +832,20 @@ $header-size: 35px;
 		.record-info {
 			color: #ef5350;
 			font-weight: bold;
-			margin-top: 5px; 
+			margin-top: 5px;
 		}
 
 		opacity: 0;
 		animation: show-in 0.7s ease-in-out forwards;
 
 		& > * {
-			animation: show-in 0.3s cubic-bezier(.36,.07,.19,.97) forwards;
+			animation: show-in 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards;
 
 			opacity: 0;
 			transform: translateY(-50px);
 
-			@for $i from 1 through 10 {//number of children of article selector
+			@for $i from 1 through 10 {
+				//number of children of article selector
 				&:nth-child(#{$i}) {
 					animation-delay: #{$i * 50ms};
 				}

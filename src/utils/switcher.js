@@ -9,19 +9,21 @@ export default class Switcher extends Widget {
 	constructor(onChange) {
 		super();
 		this.onChange = onChange;
-		this.state = 0;//0 - off, 1 - on
+		this.state = 0; //0 - off, 1 - on
 		this.widget.addClass('switcher').on('click', () => {
 			this.switch();
-			if(typeof this.onChange === 'function')
+			if (typeof this.onChange === 'function') {
 				this.onChange(!!this.state);
+			}
 		});
 	}
 
 	switch() {
-		if( (this.state = 1 - this.state) )
+		if ((this.state = 1 - this.state)) {
 			this.widget.addClass('on');
-		else
+		} else {
 			this.widget.removeClass('on');
+		}
 	}
 
 	/**
@@ -29,8 +31,9 @@ export default class Switcher extends Widget {
 	 * @returns {Switcher}
 	 */
 	setEnabled(enabled = true) {
-		if( this.state !== (enabled ? 1 : 0) )
+		if (this.state !== (enabled ? 1 : 0)) {
 			this.switch();
+		}
 		return this;
 	}
 }

@@ -1,27 +1,28 @@
 //@ts-check
-export const SPEECH_RECOGNITION_DEFAULTS = {//speech recognition commands
-	'open_settings': 'ustawienia, preferencje',
-	'edit': 'edycja, edytuj, graj',
-	'restart': 'restart',
-	'import': 'import, importuj',
-	'export': 'eksport, exportuj, pobierz mapę',
-	'menu': 'menu'
+export const SPEECH_RECOGNITION_DEFAULTS = {
+	//speech recognition commands
+	open_settings: 'ustawienia, preferencje',
+	edit: 'edycja, edytuj, graj',
+	restart: 'restart',
+	import: 'import, importuj',
+	export: 'eksport, exportuj, pobierz mapę',
+	menu: 'menu',
 };
 
 const DEFAULTS = {
-	'shadows': false,
-	'textures': true,
-	'aspect_ratio': 1280/720,//value doesnt't matter if aspect_auto is true
-	'aspect_auto': true,
+	shadows: false,
+	textures: true,
+	aspect_ratio: 1280 / 720, //value doesnt't matter if aspect_auto is true
+	aspect_auto: true,
 };
 
 Object.assign(DEFAULTS, SPEECH_RECOGNITION_DEFAULTS);
 
 /** @type {{[index: string]: boolean | string | number}} stores key: value pairs */
-let settings_store = {};
+const settings_store = {};
 
 /** @type {{[index: string]: (value: boolean | string | number) => void}} [description] */
-let watchers = {};
+const watchers = {};
 
 const SETTINGS = {
 	/**
@@ -30,39 +31,48 @@ const SETTINGS = {
 	 * @param  {boolean | string | number | undefined} value
 	 */
 	setValue: (key, value) => {
-		if(value === undefined)
+		if (value === undefined) {
 			return SETTINGS.remove(key);
+		}
 
 		settings_store[key] = value;
 
-		localStorage.setItem(key, JSON.stringify({
-			type: typeof value,
-			value: value.toString()
-		}));
+		localStorage.setItem(
+			key,
+			JSON.stringify({
+				type: typeof value,
+				value: value.toString(),
+			})
+		);
 
-		if(typeof watchers[key] === 'function')
+		if (typeof watchers[key] === 'function') {
 			watchers[key](value);
+		}
 	},
 
 	/**
 	 * @param  {string} key
 	 * @returns {boolean | string | number | undefined}
 	 */
-	getValue: (key) => {
-		if(settings_store[key] !== undefined)
+	getValue: key => {
+		if (settings_store[key] !== undefined) {
 			return settings_store[key];
-		else if (localStorage.getItem(key) !== null) {
+		} else if (localStorage.getItem(key) !== null) {
 			/** @type {{type: string, value: string}} */
-			let item = JSON.parse( localStorage.getItem(key) );
-			switch(item.type) {
-				case 'string': 	return (settings_store[key] = item.value);
-				case 'boolean':	return (settings_store[key] = item.value === 'true');
-				case 'number': 	return (settings_store[key] = Number(item.value));
+			const item = JSON.parse(localStorage.getItem(key));
+			switch (item.type) {
+			case 'string':
+				return (settings_store[key] = item.value);
+			case 'boolean':
+				return (settings_store[key] = item.value === 'true');
+			case 'number':
+				return (settings_store[key] = Number(item.value));
 			}
 			throw new Error('Incorrect type: ' + item.type);
 		}
-		if(DEFAULTS[key] !== undefined)
+		if (DEFAULTS[key] !== undefined) {
 			return DEFAULTS[key];
+		}
 		throw new Error('Cannot retrieve setting value of key: ' + key);
 	},
 
@@ -78,8 +88,9 @@ const SETTINGS = {
 	 * Set all settings to default values
 	 */
 	reset() {
-		for(let [key, value] of Object.entries(DEFAULTS))
+		for (const [key, value] of Object.entries(DEFAULTS)) {
 			this.setValue(key, value);
+		}
 	},
 
 	/**
@@ -88,11 +99,12 @@ const SETTINGS = {
 	 * @param {((value: boolean | string | number) => void) | undefined} callback
 	 */
 	watch(key, callback) {
-		if(callback === undefined)
+		if (callback === undefined) {
 			delete watchers[key];
-		else
+		} else {
 			watchers[key] = callback;
-	}
-}
+		}
+	},
+};
 
 export default SETTINGS;

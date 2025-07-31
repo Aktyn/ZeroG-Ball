@@ -7,36 +7,41 @@ import Config from './config';
  * @return {boolean}
  */
 function transformEquals(t1, t2) {
-	return t1.x === t2.x && t1.y === t2.y && t1.w === t2.w && t1.h === t2.h && t1.rot === t2.rot;
+	return (
+		t1.x === t2.x &&
+		t1.y === t2.y &&
+		t1.w === t2.w &&
+		t1.h === t2.h &&
+		t1.rot === t2.rot
+	);
 }
 
 export default class SvgObject {
 	constructor(name, prevent_centering = false) {
 		this.name = name;
-		this.node = document.createElementNS("http://www.w3.org/2000/svg", name);
+		this.node = document.createElementNS('http://www.w3.org/2000/svg', name);
 
 		this.transform = {
 			x: 0,
 			y: 0,
 			w: 1,
 			h: 1,
-			rot: 0
+			rot: 0,
 		};
 		this.prev_transform = JSON.parse(JSON.stringify(this.transform));
 		this.scale_changed = false;
 
-		if(!prevent_centering) {
+		if (!prevent_centering) {
 			//place object in center of the svg
-			if(this.name === 'circle') {
-				this.node.setAttributeNS(null, 'r', String(Config.VIRT_SCALE/2));
+			if (this.name === 'circle') {
+				this.node.setAttributeNS(null, 'r', String(Config.VIRT_SCALE / 2));
 				this.node.setAttributeNS(null, 'cx', '0');
 				this.node.setAttributeNS(null, 'cy', '0');
-			}
-			else {
+			} else {
 				this.node.setAttributeNS(null, 'width', String(Config.VIRT_SCALE));
 				this.node.setAttributeNS(null, 'height', String(Config.VIRT_SCALE));
-				this.node.setAttributeNS(null, 'x', String(-Config.VIRT_SCALE/2));
-				this.node.setAttributeNS(null, 'y', String(-Config.VIRT_SCALE/2));
+				this.node.setAttributeNS(null, 'x', String(-Config.VIRT_SCALE / 2));
+				this.node.setAttributeNS(null, 'y', String(-Config.VIRT_SCALE / 2));
 			}
 
 			this.node.setAttributeNS(null, 'transform-origin', '0 0');
@@ -48,90 +53,119 @@ export default class SvgObject {
 	}
 
 	_preserveTransform() {
-		this.prev_transform.x 	= this.transform.x;
-		this.prev_transform.y 	= this.transform.y;
-		this.prev_transform.w 	= this.transform.w;
-		this.prev_transform.h 	= this.transform.h;
-		this.prev_transform.rot	= this.transform.rot;
+		this.prev_transform.x = this.transform.x;
+		this.prev_transform.y = this.transform.y;
+		this.prev_transform.w = this.transform.w;
+		this.prev_transform.h = this.transform.h;
+		this.prev_transform.rot = this.transform.rot;
 	}
 
 	/** @param {number} dt */
-	update(dt, scale_in_transform = false) {//updates object transform
-		if(transformEquals(this.transform, this.prev_transform))
+	update(dt, scale_in_transform = false) {
+		//updates object transform
+		if (transformEquals(this.transform, this.prev_transform)) {
 			return;
+		}
 		this._preserveTransform();
 
-		if(!scale_in_transform && this.scale_changed === true) {
-			if(this.name === 'circle')
-				this.node.setAttributeNS(null, 'r', Config.VIRT_SCALE/2 * this.transform.w);
-			else {
-				
-				this.node.setAttributeNS(null, 'width', Config.VIRT_SCALE * this.transform.w);
-				this.node.setAttributeNS(null, 'height', Config.VIRT_SCALE * this.transform.h);
-				
-				this.node.setAttributeNS(null, 'x', -Config.VIRT_SCALE/2 * this.transform.w);
-				this.node.setAttributeNS(null, 'y', -Config.VIRT_SCALE/2 * this.transform.h);
+		if (!scale_in_transform && this.scale_changed === true) {
+			if (this.name === 'circle') {
+				this.node.setAttributeNS(
+					null,
+					'r',
+					(Config.VIRT_SCALE / 2) * this.transform.w
+				);
+			} else {
+				this.node.setAttributeNS(
+					null,
+					'width',
+					Config.VIRT_SCALE * this.transform.w
+				);
+				this.node.setAttributeNS(
+					null,
+					'height',
+					Config.VIRT_SCALE * this.transform.h
+				);
+
+				this.node.setAttributeNS(
+					null,
+					'x',
+					(-Config.VIRT_SCALE / 2) * this.transform.w
+				);
+				this.node.setAttributeNS(
+					null,
+					'y',
+					(-Config.VIRT_SCALE / 2) * this.transform.h
+				);
 			}
 
 			this.scale_changed = false;
 		}
 
-		this.node.setAttributeNS(null, 'transform', `translate(${
-			this.transform.x*Config.VIRT_SCALE/2} ${
-			this.transform.y*Config.VIRT_SCALE/2}) rotate(${this.transform.rot/Math.PI*180}) ${
-				scale_in_transform ? `scale(${this.transform.w}, ${this.transform.h})` : ''
-			}`);
+		this.node.setAttributeNS(
+			null,
+			'transform',
+			`translate(${(this.transform.x * Config.VIRT_SCALE) / 2} ${
+				(this.transform.y * Config.VIRT_SCALE) / 2
+			}) rotate(${(this.transform.rot / Math.PI) * 180}) ${
+				scale_in_transform
+					? `scale(${this.transform.w}, ${this.transform.h})`
+					: ''
+			}`
+		);
 	}
 
 	/** @param {SvgObject | Node} child */
 	addChild(child, push_below = false) {
-		let node = (child instanceof SvgObject) ? child.node : child;
-		if(!(node instanceof Node))
+		const node = child instanceof SvgObject ? child.node : child;
+		if (!(node instanceof Node)) {
 			throw new Error('Incorrect child');
-		
-		if(push_below)
+		}
+
+		if (push_below) {
 			this.node.insertAdjacentElement('afterbegin', node);
-		else
+		} else {
 			this.node.appendChild(node);
+		}
 		return this;
 	}
 
 	/**
-	* @param {string} name
-	*/
+	 * @param {string} name
+	 */
 	setClass(name) {
 		this.node.setAttributeNS(null, 'class', name);
 		return this;
 	}
 
 	/**
-	* @param {string} name
-	*/
+	 * @param {string} name
+	 */
 	addClass(name) {
 		this.node.classList.add(name);
 		return this;
 	}
 
-	/** 
-	*	@param {string} name 
-	*	@returns {boolean}
-	*/
+	/**
+	 *	@param {string} name
+	 *	@returns {boolean}
+	 */
 	hasClass(name) {
 		return this.node.classList.contains(name);
 	}
 
 	/**
-	* @param {string} name
-	*/
+	 * @param {string} name
+	 */
 	removeClass(name) {
 		this.node.classList.remove(name);
 		return this;
 	}
 
 	/**
-	* @param {number} x
-	* @param {number} y
-	*/
+	 * @param {number} x
+	 * @param {number} y
+	 */
 	setPos(x, y) {
 		this.transform.x = x;
 		this.transform.y = y;
@@ -143,31 +177,37 @@ export default class SvgObject {
 	}
 
 	/**
-	* @param {number} width
-	* @param {number} height
-	*/
+	 * @param {number} width
+	 * @param {number} height
+	 */
 	setSize(width, height) {
 		this.transform.w = width;
-		this.transform.h = height;//typeof height === 'number' ? height : width;
+		this.transform.h = height; //typeof height === 'number' ? height : width;
 		this.scale_changed = true;
 
 		return this;
 	}
 
 	/**
-	* @param {number} rot
-	*/
+	 * @param {number} rot
+	 */
 	setRot(rot) {
 		this.transform.rot = rot;
-		while(this.transform.rot >= Math.PI*2) this.transform.rot -= Math.PI*2;
-		while(this.transform.rot < 0) this.transform.rot += Math.PI*2;
+		while (this.transform.rot >= Math.PI * 2) {
+			this.transform.rot -= Math.PI * 2;
+		}
+		while (this.transform.rot < 0) {
+			this.transform.rot += Math.PI * 2;
+		}
 
 		return this;
 	}
 
-	set(attributes) {//@atributes object like: {fill: 'red', ...}
-		for(let attrib in attributes)
+	set(attributes) {
+		//@atributes object like: {fill: 'red', ...}
+		for (const attrib in attributes) {
 			this.node.setAttributeNS(null, attrib, attributes[attrib]);
+		}
 		return this;
 	}
 }

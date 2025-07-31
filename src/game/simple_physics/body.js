@@ -1,18 +1,18 @@
 // @ts-check
-import {Vec2, crossVV} from './math';
+import { Vec2, crossVV } from './math';
 import Config from '../config';
 import Filter from './filter';
 
 export const ShapeType = {
 	CIRCLE: 0,
-	RECT: 1
+	RECT: 1,
 };
 
 export class Body extends Filter {
-	/** 
-	* @param {number} _shape_type
-	* @param {number} _density
-	*/
+	/**
+	 * @param {number} _shape_type
+	 * @param {number} _density
+	 */
 	constructor(_shape_type, _density = 1) {
 		super();
 
@@ -23,20 +23,21 @@ export class Body extends Filter {
 
 		this.static = false;
 
-		this.density = _density;//used for mass calculations
-		this.mass = 1;//private
+		this.density = _density; //used for mass calculations
+		this.mass = 1; //private
 		this.velocity = new Vec2(0, 0);
 		this.next_velocity = null;
 		this.max_size = 0;
 
 		//this.colliding = false;
 
-		this._custom_data_ = null;//designated for only single data assignment
+		this._custom_data_ = null; //designated for only single data assignment
 	}
 
 	setCustomData(data) {
-		if(this._custom_data_ !== null)
+		if (this._custom_data_ !== null) {
 			throw new Error('Custom data has been already assigned');
+		}
 		this._custom_data_ = data;
 	}
 
@@ -49,7 +50,8 @@ export class Body extends Filter {
 	}
 
 	/** @param {number} _density */
-	setDensity(_density) {//abstract
+	setDensity(_density) {
+		//abstract
 		this.density = _density;
 		this.recalculateMass();
 	}
@@ -58,37 +60,40 @@ export class Body extends Filter {
 		throw new Error('this is abstract function and must be inherited');
 	}
 
-	/** 
-	* 	@param {number} x
-	* 	@param {number} y
-	*/
+	/**
+	 * 	@param {number} x
+	 * 	@param {number} y
+	 */
 	setPos(x, y) {
 		this.pos.set(x, y);
 	}
 
-	/** 
-	* 	@param {number} _rot
-	*/
+	/**
+	 * 	@param {number} _rot
+	 */
 	setRot(_rot) {
 		this.rot = _rot;
-		while(this.rot >= Math.PI*2) this.rot -= Math.PI*2;
-		while(this.rot < 0) this.rot += Math.PI*2;
+		while (this.rot >= Math.PI * 2) {
+			this.rot -= Math.PI * 2;
+		}
+		while (this.rot < 0) {
+			this.rot += Math.PI * 2;
+		}
 	}
 
 	/**
-	* @param {number} x
-	* @param {number} y
-	* @param {number} speed_limit
-	*/
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {number} speed_limit
+	 */
 	applyVelocity(x, y, speed_limit) {
-		let current_speed = this.velocity.length();
+		const current_speed = this.velocity.length();
 		//console.log(current_speed);
-		if(current_speed > speed_limit) {
+		if (current_speed > speed_limit) {
 			this.velocity.scale(speed_limit / current_speed);
 			this.velocity.x += x;
 			this.velocity.y += y;
-		}
-		else {
+		} else {
 			this.velocity.x += x;
 			this.velocity.y += y;
 		}
@@ -99,27 +104,28 @@ export class Body extends Filter {
 	}
 
 	update() {
-		if(this.static)
+		if (this.static) {
 			return;
+		}
 
 		//apply velocities
-		if(this.next_velocity !== null) {
+		if (this.next_velocity !== null) {
 			//debugger;
 			this.velocity = this.next_velocity;
 			this.next_velocity = null;
 		}
-		this.pos.addVec( this.velocity );
+		this.pos.addVec(this.velocity);
 		//if(this.colliding) {//deprecated - remove this variable
-			//this.pos.add(0, g);//stick to the ground
+		//this.pos.add(0, g);//stick to the ground
 		//	this.colliding = false;
 		//}
 	}
 }
 
 export class Circle extends Body {
-	/** 
-	* 	@param {number} _radius
-	*/
+	/**
+	 * 	@param {number} _radius
+	 */
 	constructor(_radius) {
 		super(ShapeType.CIRCLE);
 		this.radius = _radius;
@@ -133,20 +139,20 @@ export class Circle extends Body {
 }
 
 export class Rect extends Body {
-	/** 
-	* 	@param {number} _width
-	* 	@param {number} _height
-	*/
+	/**
+	 * 	@param {number} _width
+	 * 	@param {number} _height
+	 */
 	constructor(_width, _height) {
 		super(ShapeType.RECT);
 		this.width = _width;
 		this.height = _height;
-		
+
 		this.recalculateMass();
 	}
 
 	recalculateMass() {
-		this.mass = this.width*this.height*4 * this.density;
+		this.mass = this.width * this.height * 4 * this.density;
 		this.max_size = Math.max(this.width, this.height);
 	}
 }

@@ -1,18 +1,18 @@
 // @ts-check
-import Shape from './shape';
-import {Vec2, Random, CrossVV} from './math';
+import _Shape from './shape';
+import { Vec2, Random as _Random, CrossVV } from './math';
 
 export default class Body {
-	/** 
-	*	@param {Shape} shape
-	*	@param {number} x
-	*	@param {number} y
-	*/
+	/**
+	 *	@param {Shape} shape
+	 *	@param {number} x
+	 *	@param {number} y
+	 */
 	constructor(shape, x, y) {
 		// Set by shape
-		this.I = 0;  // moment of inertia
+		this.I = 0; // moment of inertia
 		this.iI = 0; // inverse inertia
-		this.m = 0;  // mass
+		this.m = 0; // mass
 		this.im = 0; // inverse mass
 
 		// Shape interface
@@ -29,49 +29,48 @@ export default class Body {
 		this.force = new Vec2(0, 0);
 		this.staticFriction = 0.5;
 		this.dynamicFriction = 0.3;
-		this.restitution = 0.4;//0.2;
+		this.restitution = 0.4; //0.2;
 		this.shape.initialize();
 	}
 
-	/** 
-	*	@param {number} radians
-	*/
-	setOrient( radians ) {
+	/**
+	 *	@param {number} radians
+	 */
+	setOrient(radians) {
 		this.orient = radians;
 		this.shape.setOrient(radians);
 	}
 
 	/**
-	* @param {number} x
-	* @param {number} y
-	*/
+	 * @param {number} x
+	 * @param {number} y
+	 */
 	setPos(x, y) {
 		this.position.set(x, y);
 	}
 
-	/** 
-	*	@param {Vec2} f
-	*/
+	/**
+	 *	@param {Vec2} f
+	 */
 	applyForce(f) {
 		this.force.addVec(f);
 	}
 
-	/** 
-	*	@param {Vec2} impulse
-	*	@param {Vec2} contactVector
-	*/
+	/**
+	 *	@param {Vec2} impulse
+	 *	@param {Vec2} contactVector
+	 */
 	applyImpulse(impulse, contactVector) {
 		// velocity += im * impulse;
 		this.velocity.x += this.im * impulse.x;
 		this.velocity.y += this.im * impulse.y;
-		this.angularVelocity += this.iI * CrossVV( contactVector, impulse );
+		this.angularVelocity += this.iI * CrossVV(contactVector, impulse);
 	}
 
 	setStatic() {
-		this.I = 0.;
-		this.iI = 0.;
-		this.m = 0.;
-		this.im = 0.;
+		this.I = 0;
+		this.iI = 0;
+		this.m = 0;
+		this.im = 0;
 	}
 }
-

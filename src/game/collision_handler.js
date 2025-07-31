@@ -1,8 +1,8 @@
 //@ts-check
-import GameCore from './game_core';
-import {STATE} from './map';
+import _GameCore from './game_core';
+import { STATE } from './map';
 
-import Object2D, {Type} from './objects/object2d';
+import _Object2D, { Type as _Type } from './objects/object2d';
 import Portal from './objects/portal';
 import Cannon from './objects/cannon';
 import Bullet from './objects/bullet';
@@ -19,7 +19,7 @@ import Enemy from './objects/enemy';
 import EnemySensor from './objects/enemy_sensor';
 import Item from './objects/item';
 
-import {Body} from './simple_physics/body';
+import { Body as _Body } from './simple_physics/body';
 import Filter from './simple_physics/filter';
 
 /**
@@ -29,80 +29,100 @@ import Filter from './simple_physics/filter';
  */
 export default function handleCollision(game_core, A, B) {
 	/** @type {Object2D} */
-	let objA = A.getCustomData();
+	const objA = A.getCustomData();
 	/** @type {Object2D} */
-	let objB = B.getCustomData();
+	const objB = B.getCustomData();
 
-	if(objA instanceof Player) {
-		if(objB instanceof Elevator)
+	if (objA instanceof Player) {
+		if (objB instanceof Elevator) {
 			objB.onPlayerEnter(objA);
-		else if(objB instanceof Exit) {
+		} else if (objB instanceof Exit) {
 			console.log('Level completed');
-			
+
 			game_core.state = STATE.FINISHED;
-			if(typeof game_core.listeners.onMapFinished === 'function') {
-				game_core.listeners.onMapFinished(game_core.map_data.name, 
-					game_core.elapsed_time, game_core.map_data.wasEdited);
+			if (typeof game_core.listeners.onMapFinished === 'function') {
+				game_core.listeners.onMapFinished(
+					game_core.map_data.name,
+					game_core.elapsed_time,
+					game_core.map_data.wasEdited
+				);
 			}
-		}
-		else if(objB instanceof Forcefield)
+		} else if (objB instanceof Forcefield) {
 			objB.activate(game_core.player);
-		else if((objB instanceof Sawblade) || (objB instanceof SpikyCrate) || (objB instanceof Bullet))
+		} else if (
+			objB instanceof Sawblade ||
+			objB instanceof SpikyCrate ||
+			objB instanceof Bullet
+		) {
 			objA.damage(1);
-		else if(objB instanceof Aid) {
-			objA.damage(-1);//heal player
+		} else if (objB instanceof Aid) {
+			objA.damage(-1); //heal player
 			objB.to_destroy = true;
-		}
-		else if(objB instanceof EnemySensor)
+		} else if (objB instanceof EnemySensor) {
 			objB.owner.onPlayerInRange(objA);
-		else if(objB instanceof Enemy) {
+		} else if (objB instanceof Enemy) {
 			//TODO - explosion effect (can be added as object via game_core handle)
 			objA.damage(1);
 			objB.to_destroy = true;
-		}
-		else if(objB instanceof Item) {
-			if( objB.use(objA) )
+		} else if (objB instanceof Item) {
+			if (objB.use(objA)) {
 				objB.to_destroy = true;
+			}
 		}
-
-	}
-	else if(objA instanceof Portal) {
+	} else if (objA instanceof Portal) {
 		/** @type {Object2D} */
-		let target_obj = objB;
+		const target_obj = objB;
 		//static object and other portals doesn't teleport
-		if(target_obj.static || target_obj instanceof Portal)
+		if (target_obj.static || target_obj instanceof Portal) {
 			return;
+		}
 
 		//get another portal instance with same type
 		/** @type {Portal} collided portal handle */
-		let p = objA;
+		const p = objA;
 
-		if(Filter.collide(target_obj.body, p.body))
+		if (Filter.collide(target_obj.body, p.body)) {
 			return;
+		}
 
 		/** @type {Portal[]} [potential destination portals] */
-		let other_portals = [];
+		const other_portals = [];
 
-		for(let obj of game_core.objects) {
-			if(obj !== p && obj instanceof Portal && obj.portal_type === p.portal_type && !obj.locked)
+		for (const obj of game_core.objects) {
+			if (
+				obj !== p &&
+				obj instanceof Portal &&
+				obj.portal_type === p.portal_type &&
+				!obj.locked
+			) {
 				other_portals.push(obj);
+			}
 		}
 
 		//get random target portal and init teleportation
-		if(other_portals.length > 0)
-			p.teleport( other_portals[ (Math.random()*other_portals.length)|0 ], target_obj );
-	}
-	else if(objA instanceof Bullet && !(objB instanceof Portal) && !(objB instanceof Cannon)) {
-		if(Filter.collide(objA.body, objB.body))
+		if (other_portals.length > 0) {
+			p.teleport(
+				other_portals[(Math.random() * other_portals.length) | 0],
+				target_obj
+			);
+		}
+	} else if (
+		objA instanceof Bullet &&
+		!(objB instanceof Portal) &&
+		!(objB instanceof Cannon)
+	) {
+		if (Filter.collide(objA.body, objB.body)) {
 			objA.to_destroy = true;
-	}
-	else if((objB instanceof Door) && (objA instanceof Key)) {
+		}
+	} else if (objB instanceof Door && objA instanceof Key) {
 		/** @type {Door} */
-		let door = objB;
+		const door = objB;
 		/** @type {Key} */
-		let key = objA;
+		const key = objA;
 
-		if(door.door_type === key.key_type)//compatible key and door
+		if (door.door_type === key.key_type) {
+			//compatible key and door
 			door.open(key);
+		}
 	}
 }

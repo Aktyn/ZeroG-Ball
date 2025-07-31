@@ -4,7 +4,8 @@
 	position: relative;
 	overflow: hidden;
 
-	& > * {/*fills entire div*/
+	& > * {
+		/*fills entire div*/
 		position: absolute;
 		margin: 0px;
 		left: 0px;

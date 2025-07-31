@@ -1,19 +1,26 @@
 <!doctype html>
 <html lang="pl">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name='author' content='Aktyn & Droni'>
-    <meta name="keywords" content="ball, zero, gravity, simple, physics, elastic, collisions, logic, game, project, javascript, electron">
-    <meta name="description" content="Game with simple physics created for university project">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="author" content="Aktyn & Droni" />
+		<meta
+			name="keywords"
+			content="ball, zero, gravity, simple, physics, elastic, collisions, logic, game, project, javascript, electron"
+		/>
+		<meta
+			name="description"
+			content="Game with simple physics created for university project"
+		/>
 
-    <title><%= htmlWebpackPlugin.options.title %></title>
-    <script type="text/javascript">
-    	//CHANGE HOST TO CUSTOM SERVER ADDRESS IF YOU DONT WANT CLIENT TO CONNECT WITH LOCALHOST
-    	//window.SERVER_HOST = 'http://dronidev.pl:7331';
-    </script>
-</head>
-<body>
-	<div id='main'></div>
-</body>
+		<title>ZeroG Ball</title>
+		<script type="text/javascript">
+			//CHANGE HOST TO CUSTOM SERVER ADDRESS IF YOU DONT WANT CLIENT TO CONNECT WITH LOCALHOST
+			//window.SERVER_HOST = 'http://dronidev.pl:7331';
+		</script>
+	</head>
+	<body>
+		<div id="main"></div>
+		<script type="module" src="/main.js"></script>
+	</body>
 </html>
