@@ -1,7 +1,7 @@
 @font-face {
   font-family: RobotoRegular;
   font-display: auto;
-  src: url("./Roboto-Regular.ttf") format(ttf);
+  src: url("./Roboto-Regular.ttf") format("ttf");
 }
 
 /*cubic-bezier(.87,-.41,.19,1.44)*/
@@ -13,11 +13,11 @@ textarea,
 input,
 button,
 div {
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
   font-size: 12px;
 
-  font-family: RobotoRegular, Arial;
+  font-family: RobotoRegular, Arial, serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 

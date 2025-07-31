@@ -178,7 +178,7 @@ svg.game-svg {
   &:not(.no-textures) path {
     @each $name, $data in $textures {
       &.#{$name} {
-        fill: url(#{nth($data, 1)});
+        fill: url(##{ nth($data, 1) });
       }
     }
 

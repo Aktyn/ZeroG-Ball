@@ -43,7 +43,6 @@ export const CATEGORIES = {
   //tutorial: 			'WPROWADZENIE'
 }
 
-
 export const TUTORIAL_TEXTURES = {
   tutorial_introduction: {
     src: introductionTexture,
@@ -269,7 +268,6 @@ export const OBJECTS = {
 		return parts_objects;
 	})()*/
 }
-
 
 export const TEXTURES = {
   //names must much those in svg.scss

@@ -1,6 +1,6 @@
 // @ts-check
 import Object2D, { Type } from "./objects/object2d"
-import introductionData from "../maps/first_encounter.json?raw"
+import introductionData from "../maps/introduction.json?raw"
 import firstEncounterData from "../maps/first_encounter.json?raw"
 import vulcanoPlanetData from "../maps/vulcano_planet.json?raw"
 import iceageData from "../maps/iceage.json?raw"
@@ -77,8 +77,6 @@ function fixRot(rot) {
 */
 
 const empty_map = { background: 0, objects: [] }
-
-
 
 /** @type {{name: string, json: State}[]} */
 export const AVAILABLE_MAPS = [

@@ -475,7 +475,7 @@ export default class GameGUI {
     }
     try {
       const data = await ServerApi.getRanking()
-      const map_records = data.find((d) => d.map_name === name).records
+      const map_records = data.find((d) => d.map_name === name)?.records ?? null
       if (map_records !== null) {
         this.server_best_time.text(
           "Najlepszy czas globalnie: " +

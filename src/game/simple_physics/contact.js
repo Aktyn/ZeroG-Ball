@@ -2,6 +2,7 @@
 import { Vec2, dotProduct } from "./math"
 import { ShapeType } from "./body"
 import Config from "./../config"
+import Filter from "./filter.js"
 
 const bounce = 1 //0.5;//0 - 1 -> bouncing factor
 
@@ -20,7 +21,7 @@ export default class Contact {
   }
 
   _doesCollide() {
-    return this.A.static || !this.A.collide(this.B)
+    return this.A.static || !Filter.collide(this.A, this.B)
   }
 
   solve() {
